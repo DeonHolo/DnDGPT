@@ -120,7 +120,7 @@ pre{font:.78rem/1.6 var(--font-mono,ui-monospace,monospace);white-space:pre-wrap
 </head>
 <body>
 <a class="skip-link" href="#companionContent">Skip to chapter</a>
-<header class="masthead row"><svg class="crest" viewBox="0 0 48 52" fill="none" aria-hidden="true"><path d="m24 2 21 12v24L24 50 3 38V14L24 2Z" stroke="currentColor" stroke-width="1.5"/><path d="m24 2-10 18 10 18 10-18L24 2ZM3 14l11 6L3 38l21 0 21 0-11-18 11-6M24 38v12" stroke="currentColor" stroke-width="1"/><text x="24" y="28" text-anchor="middle" fill="currentColor" font-family="Georgia,serif" font-size="11">20</text></svg><div class="identity"><p class="eyebrow">Campaign dashboard</p><h1>DnDGPT <span class="edition">1.0</span></h1></div></header>
+<header class="masthead row"><svg class="crest" viewBox="0 0 48 52" fill="none" aria-hidden="true"><path d="m24 2 21 12v24L24 50 3 38V14L24 2Z" stroke="currentColor" stroke-width="1.5"/><path d="m24 2-10 18 10 18 10-18L24 2ZM3 14l11 6L3 38l21 0 21 0-11-18 11-6M24 38v12" stroke="currentColor" stroke-width="1"/><text x="24" y="28" text-anchor="middle" fill="currentColor" font-family="Georgia,serif" font-size="11">20</text></svg><div class="identity"><p class="eyebrow">Campaign dashboard</p><h1>DnDGPT</h1></div></header>
 <details id="viewSettings" class="view-options"><summary>View options</summary>
 <div class="row session-picker"><label for="session">Saved game</label><select id="session"><option value="">Select a saved game</option></select></div>
 <div class="row"><button id="refresh" type="button">Refresh saved state</button><button id="hideHud" type="button">Hide codex</button></div>
@@ -348,7 +348,7 @@ function renderChoices(){
     [["Review sandbox","Read this sandbox's authoritative state and explain what is currently supported. Do not change it."],
      ["Review abilities","Inspect owned abilities and explain legal actions and missing mechanics. Do not roll or spend resources."],
      ["Review rules","Explain the Version 1.0 rules relevant to my next decision. Do not advance time."]]:
-    [["Review rules","Review the complete DnDGPT Version 1.0 rules without starting a campaign."],
+    [["Review rules","Review the included DnDGPT rules without starting a campaign."],
      ["How to play","Explain character creation and the separate adventure authorization gates."],
      ["Inspect progress","Show stored campaign progress without rolling or advancing time."]];
   for(const [label,prompt]of choices){const b=element("button",label);b.type="button";b.onclick=()=>sendPrompt(prompt);$("choices").append(b)}

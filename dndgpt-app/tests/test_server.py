@@ -1,5 +1,6 @@
 import json
 import time
+from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
@@ -147,4 +148,40 @@ def test_origin_attack_rejected_by_mcp_transport(web):
                         headers={"Accept": "application/json, text/event-stream",
                                  "Origin": "https://untrusted.example.test"})
     assert response.status_code in (400, 403, 421)
+
+
+@pytest.mark.parametrize("document,filename", [("rulebook", "rulebook-v1.0.txt"),
+                                               ("hardener", "rule-hardener.txt")])
+def test_hosted_rules_are_complete_paginated_read_only_text(web, tokens, document, filename):
+    import hashlib
+    state = new_sandbox(web)
+    readonly = {"Authorization": "Bearer " + tokens(scopes="campaign:read")}
+    before = web.get("/api/campaigns/" + state["id"]).json()
+    data = (Path(__file__).resolve().parents[1] / "rules" / filename).read_bytes()
+    offset, parts = 0, []
+    while True:
+        result = rpc(web, "tools/call", {"name": "read_rules",
+                     "arguments": {"document": document, "offset": offset}}, headers=readonly)
+        assert not result.get("isError"), result
+        page = result["structuredContent"]
+        assert page["offset"] == offset and len(page["content"]) <= 20000
+        assert page["source_sha256"] == hashlib.sha256(data).hexdigest()
+        assert page["total_characters"] == len(data.decode("utf-8"))
+        parts.append(page["content"])
+        if page["next_offset"] is None:
+            break
+        assert page["next_offset"] == offset + len(page["content"])
+        assert page["next_offset"] > offset
+        offset = page["next_offset"]
+    assert "".join(parts) == data.decode("utf-8")
+    assert web.get("/api/campaigns/" + state["id"]).json() == before
+    definition = next(t for t in rpc(web, "tools/list")["tools"] if t["name"] == "read_rules")
+    assert definition["annotations"]["readOnlyHint"] is True
+    assert definition["securitySchemes"][0]["scopes"] == ["campaign:read"]
+
+
+@pytest.mark.parametrize("arguments", [{"offset": -1}, {"offset": 10**9},
+                                       {"document": "../../.env"}])
+def test_hosted_rules_reject_invalid_pages_and_arbitrary_files(web, arguments):
+    assert tool(web, "read_rules", arguments)["isError"] is True
 

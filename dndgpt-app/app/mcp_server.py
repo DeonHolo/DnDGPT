@@ -2,6 +2,7 @@
 import hashlib
 import json
 from pathlib import Path
+from typing import Literal
 from urllib.parse import urlsplit
 
 from mcp.server.auth.middleware.auth_context import get_access_token
@@ -17,6 +18,24 @@ from .version import APP_VERSION
 
 HTML_PATH = Path(__file__).with_name("index.html")
 MIME_TYPE = "text/html;profile=mcp-app"
+RULE_FILES = {"rulebook": "rulebook-v1.0.txt", "hardener": "rule-hardener.txt"}
+
+
+def rules_page(document, offset):
+    if document not in RULE_FILES:
+        raise EngineError(400, "invalid_rules_document", "Choose rulebook or hardener")
+    data = (HTML_PATH.parent.parent / "rules" / RULE_FILES[document]).read_bytes()
+    text = data.decode("utf-8")
+    if type(offset) is not int or not 0 <= offset <= len(text):
+        raise EngineError(400, "invalid_rules_offset", "Offset is outside the document")
+    end = min(offset + 20000, len(text))
+    if end < len(text):
+        boundary = text.rfind("\n", offset, end)
+        if boundary > offset:
+            end = boundary + 1
+    return {"document": document, "content": text[offset:end], "offset": offset,
+            "next_offset": end if end < len(text) else None, "total_characters": len(text),
+            "source_sha256": hashlib.sha256(data).hexdigest()}
 
 
 def build_mcp(engine, config, verifier, creation_repository=None):
@@ -31,7 +50,7 @@ def build_mcp(engine, config, verifier, creation_repository=None):
     parsed = urlsplit(config.resource_url)
     origin = f"{parsed.scheme}://{parsed.netloc}"
     server = FastMCP(
-        "DnDGPT 1.0", stateless_http=True, json_response=True,
+        "DnDGPT", stateless_http=True, json_response=True,
         token_verifier=verifier if config.configured else None,
         auth=AuthSettings(issuer_url=config.issuer, resource_server_url=config.resource_url,
                           required_scopes=[READ_SCOPE]) if config.configured else None,
@@ -74,6 +93,18 @@ def build_mcp(engine, config, verifier, creation_repository=None):
     game_random = GameRandom(engine.store, engine.dice)
     from .chat_game import ChatGame
     chat_game = ChatGame(engine)
+
+    @server.tool(annotations=read, meta=metadata())
+    def read_rules(document: Literal["rulebook", "hardener"] = "rulebook",
+                   offset: int = 0) -> CallToolResult:
+        """Read the standard DnDGPT rulebook or Rule Hardener from the hosted service.
+        No file upload is needed for standard rules. Start each document at offset=0;
+        next_offset identifies its next page, or is null when the complete document is read.
+        Read both complete documents before standard character generation or adjudication.
+        A player's explicit custom rulebook takes precedence for that campaign.
+        Reading rules never creates a campaign, rolls dice, resumes play or changes saves.
+        """
+        return invoke(lambda owner: rules_page(document, offset))
 
     @server.tool(annotations=write, meta=metadata(WRITE_SCOPE))
     def create_chat_game(name: str, action_id: str, disposable: bool = False) -> CallToolResult:

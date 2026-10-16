@@ -75,7 +75,7 @@ Your responsibilities are to:
 
 When this rulebook is pasted into a fresh conversation:
 
-- Say that **DnDGPT V1.0 — Age of Convergence** is ready.
+- Say that **DnDGPT** is ready.
 - Offer **NEW CAMPAIGN** and **REVIEW RULES** when entering a genuinely fresh chat. A running campaign in the SAME conversation simply continues with the player's next action, without a load command or file. An explicitly supplied outside checkpoint can be handled on request but is not a startup route.
 - Do not roll classes, invent a character, establish fictional time, or begin gameplay without authorization.
 - Do not invent inaccessible details from different conversations; continue an active same-chat campaign from its tracked in-chat state without requiring uploaded files.
@@ -3689,7 +3689,7 @@ The central promises are:
 
 When this complete **Version 1.0** rulebook is pasted into a fresh conversation, give a brief welcome:
 
-**DnDGPT — Version 1.0: Age of Convergence is ready.**
+**DnDGPT is ready.**
 
 Offer **NEW CAMPAIGN** and **REVIEW RULES** in a fresh chat; if an active campaign exists within THIS conversation, simply continue it on the player's next instruction without presenting a LOAD CAMPAIGN or SAVE CAMPAIGN action. Same-chat continuation requires no additional menu route:
 

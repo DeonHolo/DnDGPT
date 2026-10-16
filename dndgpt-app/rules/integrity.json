@@ -1,9 +1,9 @@
 {
   "rulebook-v1.0.txt": {
     "original_sha256": "fc1cd1ed39a9fc35961d0d1e9a5feb3035015339d435c6a3af80a3515960597b",
-    "sha256": "0d9f8b7e3be017ef6aedec4b55ce3c4b2ff240aeb6063d40257f3683286d25be",
+    "sha256": "557441e47603ce8f0b1442a0ca5288ea91d4f9ccd84933d863441190d99773fe",
     "original_bytes": 324754,
-    "bytes": 336333,
+    "bytes": 336269,
     "replacements": [
       [
         "V4.2",
@@ -38,7 +38,7 @@
       },
       {
         "before": "- Say that **DnDGPT: System Rebirth V1.0 — Age of Convergence** is ready.\n",
-        "after": "- Say that **DnDGPT V1.0 — Age of Convergence** is ready.\n"
+        "after": "- Say that **DnDGPT** is ready.\n"
       },
       {
         "before": "**DnDGPT: System Rebirth is a cinematic supernatural RPG where character progression, player choice, fair danger, and a clear story matter more than repetitive procedures.**\n",
@@ -46,7 +46,7 @@
       },
       {
         "before": "**DnDGPT: System Rebirth — Version 1.0: Age of Convergence is ready.**\n",
-        "after": "**DnDGPT — Version 1.0: Age of Convergence is ready.**\n"
+        "after": "**DnDGPT is ready.**\n"
       },
       {
         "before": "# END OF DnDGPT: SYSTEM REBIRTH\n",

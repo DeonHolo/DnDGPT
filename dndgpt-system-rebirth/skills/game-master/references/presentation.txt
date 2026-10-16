@@ -1,6 +1,12 @@
-# Presentation layer — DnDGPT 1.0
+# Presentation layer — DnDGPT
 
 This guide controls presentation only. The complete edition-1.0 rulebook and hardener retain mechanical authority. It does not create powers, change rules, authorize gameplay or guarantee a particular native ChatGPT layout.
+
+## Player-facing name and rules
+
+Use **DnDGPT** alone in launch cards, headings and prompts. Omit software/rulebook versions and retired subtitles. Internal version fields, file names and rule-precedence records remain unchanged; disclose them only when the player asks. This naming preference applies to newly generated native Chat UI as well as the hosted dashboard.
+
+Describe the game as a heavily customized, D&D-inspired fantasy RPG built around Deon Holo's preferences, with its own rules, classes and progression. The full GM plugin includes the complete rulebook and Rule Hardener. A hosted custom MCP connection can fetch the same standard texts through `read_rules`; file uploads are only needed for custom forks or a genuinely unavailable rules source.
 
 ## Native Intelligent UI in regular Chat
 
@@ -12,7 +18,7 @@ Use genuine native controls when the client supports them. Guide the model throu
   1. Character & Progression
   2. Skills & Class Abilities
   3. Health & Conditions
-  4. Summons & Combat
+  4. Allies & Combat
   5. Equipment & Inventory
   6. Quest Journal
   7. World & Campaign Log
@@ -44,6 +50,6 @@ Core facts, ownership and at-most-once commits belong in the authenticated engin
 
 Keep generated headings and journal summaries short: a useful title or one sentence, with full outcomes and mechanics in the entry's detail fields. Never repeat the entire campaign checkpoint as a heading or current-scene summary. Retain complete acquired mechanics; compact presentation is not permission to omit restrictions or invent missing costs.
 
-The companion separates Summons / Combat, Equipment / Inventory and World / Campaign Log into local subtabs. A summon starts with identity, HP, defense and movement; Combat & instincts, Nature & interior, Evolution and Recovery & permanence expand independently. Evolution ranks expand separately. World facts, nested preparation records and log entries use labeled details rather than flattened object dumps. Log headings are capped at100 characters while full saved text stays available. Character background/class/talent/biography, conditions, items, supplies and quests follow the same structured detail convention.
+The companion separates Allies / Combat, Equipment / Inventory and World / Campaign Log into local subtabs. A summon starts with identity, HP, defense and movement; Combat & instincts, Nature & interior, Evolution and Recovery & permanence expand independently. Evolution ranks expand separately. World facts, nested preparation records and log entries use labeled details rather than flattened object dumps. Log headings are capped at100 characters while full saved text stays available. Character background/class/talent/biography, conditions, items, supplies and quests follow the same structured detail convention.
 
 Chat-led abilities can store `effect`, `cost` and `ready`; development-engine abilities can store `mechanics`, numeric resource costs and explicit `status`. Display the actual saved fields from either format. Absent numeric costs do not imply free activation; absent engine status does not imply UNAVAILABLE. Creation abilities are marked DRAFT, and an activation beginning with Passive belongs under Passives even when it includes preparation instructions. Do not rewrite saved abilities to repair their display.
