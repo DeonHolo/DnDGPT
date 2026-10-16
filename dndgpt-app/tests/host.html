@@ -1,0 +1,403 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DnDGPT · MCP App interaction tests</title>
+<style>body{font:14px system-ui;margin:20px;background:#f7f7f8;color:#24262c}h1{font-size:20px}button{padding:10px 16px}iframe{width:100%;height:760px;border:1px solid #bbb;border-radius:12px;background:white}main{display:grid;grid-template-columns:minmax(360px,700px) minmax(220px,1fr);gap:20px}pre{white-space:pre-wrap;overflow-wrap:anywhere}.pass{color:#196733}.fail{color:#b02031}@media(max-width:850px){main{grid-template-columns:1fr}}</style>
+<h1>DnDGPT 1.0 · MCP App interaction tests</h1>
+<p><strong>Simulated host, disposable fixtures.</strong> This page is not ChatGPT and does not establish real PiP or OAuth sign-in support.</p>
+<button id="run">Run interaction tests</button><p id="summary" role="status">Waiting for app initialization…</p>
+<main><iframe id="widget" title="DnDGPT test widget" src="/test-widget"></iframe><div><h2>Test results</h2><pre id="results"></pre><h2>Simulated chat messages</h2><div id="chat"></div></div></main>
+<script>
+const frame=document.getElementById("widget"),messages=[],results=[],calls=[];
+let initialized=0,nextId=1000;
+const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+async function until(test){for(let n=0;n<120;n++){if(await test())return;await sleep(100)}throw new Error("Timed out waiting for UI")}
+async function snapshot(){return(await fetch("/test-state")).json()}
+async function availability(available){await fetch("/test-availability",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({available})})}
+async function mcp(name,args={}){const response=await fetch("/test-rpc",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({jsonrpc:"2.0",id:nextId++,method:"tools/call",params:{name,arguments:args}})});const data=await response.json();if(data.error)throw new Error(data.error.message);return data.result}
+window.addEventListener("message",async event=>{
+ if(event.source!==frame.contentWindow||event.data?.jsonrpc!=="2.0")return;
+ const m=event.data;if(m.method==="ui/notifications/initialized"){initialized++;document.getElementById("summary").textContent="App initialized · ready for tests";return}
+ if(m.id===undefined)return;
+ let result,error;
+ try{
+  if(m.method==="ui/initialize")result={protocolVersion:"2026-01-26",hostInfo:{name:"DnDGPT test host",version:"1.0.0"},hostCapabilities:{serverTools:{},message:{text:{}}},hostContext:{theme:"light",displayMode:"inline",availableDisplayModes:["inline","pip","fullscreen"]}};
+  else if(m.method==="tools/call"){calls.push(m.params.name);const response=await fetch("/test-rpc",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(m)});const body=await response.json();if(body.error)throw new Error(body.error.message);result=body.result}
+  else if(m.method==="ui/message"){if(!Array.isArray(m.params.content))throw new Error("content must be content blocks");messages.push(m.params.content.map(c=>c.text||"").join(""));const p=document.createElement("p");p.textContent=messages.at(-1);document.getElementById("chat").append(p);result={}}
+  else if(m.method==="ui/request-display-mode")result={mode:"inline"};
+  else throw new Error("Unsupported host method: "+m.method);
+ }catch(e){error={code:-32000,message:e.message}}
+ frame.contentWindow.postMessage({jsonrpc:"2.0",id:m.id,...(error?{error}:{result})},location.origin);
+});
+function assert(test,message){if(!test)throw new Error(message)}
+function report(name,error){results.push({name,passed:!error,...(error?{error:error.message}:{})});const row=document.createElement("div");row.className=error?"fail":"pass";row.textContent=(error?"FAIL ":"PASS ")+name+(error?": "+error.message:"");document.getElementById("results").append(row)}
+async function test(name,run){try{await run();report(name)}catch(e){report(name,e)}}
+document.getElementById("run").onclick=async()=>{
+ document.getElementById("run").disabled=true;
+ await until(()=>frame.contentDocument?.getElementById("hero")?.textContent.includes("UI test fixture"));
+ let doc=frame.contentDocument;const before=await snapshot();
+ await test("Seven canonical navigation pages; choices above codex",async()=>{
+  const panels=[...doc.querySelectorAll("#hud [data-panel]")];assert(panels.length===7,"Page count differs");
+  assert(panels.map(p=>p.dataset.panel).join(",")==="character,skills,health,summons,equipment,quests,world","Canonical panel order changed");
+  assert(doc.getElementById("choices").children.length>=3,"Missing action choices");
+  assert(Boolean(doc.getElementById("choices").compareDocumentPosition(doc.getElementById("hud"))&Node.DOCUMENT_POSITION_FOLLOWING),"Choices are below HUD");
+ });
+ await test("Resource meters and navigation summaries reflect authoritative state",async()=>{
+  const character=before.campaign.character,meters=[...doc.querySelectorAll("#resources meter")];
+  assert(meters.length===3,"Missing resource meters");
+  for(const [index,key]of ["hp","mp","sta"].entries()){
+   assert(meters[index].value===character[key]&&meters[index].max===character[key+"_max"],"Resource value differs from server state");
+   assert(meters[index].getAttribute("aria-label")===key.toUpperCase(),"Resource is not labeled");
+  }
+  assert(doc.getElementById("skillsPreview").textContent===before.campaign.abilities.length+" owned · 0 ready","Unavailable fixture was presented as ready");
+  assert(doc.getElementById("worldPreview").textContent===before.campaign.current_location,"Location summary differs from state");
+  assert(doc.getElementById("characterPreview").textContent.includes("XP "+character.xp+" / "+character.xp_next),"Character navigation lacks authoritative XP");
+  assert(doc.getElementById("xpMeter").value===character.xp&&doc.getElementById("xpMeter").max===character.xp_next,"XP meter differs from state");
+  assert([...doc.querySelectorAll(".panel-preview")].length===7,"A canonical group lacks its summary");
+ });
+ await test("All seven buttons open one full page locally without chat or remount",async()=>{
+  const count=initialized,chatCount=messages.length;
+  const buttons=[...doc.querySelectorAll("#sectionNav button")];assert(buttons.length===7,"Missing navigation buttons");
+  for(const button of buttons){
+   button.click();
+   const visible=[...doc.querySelectorAll("#hud [data-panel]")].filter(p=>!p.hidden);
+   assert(visible.length===1&&visible[0].dataset.panel===button.dataset.target,"Navigation did not select exactly its page");
+   assert(doc.querySelectorAll('#sectionNav [aria-current="page"]').length===1,"Active navigation is ambiguous");
+   assert(doc.getElementById(button.getAttribute("aria-controls"))===visible[0],"Accessible control target differs from displayed page");
+   assert(button.getBoundingClientRect().height>=44,"Navigation touch target is too small");
+  }
+  assert(initialized===count&&messages.length===chatCount,"Inspecting a chapter remounted the view or sent a chat message");
+ });
+ await test("Companion stays readable at 340, 480, 640 and 1024px",async()=>{
+  for(const width of [340,480,640,1024]){
+   frame.style.width=width+"px";await sleep(100);
+   assert(doc.documentElement.scrollWidth<=frame.contentWindow.innerWidth+1,"Companion overflows at "+width+"px");
+  }
+  frame.style.width="";
+ });
+ await test("Keyboard chapter navigation exposes the selected page",async()=>{
+  const first=doc.getElementById("nav-character");first.focus();
+  first.dispatchEvent(new frame.contentWindow.KeyboardEvent("keydown",{key:"ArrowDown",bubbles:true}));
+  assert(doc.activeElement===doc.getElementById("nav-skills"),"Keyboard focus did not follow navigation");
+  assert(!doc.getElementById("page-skills").hidden,"Keyboard navigation did not reveal its page");
+  doc.activeElement.dispatchEvent(new frame.contentWindow.KeyboardEvent("keydown",{key:"End",bubbles:true}));
+  assert(doc.activeElement===doc.getElementById("nav-world")&&!doc.getElementById("page-world").hidden,"End did not select the last page");
+  const modifiedHome=new frame.contentWindow.KeyboardEvent("keydown",{key:"Home",ctrlKey:true,bubbles:true,cancelable:true});
+  doc.activeElement.dispatchEvent(modifiedHome);
+  assert(!modifiedHome.defaultPrevented&&!doc.getElementById("page-world").hidden,"Browser shortcut was intercepted by chapter navigation");
+ });
+ await test("Codex text and control boundaries retain contrast in both themes",async()=>{
+  const probe=doc.createElement("span");probe.hidden=true;doc.body.append(probe);
+  const rgb=value=>{probe.style.color=value;return frame.contentWindow.getComputedStyle(probe).color.match(/[\d.]+/g).slice(0,3).map(Number)};
+  const luminance=values=>values.map(v=>{v/=255;return v<=.04045?v/12.92:((v+.055)/1.055)**2.4}).reduce((sum,v,i)=>sum+v*[.2126,.7152,.0722][i],0);
+  const ratio=(a,b)=>{const x=luminance(rgb("var("+a+")")),y=luminance(rgb("var("+b+")"));return(Math.max(x,y)+.05)/(Math.min(x,y)+.05)};
+  try{for(const theme of ["light","dark"]){
+   frame.contentWindow.postMessage({jsonrpc:"2.0",method:"ui/notifications/host-context-changed",params:{theme}},location.origin);
+   await until(()=>doc.documentElement.style.colorScheme===theme);
+   for(const text of ["--ink","--muted","--gold","--hp","--mp","--sta"])
+    for(const surface of ["--paper","--soft"])assert(ratio(text,surface)>=4.5,text+" has low text contrast in "+theme);
+   assert(ratio("--line","--paper")>=3,"Control border has low contrast in "+theme);
+   assert(ratio("--muted","--gold-wash")>=4.5,"Active navigation summary has low contrast in "+theme);
+  }}finally{probe.remove()}
+ });
+ await test("Parent, evolution and Imprint expand independently",async()=>{
+  doc.getElementById("nav-skills").click();
+  doc.querySelector('[data-detail="ability-fixture-bolt"]>summary').click();
+  doc.querySelector('[data-detail="child-fixture-bolt-fixture-evolution"]>summary').click();
+  assert(doc.querySelector('[data-detail="child-fixture-bolt-fixture-evolution"]').open,"Evolution did not expand");
+  assert(!doc.querySelector('[data-detail="child-fixture-bolt-fixture-imprint"]').open,"Sibling expanded unexpectedly");
+ });
+ await test("Skill subtabs isolate groups and preserve nested details without gameplay changes",async()=>{
+  const chatCount=messages.length,viewCount=initialized;
+  const tabs=[...doc.querySelectorAll('#skillTabs [role="tab"]')];
+  assert(tabs.length===4,"Missing ability subtabs");
+  const expected=[["combat","fixture-bolt"],["reactions","fixture-guard"],["passives","fixture-passive"],["utility","fixture-survey"]];
+  for(const [id,ability]of expected){
+   const button=doc.getElementById("skill-tab-"+id);button.click();
+   const visible=[...doc.querySelectorAll("[data-skill-page]")].filter(page=>!page.hidden);
+   assert(visible.length===1&&visible[0].dataset.skillPage===id,"Skill tab revealed the wrong group");
+   assert(visible[0].querySelector('[data-detail="ability-'+ability+'"]'),"Owned ability is in the wrong group");
+   assert(button.getAttribute("aria-selected")==="true"&&button.tabIndex===0,"Selected skill tab is not exposed");
+   assert(button.textContent.includes("1"),"Skill count differs from owned abilities");
+   assert(tabs.filter(tab=>tab.tabIndex===0).length===1,"Tab order includes inactive skill tabs");
+   assert(doc.getElementById(button.getAttribute("aria-controls"))===visible[0],"Skill tab controls another page");
+   assert(button.getBoundingClientRect().height>=44,"Skill tab touch target too small");
+   for(const width of [340,480,640,1024]){
+    frame.style.width=width+"px";await sleep(40);
+    assert(doc.documentElement.scrollWidth<=frame.contentWindow.innerWidth+1,"Skill tabs overflow at "+width);
+   }
+  }
+  frame.style.width="";
+  doc.getElementById("nav-character").click();doc.getElementById("nav-skills").click();
+  assert(!doc.getElementById("skill-page-utility").hidden,"Chapter navigation lost skill subtab");
+  assert(doc.querySelector('[data-detail="child-fixture-bolt-fixture-evolution"]').open,"Subtab switch lost nested expansion");
+  await sleep(900);const after=await snapshot();
+  assert(after.preferences.skills_tab==="utility","Skill subtab preference was not saved");
+  assert(JSON.stringify(after.campaign)===JSON.stringify(before.campaign)&&after.audit.event_count===before.audit.event_count,"Skill inspection mutated gameplay");
+  assert(initialized===viewCount&&messages.length===chatCount,"Skill inspection remounted UI or sent chat");
+ });
+ await test("Skill subtabs support keyboard selection and preserve browser shortcuts",async()=>{
+  const last=doc.getElementById("skill-tab-utility");last.focus();
+  const key=value=>doc.activeElement.dispatchEvent(new frame.contentWindow.KeyboardEvent("keydown",{key:value,bubbles:true,cancelable:true}));
+  key("ArrowRight");assert(doc.activeElement.id==="skill-tab-combat","Skill tabs did not wrap forward");
+  key("ArrowLeft");assert(doc.activeElement.id==="skill-tab-utility","Skill tabs did not wrap backward");
+  key("Home");assert(!doc.getElementById("skill-page-combat").hidden,"Home did not select Combat");
+  key("End");assert(!doc.getElementById("skill-page-utility").hidden,"End did not select Utility");
+  const modified=new frame.contentWindow.KeyboardEvent("keydown",{key:"Home",ctrlKey:true,bubbles:true,cancelable:true});
+  doc.activeElement.dispatchEvent(modified);
+  assert(!modified.defaultPrevented&&!doc.getElementById("skill-page-utility").hidden,"Skill tabs intercepted browser shortcut");
+ });
+ await test("Equipment and Inventory tabs inspect gear without exposing hidden rolls",async()=>{
+  const count=messages.length,viewCount=initialized;
+  doc.getElementById("nav-equipment").click();
+  assert(doc.querySelectorAll('#gearTabs [role="tab"]').length===2,"Missing gear subtabs");
+  assert(!doc.getElementById("gear-equipment").hidden&&doc.getElementById("gear-inventory").hidden,"Equipment tab did not open by default");
+  const worn=doc.querySelectorAll("#gear-equipment .item-card");
+  assert(worn.length===1,"Two-handed item was duplicated");
+  assert(doc.getElementById("equipmentPreview").textContent==="1 equipped · 3 stored items","Gear navigation counts include worn duplicates");
+  assert(doc.querySelector(".item-slot").textContent.includes("Main Hand · Off-Hand"),"Occupied hand slots not combined");
+  assert(doc.querySelectorAll(".empty-slot").length===14,"Canonical empty slots were lost");
+  worn[0].querySelector("summary").click();await until(()=>worn[0].open);
+  assert(worn[0].textContent.includes("STR 5")&&worn[0].textContent.includes("2.4 kg"),"Recorded details are missing");
+  const first=doc.getElementById("tab-equipment");first.focus();
+  first.dispatchEvent(new frame.contentWindow.KeyboardEvent("keydown",{key:"ArrowRight",bubbles:true,cancelable:true}));
+  assert(doc.activeElement===doc.getElementById("tab-inventory")&&!doc.getElementById("gear-inventory").hidden,"Keyboard subtab selection failed");
+  assert(doc.getElementById("tab-inventory").getAttribute("aria-selected")==="true"&&doc.getElementById("tab-equipment").tabIndex===-1,"Tab semantics do not match selection");
+  const stored=doc.querySelectorAll("#gear-inventory .item-card");
+  stored[0].querySelector("summary").click();await until(()=>stored[0].open);
+  assert([...stored[0].querySelectorAll("dt")].some(label=>label.textContent==="Remaining"&&label.nextElementSibling.textContent==="0"),"Zero charges were omitted");
+  assert(stored[1].textContent.includes("More details have not been recorded."),"Missing details were invented");
+  assert(doc.querySelector("#gear-inventory .supply-list").textContent.includes("Qty 3"),"Supplies ledger missing");
+  assert(!doc.getElementById("equipment").textContent.includes("PRIVATE_RARITY_RECEIPT")&&!doc.getElementById("equipment").textContent.includes("HIDDEN_NESTED_RECEIPT"),"Hidden receipts leaked through item details");
+  assert(!doc.querySelector("#equipment img, #equipment script"),"Untrusted item markup became executable HTML");
+  assert(stored[2].textContent.includes("<img src=x"),"Untrusted item name was lost");
+  doc.getElementById("nav-character").click();doc.getElementById("nav-equipment").click();
+  assert(!doc.getElementById("gear-inventory").hidden&&stored[0].open,"Chapter navigation lost the subtab or detail");
+  for(const width of [340,480,640,1024]){
+    frame.style.width=width+"px";await sleep(60);
+    assert(doc.documentElement.scrollWidth<=frame.contentWindow.innerWidth+1,"Populated inventory overflows at "+width);
+  }
+  frame.style.width="";
+  await sleep(900);
+  const after=await snapshot();
+  assert(after.preferences.equipment_tab==="inventory","Inventory subtab was not saved");
+  assert(JSON.stringify(after.campaign)===JSON.stringify(before.campaign)&&after.audit.event_count===before.audit.event_count,"Item inspection changed game state");
+  assert(initialized===viewCount&&messages.length===count,"Item inspection remounted UI or sent chat");
+  doc.getElementById("nav-skills").click();
+ });
+ await test("Player view hides test shortcuts and technical versions",async()=>{
+  assert(!doc.getElementById("viewSettings").open&&!doc.getElementById("developmentTools").open,"Test controls start expanded");
+  assert(doc.getElementById("developmentTools").contains(doc.getElementById("choices")),"Test shortcuts remain in player flow");
+  assert(doc.getElementById("viewSettings").contains(doc.getElementById("refresh")),"Refresh still clutters the toolbar");
+  assert(!doc.getElementById("progress").textContent.includes("Version"),"Internal state version remains on character strip");
+  assert(!doc.querySelector(".status-seal"),"Unexplained SR badge remains");
+ });
+ await test("Option button sends one chat prompt without a game mutation",async()=>{
+  doc.getElementById("viewSettings").open=true;doc.getElementById("developmentTools").open=true;
+  const count=messages.length;doc.querySelector("#choices button").click();await until(()=>messages.length===count+1);
+  assert(messages.at(-1).includes("authoritative state"),"Prompt does not match selection");
+  assert((await snapshot()).campaign.version===before.campaign.version,"Click changed campaign");
+  doc.getElementById("developmentTools").open=false;doc.getElementById("viewSettings").open=false;
+ });
+ await test("Custom ordered actions retain the player's text",async()=>{
+  const input=doc.getElementById("custom"),count=messages.length;input.value="Inspect the door, then wait for my decision.";
+  doc.getElementById("send").click();await until(()=>messages.length===count+1);
+  assert(messages.at(-1).endsWith(input.value),"Custom text changed");
+ });
+ await test("HUD can hide and show without changing state",async()=>{
+  doc.getElementById("hideHud").click();assert(doc.getElementById("hud").hidden,"HUD did not hide");
+  doc.getElementById("hideHud").click();assert(!doc.getElementById("hud").hidden,"HUD did not return");
+ });
+ await test("Host display changes preserve the mounted view and respect safe areas",async()=>{
+  const count=initialized;
+  frame.contentWindow.postMessage({jsonrpc:"2.0",method:"ui/notifications/host-context-changed",params:{displayMode:"fullscreen",safeAreaInsets:{top:30,bottom:24}}},location.origin);
+  await until(()=>doc.getElementById("mode").textContent==="Expanded");
+  assert(doc.body.style.paddingTop==="30px","Host safe area ignored");
+  assert(initialized===count,"View was recreated on display change");
+  frame.contentWindow.postMessage({jsonrpc:"2.0",method:"ui/notifications/host-context-changed",params:{displayMode:"inline"}},location.origin);
+  await until(()=>doc.getElementById("mode").textContent==="Inline");
+ });
+ await test("Inspection and UI-preference writes preserve rolls, state and event count",async()=>{
+  await sleep(1000);const after=await snapshot();assert(JSON.stringify(after.campaign)===JSON.stringify(before.campaign),"Inspection changed state");
+  assert(after.audit.event_count===before.audit.event_count,"Inspection created game events");
+  assert(after.preferences.panels.includes("skills"),"Panel state was not stored in database");
+ });
+ let proposal;
+ await test("Action preview is inert until approval",async()=>{
+  proposal=await(await fetch("/test-proposal",{method:"POST"})).json();
+  doc.getElementById("refresh").click();await until(()=>!doc.getElementById("approval").hidden);
+  assert((await snapshot()).campaign.version===before.campaign.version,"Preview committed action");
+ });
+ await test("Lost connection retains the snapshot and blocks approval until recovery",async()=>{
+  const version=(await snapshot()).campaign.version,chapter=doc.querySelector('#sectionNav [aria-current="page"]');
+  const cached=await mcp("get_campaign",{campaign_id:before.campaign.id});
+  assert(doc.getElementById("syncStatus").dataset.state==="saved","Successful read was not marked saved");
+  try{
+   await availability(false);doc.getElementById("refresh").click();
+   await until(()=>doc.getElementById("syncStatus").dataset.state==="stale");
+   assert(doc.getElementById("syncStatus").textContent.includes("last saved snapshot"),"Lost connection was hidden");
+   assert(doc.getElementById("confirm").disabled,"Unverified approval stayed enabled");
+   frame.contentWindow.postMessage({jsonrpc:"2.0",method:"ui/notifications/tool-result",params:cached},location.origin);
+   await sleep(50);
+   assert(doc.getElementById("syncStatus").dataset.state==="stale"&&doc.getElementById("confirm").disabled,"Cached host output cleared the connection failure");
+   assert(doc.getElementById("hero").textContent.includes("UI test fixture")&&chapter.getAttribute("aria-current")==="page","Snapshot or selected chapter disappeared");
+   doc.getElementById("confirm").click();
+   assert((await snapshot()).campaign.version===version,"Offline approval changed state");
+  }finally{await availability(true)}
+  doc.getElementById("refresh").click();
+  await until(()=>doc.getElementById("syncStatus").dataset.state==="saved"&&!doc.getElementById("confirm").disabled);
+  assert(doc.getElementById("notice").textContent.includes("Connection restored"),"Old connection error remained after recovery");
+  assert((await snapshot()).campaign.version===version,"Reconnecting committed a pending action");
+ });
+ await test("Approval commits once; double click and network retry do not repeat",async()=>{
+  const button=doc.getElementById("confirm");button.click();button.click();
+  await until(async()=>(await snapshot()).campaign.version===before.campaign.version+1);
+  const count=(await snapshot()).audit.event_count;
+  await mcp("execute_confirmed_action",{proposal_id:proposal.proposal.id,approval_token:proposal._meta.approval_token});
+  const after=await snapshot();assert(after.audit.event_count===count,"Retry duplicated event");
+  assert(after.campaign.paused===false,"Approved resume did not commit");
+  await until(()=>messages.some(m=>m.includes("already committed result")));
+ });
+ await test("External commit updates the mounted dashboard through polling without chat",async()=>{
+  const current=await snapshot(),count=initialized,chatCount=messages.length,page=doc.getElementById("page-skills");
+  const proposed=await mcp("propose_action",{campaign_id:current.campaign.id,action_id:"browser-external-pause-001",expected_version:current.campaign.version,kind:"pause",payload:{}});
+  const committed=await mcp("execute_confirmed_action",{proposal_id:proposed.structuredContent.proposal.id,approval_token:proposed._meta.approval_token});
+  assert(!committed.isError,"External test-client approval failed");
+  const version=committed.structuredContent.campaign.version;
+  await until(()=>doc.getElementById("stateVersion").textContent.includes("State version "+version));
+  assert(doc.getElementById("progress").textContent.includes("PAUSED"),"Dashboard did not show the committed state");
+  assert(initialized===count&&frame.contentDocument===doc&&doc.getElementById("page-skills")===page,"Polling recreated the app or chapter");
+  assert(messages.length===chatCount,"A read-only state refresh sent a chat prompt");
+  assert(!page.hidden&&doc.querySelector('[data-detail="child-fixture-bolt-fixture-evolution"]').open,"Refreshing lost the selected chapter or nested preferences");
+  assert(!doc.getElementById("skill-page-utility").hidden,"Polling lost the selected skill group");
+ });
+ await test("Recreated app view restores database state and nested preferences",async()=>{
+  await sleep(1000);const count=initialized,version=(await snapshot()).campaign.version;
+  frame.src="/test-widget?recreated=1";
+  await until(()=>initialized>count&&frame.contentDocument?.getElementById("hero")?.textContent.includes("UI test fixture"));
+  doc=frame.contentDocument;assert(!doc.getElementById("page-skills").hidden,"Selected chapter preference lost");
+  assert(!doc.getElementById("skill-page-utility").hidden,"Skill subtab was not restored");
+  assert(doc.querySelector('[data-detail="child-fixture-bolt-fixture-evolution"]').open,"Nested preference lost");
+  doc.getElementById("nav-equipment").click();
+  assert(!doc.getElementById("gear-inventory").hidden,"Inventory subtab was not restored");
+  assert(doc.querySelector("#gear-inventory .item-card").open,"Item expansion was not restored");
+  doc.getElementById("nav-skills").click();
+  assert((await snapshot()).campaign.version===version,"Recreating view changed game state");
+ });
+ // Synthetic chat-shaped presentation data only; never written into a campaign.
+ const savedBeforePresentation=await snapshot(),messageCount=messages.length,mountCount=initialized;
+ const display=structuredClone(savedBeforePresentation.campaign);display.mode="chat";display.phase="character_draft";display.version+=100;
+ const fullEffect="A saved effect that the Game Master already supplied. It retains its range and resistance rules. No additional effect is invented by the display.";
+ const autonomy="Moves once toward a visible threat. Takes exactly one instinct. If capture fails, the target stays outside. A captive may spend an action to escape. The same target cannot be captured again this round.";
+ const recovery="At zero HP the creature becomes inert. A ten-minute rite restores it at half HP. Growth and identity remain unchanged.";
+ display.abilities=[
+  {id:"chat-action",name:"Fixture command",rarity:"UNIQUE",activation:"Action",cost:"8 MP; once per encounter",effect:fullEffect,ready:true,learned:true,range:"6 m",target:"One visible target",attack_save:"STR save DC 12",duration:"One round",cooldown:"2 rounds",visual:"A clear visual description."},
+  {id:"chat-passive",name:"Fixture craft",rarity:"RARE",activation:"Passive (safe out-of-combat preparation)",group:"combat",cost:"0 MP; requires an earned component",effect:{benefit:"A recorded passive benefit",private_receipt:"HIDDEN_PRESENTATION"},ready:true},
+  {id:"chat-unknown",name:"Fixture incomplete",activation:"Reaction",ready:false}
+ ];
+ display.summons=[{id:"chat-summon",name:"Fixture guardian",rarity:"UNIQUE",hp:48,hp_max:48,def:14,move:"6 m ground",permanent:true,autonomous:true,owner:"player",source_id:"fixture-source",status:"creation_draft_not_in_play",attack:"+6 to hit; 1d10+4 damage",autonomy,look:"A creature of carved stone.",law:"A persistent chamber with one physical exit.",revival:recovery,evolution_rank:1,evolution_marks:0,growth:{meter:"Deeds",now:0,pace:"Only meaningful scenes count.",rank2:"At three deeds choose one permanent expansion.",rank3:"At seven deeds the chamber grows.",rank4:"At twelve deeds gain a limited capture."},private_receipt:"HIDDEN_PRESENTATION"}];
+ display.world={geography:"A recorded valley.",adventure_possibilities:["Explore the ridge","Visit the harbor"],private_receipt:"HIDDEN_PRESENTATION"};
+ display.world_log=[{name:"A prior discovery",text:"The bridge was already discovered."}];display.notes="Character creation remains in progress.";
+ const longText="A long, previously saved account with detailed positions and consequences. ".repeat(20);
+ display.character.class_details={identity:"A recorded class identity",growth:{rank2:longText,private_receipt:"HIDDEN_PRESENTATION"}};
+ display.character.biography=longText;
+ display.conditions=[{id:"condition-fixture",name:"Recorded condition",effect:{duration:"One round",limits:longText}}];
+ display.quest_log=[{id:"quest-fixture",summary:longText,objective:{steps:["Inspect a route","Report the findings"],constraints:longText}}];
+ display.world.opening_preparation={enemies:{fixture:{hp:23,attack:"1d6+2",tactics:longText}},scene_state:{combat:false,description:longText}};
+ display.world_log.push({id:"long-log",summary:longText,text:longText,site_state:{positions:["North gate","South entrance"],description:longText}});
+ display.enemies=[{id:"fixture-enemy",name:"Fixture opponent",hp:0,hp_max:23,def:12,move_m:7,status:"defeated",attack:"1d6+2",tactics:longText}];
+ frame.contentWindow.postMessage({jsonrpc:"2.0",method:"ui/notifications/tool-result",params:{structuredContent:{campaign:display}}},location.origin);
+ await until(()=>doc.getElementById("skillsPreview").textContent.includes("creation draft"));
+ await test("Chat-shaped abilities show saved effects and costs without inventing readiness",async()=>{
+  doc.getElementById("nav-skills").click();doc.getElementById("skill-tab-combat").click();
+  const ability=doc.querySelector('[data-detail="ability-chat-action"]');ability.querySelector("summary").click();
+  assert(ability.querySelector("summary").textContent.includes("DRAFT")&&!ability.querySelector("summary").textContent.includes("UNAVAILABLE"),"Draft was mislabeled unavailable");
+  assert(ability.textContent.includes(fullEffect)&&ability.textContent.includes("8 MP; once per encounter"),"Saved effect or actual cost omitted");
+  for(const value of ["6 m","One visible target","STR save DC 12","One round","2 rounds"])assert(ability.textContent.includes(value),"Missing saved field: "+value);
+  assert(!ability.textContent.includes("MP 0")&&!ability.textContent.includes("Full mechanics have not"),"Missing engine fields overrode saved chat details");
+  doc.getElementById("skill-tab-passives").click();
+  assert(doc.querySelector('[data-detail="ability-chat-passive"]').closest('[data-skill-page]').dataset.skillPage==="passives","Qualified passive activation was grouped as combat");
+  assert(doc.querySelector('[data-detail="ability-chat-passive"]').textContent.includes("requires an earned component"),"A real passive requirement was hidden");
+  const freePassive={...display,version:display.version+1,abilities:[{id:"free-passive",name:"Fixture free passive",activation:"Passive",cost:0,effect:"Always active",ready:true}]};
+  frame.contentWindow.postMessage({jsonrpc:"2.0",method:"ui/notifications/tool-result",params:{structuredContent:{campaign:freePassive}}},location.origin);
+  await until(()=>doc.querySelector('[data-detail="ability-free-passive"]'));
+  assert(![...doc.querySelector('[data-detail="ability-free-passive"]').querySelectorAll("dt")].some(term=>term.textContent==="Cost"),"Free passive still shows a cost row");
+  display.version+=2;
+  frame.contentWindow.postMessage({jsonrpc:"2.0",method:"ui/notifications/tool-result",params:{structuredContent:{campaign:display}}},location.origin);
+  await until(()=>doc.querySelector('[data-detail="ability-chat-unknown"]'));
+  const incomplete=doc.querySelector('[data-detail="ability-chat-unknown"]');
+  assert(incomplete.textContent.includes("Full mechanics have not been recorded.")&&!incomplete.textContent.includes("MP 0"),"Incomplete ability invented mechanics or free costs");
+  const adventure={...display,phase:"adventure",version:display.version+1,abilities:display.abilities.map(a=>({...a,...(a.id==="chat-action"?{status:" ready "}:a.id==="chat-passive"?{status:"passive"}:{})}))};
+  frame.contentWindow.postMessage({jsonrpc:"2.0",method:"ui/notifications/tool-result",params:{structuredContent:{campaign:adventure}}},location.origin);
+  await until(()=>doc.getElementById("skillsPreview").textContent==="3 owned · 1 ready");
+  assert(doc.querySelector('[data-detail="ability-chat-action"] summary').textContent.includes("READY"),"Lowercase saved ready status was not normalized");
+  assert(doc.querySelector('[data-detail="ability-chat-passive"] summary').textContent.includes("PASSIVE"),"Passive counted as a ready combat action");
+  display.version+=2;
+  frame.contentWindow.postMessage({jsonrpc:"2.0",method:"ui/notifications/tool-result",params:{structuredContent:{campaign:display}}},location.origin);
+  await until(()=>doc.getElementById("skillsPreview").textContent.includes("creation draft"));
+ });
+ await test("Summon summaries hide raw storage fields and preserve all detailed mechanics",async()=>{
+  doc.getElementById("nav-summons").click();const card=doc.querySelector("#summons .actor-card");
+  assert(card.querySelector("h3").textContent==="Fixture guardian"&&card.querySelector(".actor-stats").textContent.includes("48 / 48"),"Compact summon identity or stats missing");
+  assert(card.querySelector(".actor-meta").textContent.includes("Creation draft · not in play"),"Draft summon falsely shown active");
+  const sections=[...card.querySelectorAll(":scope > details")];assert(sections.length===4&&sections.every(section=>!section.open),"Summon details are not progressively disclosed");
+  for(const value of [autonomy,recovery]){
+   const words=value.replace(/\s+/g," "),text=card.textContent.replace(/\s+/g," ");
+   assert(words.split(".").filter(Boolean).every(sentence=>text.includes(sentence.trim())),"Saved summon rules were cut");
+  }
+  for(const title of ["Combat & instincts","Nature & interior","Evolution · Deeds 0","Recovery & permanence"])assert(sections.some(section=>section.firstElementChild.textContent===title),"Missing section: "+title);
+  assert(card.querySelectorAll("details details").length===3,"Evolution ranks remain one dense dump");
+  assert(!card.textContent.includes("owner:")&&!card.textContent.includes("autonomous:")&&!card.textContent.includes("fixture-source"),"Storage fields still clutter the summon");
+  sections[0].querySelector("summary").click();await until(()=>sections[0].open);
+  doc.getElementById("nav-character").click();doc.getElementById("nav-summons").click();assert(sections[0].open,"Chapter navigation lost summon expansion");
+  for(const width of [340,480,640,1024]){frame.style.width=width+"px";await sleep(60);assert(doc.documentElement.scrollWidth<=frame.contentWindow.innerWidth+1,"Summon overflows at "+width)}frame.style.width="";
+ });
+ await test("Summons and Combat tabs isolate allies from threats and preserve selection",async()=>{
+  const tab=doc.getElementById("combat-tab-summons"),allies=doc.getElementById("combat-page-summons"),combat=doc.getElementById("combat-page-combat");
+  tab.focus();tab.dispatchEvent(new KeyboardEvent("keydown",{key:"End",bubbles:true}));
+  assert(allies.hidden&&!combat.hidden&&doc.activeElement===doc.getElementById("combat-tab-combat"),"Combat keyboard selection failed");
+  assert(!combat.textContent.includes("Fixture guardian")&&!allies.textContent.includes("Fixture opponent"),"Allies and enemies remain mixed");
+  assert(combat.querySelector(".actor-stats").textContent.includes("0 / 23")&&combat.querySelector(".actor-stats").textContent.includes("7 m"),"Enemy zero HP or move_m missing");
+  assert(combat.querySelector(".actor-meta").textContent.includes("Defeated"),"Defeated enemy presented as active");
+  doc.getElementById("nav-character").click();doc.getElementById("nav-summons").click();assert(!combat.hidden,"Combat subtab lost on chapter switch");
+  await sleep(1000);assert((await snapshot()).preferences.combat_tab==="combat","Combat preference not stored");
+ });
+ await test("Long generated records in every chapter keep bounded headings and structured details",async()=>{
+  for(const id of ["character","health","quests","world"]){
+   doc.getElementById("nav-"+id).click();
+   const root=doc.getElementById(id),details=[...root.querySelectorAll("details")];
+   assert(details.length>0,"Missing progressive detail sections in "+id);
+   assert(details.every(detail=>detail.firstElementChild.textContent.length<=100),"An overlong summary remains in "+id);
+   assert(details.every(detail=>!detail.open),"New long records start expanded in "+id);
+   assert(root.textContent.includes("previously saved account"),"Saved full detail was removed from "+id);
+  }
+  const quest=doc.querySelector("#quests > details");quest.firstElementChild.click();await until(()=>quest.open);
+  assert(quest.querySelector("dl dt")&&quest.querySelector("details"),"Nested journal data is flattened into raw text");
+  const preparation=doc.querySelector('[data-detail="world-field-opening_preparation"]');preparation.firstElementChild.click();await until(()=>preparation.open);
+  assert(preparation.querySelectorAll("details").length>=3,"World preparation remains one giant nested dump");
+  for(const width of [340,480,640,1024]){frame.style.width=width+"px";await sleep(60);assert(doc.documentElement.scrollWidth<=frame.contentWindow.innerWidth+1,"Structured long details overflow at "+width)}frame.style.width="";
+ });
+ await test("World and Campaign Log tabs separate content with keyboard and saved preferences",async()=>{
+  doc.getElementById("nav-world").click();const world=doc.getElementById("world-page-world"),log=doc.getElementById("world-page-log"),tab=doc.getElementById("world-tab-world");
+  tab.click();assert(!world.hidden&&log.hidden&&world.textContent.includes("A recorded valley.")&&!world.textContent.includes("bridge was"),"World includes campaign history");
+  assert(world.querySelector('[data-detail="world-field-adventure_possibilities"]').querySelectorAll("li").length===2,"World lists lost their structure");
+  tab.focus();tab.dispatchEvent(new KeyboardEvent("keydown",{key:"End",bubbles:true}));
+  assert(world.hidden&&!log.hidden&&doc.activeElement===doc.getElementById("world-tab-log"),"Keyboard did not select log");
+  assert(log.textContent.includes("bridge was already discovered")&&!log.textContent.includes("recorded valley"),"Campaign Log content was merged with World");
+  assert(tab.tabIndex===-1&&doc.getElementById("world-tab-log").getAttribute("aria-selected")==="true","World tab ARIA selection incorrect");
+  doc.getElementById("nav-character").click();doc.getElementById("nav-world").click();assert(!log.hidden,"Chapter navigation lost log tab");
+  await sleep(1000);assert((await snapshot()).preferences.world_tab==="log","Log preference was not stored");
+  assert(!doc.getElementById("hud").textContent.includes("HIDDEN_PRESENTATION")&&!doc.querySelector("#summons script, #world script"),"Private presentation fields leaked");
+  const after=await snapshot();assert(JSON.stringify(after.campaign)===JSON.stringify(savedBeforePresentation.campaign)&&after.audit.event_count===savedBeforePresentation.audit.event_count,"Presentation changed game data");
+  assert(messages.length===messageCount&&initialized===mountCount,"Presentation sent chat or remounted app");
+ });
+ await test("Reload restores World subtab independently of chapters and gameplay",async()=>{
+  const count=initialized;frame.src="/test-widget?world-recreated=1";
+  await until(()=>initialized>count&&frame.contentDocument?.getElementById("hero")?.textContent.includes("UI test fixture"));doc=frame.contentDocument;
+  assert(!doc.getElementById("page-world").hidden&&!doc.getElementById("world-page-log").hidden,"World chapter or log preference was not restored");
+  doc.getElementById("nav-summons").click();assert(!doc.getElementById("combat-page-combat").hidden,"Combat subtab was not restored independently");
+  assert((await snapshot()).campaign.version===savedBeforePresentation.campaign.version,"Reload altered campaign state");
+ });
+ const reportData={passed:results.filter(r=>r.passed).length,failed:results.filter(r=>!r.passed).length,tests:results};
+ await fetch("/test-record",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(reportData)});
+ document.getElementById("summary").textContent=reportData.passed+" passed, "+reportData.failed+" failed · simulated host only";
+};
+</script></html>
+

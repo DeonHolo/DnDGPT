@@ -1,0 +1,52 @@
+{
+  "rulebook-v1.0.txt": {
+    "original_sha256": "fc1cd1ed39a9fc35961d0d1e9a5feb3035015339d435c6a3af80a3515960597b",
+    "sha256": "ab2541bd4ec2c10573b58d66595183fe12a28ee487582dd4a72ab493701f66a9",
+    "original_bytes": 324754,
+    "bytes": 336429,
+    "replacements": [
+      [
+        "V4.2",
+        "V1.0"
+      ],
+      [
+        "VERSION 4.2",
+        "VERSION 1.0"
+      ],
+      [
+        "Version 4.2",
+        "Version 1.0"
+      ]
+    ],
+    "edition_sha256": "aaae8d2dcc18259e5bdc1aad0a4b6a18aa03b77c1f92f1b15edd2408cb56e357",
+    "edition_bytes": 324754,
+    "amendments": [
+      {
+        "id": "skill-ability-originality-2026-10-16",
+        "source": "skill-originality-v1.0.json",
+        "insertions": 4
+      }
+    ]
+  },
+  "rule-hardener.txt": {
+    "original_sha256": "bc21947f299ae37dc306581aa7110231809140c332ed4e8b1ceccbb86cbce8da",
+    "sha256": "92fee423b309f7e8e395409bf9e9d9220ac4dfa1f3cd93fa31aa9a46d0720bd3",
+    "original_bytes": 10370,
+    "bytes": 13635,
+    "replacements": [
+      [
+        "V4.2-R1",
+        "V1.0"
+      ]
+    ],
+    "edition_sha256": "b07d084531078cd4762611d8d766810e690bf049b4a47e702f4461731d78a0ca",
+    "edition_bytes": 10367,
+    "amendments": [
+      {
+        "id": "skill-ability-originality-2026-10-16",
+        "source": "skill-originality-v1.0.json",
+        "insertions": 1
+      }
+    ]
+  }
+}

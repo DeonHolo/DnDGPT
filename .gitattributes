@@ -1,0 +1,3 @@
+* text=auto
+# Rule integrity checks depend on exact source bytes across operating systems.
+*.txt -text whitespace=cr-at-eol

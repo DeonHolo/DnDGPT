@@ -1,0 +1,842 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DnDGPT · System Rebirth 1.0</title>
+<style>
+:root{
+  color-scheme:light dark;font:16px var(--font-sans,system-ui,sans-serif);
+  --surface:light-dark(#f0e9d9,#111610);--soft:light-dark(#e9dfca,#1d241c);
+  --paper:light-dark(#fff9eb,#192018);--line:light-dark(#8d7959,#9b8863);
+  --muted:light-dark(#665940,#c0b49b);--ink:light-dark(#302a1f,#f1e7d1);
+  --gold:light-dark(#79551c,#dfbb70);--gold-wash:light-dark(#ead6a6,#37301e);
+  --accent:light-dark(#963d36,#df8e77);--focus:light-dark(#76510c,#f2d28c);
+  --hp:light-dark(#a32a38,#f0a1a7);--mp:light-dark(#235da1,#99c7fb);--sta:light-dark(#28683e,#9bd3a9);
+  --positive:light-dark(#28683e,#a5d6ad);--warning:light-dark(#79551c,#efc984);
+  --rare:light-dark(#235da1,#99c7fb);--epic:light-dark(#733795,#d4b0ee);
+  --shadow:light-dark(#49300e12,#00000030);
+  color:var(--ink);background:var(--surface)
+}
+*{box-sizing:border-box}body{max-width:1240px;margin:0 auto;padding:20px;line-height:1.5;background:radial-gradient(ellipse at top right,var(--gold-wash),transparent 48%);min-height:100vh}
+button,input,textarea,select{font:inherit;color:inherit;background:var(--soft);border:1px solid var(--line);border-radius:5px;padding:10px 12px;max-width:100%}
+button{cursor:pointer;min-height:44px;font-weight:550;font-size:.85rem;transition:background-color 140ms,border-color 140ms,color 140ms}
+button:hover{background:var(--gold-wash);border-color:var(--gold)}button:active{background:var(--soft)}button:disabled{opacity:.5;cursor:not-allowed}
+button:focus-visible,summary:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.identity{flex:1;min-width:0}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;font-weight:500;margin:0 0 8px}h1{font-size:1.7rem;letter-spacing:-.025em;margin:0}h2{font-size:1.65rem;line-height:1.18}
+.masthead{padding-bottom:16px;border-bottom:1px solid var(--line);gap:14px}.crest{width:42px;height:46px;flex:none;color:var(--gold)}
+.edition{font:500 .72rem var(--font-sans,system-ui,sans-serif);color:var(--muted);border-left:1px solid var(--line);padding-left:8px;margin-left:4px;vertical-align:middle}
+.eyebrow{font-size:.68rem;font-weight:650;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:0 0 5px}
+.muted{color:var(--muted);font-size:.82rem}.badge{font-size:.68rem;font-weight:600;letter-spacing:.03em;border:1px solid var(--line);border-radius:20px;padding:5px 10px;background:var(--soft);white-space:nowrap}
+#syncStatus{font-size:.72rem;color:var(--muted);margin:12px 0 0}#syncStatus[data-state="stale"]{color:var(--warning)}
+#connection{margin:10px 0 16px}#session{min-width:0;flex:1}.session-picker{font-size:.82rem}
+#choices{margin:16px 0 10px}#choices button{flex:1;text-align:left}
+#customForm{display:flex;gap:8px}#custom{flex:1;min-width:0;font-size:.85rem}
+#notice{min-height:1.4em;margin:8px 0;color:var(--warning);font-size:.85rem}#notice:empty{display:none}
+#fallback{width:100%;margin:8px 0}
+#status{position:relative;margin:16px 0 10px;padding:18px 20px;border:1px solid var(--line);border-top:2px solid var(--gold);border-radius:8px;background:linear-gradient(120deg,var(--soft),var(--paper));box-shadow:0 8px 28px var(--shadow)}
+.status-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}#hero{display:block;font:500 1.25rem/1.3 Georgia,"Times New Roman",serif}
+
+#resources{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:16px}
+.resource-label{display:flex;justify-content:space-between;gap:4px;font-size:.76rem;font-variant-numeric:tabular-nums}.resource-label strong{font-weight:650;letter-spacing:.04em}
+meter{display:block;width:100%;height:7px;margin-top:7px;border:0;border-radius:2px;background:var(--line)}
+meter::-webkit-meter-bar{border:0;border-radius:2px;background:var(--line)}
+meter::-webkit-meter-optimum-value{border-radius:2px;background:currentColor}meter::-moz-meter-bar{border-radius:2px;background:currentColor}
+.hp{color:var(--hp)}.mp{color:var(--mp)}.sta{color:var(--sta)}
+.experience{margin-top:13px;color:var(--gold)}#progress{margin:0;font-size:.72rem;font-variant-numeric:tabular-nums}#xpMeter{height:3px;margin-top:6px}#location{margin:9px 0 0;font-size:.72rem}
+.ready,.active{color:var(--positive)}.cooldown,.pending{color:var(--warning)}.unavailable,.spent{color:var(--muted)}
+.rarity-COMMON{color:inherit}.rarity-UNCOMMON{color:var(--positive)}.rarity-RARE{color:var(--rare)}.rarity-EPIC{color:var(--epic)}.rarity-LEGENDARY{color:var(--gold)}.rarity-UNIQUE{color:var(--accent)}
+.toolbar{margin:14px 0 12px}.toolbar-label{flex:1;margin:0;font-size:.68rem}.toolbar button{font-size:.78rem;min-height:44px;padding:6px 10px}
+.codex-layout{display:grid;gap:20px;align-items:start}
+.section-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;min-width:0}
+.section-link{position:relative;display:flex;align-items:center;gap:10px;width:100%;min-height:72px;padding:12px;text-align:left;background:var(--paper);border-color:var(--line);border-radius:6px}
+.section-link:last-child{grid-column:1/-1}.section-link[aria-current="page"]{border-color:var(--gold);background:linear-gradient(100deg,var(--gold-wash),var(--paper));box-shadow:inset 3px 0 var(--gold)}
+.nav-icon{width:22px;height:22px;flex:none;color:var(--gold)}.nav-copy{min-width:0;flex:1}.nav-title{display:block;font-size:.8rem;font-weight:600;line-height:1.35;overflow-wrap:anywhere}
+.panel-preview{display:block;color:var(--muted);font-size:.75rem;font-weight:400;line-height:1.4;margin-top:5px;overflow-wrap:anywhere}
+.nav-index{display:none;color:var(--muted);font:500 .72rem Georgia,serif}
+#companionContent{min-width:0;outline:none}
+.companion-page{position:relative;padding:24px;background:var(--paper);border:1px solid var(--line);border-radius:8px;min-height:350px;box-shadow:0 10px 30px var(--shadow)}
+.page-heading{padding-bottom:20px;border-bottom:1px solid var(--line);margin-bottom:20px}.page-heading .eyebrow{font-size:.61rem;margin-bottom:9px}
+.page-description{font:italic .9rem/1.5 Georgia,serif;color:var(--muted);margin:8px 0 0}.page-content{font-size:.9rem;overflow-wrap:anywhere}
+.page-content p{margin:10px 0}.page-lead{font:500 1.1rem Georgia,serif}.stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:18px 0}
+.stat{border:1px solid var(--line);border-radius:5px;padding:12px 8px;text-align:center;background:var(--soft)}
+.stat-label{display:block;font-size:.65rem;font-weight:600;letter-spacing:.08em;color:var(--muted)}.stat-value{display:block;font:500 1.65rem Georgia,serif;color:var(--ink);margin:4px 0}.stat-mod{font-size:.72rem;color:var(--gold)}
+.record-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:16px 0}.record{padding:14px;border:1px solid var(--line);border-radius:5px}.record strong{display:block;font:500 1.25rem Georgia,serif;margin-top:6px}
+.chapter-note{font-size:.75rem;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;margin-top:20px}
+.codex-caption{margin:18px 0 12px;font-size:.62rem}.empty-state{padding:24px 8px;text-align:center;color:var(--muted)}.empty-state svg{width:38px;height:38px;color:var(--gold);margin-bottom:12px}.empty-state h3{color:var(--ink);font-size:1.15rem}.empty-state p{font-size:.82rem;max-width:32ch;margin:8px auto}
+summary{cursor:pointer;min-height:44px;font-weight:550;padding:6px 0;font-size:.86rem}summary::marker{color:var(--gold)}
+details{border-left:2px solid var(--line);padding:0 0 0 14px;margin:12px 0}details[open]{border-left-color:var(--gold)}
+details details{margin:10px 0 10px 4px}details p,details pre{margin:8px 0}
+pre{font:.78rem/1.6 var(--font-mono,ui-monospace,monospace);white-space:pre-wrap;overflow-wrap:anywhere}
+.group{margin:24px 0 8px;font:650 .67rem var(--font-sans,system-ui,sans-serif);letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}.group:first-child{margin-top:0}
+#approval{border:2px solid var(--gold);padding:18px;border-radius:8px;margin:16px 0;background:var(--paper)}#approvalSummary{max-height:240px;overflow:auto}
+.empty{padding:16px 0}.sr-only,.skip-link:not(:focus){position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip-link:focus{display:block;padding:12px;color:var(--ink);background:var(--paper);margin-bottom:12px}
+.view-options{margin:12px 0 0;border:0;padding:0}.view-options>summary{width:fit-content;color:var(--muted);font-size:.78rem}
+.view-options .row{margin:12px 0}.development-tools{border:1px solid var(--line);border-radius:5px;padding:0 12px;background:var(--soft)}
+.development-tools>summary{color:var(--gold);font-size:.78rem}.development-tools #choices{margin:8px 0}
+#connection{margin:8px 0}#mode{display:inline-block}#customForm{margin:12px 0}
+.gear-tabs{display:flex;gap:8px;border-bottom:1px solid var(--line);margin:0 0 18px;padding-bottom:12px}
+.gear-tabs [role="tab"]{flex:1;background:var(--paper)}
+.gear-tabs [aria-selected="true"]{color:var(--gold);border-color:var(--gold);background:var(--gold-wash);box-shadow:inset 0 -2px var(--gold)}
+.gear-count{font-size:.72rem;margin-left:6px;color:var(--muted)}
+.skills-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.skills-tabs [role="tab"]{min-width:0;padding:10px 8px}.skills-tabs .gear-count{white-space:nowrap}
+#skills{container-type:inline-size}
+@container (min-width:420px){.skills-tabs{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.item-card{margin:10px 0;border:1px solid var(--line);border-radius:5px;padding:0 14px;background:var(--soft)}
+.item-card[open]{border-color:var(--gold)}.item-card>summary{padding:12px 0}
+.item-heading{display:inline}.item-name{font-family:Georgia,serif;font-size:1.05rem}
+.item-rarity{font-size:.65rem;letter-spacing:.04em;margin-left:8px}
+.item-summary{display:block;margin:4px 0 0 17px;font-size:.75rem;font-weight:400;color:var(--muted)}
+.item-slot{margin:16px 0 0!important;font-size:.68rem;font-weight:650;color:var(--gold);text-transform:uppercase;letter-spacing:.07em}
+.item-fields{margin:4px 0 14px}.item-fields dt{font-size:.67rem;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);margin-top:12px}
+.item-fields dd{margin:4px 0;font-size:.85rem;white-space:pre-line}
+.actor-card{padding:18px 0;border-bottom:1px solid var(--line)}
+.actor-card:first-of-type{padding-top:0}.actor-card h3{font:600 1.25rem/1.3 Georgia,serif;margin:0 0 6px}
+.actor-meta{color:var(--muted);font-size:.78rem;margin:0 0 14px!important}
+.actor-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:14px 0}
+.actor-stat{min-width:0}.actor-stat dt{font-size:.72rem;color:var(--muted)}
+.actor-stat dd{font-size:1rem;font-weight:650;margin:4px 0;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.actor-card>details{border-left:0;border-bottom:1px solid var(--line);padding:0;margin:0}
+.actor-card>details:last-child{border-bottom:0}.actor-card>details>summary{padding:13px 0;min-height:44px}
+.record-facts{margin:0 0 14px}.record-facts dt{color:var(--gold);font-size:.76rem;font-weight:650;margin:14px 0 5px}
+.record-facts dd{margin:0;min-width:0}.record-facts p,.mechanics-copy p{margin:8px 0;max-width:65ch}
+.mechanics-list{padding-left:20px;margin:8px 0 16px;max-width:65ch}.mechanics-list li{margin:8px 0;line-height:1.65}
+.record-facts dl{padding-left:12px;border-left:1px solid var(--line)}
+.world-section{margin:20px 0}.world-section h3{color:var(--gold);font-size:.85rem;margin:0 0 8px}
+.draft,.recorded{color:var(--muted)}
+.empty-slots{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.empty-slot{padding:8px 10px;border:1px solid var(--line);border-radius:4px}
+.empty-slot strong{display:block;font-size:.75rem;font-weight:500}.empty-slot span{font-size:.72rem;color:var(--muted)}
+.supply-list{padding-left:18px;font-size:.85rem}.supply-list li{margin:8px 0}
+[role="tabpanel"]:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+[hidden]{display:none!important}
+@media(min-width:620px){.codex-layout{grid-template-columns:200px minmax(0,1fr);gap:18px}.section-nav{grid-template-columns:1fr;gap:6px}.section-link{min-height:66px;padding:11px 12px}.section-link:last-child{grid-column:auto}.nav-title{font-size:.8rem}.companion-page{min-height:498px;padding:24px}.nav-icon{width:20px;height:20px}}
+@media(min-width:980px){.codex-layout{grid-template-columns:240px minmax(0,1fr);gap:24px}.nav-index{display:block}.section-link{min-height:72px}.nav-title{font-size:.83rem}.companion-page{padding:30px}}
+@media(max-width:400px){body{padding:14px}h1{font-size:1.4rem}.crest{width:32px;height:38px}.masthead{gap:10px}.masthead .badge{font-size:.7rem;padding:4px 7px}.section-link{gap:7px;padding:10px;min-height:82px}.nav-icon{width:18px;height:18px}.nav-title{font-size:.8rem}.companion-page{padding:18px}h2{font-size:1.4rem}.toolbar-label{flex-basis:100%}}
+@media(max-width:480px){#choices{gap:8px}#choices button{flex:1 1 100%}#resources{gap:10px}.resource-label{font-size:.7rem;flex-wrap:wrap}#customForm{flex-wrap:wrap}#custom{flex-basis:100%}.toolbar button{flex:1}#status{padding:14px}.stat-grid{gap:6px}.record-grid{gap:8px}}
+@media(prefers-reduced-motion:reduce){button{transition:none}}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#companionContent">Skip to chapter</a>
+<header class="masthead row"><svg class="crest" viewBox="0 0 48 52" fill="none" aria-hidden="true"><path d="m24 2 21 12v24L24 50 3 38V14L24 2Z" stroke="currentColor" stroke-width="1.5"/><path d="m24 2-10 18 10 18 10-18L24 2ZM3 14l11 6L3 38l21 0 21 0-11-18 11-6M24 38v12" stroke="currentColor" stroke-width="1"/><text x="24" y="28" text-anchor="middle" fill="currentColor" font-family="Georgia,serif" font-size="11">20</text></svg><div class="identity"><p class="eyebrow">The adventurer's codex</p><h1>System Rebirth <span class="edition">1.0</span></h1></div></header>
+<details id="viewSettings" class="view-options"><summary>View options</summary>
+<div class="row session-picker"><label for="session">Saved game</label><select id="session"><option value="">Select a saved game</option></select></div>
+<div class="row"><button id="refresh" type="button">Refresh saved state</button><button id="hideHud" type="button">Hide codex</button></div>
+<details id="diagnostics"><summary>Connection details</summary><p id="connection" class="muted">Connecting…</p><span id="mode" class="badge">Inline</span><p id="stateVersion" class="muted">No saved state selected</p><pre id="lastEvent"></pre></details>
+<details id="developmentTools" class="development-tools"><summary>Development tools</summary><p class="muted">Test sandbox controls. These inspect test data; they are not adventure choices.</p><nav id="choices" class="row" aria-label="Development shortcuts"></nav><button id="newSandbox" type="button">New test sandbox</button></details>
+</details>
+<form id="customForm"><label class="sr-only" for="custom">Custom action or ordered actions</label><input id="custom" placeholder="Type an action or ordered sequence…" maxlength="3000"><button id="send" type="submit">Send to chat</button></form>
+<p id="notice" role="status" aria-live="polite"></p>
+<textarea id="fallback" aria-label="Prompt to copy into chat" rows="3" readonly hidden></textarea>
+<section id="approval" aria-label="Review proposed action" hidden>
+<h2>Review proposed action</h2><p id="approvalLabel"></p><pre id="approvalSummary"></pre>
+<div class="row"><button id="confirm" type="button">Approve this action</button><button id="decline" type="button">Dismiss preview</button></div>
+<p class="muted">Only approval commits the displayed command. Browsing chapters never uses an action.</p>
+</section>
+<section id="status" aria-label="Current character status">
+<div class="status-heading"><div><p class="eyebrow">Your character</p><strong id="hero">No campaign selected</strong></div></div>
+<div id="resources"></div>
+<div class="experience"><p id="progress" class="muted">Select existing state or review the rules.</p><meter id="xpMeter" aria-label="Experience" min="0" max="100" value="0"></meter></div><p id="location" class="muted"></p>
+<p id="syncStatus" role="status" aria-live="polite" data-state="waiting">Waiting for saved state…</p>
+</section>
+<div class="toolbar row"><span class="eyebrow toolbar-label">Seven chapters. One living record.</span></div>
+<div id="hud" class="codex-layout">
+<nav id="sectionNav" class="section-nav" aria-label="Companion sections">
+<button id="nav-character" class="section-link" data-target="character" type="button" aria-controls="page-character" aria-current="page"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21v-3a4 4 0 0 1 8 0v3M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M3 21h18"/></svg><span class="nav-copy"><span class="nav-title">Character &amp; Progression</span><span id="characterPreview" class="panel-preview">No state selected</span></span><span class="nav-index" aria-hidden="true">01</span></button>
+<button id="nav-skills" class="section-link" data-target="skills" type="button" aria-controls="page-skills"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14 3 7 7-3 1-5 5-1 3-7-7 3-1 5-5 1-3ZM4 20l5-5M3 16l5 5"/></svg><span class="nav-copy"><span class="nav-title">Skills &amp; Class Abilities</span><span id="skillsPreview" class="panel-preview">No state selected</span></span><span class="nav-index" aria-hidden="true">02</span></button>
+<button id="nav-health" class="section-link" data-target="health" type="button" aria-controls="page-health"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3ZM8 12h8M12 8v8"/></svg><span class="nav-copy"><span class="nav-title">Health &amp; Conditions</span><span id="healthPreview" class="panel-preview">No state selected</span></span><span class="nav-index" aria-hidden="true">03</span></button>
+<button id="nav-summons" class="section-link" data-target="summons" type="button" aria-controls="page-summons"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 3 7 7-2 2-7-7 2-2Zm16 0-7 7 2 2 7-7-2-2ZM8 13l-5 8M16 13l5 8M4 16l4 3M20 16l-4 3"/></svg><span class="nav-copy"><span class="nav-title">Summons &amp; Combat</span><span id="summonsPreview" class="panel-preview">No state selected</span></span><span class="nav-index" aria-hidden="true">04</span></button>
+<button id="nav-equipment" class="section-link" data-target="equipment" type="button" aria-controls="page-equipment"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8h12l2 13H4L6 8ZM9 8V6a3 3 0 0 1 6 0v2M8 12h8M9 16h6"/></svg><span class="nav-copy"><span class="nav-title">Equipment &amp; Inventory</span><span id="equipmentPreview" class="panel-preview">No state selected</span></span><span class="nav-index" aria-hidden="true">05</span></button>
+<button id="nav-quests" class="section-link" data-target="quests" type="button" aria-controls="page-quests"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4h12v16H6V4ZM9 2v4M15 2v4M9 10h6M9 14h6M9 18h3"/></svg><span class="nav-copy"><span class="nav-title">Quest Journal</span><span id="questsPreview" class="panel-preview">No state selected</span></span><span class="nav-index" aria-hidden="true">06</span></button>
+<button id="nav-world" class="section-link" data-target="world" type="button" aria-controls="page-world"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5l6-2 6 2 6-2v16l-6 2-6-2-6 2V5ZM9 3v16M15 5v16"/></svg><span class="nav-copy"><span class="nav-title">World &amp; Campaign Log</span><span id="worldPreview" class="panel-preview">No state selected</span></span><span class="nav-index" aria-hidden="true">07</span></button>
+</nav>
+<main id="companionContent" tabindex="-1"><section class="companion-page" id="page-character" data-panel="character" aria-labelledby="title-character"><header class="page-heading"><p class="eyebrow">Chapter 01 / The adventurer's codex</p><h2 id="title-character">Character &amp; Progression</h2><p class="page-description">Your character, and the road ahead.</p></header><div id="character" class="page-content"><p class="empty muted">Choose a stored sandbox to view this chapter.</p></div></section>
+<section class="companion-page" id="page-skills" data-panel="skills" aria-labelledby="title-skills" hidden><header class="page-heading"><p class="eyebrow">Chapter 02 / The adventurer's codex</p><h2 id="title-skills">Skills &amp; Class Abilities</h2><p class="page-description">The arts and powers at your command.</p></header><div id="skills" class="page-content"><p class="empty muted">Choose a stored sandbox to view this chapter.</p></div></section>
+<section class="companion-page" id="page-health" data-panel="health" aria-labelledby="title-health" hidden><header class="page-heading"><p class="eyebrow">Chapter 03 / The adventurer's codex</p><h2 id="title-health">Health &amp; Conditions</h2><p class="page-description">Vitality, resilience and lingering effects.</p></header><div id="health" class="page-content"><p class="empty muted">Choose a stored sandbox to view this chapter.</p></div></section>
+<section class="companion-page" id="page-summons" data-panel="summons" aria-labelledby="title-summons" hidden><header class="page-heading"><p class="eyebrow">Chapter 04 / The adventurer's codex</p><h2 id="title-summons">Summons &amp; Combat</h2><p class="page-description">Allies in the field. Threats on the horizon.</p></header><div id="summons" class="page-content"><p class="empty muted">Choose a stored sandbox to view this chapter.</p></div></section>
+<section class="companion-page" id="page-equipment" data-panel="equipment" aria-labelledby="title-equipment" hidden><header class="page-heading"><p class="eyebrow">Chapter 05 / The adventurer's codex</p><h2 id="title-equipment">Equipment &amp; Inventory</h2><p class="page-description">Everything carried into the unknown.</p></header><div id="equipment" class="page-content"><p class="empty muted">Choose a stored sandbox to view this chapter.</p></div></section>
+<section class="companion-page" id="page-quests" data-panel="quests" aria-labelledby="title-quests" hidden><header class="page-heading"><p class="eyebrow">Chapter 06 / The adventurer's codex</p><h2 id="title-quests">Quest Journal</h2><p class="page-description">Promises made. Paths still unwritten.</p></header><div id="quests" class="page-content"><p class="empty muted">Choose a stored sandbox to view this chapter.</p></div></section>
+<section class="companion-page" id="page-world" data-panel="world" aria-labelledby="title-world" hidden><header class="page-heading"><p class="eyebrow">Chapter 07 / The adventurer's codex</p><h2 id="title-world">World &amp; Campaign Log</h2><p class="page-description">Places discovered, and the story so far.</p></header><div id="world" class="page-content"><p class="empty muted">Choose a stored sandbox to view this chapter.</p></div></section></main>
+</div>
+<script id="companionNavigation">
+"use strict";
+function selectCompanionPage(id){
+  const button=document.querySelector('#sectionNav [data-target="'+id+'"]');
+  if(!button)return;
+  for(const item of document.querySelectorAll("#sectionNav [data-target]")){
+    if(item===button)item.setAttribute("aria-current","page");else item.removeAttribute("aria-current");
+  }
+  for(const page of document.querySelectorAll("#hud [data-panel]"))page.hidden=page.dataset.panel!==id;
+  document.dispatchEvent(new CustomEvent("companion:page",{detail:{id}}));
+}
+for(const button of document.querySelectorAll("#sectionNav [data-target]")){
+  button.addEventListener("click",()=>selectCompanionPage(button.dataset.target));
+  button.addEventListener("keydown",event=>{
+    if(event.altKey||event.ctrlKey||event.metaKey)return;
+    const buttons=[...document.querySelectorAll("#sectionNav [data-target]")],index=buttons.indexOf(button);
+    const steps={ArrowRight:1,ArrowDown:1,ArrowLeft:-1,ArrowUp:-1};
+    let next;
+    if(event.key in steps)next=(index+steps[event.key]+buttons.length)%buttons.length;
+    else if(event.key==="Home")next=0;else if(event.key==="End")next=buttons.length-1;else return;
+    event.preventDefault();buttons[next].focus();buttons[next].click();
+  });
+}
+</script>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const requests=new Map();
+let nextId=1, standard=false, hostCapabilities={}, hostContext={}, state=null, campaigns=[], pending=null;
+let preferences=window.openai?.widgetState?.view_preferences||{panels:[],details:[],hud_hidden:false};
+let preferencesLoaded=Boolean(window.openai?.widgetState?.view_preferences), restoring=false, savingTimer, pollingTimer, polling=false, busy=false;
+let lastSelected=window.openai?.widgetState?.campaign_id||null;
+let dismissedProposal=null, lastVerifiedAt=null, syncIssue=false, gearTab="equipment", skillTab="combat", worldTab="world", combatTab="summons";
+const groups=["Combat Actions & Commands","Defensive & Off-Turn Reactions","Standalone Passive Skills","Exploration & Utility"];
+const skillTabs=[["combat","Combat"],["reactions","Reactions"],["passives","Passives"],["utility","Utility"]];
+
+function notify(method,params={}){window.parent.postMessage({jsonrpc:"2.0",method,params},"*")}
+function rpc(method,params){
+  if(window.parent===window)return Promise.reject(new Error("Chat host is not connected"));
+  const id=nextId++;
+  return new Promise((resolve,reject)=>{
+    const timeout=setTimeout(()=>{requests.delete(id);reject(new Error("Host request timed out"))},15000);
+    requests.set(id,{resolve,reject,timeout});
+    window.parent.postMessage({jsonrpc:"2.0",id,method,params},"*");
+  });
+}
+function notice(text){$("notice").textContent=text}
+function updateSyncStatus(){
+  const status=$("syncStatus"), checked=lastVerifiedAt?.toLocaleTimeString();
+  status.dataset.state=syncIssue?"stale":lastVerifiedAt?"saved":"waiting";
+  status.textContent=syncIssue?
+    (state?"Connection lost · showing last saved snapshot.":"Saved state unavailable.")+(checked?" Last checked "+checked+".":"")+" Refresh to reconnect.":
+    lastVerifiedAt?(state?"Saved":"No saved game selected")+" · checked "+checked:
+    state?"Verifying saved snapshot…":"Waiting for saved state…";
+  const outdated=pending&&pending.proposal.expected_version!==state?.version;
+  $("confirm").disabled=busy||syncIssue||!lastVerifiedAt||!pending||Boolean(outdated);
+  $("confirm").title=syncIssue||!lastVerifiedAt?"Refresh saved state before approving.":outdated?"State changed. Request a new action preview.":"";
+}
+function element(tag,text,className){
+  const node=document.createElement(tag);if(text!==undefined)node.textContent=String(text);
+  if(className)node.className=className;return node;
+}
+function paragraph(parent,text,className){parent.append(element("p",text,className))}
+function publicField(key){return !/roll|receipt|token|secret|private|sha256/i.test(key)}
+function fieldLabel(key){return key.replaceAll("_"," ").replace(/^./,letter=>letter.toUpperCase())}
+function briefText(value,limit=100){
+  const text=typeof value==="string"?value.replace(/\s+/g," ").trim():"";
+  if(text.length<=limit)return text;
+  const cut=text.slice(0,limit-1),space=cut.lastIndexOf(" ");return cut.slice(0,space>limit/2?space:cut.length)+"…";
+}
+function renderValue(parent,value,depth=0){
+  if(value===null||value===undefined||value==="")return;
+  if(Array.isArray(value)){
+    const list=element("ul",undefined,"mechanics-list");
+    for(const entry of value){const row=element("li");renderValue(row,entry,depth+1);if(row.childNodes.length)list.append(row)}
+    if(list.childNodes.length)parent.append(list);return;
+  }
+  if(typeof value==="object"){
+    renderFacts(parent,Object.entries(value).filter(([key])=>publicField(key)).map(([key,item])=>[fieldLabel(key),item]),depth+1);return;
+  }
+  const text=typeof value==="boolean"?(value?"Yes":"No"):String(value),lines=text.split(/\n+/).filter(line=>line.trim());
+  for(const line of lines){
+    const sentences=line.length>280?line.split(/(?<=[.!?])\s+(?=[A-Z])/):[line];
+    if(sentences.length<3)paragraph(parent,line);
+    else{const list=element("ul",undefined,"mechanics-list");for(const sentence of sentences)list.append(element("li",sentence));parent.append(list)}
+  }
+}
+function renderFacts(parent,pairs,depth=0){
+  const facts=element("dl",undefined,"record-facts");
+  for(const [label,value]of pairs){
+    if(value===undefined||value===null||value==="")continue;
+    const definition=element("dd");
+    if(value&&typeof value==="object"){
+      const detail=element("details");detail.append(element("summary","View "+label.toLowerCase()));renderValue(detail,value,depth);definition.append(detail);
+    }else renderValue(definition,value,depth);
+    if(definition.childNodes.length)facts.append(element("dt",label),definition);
+  }
+  if(facts.childNodes.length)parent.append(facts);
+}
+function recordDetail(parent,label,key){
+  const detail=element("details");detail.dataset.detail=key;
+  detail.append(element("summary",label));parent.append(detail);return detail;
+}
+function applyHostContext(context={}){
+  hostContext={...hostContext,...context};
+  if(context.theme)document.documentElement.style.colorScheme=context.theme;
+  const vars=context.styles?.variables||{};
+  for(const [key,value]of Object.entries(vars))if(key.startsWith("--")&&typeof value==="string")document.documentElement.style.setProperty(key,value);
+  if(context.locale)document.documentElement.lang=context.locale;
+  const mode=hostContext.displayMode||window.openai?.displayMode||"inline";
+  $("mode").textContent=mode==="pip"?"Pinned":mode==="fullscreen"?"Expanded":"Inline";
+  const insets=hostContext.safeAreaInsets||{};
+  for(const edge of ["top","right","bottom","left"]){
+    const value=insets[edge];
+    document.body.style["padding"+edge[0].toUpperCase()+edge.slice(1)]=Math.max(16,Number.isFinite(value)?value:0)+"px";
+  }
+}
+function persistPreferences(){
+  if(restoring)return;
+  preferences={
+    panels:[document.querySelector('#sectionNav [aria-current="page"]')?.dataset.target||"character"],
+    details:[...document.querySelectorAll("[data-detail][open]")].map(n=>n.dataset.detail),
+    hud_hidden:$("hud").hidden,
+    equipment_tab:gearTab,
+    skills_tab:skillTab,
+    world_tab:worldTab,
+    combat_tab:combatTab
+  };
+  try{window.openai?.setWidgetState?.({campaign_id:state?.id||lastSelected,view_preferences:preferences})}catch{}
+  clearTimeout(savingTimer);
+  if(standard||window.openai?.callTool)savingTimer=setTimeout(()=>{
+    callTool("set_view_preferences",{preferences}).catch(()=>{});
+  },700);
+}
+function restorePreferences(){
+  restoring=true;
+  selectCompanionPage(preferences.panels.find(id=>document.getElementById("page-"+id))||"character");
+  for(const node of document.querySelectorAll("[data-detail]"))node.open=preferences.details.includes(node.dataset.detail);
+  gearTab=preferences.equipment_tab==="inventory"?"inventory":"equipment";selectGearTab(gearTab,false);
+  selectSkillTab(preferences.skills_tab,false);
+  selectWorldTab(preferences.world_tab,false);
+  selectCombatTab(preferences.combat_tab,false);
+  $("hud").hidden=preferences.hud_hidden;
+  $("hideHud").textContent=$("hud").hidden?"Show codex":"Hide codex";
+  // toggle events are queued; restore guard lasts until they have fired.
+  setTimeout(()=>{restoring=false},0);
+}
+async function callTool(name,args={}){
+  const checksState=["get_campaign","render_dashboard","execute_confirmed_action"].includes(name);
+  let result;
+  try{
+  if(standard&&hostCapabilities.serverTools)result=await rpc("tools/call",{name,arguments:args});
+  else if(window.openai?.callTool)result=await window.openai.callTool(name,args);
+  else throw new Error("Connected MCP tools are unavailable");
+  if(result?.isError)throw new Error(result.structuredContent?.message||result.content?.find(c=>c.type==="text")?.text||"Tool failed");
+  receive(result);
+  if(checksState&&(result.structuredContent?.campaign||Array.isArray(result.structuredContent?.campaigns))){
+    if(syncIssue)notice("Connection restored. Saved state refreshed.");
+    lastVerifiedAt=new Date();syncIssue=false;updateSyncStatus();
+  }
+  return result;
+  }catch(error){
+    if(checksState){syncIssue=true;updateSyncStatus()}
+    throw error;
+  }
+}
+async function sendPrompt(text){
+  const prompt=(state?("[DnDGPT campaign "+state.id+", version "+state.version+"] "):"")+text;
+  $("fallback").hidden=true;
+  try{
+    let result;
+    if(standard&&hostCapabilities.message)result=await rpc("ui/message",{role:"user",content:[{type:"text",text:prompt}]});
+    else if(window.openai?.sendFollowUpMessage)result=await window.openai.sendFollowUpMessage({prompt,scrollToBottom:false});
+    else throw new Error("This preview cannot send chat messages");
+    if(result?.isError)throw new Error("The host did not send the message");
+    notice("Sent to chat.");
+  }catch(error){
+    $("fallback").value=prompt;$("fallback").hidden=false;
+    notice(error.message+". Copy the prompt into chat.");
+  }
+}
+function renderChoices(){
+  $("developmentTools").hidden=Boolean(state&&state.mode!=="sandbox");
+  $("choices").replaceChildren();
+  const choices=state?.mode==="sandbox"?
+    [["Review sandbox","Read this sandbox's authoritative state and explain what is currently supported. Do not change it."],
+     ["Review abilities","Inspect owned abilities and explain legal actions and missing mechanics. Do not roll or spend resources."],
+     ["Review rules","Explain the Version 1.0 rules relevant to my next decision. Do not advance time."]]:
+    [["Review rules","Review the complete DnDGPT Version 1.0 rules without starting a campaign."],
+     ["How to play","Explain character creation and the separate adventure authorization gates."],
+     ["Inspect progress","Show stored campaign progress without rolling or advancing time."]];
+  for(const [label,prompt]of choices){const b=element("button",label);b.type="button";b.onclick=()=>sendPrompt(prompt);$("choices").append(b)}
+}
+function format(value){return typeof value==="string"?value:JSON.stringify(value,null,2)}
+function renderResources(character){
+  $("resources").replaceChildren(...["hp","mp","sta"].map(key=>{
+    const resource=element("div",undefined,key),label=element("div",undefined,"resource-label");
+    const value=character[key],maximum=character[key+"_max"];
+    label.append(element("strong",key.toUpperCase()),element("span",value+" / "+maximum));
+    const meter=document.createElement("meter");meter.min=0;meter.max=Math.max(1,maximum);meter.value=value;
+    meter.setAttribute("aria-label",key.toUpperCase());meter.setAttribute("aria-valuetext",value+" of "+maximum);
+    resource.append(label,meter);return resource;
+  }));
+}
+function skillGroup(ability){
+  const activation=String(ability.activation||"").toUpperCase().trim().replaceAll(" ","_");
+  if(activation.startsWith("PASSIVE"))return 2;
+  if(activation.startsWith("REACTION"))return 1;
+  const explicit=skillTabs.findIndex(([id],index)=>ability.group===id||ability.group===groups[index]);
+  if(explicit>=0)return explicit;
+  return 0;
+}
+function skillStatus(ability){
+  if(ability.status){
+    const status=String(ability.status).trim();
+    return /^(ready|passive|unavailable|cooldown|draft|recorded)$/i.test(status)?status.toUpperCase():status;
+  }
+  if(state?.mode==="chat"&&state.phase==="character_draft")return "DRAFT";
+  if(ability.cooldown_remaining>0)return "COOLDOWN";
+  if(ability.ready===false)return "UNAVAILABLE";
+  if(ability.ready===true)return String(ability.activation||"").toUpperCase().startsWith("PASSIVE")?"PASSIVE":"READY";
+  return state?.mode==="chat"?"RECORDED":"UNAVAILABLE";
+}
+function skillCost(ability){
+  if(skillGroup(ability)===2){
+    const cost=ability.cost;
+    const free=cost===undefined||cost===null||cost===""||cost===0||typeof cost==="string"&&/^(0|none|free|no cost)$/i.test(cost.trim());
+    if(free&&[ability.mp_cost,ability.sta_cost].every(value=>value===undefined||value===null||Number(value)===0))return undefined;
+  }
+  if(ability.cost!==undefined&&ability.cost!==null&&ability.cost!=="")return ability.cost;
+  const parts=[];
+  if(ability.mp_cost!==undefined)parts.push("MP "+ability.mp_cost);
+  if(ability.sta_cost!==undefined)parts.push("STA "+ability.sta_cost);
+  return parts.join(" · ")||undefined;
+}
+function selectSkillTab(id,save=true){
+  skillTab=skillTabs.some(([key])=>key===id)?id:"combat";
+  for(const button of document.querySelectorAll('#skillTabs [role="tab"]')){
+    const selected=button.dataset.skill===skillTab;
+    button.setAttribute("aria-selected",String(selected));button.tabIndex=selected?0:-1;
+  }
+  for(const page of document.querySelectorAll("[data-skill-page]"))page.hidden=page.dataset.skillPage!==skillTab;
+  if(save)persistPreferences();
+}
+function renderSkills(abilities){
+  const root=$("skills");root.replaceChildren();
+  if(state?.mode==="chat"&&state.phase==="character_draft")paragraph(root,"Saved abilities · character creation is still in progress.","chapter-note");
+  const tabs=element("div",undefined,"gear-tabs skills-tabs");tabs.id="skillTabs";
+  tabs.setAttribute("role","tablist");tabs.setAttribute("aria-label","Skills and class ability groups");root.append(tabs);
+  for(const [index,[id,label]]of skillTabs.entries()){
+    const matches=abilities.filter(ability=>skillGroup(ability)===index);
+    const button=element("button");button.id="skill-tab-"+id;button.type="button";button.dataset.skill=id;
+    button.setAttribute("role","tab");button.setAttribute("aria-controls","skill-page-"+id);
+    button.append(element("span",label),element("span"," · "+matches.length,"gear-count"));
+    button.onclick=()=>selectSkillTab(id);
+    button.onkeydown=event=>{
+      if(event.altKey||event.ctrlKey||event.metaKey||!["ArrowRight","ArrowLeft","Home","End"].includes(event.key))return;
+      event.preventDefault();
+      const next=event.key==="Home"?0:event.key==="End"?skillTabs.length-1:
+        (index+(event.key==="ArrowRight"?1:-1)+skillTabs.length)%skillTabs.length;
+      selectSkillTab(skillTabs[next][0]);$("skill-tab-"+skillTabs[next][0]).focus();
+    };
+    tabs.append(button);
+    const page=element("section");page.id="skill-page-"+id;page.dataset.skillPage=id;
+    page.setAttribute("role","tabpanel");page.setAttribute("aria-labelledby",button.id);page.tabIndex=0;root.append(page);
+    page.append(element("h3",groups[index],"group"));
+    if(!matches.length)paragraph(page,"No owned abilities in this group.","muted");
+    for(const ability of matches){
+      const detail=document.createElement("details");detail.dataset.detail="ability-"+ability.id;
+      const summary=document.createElement("summary");
+      summary.append(element("span",ability.name+" · "+(ability.rarity||"COMMON"),"rarity-"+(ability.rarity||"COMMON")));
+      const status=skillStatus(ability);
+      summary.append(element("span"," · "+status+(ability.status_reason?": "+ability.status_reason:"")," "+status.toLowerCase()));
+      detail.append(summary);
+      paragraph(detail,ability.activation||"Activation not recorded","muted");
+      if(ability.simple||ability.description)renderValue(detail,ability.simple||ability.description);
+      renderFacts(detail,[["Cost",skillCost(ability)],["Range",ability.range],["Target",ability.target],
+        ["Attack / save",ability.attack_save],["Duration",ability.duration],
+        ["Cooldown",ability.cooldown_remaining!==undefined?ability.cooldown_remaining+" rounds remaining":ability.cooldown]]);
+      const mechanics=ability.mechanics??ability.effect;
+      if(mechanics!==undefined&&mechanics!==null&&mechanics!=="")renderValue(detail,mechanics);
+      else paragraph(detail,"Full mechanics have not been recorded.","muted");
+      if(ability.visual){const visual=recordDetail(detail,"Appearance","visual-"+ability.id);renderValue(visual,ability.visual)}
+      for(const child of [...(ability.evolutions||[]),...(ability.imprints||[])]){
+        const nested=document.createElement("details");nested.dataset.detail="child-"+ability.id+"-"+child.id;
+        nested.append(element("summary",child.name+" · "+child.rarity,"rarity-"+child.rarity));
+        paragraph(nested,"Integrated passive","muted");renderValue(nested,child.mechanics??child.effect??child.description??"");
+        detail.append(nested);
+      }
+      detail.addEventListener("toggle",persistPreferences);page.append(detail);
+    }
+  }
+  selectSkillTab(skillTab,false);
+}
+function itemRecord(value,inventory){
+  if(value&&typeof value==="object")return value;
+  return inventory.find(item=>item&&typeof item==="object"&&item.id===value)||{name:String(value)};
+}
+function gearRecords(next){
+  const inventory=Array.isArray(next.inventory)?next.inventory:[],equipped=[],empty=[];
+  for(const [slot,value]of Object.entries(next.equipment||{})){
+    if(!value){empty.push(slot);continue}
+    const item=itemRecord(value,inventory),existing=item.id&&equipped.find(entry=>entry.item.id===item.id);
+    if(existing)existing.slots.push(slot);else equipped.push({item,slots:[slot]});
+  }
+  const worn=new Set(equipped.map(entry=>entry.item.id).filter(Boolean)),seen=new Set();
+  const stored=inventory.map(value=>itemRecord(value,inventory)).filter(item=>{
+    if(!item.id)return true;
+    if(worn.has(item.id)||seen.has(item.id))return false;
+    seen.add(item.id);return true;
+  });
+  return {equipped,empty,stored};
+}
+function itemDetailKey(scope,item,index){
+  const identity=scope+":"+String(item.id??((item.name||"item")+":"+index));
+  let hash=2166136261;for(const char of identity)hash=Math.imul(hash^char.charCodeAt(0),16777619);
+  return "item-"+scope+"-"+(hash>>>0).toString(36);
+}
+function renderItem(parent,item,scope,index){
+  const detail=element("details",undefined,"item-card");detail.dataset.detail=itemDetailKey(scope,item,index);
+  const summary=element("summary"),heading=element("span",undefined,"item-heading");
+  heading.append(element("span",item.name||"Unnamed item","item-name"));
+  const rarity=typeof item.rarity==="string"?item.rarity.toUpperCase():"";
+  if(rarity)heading.append(element("span"," · "+rarity,"item-rarity "+(["COMMON","UNCOMMON","RARE","EPIC","LEGENDARY","UNIQUE"].includes(rarity)?"rarity-"+rarity:"")));
+  summary.append(heading);
+  const brief=[item.summary||item.simple||item.item_type];
+  if(item.quantity!==undefined)brief.push("Qty "+item.quantity);
+  if(item.weight_kg!==undefined)brief.push(item.weight_kg+" kg");
+  summary.append(element("span",brief.filter(v=>v!==undefined&&v!==null&&v!=="").join(" · ")||"View recorded details","item-summary"));
+  detail.append(summary);const fields=element("dl",undefined,"item-fields");
+  const pairs=[["Description",item.description],["Stats",item.stats],["Bonuses",item.bonus],["Damage",item.damage],["Defense",item.defense],
+    ["Effects",item.effects??item.mechanics],["Requirements",item.requirements],["Weight",item.weight_kg===undefined?undefined:item.weight_kg+" kg"],
+    ["Charges",item.charges],["Uses",item.uses],["Durability",item.durability],["Source",item.source]];
+  for(const [label,value]of pairs){
+    if(value===undefined||value===null||value==="")continue;
+    const definition=element("dd");renderValue(definition,value);if(definition.childNodes.length)fields.append(element("dt",label),definition);
+  }
+  if(item.quest_item===true)fields.append(element("dt","Category"),element("dd","Quest item"));
+  if(fields.children.length)detail.append(fields);else paragraph(detail,"More details have not been recorded.","muted");
+  const known=new Set(["id","name","rarity","summary","simple","item_type","quantity","description","stats","bonus","damage","defense","effects","mechanics","requirements","weight_kg","charges","uses","durability","source","quest_item","owner","source_id"]);
+  const extra=Object.entries(item).filter(([key])=>!known.has(key)&&publicField(key));
+  if(extra.length)renderValue(recordDetail(detail,"Further details",detail.dataset.detail+"-other"),Object.fromEntries(extra));
+  parent.append(detail);
+}
+function renderRecords(parent,records,empty){
+  if(!records.length){if(empty)paragraph(parent,empty,"muted");return}
+  for(const [index,value]of records.entries()){
+    const record=value&&typeof value==="object"?value:{text:value};
+    const heading=record.name||record.title||record.summary||record.text;
+    const detail=recordDetail(parent,briefText(heading)||"Entry "+(index+1),itemDetailKey(parent.id,record,index));
+    if(typeof heading==="string"&&heading.length>100&&(heading===record.name||heading===record.title))renderFacts(detail,[["Full title",heading]]);
+    renderValue(detail,Object.fromEntries(Object.entries(record).filter(([key])=>publicField(key)&&!["id","name","title"].includes(key))));
+  }
+}
+function renderActors(parent,records,scope){
+  records.forEach((actor,index)=>{
+    const card=element("article",undefined,"actor-card"),key=itemDetailKey(scope,actor,index);
+    card.append(element("h3",actor.name||"Unnamed creature"));
+    const meta=[actor.rarity,actor.permanent===true?"Permanent":undefined,actor.autonomous===true?"Autonomous":undefined,
+      actor.evolution_rank!==undefined?"Rank "+actor.evolution_rank:undefined,
+      actor.status==="creation_draft_not_in_play"?"Creation draft · not in play":actor.status?fieldLabel(String(actor.status)):undefined];
+    paragraph(card,meta.filter(Boolean).join(" · "),"actor-meta");
+    const stats=element("dl",undefined,"actor-stats");
+    for(const [label,value]of [["HP",actor.hp===undefined?undefined:actor.hp+(actor.hp_max===undefined?"":" / "+actor.hp_max)],
+      ["Defense",actor.def],["Movement",actor.move??(actor.move_m===undefined?undefined:actor.move_m+" m")]])if(value!==undefined){
+      const stat=element("div",undefined,"actor-stat");stat.append(element("dt",label),element("dd",value));stats.append(stat);
+    }
+    if(stats.children.length)card.append(stats);
+    const add=(label,suffix,pairs)=>{
+      if(!pairs.some(([,value])=>value!==undefined&&value!==null&&value!==""))return;
+      renderFacts(recordDetail(card,label,key+"-"+suffix),pairs);
+    };
+    add("Combat & instincts","combat",[["Attack",actor.attack],["Autonomous turn",actor.autonomy],["Abilities",actor.abilities],["Conditions",actor.conditions]]);
+    add("Nature & interior","nature",[["Appearance",actor.look??actor.description],["Nature",actor.law]]);
+    const growth=actor.growth;
+    if(growth||actor.evolution_marks!==undefined){
+      const evolution=recordDetail(card,"Evolution"+(growth?.meter?" · "+growth.meter+" "+(growth.now??actor.evolution_marks??0):""),key+"-growth");
+      renderFacts(evolution,[["Rank",actor.evolution_rank],["Marks",actor.evolution_marks],["Growth",growth?.pace]]);
+      if(growth&&typeof growth==="object"&&!Array.isArray(growth)){
+        for(const [field,value]of Object.entries(growth).filter(([field])=>publicField(field)&&!["meter","now","pace"].includes(field))){
+          const label=/^rank\d+$/i.test(field)?"Rank "+field.slice(4):fieldLabel(field);
+          renderValue(recordDetail(evolution,label,key+"-growth-"+field),value);
+        }
+      }else renderValue(evolution,growth);
+    }
+    add("Recovery & permanence","recovery",[["Recovery",actor.revival]]);
+    const known=new Set(["id","name","rarity","permanent","autonomous","evolution_rank","status","hp","hp_max","def","move","move_m","attack","autonomy","abilities","conditions","look","description","law","growth","evolution_marks","revival","owner","source_id","source"]);
+    const extra=Object.entries(actor).filter(([field])=>!known.has(field)&&publicField(field)).map(([field,value])=>[fieldLabel(field),value]);
+    add("Further details","other",extra);parent.append(card);
+  });
+}
+function selectCombatTab(id,save=true){
+  combatTab=id==="combat"?"combat":"summons";
+  for(const button of document.querySelectorAll('#combatTabs [role="tab"]')){
+    const selected=button.dataset.combat===combatTab;button.setAttribute("aria-selected",String(selected));button.tabIndex=selected?0:-1;
+  }
+  for(const page of document.querySelectorAll("[data-combat-page]"))page.hidden=page.dataset.combatPage!==combatTab;
+  if(save)persistPreferences();
+}
+function renderCombat(next){
+  const root=$("summons");root.replaceChildren();
+  const tabs=element("div",undefined,"gear-tabs");tabs.id="combatTabs";tabs.setAttribute("role","tablist");tabs.setAttribute("aria-label","Summons and combat");root.append(tabs);
+  for(const [id,label,count]of [["summons","Summons",next.summons.length],["combat","Combat",next.enemies.length]]){
+    const button=element("button");button.append(element("span",label),element("span"," · "+count,"gear-count"));
+    button.id="combat-tab-"+id;button.type="button";button.dataset.combat=id;button.setAttribute("role","tab");button.setAttribute("aria-controls","combat-page-"+id);button.onclick=()=>selectCombatTab(id);
+    button.onkeydown=event=>{
+      if(event.altKey||event.ctrlKey||event.metaKey||!["ArrowRight","ArrowLeft","Home","End"].includes(event.key))return;
+      event.preventDefault();const target=event.key==="Home"?"summons":event.key==="End"?"combat":id==="summons"?"combat":"summons";
+      selectCombatTab(target);$("combat-tab-"+target).focus();
+    };tabs.append(button);
+    const page=element("section");page.id="combat-page-"+id;page.dataset.combatPage=id;
+    page.setAttribute("role","tabpanel");page.setAttribute("aria-labelledby",button.id);page.tabIndex=0;root.append(page);
+  }
+  const summons=$("combat-page-summons"),combat=$("combat-page-combat");
+  if(next.summons.length)renderActors(summons,next.summons,"summon");else paragraph(summons,"No recorded summons.","muted");
+  paragraph(combat,"Known enemies","page-lead");
+  if(next.enemies.length)renderActors(combat,next.enemies,"enemy");else paragraph(combat,"No known enemies.","muted");
+  if(next.combat)renderValue(recordDetail(combat,"Encounter details","combat-encounter"),next.combat);
+  if(next.mode==="sandbox")paragraph(combat,"Combat action resolution is not implemented in this sandbox.","muted");
+  selectCombatTab(combatTab,false);
+}
+function selectWorldTab(id,save=true){
+  worldTab=id==="log"?"log":"world";
+  for(const button of document.querySelectorAll('#worldTabs [role="tab"]')){
+    const selected=button.dataset.world===worldTab;button.setAttribute("aria-selected",String(selected));button.tabIndex=selected?0:-1;
+  }
+  for(const page of document.querySelectorAll("[data-world-page]"))page.hidden=page.dataset.worldPage!==worldTab;
+  if(save)persistPreferences();
+}
+function renderWorld(next){
+  const root=$("world");root.replaceChildren();
+  const tabs=element("div",undefined,"gear-tabs");tabs.id="worldTabs";tabs.setAttribute("role","tablist");tabs.setAttribute("aria-label","World and campaign log");root.append(tabs);
+  for(const [id,label]of [["world","World"],["log","Campaign Log"]]){
+    const button=element("button",label);button.id="world-tab-"+id;button.type="button";button.dataset.world=id;
+    button.setAttribute("role","tab");button.setAttribute("aria-controls","world-page-"+id);button.onclick=()=>selectWorldTab(id);
+    button.onkeydown=event=>{
+      if(event.altKey||event.ctrlKey||event.metaKey||!["ArrowRight","ArrowLeft","Home","End"].includes(event.key))return;
+      event.preventDefault();const target=event.key==="Home"?"world":event.key==="End"?"log":id==="world"?"log":"world";
+      selectWorldTab(target);$("world-tab-"+target).focus();
+    };
+    tabs.append(button);
+    const page=element("section");page.id="world-page-"+id;page.dataset.worldPage=id;
+    page.setAttribute("role","tabpanel");page.setAttribute("aria-labelledby",button.id);page.tabIndex=0;root.append(page);
+  }
+  const world=$("world-page-world"),log=$("world-page-log");
+  const entries=Object.entries(next.world||{}).filter(([name])=>publicField(name));
+  if(!entries.length)paragraph(world,"No world details recorded.","muted");
+  for(const [name,value]of entries){
+    const section=recordDetail(world,briefText(fieldLabel(name)),"world-field-"+name);renderValue(section,value);
+  }
+  if(next.notes){const current=recordDetail(log,"Current scene","world-current-scene");renderValue(current,next.notes)}
+  if(next.opening_preview&&next.phase!=="adventure"){
+    const preview=recordDetail(log,"Opening preview","world-opening-preview");renderValue(preview,next.opening_preview);
+  }
+  if(!(next.world_log||[]).length)paragraph(log,next.mode==="sandbox"?"No story entries recorded in this development sandbox.":"No campaign log entries recorded.","muted");
+  renderRecords(log,next.world_log||[],"");
+  if(next.last_event?.kind)paragraph(log,"Last saved update: "+next.last_event.kind.replaceAll("_"," ")+".","chapter-note");
+  selectWorldTab(worldTab,false);
+}
+function selectGearTab(id,save=true){
+  gearTab=id==="inventory"?"inventory":"equipment";
+  for(const button of document.querySelectorAll('#gearTabs [role="tab"]')){
+    const selected=button.dataset.gear===gearTab;button.setAttribute("aria-selected",String(selected));button.tabIndex=selected?0:-1;
+  }
+  for(const page of document.querySelectorAll("[data-gear-page]"))page.hidden=page.dataset.gearPage!==gearTab;
+  if(save)persistPreferences();
+}
+function renderGear(next,gear){
+  const root=$("equipment");root.replaceChildren();
+  const tabs=element("div",undefined,"gear-tabs");tabs.id="gearTabs";tabs.setAttribute("role","tablist");tabs.setAttribute("aria-label","Equipment and inventory");
+  for(const [id,label,count]of [["equipment","Equipment",gear.equipped.length],["inventory","Inventory",gear.stored.length]]){
+    const button=element("button");button.id="tab-"+id;button.type="button";button.dataset.gear=id;button.setAttribute("role","tab");button.setAttribute("aria-controls","gear-"+id);
+    button.append(element("span",label),element("span"," · "+count,"gear-count"));button.onclick=()=>selectGearTab(id);
+    button.onkeydown=event=>{
+      if(event.altKey||event.ctrlKey||event.metaKey||!["ArrowRight","ArrowLeft","Home","End"].includes(event.key))return;
+      event.preventDefault();const target=event.key==="Home"?"equipment":event.key==="End"?"inventory":gearTab==="equipment"?"inventory":"equipment";
+      selectGearTab(target);$("tab-"+target).focus();
+    };
+    tabs.append(button);
+  }
+  root.append(tabs);
+  const equipment=element("section"),inventory=element("section");
+  for(const [id,page]of [["equipment",equipment],["inventory",inventory]]){
+    page.id="gear-"+id;page.dataset.gearPage=id;page.setAttribute("role","tabpanel");page.setAttribute("aria-labelledby","tab-"+id);page.tabIndex=0;root.append(page);
+  }
+  paragraph(equipment,"Worn & wielded","page-lead");
+  if(!gear.equipped.length)paragraph(equipment,"No equipment worn or wielded.","muted");
+  gear.equipped.forEach(({item,slots},index)=>{paragraph(equipment,slots.join(" · "),"item-slot");renderItem(equipment,item,"equipment",index)});
+  if(gear.empty.length){
+    equipment.append(element("h3","Empty slots","group"));const slots=element("div",undefined,"empty-slots");
+    for(const slot of gear.empty){const row=element("div",undefined,"empty-slot");row.append(element("strong",slot),element("span","Empty"));slots.append(row)}
+    equipment.append(slots);
+  }
+  paragraph(inventory,"Carried items","page-lead");
+  if(!gear.stored.length)paragraph(inventory,"No stored items.","muted");
+  gear.stored.forEach((item,index)=>renderItem(inventory,item,"inventory",index));
+  inventory.append(element("h3","Supplies","group"));
+  const supplies=Array.isArray(next.supplies)?next.supplies:[];
+  if(!supplies.length)paragraph(inventory,"No acquired supplies.","muted");
+  else{const list=element("ul",undefined,"supply-list");for(const [index,value]of supplies.entries()){
+    const item=typeof value==="object"?value:{name:String(value)};
+    const row=element("li");renderItem(row,item,"supply",index);list.append(row);
+  }inventory.append(list)}
+  paragraph(inventory,"Carrying capacity "+next.character.carry_capacity_kg+" kg. Total carried weight is not recorded.","chapter-note");
+  if(Object.keys(next.funds||{}).length){inventory.append(element("h3","Funds","group"));renderValue(inventory,next.funds)}
+  paragraph(equipment,"Open an item to inspect it. Viewing details does not equip or use it.","chapter-note");
+  selectGearTab(gearTab,false);
+}
+function renderCampaign(next){
+  if(state?.id===next.id&&next.version<state.version)return;
+  const changed=!state||state.id!==next.id||state.version!==next.version;
+  if(changed)lastVerifiedAt=null;
+  state=next;lastSelected=next.id;
+  $("session").value=next.id;
+  if(!changed)return;
+  const c=next.character,gear=gearRecords(next);
+  $("stateVersion").textContent="State version "+next.version+" · Rules "+next.rules_version;
+  $("lastEvent").textContent=next.last_event?format(next.last_event):"No recorded events.";
+  $("hero").textContent=c.name+" · Level "+c.level+" · "+c.class_name;
+  renderResources(c);
+  $("characterPreview").textContent="Level "+c.level+" · XP "+c.xp+" / "+c.xp_next;
+  $("skillsPreview").textContent=(next.abilities||[]).length+" owned · "+(next.mode==="chat"&&next.phase==="character_draft"?"creation draft":(next.abilities||[]).filter(a=>skillStatus(a)==="READY").length+" ready");
+  $("healthPreview").textContent=next.conditions.length+" recorded conditions · DEF "+c.def;
+  $("summonsPreview").textContent=next.summons.length+" summons · "+next.enemies.length+" known enemies";
+  $("equipmentPreview").textContent=gear.equipped.length+" equipped · "+gear.stored.length+" stored items";
+  $("questsPreview").textContent=next.quest_log.length+" journal entries";
+  $("worldPreview").textContent=next.current_location;
+  $("progress").textContent="XP "+c.xp+"/"+c.xp_next+" · Scenes "+c.scene_counter+" · "+(next.level_up_freeze?"ADVANCEMENT FROZEN":next.paused?"PAUSED":"RUNNING");
+  $("xpMeter").max=Math.max(1,c.xp_next);$("xpMeter").value=c.xp;
+  $("xpMeter").setAttribute("aria-valuetext",c.xp+" of "+c.xp_next+" experience");
+  $("location").textContent=next.current_location+" · "+(next.fictional_time_seconds===0?"No fictional time advanced":next.fictional_time_seconds+" seconds elapsed");
+  for(const id of ["character","health","summons","equipment","quests","world"])$(id).replaceChildren();
+  paragraph($("character"),c.name,"page-lead");
+  paragraph($("character"),c.class_name+" · "+c.rarity+" · Rules "+next.rules_version,"muted");
+  if(c.title)paragraph($("character"),"Title · "+c.title);
+  if(c.background){
+    if(typeof c.background==="string"&&c.background.length<160)paragraph($("character"),"Background · "+c.background);
+    else renderValue(recordDetail($("character"),"Background","character-background"),c.background);
+  }
+  for(const [label,key]of [["Class details","class_details"],["Talent web","talent_web"],["Biography","biography"]])if(c[key]){
+    renderValue(recordDetail($("character"),label,"character-"+key),c[key]);
+  }
+  const attributes=element("div",undefined,"stat-grid");
+  for(const [key,value]of Object.entries(c.attributes||{})){
+    const stat=element("div",undefined,"stat"),modifier=Math.floor((value-5)/2);
+    stat.append(element("span",key,"stat-label"),element("strong",value,"stat-value"),element("span",(modifier>=0?"+":"")+modifier+" modifier","stat-mod"));attributes.append(stat);
+  }
+  $("character").append(attributes);
+  const progression=element("div",undefined,"record-grid");
+  for(const [label,value]of [["Level",c.level],["Experience",c.xp+" / "+c.xp_next]]){
+    const record=element("div",undefined,"record");record.append(element("span",label,"eyebrow"),element("strong",value));progression.append(record);
+  }
+  $("character").append(progression);
+  paragraph($("character"),"Unspent Attribute / Skill / Talent points: "+[c.attribute_points,c.skill_points,c.talent_points].join(" / "));
+  if(next.phase==="character_draft")paragraph($("character"),"Character draft · review your choices in chat, then confirm here. The adventure stays paused.","pending");
+  if(next.phase==="ready")paragraph($("character"),"Character confirmed · review the opening in chat. Starting the adventure needs your separate approval.","pending");
+  if(next.level_up_freeze)paragraph($("character"),next.mode==="chat"?"Advancement choices are pending. Resolve them with your Game Master in chat before continuing.":"Advancement is frozen. Full offer generation and spending across all tracks remain pending implementation. Attribute previews do not resume play.","pending");
+  renderSkills(next.abilities||[]);
+  paragraph($("health"),"DEF "+c.def+" · Movement "+(c.movement_mm/1000)+" m per round");
+  renderRecords($("health"),next.conditions,"No recorded conditions.");
+  renderCombat(next);
+  renderGear(next,gear);
+  renderRecords($("quests"),next.quest_log,"No quests recorded.");
+  renderWorld(next);
+  renderChoices();restorePreferences();
+}
+function receive(result){
+  const data=result?.structuredContent||{};
+  if(data.historical)return;
+  if(data.view_preferences&&!preferencesLoaded){
+    preferences={...preferences,...data.view_preferences};preferencesLoaded=true;restorePreferences();
+  }
+  if(Array.isArray(data.campaigns)){
+    campaigns=data.campaigns;$("session").replaceChildren(element("option","Select a saved game"));
+    $("session").firstElementChild.value="";
+    for(const c of campaigns){const option=element("option",c.name);option.value=c.id;$("session").append(option)}
+    if(state)$("session").value=state.id;
+  }
+  if(data.campaign)renderCampaign(data.campaign);
+  const meta=result?._meta||{};
+  if(meta.approval!==undefined)showApproval(meta.approval);
+  else if(data.proposal&&meta.approval_token)showApproval({proposal:data.proposal,approval_token:meta.approval_token});
+  updateSyncStatus();
+}
+function showApproval(approval){
+  if(approval?.proposal.id===dismissedProposal)return;
+  pending=approval;
+  $("approval").hidden=!approval;
+  updateSyncStatus();
+  if(!approval)return;
+  const p=approval.proposal;
+  const chatLabels={confirm_chat_character:"Confirm character",start_chat_adventure:"Begin adventure",correct_chat_state:"Approve correction"};
+  $("confirm").textContent=chatLabels[p.kind]||"Approve this action";
+  $("approvalLabel").textContent=p.kind.replaceAll("_"," ")+" · version "+p.expected_version;
+  const deltas={};
+  for(const key of Object.keys(p.character_before||{}))if(JSON.stringify(p.character_before[key])!==JSON.stringify(p.character_after?.[key]))deltas[key]={before:p.character_before[key],after:p.character_after?.[key]};
+  $("approvalSummary").textContent=p.kind==="confirm_chat_character"?"Confirm the character currently shown in your codex. This does not start the adventure.":p.kind==="start_chat_adventure"?state.opening_preview:format({command:p.kind,payload:p.payload,effects:deltas,random_result:p.random_result});
+}
+async function refresh(){
+  if(polling||document.visibilityState==="hidden")return;
+  polling=true;
+  try{
+    if(state)await callTool("get_campaign",{campaign_id:state.id});
+    else{
+      await callTool("render_dashboard",{});
+      if(lastSelected&&campaigns.some(c=>c.id===lastSelected))await callTool("get_campaign",{campaign_id:lastSelected});
+    }
+  }finally{polling=false}
+}
+window.addEventListener("message",event=>{
+  if(event.source!==window.parent)return;
+  const message=event.data;
+  if(!message||message.jsonrpc!=="2.0")return;
+  if(message.id!==undefined&&requests.has(message.id)){
+    const item=requests.get(message.id);requests.delete(message.id);clearTimeout(item.timeout);
+    if(message.error)item.reject(new Error(message.error.message||"Host rejected the request"));
+    else item.resolve(message.result);return;
+  }
+  if(message.method==="ui/notifications/tool-result")receive(message.params);
+  if(message.method==="ui/notifications/host-context-changed")applyHostContext(message.params);
+  if(message.method==="ui/notifications/tool-cancelled"){showApproval(null);notice("The host cancelled the action.")}
+  if(message.method==="ui/resource-teardown"&&message.id!==undefined){
+    clearInterval(pollingTimer);clearTimeout(savingTimer);
+    for(const item of requests.values()){clearTimeout(item.timeout);item.reject(new Error("View closed"))}
+    requests.clear();
+    window.parent.postMessage({jsonrpc:"2.0",id:message.id,result:{}},"*");
+  }
+});
+window.addEventListener("openai:set_globals",event=>{
+  const globals=event.detail?.globals||{};
+  if(globals.toolOutput)receive({structuredContent:globals.toolOutput,_meta:globals.toolResponseMetadata?.mcp_tool_result?._meta||{}});
+  applyHostContext({theme:globals.theme||hostContext.theme,displayMode:globals.displayMode||hostContext.displayMode});
+});
+$("customForm").onsubmit=event=>{event.preventDefault();const text=$("custom").value.trim();if(text)sendPrompt(text)};
+$("hideHud").onclick=()=>{$("hud").hidden=!$("hud").hidden;$("hideHud").textContent=$("hud").hidden?"Show codex":"Hide codex";persistPreferences()};
+$("refresh").onclick=()=>refresh().catch(error=>notice(error.message));
+$("session").onchange=()=>{const id=$("session").value;if(id)callTool("get_campaign",{campaign_id:id}).then(()=>persistPreferences()).catch(error=>notice(error.message))};
+$("newSandbox").onclick=()=>sendPrompt("Create a new empty PAUSED development sandbox only. Do not generate a character, world, gameplay rolls or adventure.");
+$("decline").onclick=()=>{dismissedProposal=pending?.proposal.id;showApproval(null);notice("Preview dismissed. Nothing committed.")};
+$("confirm").onclick=async()=>{
+  if(busy||!pending||syncIssue||!lastVerifiedAt||pending.proposal.expected_version!==state?.version)return;
+  const approval=pending;busy=true;$("confirm").disabled=true;
+  try{
+    await callTool("execute_confirmed_action",{proposal_id:approval.proposal.id,approval_token:approval.approval_token});
+    showApproval(null);notice("Action committed.");
+    const followup=state?.disposable?"Disposable development acceptance only. Read this test record and report its current phase, paused state and version. No further writes, story generation or rolls.":approval.proposal.kind==="confirm_chat_character"?"My character is confirmed. Read saved state. If an opening_preview is already saved, present it; otherwise prepare and save it. Do not start the adventure; wait for my separate authorization.":approval.proposal.kind==="start_chat_adventure"?"I approved starting this adventure. Read saved state and begin the opening scene. Save any changes once through save_chat_update.":"Describe the already committed result of proposal "+approval.proposal.id+". Read current state; do not execute or reroll it again.";
+    await sendPrompt(followup);
+  }catch(error){notice(error.message+". Retry this same approval if delivery was uncertain.")}
+  finally{busy=false;updateSyncStatus()}
+};
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&(standard||window.openai?.callTool))refresh().catch(error=>notice(error.message))});
+document.addEventListener("companion:page",persistPreferences);
+document.addEventListener("toggle",event=>{if(event.target.matches?.("[data-detail]"))persistPreferences()},true);
+new ResizeObserver(()=>{if(standard)notify("ui/notifications/size-changed",{height:document.body.scrollHeight})}).observe(document.body);
+(async()=>{
+  renderChoices();restorePreferences();
+  if(window.parent!==window){
+    try{
+      const init=await rpc("ui/initialize",{protocolVersion:"2026-01-26",appInfo:{name:"DnDGPT System Rebirth",version:"1.0.15"},appCapabilities:{availableDisplayModes:["inline","pip","fullscreen"]}});
+      if(init.protocolVersion!=="2026-01-26")throw new Error("Unsupported MCP Apps protocol version");
+      standard=true;hostCapabilities=init.hostCapabilities||{};applyHostContext(init.hostContext);
+      notify("ui/notifications/initialized");
+      $("connection").textContent="Connected to saved state.";
+    }catch(error){
+      $("connection").textContent=window.openai?.callTool?"ChatGPT compatibility bridge available.":"Host connection unavailable. Prompt-copy preview only.";
+    }
+  }else $("connection").textContent="Local preview · not connected to a ChatGPT conversation.";
+  if(window.openai?.toolOutput)receive({structuredContent:window.openai.toolOutput,_meta:window.openai.toolResponseMetadata?.mcp_tool_result?._meta||{}});
+  if(standard||window.openai?.callTool){
+    try{await refresh()}catch(error){notice(error.message)}
+    pollingTimer=setInterval(()=>refresh().catch(error=>notice(error.message)),8000);
+  }
+  if(!standard&&!window.openai?.callTool){$("syncStatus").dataset.state="preview";$("syncStatus").textContent="Preview · no saved state connection."}
+  applyHostContext(hostContext);
+})();
+</script>
+</body>
+</html>
+
+

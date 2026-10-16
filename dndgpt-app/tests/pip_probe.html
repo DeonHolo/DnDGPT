@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DnDGPT PiP compatibility test</title>
+<style>
+/* SHARED_COMPANION_CSS */
+#diagnostics{margin-top:16px;border-top:1px solid var(--line);padding-top:12px}
+#diagnostics dt{font-weight:600}#diagnostics dd{margin:2px 0 10px;overflow-wrap:anywhere}
+#result,#attempts{white-space:pre-wrap;overflow-wrap:anywhere}
+</style>
+<a class="skip-link" href="#companionContent">Skip to chapter</a>
+<header class="masthead row"><svg class="crest" viewBox="0 0 48 52" fill="none" aria-hidden="true"><path d="m24 2 21 12v24L24 50 3 38V14L24 2Z" stroke="currentColor" stroke-width="1.5"/><path d="m24 2-10 18 10 18 10-18L24 2ZM3 14l11 6L3 38l21 0 21 0-11-18 11-6M24 38v12" stroke="currentColor" stroke-width="1"/><text x="24" y="28" text-anchor="middle" fill="currentColor" font-family="Georgia,serif" font-size="11">20</text></svg><div class="identity"><p class="eyebrow">The adventurer's codex</p><h1>System Rebirth <span class="edition">1.0</span></h1></div><span class="badge">UI preview</span></header>
+<p id="connection" class="muted">Display fixtures only · No campaign or database connected</p>
+<section id="status" aria-label="Display fixture status"><div class="status-heading"><div><p class="eyebrow">Your character</p><strong id="hero">Display Sample · Level 1 · Preview</strong></div><span class="status-seal" aria-hidden="true">SR</span></div>
+<div id="resources">
+<div class="hp"><div class="resource-label"><strong>HP</strong><span>20 / 20</span></div><meter aria-label="HP" min="0" max="20" value="20"></meter></div>
+<div class="mp"><div class="resource-label"><strong>MP</strong><span>12 / 20</span></div><meter aria-label="MP" min="0" max="20" value="12"></meter></div>
+<div class="sta"><div class="resource-label"><strong>STA</strong><span>18 / 20</span></div><meter aria-label="STA" min="0" max="20" value="18"></meter></div>
+</div><div class="experience"><p id="progress" class="muted">XP 0 / 100 · Display fixtures, not gameplay</p><meter id="xpMeter" aria-label="Experience" min="0" max="100" value="0"></meter></div><p id="location" class="muted">Sample scene · No conditions</p></section>
+<p class="eyebrow codex-caption">Seven chapters. One living record.</p>
+<div id="hud" class="codex-layout">
+<!-- SHARED_COMPANION_NAV -->
+<main id="companionContent" tabindex="-1"><section class="companion-page" id="page-character" data-panel="character" aria-labelledby="title-character"><header class="page-heading"><p class="eyebrow">Chapter 01 / The adventurer's codex</p><h2 id="title-character">Character &amp; Progression</h2><p class="page-description">Your character, and the road ahead.</p></header><div id="character" class="page-content"><p class="page-lead">Display Sample</p><p class="muted">Preview class · Illustrative values only</p><div class="stat-grid"><div class="stat"><span class="stat-label">STR</span><strong class="stat-value">5</strong><span class="stat-mod">+0 modifier</span></div><div class="stat"><span class="stat-label">AGI</span><strong class="stat-value">5</strong><span class="stat-mod">+0 modifier</span></div><div class="stat"><span class="stat-label">INT</span><strong class="stat-value">5</strong><span class="stat-mod">+0 modifier</span></div><div class="stat"><span class="stat-label">CHA</span><strong class="stat-value">5</strong><span class="stat-mod">+0 modifier</span></div><div class="stat"><span class="stat-label">LCK</span><strong class="stat-value">5</strong><span class="stat-mod">+0 modifier</span></div></div><div class="record-grid"><div class="record"><span class="eyebrow">Level</span><strong>1</strong></div><div class="record"><span class="eyebrow">Experience</span><strong>0 / 100</strong></div></div><p class="chapter-note">This is a display fixture. No character has been created or saved.</p></div></section>
+<section class="companion-page" id="page-skills" data-panel="skills" aria-labelledby="title-skills" hidden><header class="page-heading"><p class="eyebrow">Chapter 02 / The adventurer's codex</p><h2 id="title-skills">Skills &amp; Class Abilities</h2><p class="page-description">The arts and powers at your command.</p></header><div id="skills" class="page-content"><h3 class="group">Combat Actions &amp; Commands</h3><details data-detail="preview-ability"><summary>Example ability <span class="unavailable">· UNAVAILABLE</span></summary><p>A display fixture with no executable mechanics.</p><details data-detail="preview-passive"><summary>Example passive evolution</summary><p>Integrated display fixture. No activation, cost or cooldown.</p></details></details><h3 class="group">Defensive &amp; Off-Turn Reactions</h3><p class="muted">None acquired</p><h3 class="group">Standalone Passive Skills</h3><p class="muted">None acquired</p><h3 class="group">Exploration &amp; Utility</h3><p class="muted">None acquired</p></div></section>
+<section class="companion-page" id="page-health" data-panel="health" aria-labelledby="title-health" hidden><header class="page-heading"><p class="eyebrow">Chapter 03 / The adventurer's codex</p><h2 id="title-health">Health &amp; Conditions</h2><p class="page-description">Vitality, resilience and lingering effects.</p></header><div id="health" class="page-content"><div class="record-grid"><div class="record"><span class="eyebrow">Health</span><strong>20 / 20</strong></div><div class="record"><span class="eyebrow">Mana</span><strong>12 / 20</strong></div><div class="record"><span class="eyebrow">Stamina</span><strong>18 / 20</strong></div><div class="record"><span class="eyebrow">Conditions</span><strong>0</strong></div></div><div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3ZM8 12h8M12 8v8"/></svg><h3>No conditions recorded</h3><p>Resource values above are static UI fixtures.</p></div></div></section>
+<section class="companion-page" id="page-summons" data-panel="summons" aria-labelledby="title-summons" hidden><header class="page-heading"><p class="eyebrow">Chapter 04 / The adventurer's codex</p><h2 id="title-summons">Summons &amp; Combat</h2><p class="page-description">Allies in the field. Threats on the horizon.</p></header><div id="summons" class="page-content"><div class="record-grid"><div class="record"><span class="eyebrow">Active summons</span><strong>0</strong></div><div class="record"><span class="eyebrow">Known enemies</span><strong>0</strong></div></div><div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 3 7 7-2 2-7-7 2-2Zm16 0-7 7 2 2 7-7-2-2ZM8 13l-5 8M16 13l5 8M4 16l4 3M20 16l-4 3"/></svg><h3>The field is quiet</h3><p>No encounter or combat commands in this preview.</p></div></div></section>
+<section class="companion-page" id="page-equipment" data-panel="equipment" aria-labelledby="title-equipment" hidden><header class="page-heading"><p class="eyebrow">Chapter 05 / The adventurer's codex</p><h2 id="title-equipment">Equipment &amp; Inventory</h2><p class="page-description">Everything carried into the unknown.</p></header><div id="equipment" class="page-content"><div class="record-grid"><div class="record"><span class="eyebrow">Equipped items</span><strong>0</strong></div><div class="record"><span class="eyebrow">Inventory items</span><strong>0</strong></div></div><div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8h12l2 13H4L6 8ZM9 8V6a3 3 0 0 1 6 0v2M8 12h8M9 16h6"/></svg><h3>Nothing carried yet</h3><p>Equipment slots, supplies and acquired items belong in this chapter.</p></div></div></section>
+<section class="companion-page" id="page-quests" data-panel="quests" aria-labelledby="title-quests" hidden><header class="page-heading"><p class="eyebrow">Chapter 06 / The adventurer's codex</p><h2 id="title-quests">Quest Journal</h2><p class="page-description">Promises made. Paths still unwritten.</p></header><div id="quests" class="page-content"><div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4h12v16H6V4ZM9 2v4M15 2v4M9 10h6M9 14h6M9 18h3"/></svg><h3>A blank page in the journal</h3><p>No active or completed quests. This preview does not create objectives.</p></div></div></section>
+<section class="companion-page" id="page-world" data-panel="world" aria-labelledby="title-world" hidden><header class="page-heading"><p class="eyebrow">Chapter 07 / The adventurer's codex</p><h2 id="title-world">World &amp; Campaign Log</h2><p class="page-description">Places discovered, and the story so far.</p></header><div id="world" class="page-content"><div class="record-grid"><div class="record"><span class="eyebrow">Current location</span><strong>Sample scene</strong></div><div class="record"><span class="eyebrow">Recorded events</span><strong>0</strong></div></div><div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5l6-2 6 2 6-2v16l-6 2-6-2-6 2V5ZM9 3v16M15 5v16"/></svg><h3>The story is still unwritten</h3><p>No campaign history or saved game data is connected.</p></div></div></section></main>
+</div>
+<script id="companionNavigation">/* SHARED_COMPANION_NAVIGATION */</script>
+<details id="diagnostics"><summary>Interface compatibility checks</summary>
+<dl><dt>Bridge</dt><dd id="bridge">Connecting</dd><dt>Host-reported mode</dt><dd id="mode">Unknown</dd><dt>Live read-only server clock</dt><dd id="clock">Not read</dd></dl>
+<button id="pip">Test PiP</button><button id="compat">Test compatibility PiP</button><button id="send">Send test message</button>
+<pre id="attempts"></pre>
+<p id="result" role="status" aria-live="polite">PiP has not been verified.</p>
+</details>
+<script>
+"use strict";
+const $=id=>document.getElementById(id),pending=new Map();let nextId=0,standard=false,actualMode="unknown",busy=false;
+for(const [id,text]of Object.entries({character:"Level 1 · XP 0 / 100",skills:"No owned powers",health:"No conditions",summons:"0 summons · 0 enemies",equipment:"0 equipped · 0 items",quests:"No active quests",world:"Sample scene · No history"}))$(id+"Preview").textContent=text;
+const prompt="DNDGPT_PIP_PROBE_MESSAGE_ONLY: acknowledge this interface test. Do not start or change gameplay. Reply only: PiP test message received.";
+function rpc(method,params){return new Promise((resolve,reject)=>{
+  const id=++nextId,timer=setTimeout(()=>{pending.delete(id);reject(new Error("Host request timed out"))},10000);
+  pending.set(id,{resolve,reject,timer});window.parent.postMessage({jsonrpc:"2.0",id,method,params},"*");
+})}
+function reportMode(value){if(typeof value==="string"){actualMode=value;$("mode").textContent=value}}
+function result(text){$("result").textContent=text;$("attempts").textContent+=text+"\n"}
+function toolResult(data){if(data?.source_utc)$("clock").textContent=data.source_utc}
+window.addEventListener("message",event=>{
+  if(event.source!==window.parent)return;const message=event.data;if(message?.jsonrpc!=="2.0")return;
+  const waiting=pending.get(message.id);if(waiting){clearTimeout(waiting.timer);pending.delete(message.id);if(message.error)waiting.reject(Object.assign(new Error(message.error.message||"Host error"),{code:message.error.code}));else waiting.resolve(message.result);return}
+  if(message.method==="ui/notifications/host-context-changed")reportMode(message.params?.displayMode);
+  if(message.method==="ui/notifications/tool-result")toolResult(message.params?.structuredContent);
+});
+window.addEventListener("openai:set_globals",event=>{reportMode(event.detail?.globals?.displayMode);toolResult(event.detail?.globals?.toolOutput)});
+async function readClock(){
+  try{let response;if(standard)response=await rpc("tools/call",{name:"get_probe_status",arguments:{}});
+    else if(window.openai?.callTool)response=await window.openai.callTool("get_probe_status",{});else return;
+    toolResult(response?.structuredContent||response);
+  }catch(error){$("clock").textContent="Read unavailable: "+error.message}
+}
+$("pip").onclick=async()=>{
+  $("pip").disabled=true;try{
+    let response;if(standard){try{response=await rpc("ui/request-display-mode",{mode:"pip"})}catch(error){if(error.code!==-32601||!window.openai?.requestDisplayMode)throw error;response=await window.openai.requestDisplayMode({mode:"pip"})}}
+    else if(window.openai?.requestDisplayMode)response=await window.openai.requestDisplayMode({mode:"pip"});else throw new Error("No display-mode request API is available");
+    reportMode(response?.mode||window.openai?.displayMode);
+    result("Requested pip; host reported: "+actualMode+". Confirm floating behavior visually; a request alone is not proof.");
+  }catch(error){result("PiP request unavailable or rejected: "+error.message)}finally{$("pip").disabled=false}
+};
+$("send").onclick=async()=>{
+  $("send").disabled=true;try{
+    if(standard)await rpc("ui/message",{role:"user",content:[{type:"text",text:prompt}]});
+    else if(window.openai?.sendFollowUpMessage)await window.openai.sendFollowUpMessage({prompt});else throw new Error("No message API is available");
+    result("Message request accepted by host. Verify the exact user message and acknowledgment in this same Chat conversation.");
+  }catch(error){result("Message request failed: "+error.message)}finally{$("send").disabled=false}
+};
+$("compat").onclick=async()=>{
+  $("compat").disabled=true;try{
+    if(!window.openai?.requestDisplayMode)throw new Error("ChatGPT compatibility display-mode API is absent");
+    const response=await window.openai.requestDisplayMode({mode:"pip"});
+    reportMode(response?.mode||window.openai?.displayMode);
+    result("Compatibility API requested pip; returned mode: "+(response?.mode||"not supplied")+"; host reported: "+actualMode+".");
+  }catch(error){result("Compatibility PiP unavailable or rejected: "+error.message)}finally{$("compat").disabled=false}
+};
+(async()=>{
+  if(window.parent===window){$("bridge").textContent="Standalone preview; not a ChatGPT test";$("pip").disabled=true;$("compat").disabled=true;$("send").disabled=true;return}
+  try{const init=await rpc("ui/initialize",{protocolVersion:"2026-01-26",appInfo:{name:"DnDGPT PiP probe",version:"1.0.0"},appCapabilities:{availableDisplayModes:["inline","pip","fullscreen"]}});
+    standard=true;$("bridge").textContent="MCP Apps";reportMode(init.hostContext?.displayMode);
+    window.parent.postMessage({jsonrpc:"2.0",method:"ui/notifications/initialized"},"*");
+  }catch(error){$("bridge").textContent=window.openai?"ChatGPT compatibility API":"No supported host bridge";reportMode(window.openai?.displayMode)}
+  await readClock();setInterval(async()=>{if(busy)return;busy=true;try{await readClock()}finally{busy=false}},6000);
+})();
+</script></html>
