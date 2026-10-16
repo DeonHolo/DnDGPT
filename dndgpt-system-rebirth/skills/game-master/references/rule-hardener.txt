@@ -1,4 +1,4 @@
-# DnDGPT: SYSTEM REBIRTH — RULE HARDENER
+# DnDGPT — RULE HARDENER
 
 **Companion prompt for the complete V1.0 rulebook**
 

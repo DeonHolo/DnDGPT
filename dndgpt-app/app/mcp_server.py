@@ -31,7 +31,7 @@ def build_mcp(engine, config, verifier, creation_repository=None):
     parsed = urlsplit(config.resource_url)
     origin = f"{parsed.scheme}://{parsed.netloc}"
     server = FastMCP(
-        "DnDGPT System Rebirth 1.0", stateless_http=True, json_response=True,
+        "DnDGPT 1.0", stateless_http=True, json_response=True,
         token_verifier=verifier if config.configured else None,
         auth=AuthSettings(issuer_url=config.issuer, resource_server_url=config.resource_url,
                           required_scopes=[READ_SCOPE]) if config.configured else None,

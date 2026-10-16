@@ -79,7 +79,7 @@ def create_app(db_path=None, auth_config=None, token_verifier=None, *, enable_cr
         async with mcp.session_manager.run():
             yield
 
-    app = FastAPI(title="DnDGPT System Rebirth", version=APP_VERSION, lifespan=lifespan)
+    app = FastAPI(title="DnDGPT", version=APP_VERSION, lifespan=lifespan)
     app.state.engine, app.state.mcp, app.state.resource_uri = engine, mcp, resource_uri
     app.state.auth_config = config
     app.state.creation_repository = creation_repository

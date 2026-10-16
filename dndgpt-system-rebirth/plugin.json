@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "dndgpt-system-rebirth",
-  "version": "1.0.15",
+  "version": "1.0.19",
   "description": "DnDGPT: ChatGPT-led roleplaying with authenticated saved state and a reusable campaign dashboard.",
   "author": {
     "name": "Deon Holo"
@@ -11,12 +11,14 @@
       "apps": "./.app.json",
       "interface": {
         "displayName": "DnDGPT",
-        "shortDescription": "Cinematic RPG game master",
+        "shortDescription": "ChatGPT as your GM",
         "longDescription": "Play with ChatGPT as Game Master using the complete edition 1.0 rules and a reusable seven-page campaign codex. This source template requires your own authenticated server and connected App.",
         "developerName": "Deon Holo",
         "category": "Entertainment",
         "capabilities": [],
-        "defaultPrompt": "Use DnDGPT: System Rebirth V1.0 rules. Do not start or resume any campaign until I explicitly authorize it."
+        "defaultPrompt": "Use DnDGPT V1.0 rules. Do not start or resume any campaign until I explicitly authorize it.",
+        "logo": "./brand/dndgpt-dice.svg",
+        "composerIcon": "./brand/dndgpt-dice.svg"
       }
     }
   }

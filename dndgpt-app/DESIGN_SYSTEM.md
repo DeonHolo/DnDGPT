@@ -48,7 +48,7 @@ Skill tabs expose tablist/tab/tabpanel semantics, one selected tab and roving fo
 
 Tab/Enter/Space and Left/Right/Home/End work with tablist/tab/tabpanel semantics and roving focus. The optional equipment_tab preference stores selection while old preference records remain valid. Detail expansions remain separate; inspection changes presentation preferences only.
 
-View options contains saved-game selection, manual refresh and hide controls; Connection details contains technical versions and receipts. Sandbox Review shortcuts and sandbox creation stay inside collapsed Development tools, clearly separate from eventual gameplay choices. The character strip retains Saved/check feedback and visible connection-loss warnings. The decorative SR badge (System Rebirth) was removed after the user found it ambiguous.
+View options contains saved-game selection, manual refresh and hide controls; Connection details contains technical versions and receipts. Sandbox Review shortcuts and sandbox creation stay inside collapsed Development tools, clearly separate from eventual gameplay choices. The character strip retains Saved/check feedback and visible connection-loss warnings. A decorative initial badge was removed after the user found it ambiguous.
 
 The targeted skill query for inventory disclosure returned touch guidance; its one narrower accordion retry returned unrelated typography guidance. Neither result establishes accordion-specific advice. The implementation reuses the existing semantic HTML details pattern and applies the previously verified keyboard, target-size, contrast and responsive rules.
 

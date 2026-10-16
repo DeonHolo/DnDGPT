@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DnDGPT · System Rebirth 1.0</title>
+<title>DnDGPT · Campaign dashboard</title>
 <style>
 :root{
   color-scheme:light dark;font:16px var(--font-sans,system-ui,sans-serif);
@@ -120,7 +120,7 @@ pre{font:.78rem/1.6 var(--font-mono,ui-monospace,monospace);white-space:pre-wrap
 </head>
 <body>
 <a class="skip-link" href="#companionContent">Skip to chapter</a>
-<header class="masthead row"><svg class="crest" viewBox="0 0 48 52" fill="none" aria-hidden="true"><path d="m24 2 21 12v24L24 50 3 38V14L24 2Z" stroke="currentColor" stroke-width="1.5"/><path d="m24 2-10 18 10 18 10-18L24 2ZM3 14l11 6L3 38l21 0 21 0-11-18 11-6M24 38v12" stroke="currentColor" stroke-width="1"/><text x="24" y="28" text-anchor="middle" fill="currentColor" font-family="Georgia,serif" font-size="11">20</text></svg><div class="identity"><p class="eyebrow">The adventurer's codex</p><h1>System Rebirth <span class="edition">1.0</span></h1></div></header>
+<header class="masthead row"><svg class="crest" viewBox="0 0 48 52" fill="none" aria-hidden="true"><path d="m24 2 21 12v24L24 50 3 38V14L24 2Z" stroke="currentColor" stroke-width="1.5"/><path d="m24 2-10 18 10 18 10-18L24 2ZM3 14l11 6L3 38l21 0 21 0-11-18 11-6M24 38v12" stroke="currentColor" stroke-width="1"/><text x="24" y="28" text-anchor="middle" fill="currentColor" font-family="Georgia,serif" font-size="11">20</text></svg><div class="identity"><p class="eyebrow">Campaign dashboard</p><h1>DnDGPT <span class="edition">1.0</span></h1></div></header>
 <details id="viewSettings" class="view-options"><summary>View options</summary>
 <div class="row session-picker"><label for="session">Saved game</label><select id="session"><option value="">Select a saved game</option></select></div>
 <div class="row"><button id="refresh" type="button">Refresh saved state</button><button id="hideHud" type="button">Hide codex</button></div>
@@ -141,7 +141,7 @@ pre{font:.78rem/1.6 var(--font-mono,ui-monospace,monospace);white-space:pre-wrap
 <div class="experience"><p id="progress" class="muted">Select existing state or review the rules.</p><meter id="xpMeter" aria-label="Experience" min="0" max="100" value="0"></meter></div><p id="location" class="muted"></p>
 <p id="syncStatus" role="status" aria-live="polite" data-state="waiting">Waiting for saved state…</p>
 </section>
-<div class="toolbar row"><span class="eyebrow toolbar-label">Seven chapters. One living record.</span></div>
+<div class="toolbar row"><span class="eyebrow toolbar-label">Campaign overview</span></div>
 <div id="hud" class="codex-layout">
 <nav id="sectionNav" class="section-nav" aria-label="Companion sections">
 <button id="nav-character" class="section-link" data-target="character" type="button" aria-controls="page-character" aria-current="page"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21v-3a4 4 0 0 1 8 0v3M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M3 21h18"/></svg><span class="nav-copy"><span class="nav-title">Character &amp; Progression</span><span id="characterPreview" class="panel-preview">No state selected</span></span><span class="nav-index" aria-hidden="true">01</span></button>
@@ -818,7 +818,7 @@ new ResizeObserver(()=>{if(standard)notify("ui/notifications/size-changed",{heig
   renderChoices();restorePreferences();
   if(window.parent!==window){
     try{
-      const init=await rpc("ui/initialize",{protocolVersion:"2026-01-26",appInfo:{name:"DnDGPT System Rebirth",version:"1.0.15"},appCapabilities:{availableDisplayModes:["inline","pip","fullscreen"]}});
+      const init=await rpc("ui/initialize",{protocolVersion:"2026-01-26",appInfo:{name:"DnDGPT",version:"1.0.15"},appCapabilities:{availableDisplayModes:["inline","pip","fullscreen"]}});
       if(init.protocolVersion!=="2026-01-26")throw new Error("Unsupported MCP Apps protocol version");
       standard=true;hostCapabilities=init.hostCapabilities||{};applyHostContext(init.hostContext);
       notify("ui/notifications/initialized");

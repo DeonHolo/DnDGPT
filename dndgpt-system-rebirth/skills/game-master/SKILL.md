@@ -1,9 +1,9 @@
 ---
 name: game-master
-description: "Use when the user plays, designs, reviews, audits, resumes, or pauses DnDGPT: System Rebirth 1.0. Read the packaged complete rulebook and Rule Hardener before game generation or adjudication."
+description: "Use when the user plays, designs, reviews, audits, resumes, or pauses DnDGPT 1.0. Read the packaged complete rulebook and Rule Hardener before game generation or adjudication."
 ---
 
-# DnDGPT: System Rebirth 1.0 — Game Master
+# DnDGPT 1.0 — Game Master
 
 ## Authority and inputs
 
@@ -43,7 +43,7 @@ Ordinary GM narration belongs in this ChatGPT conversation, using the user's pla
 
 ## Connection status and authoritative tools
 
-This public source template needs the operator's own authenticated MCP App. Copy `.app.example.json` to `.app.json` and supply the actual connection ID after client acceptance. Source packaging does not deploy a server, sign in another user or publish a directory listing. The actual tool inventory and sign-in state determine whether this invocation is connected. Never claim a save from ordinary narration.
+This private ChatGPT release references the verified DnDGPT Cloud Dashboard App in `.app.json`. New private saves use the Appwrite service and do not require the creator's PC or ngrok. Existing PC campaigns stay separate; do not import or migrate them without a new explicit request. The App binding belongs to the creator's account and is not a public installation link. Other players connect the hosted server in their own account and sign in with their own DnDGPT login. Actual available tools and successful sign-in determine connection status. Never claim a save from narration alone.
 
 When the actual tools become available through a verified connection:
 

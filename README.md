@@ -1,30 +1,95 @@
 <p align="center">
-  <img src="docs/images/dndgpt-banner.svg" alt="DnDGPT — The Adventurer's Codex. Seven chapters. One living record." width="100%">
+  <img src="docs/images/dndgpt-banner.svg" alt="DnDGPT — ChatGPT as your GM" width="100%">
 </p>
 
 <p align="center">
-  <strong>A persistent RPG companion for ChatGPT.</strong><br>
-  ChatGPT tells the story. Your codex keeps the record.
+  Play a tabletop-style RPG in ChatGPT, with a saved dashboard for your character and campaign.
 </p>
 
 <p align="center">
-  <a href="#what-it-does">The codex</a> ·
-  <a href="#host-on-appwrite">Cloud hosting</a> ·
-  <a href="#run-locally">Local setup</a> ·
+  <a href="#start-playing">Start playing</a> ·
+  <a href="#what-it-does">Dashboard</a> ·
+  <a href="#how-it-works">How it works</a> ·
+  <a href="#developer-setup">Developer setup</a> ·
   <a href="PROJECT_PROFILE.md">Portfolio & resume</a>
 </p>
 
 DnDGPT puts character stats, abilities, summons, equipment and campaign history in one reusable dashboard beside the conversation. The GM saves resolved changes through authenticated tools, so the interface can reopen the latest record without rebuilding a status panel every turn.
 
-**Python · FastAPI · JavaScript · MCP / MCP Apps · Auth0 OAuth 2.0 / PKCE · Appwrite Functions / TablesDB**
-
 ![DnDGPT dark-mode dashboard showing a demo character, resource meters and seven chapter navigation](docs/images/dashboard-dark.jpg)
 
 <sub>Current dark-mode interface, captured with disposable demo data in the local host simulator. No player save or private account is shown.</sub>
 
+## Start playing
+
+**Use the hosted DnDGPT service from your own ChatGPT account.** No coding, server, terminal, API key, Appwrite account or ngrok setup needed. You create a DnDGPT login to keep your saves private.
+
+This is a one-time manual connection. DnDGPT is not listed in ChatGPT's public directory yet. Your ChatGPT account must offer **Add custom MCP server**; if that option is missing, this installation route is unavailable on your account.
+
+### 1. Add DnDGPT to ChatGPT
+
+Open **Plugins → + → Add custom MCP server**. Set the name to **DnDGPT**, choose **OAuth**, and paste this server URL:
+
+```text
+https://dndgpt-deonholo.fra.appwrite.run/mcp
+```
+
+### 2. Fill in the sign-in settings
+
+Open the advanced OAuth settings. Choose **User-Defined OAuth Client**, then copy these values:
+
+| Field | Value |
+| --- | --- |
+| Client ID | `0vMIwqvc8C7y68Mf1P4BLMcVii38ETri` |
+| Token authentication method | **None** |
+| Client secret | Leave empty |
+| Scopes | `campaign:read` and `campaign:write` |
+| Base scopes | `offline_access` |
+| OpenID Connect / OIDC | **Off** |
+
+The client ID is public connection information, not a password.
+
+<details>
+<summary>If ChatGPT asks for authorization and token URLs</summary>
+
+| Field | Value |
+| --- | --- |
+| Authorization URL | `https://dev-ixieupunvjp8krl6.us.auth0.com/authorize` |
+| Token URL | `https://dev-ixieupunvjp8krl6.us.auth0.com/oauth/token` |
+| Resource | `https://dndgpt-deonholo.fra.appwrite.run/mcp` |
+
+</details>
+
+### 3. Connect and sign in
+
+Review the requested access, click **Create as a plugin**, then **Connect**. On the DnDGPT sign-in page, choose **Sign up** if you are new, or use your existing DnDGPT login.
+
+That page uses Auth0 to handle DnDGPT sign-in. You are creating a player account, not an Auth0 developer account. When ChatGPT shows **Connected**, you are ready.
+
+### 4. Load the rules and start a chat
+
+Download the [DnDGPT rulebook](https://raw.githubusercontent.com/DeonHolo/DnDGPT/main/dndgpt-app/rules/rulebook-v1.0.txt) and [Rule Hardener](https://raw.githubusercontent.com/DeonHolo/DnDGPT/main/dndgpt-app/rules/rule-hardener.txt) as `.txt` files. Click **Try in chat**, use regular **Chat** mode, and attach both files. You can attach your own complete rulebook fork instead of the standard rulebook.
+
+Send this to begin:
+
+> Act as my DnDGPT GM using the attached rules. Begin character creation, save my resolved choices with the DnDGPT tools, and open my campaign dashboard. Keep the dashboard updated as we play. Ask for character confirmation and starting the adventure separately.
+
+The connection provides the dashboard and save tools; the attached files provide the rules. After a saved choice, you can say **“Open my campaign dashboard.”** Updates appear when ChatGPT saves the result; narration alone does not update it.
+
+<details>
+<summary>Already connected, using custom rules, or having trouble?</summary>
+
+- **Already says Connected?** Click **Try in chat**. You do not need to create another connection.
+- **Custom rulebook?** Attach your full version and tell the GM it takes precedence. Extra systems can use supported save fields; they do not automatically add dashboard tabs.
+- **Blank dashboard?** Ask ChatGPT to save your current character choices, then open your campaign dashboard.
+- **App unavailable or old layout?** Reload ChatGPT. If needed, open the DnDGPT connection's settings, select **Refresh tools**, then reload again.
+- **Which plugins do I keep?** Keep your DnDGPT game plugin and its hosted dashboard connection. Old temporary, test, sandbox and PC dashboard connections are not needed for hosted games.
+
+</details>
+
 ## What it does
 
-- **One living character sheet.** Resource meters, progression, conditions and saved character choices.
+- **A saved character sheet.** Resource meters, progression, conditions and saved character choices.
 - **Details when you need them.** Ability subtabs, expandable mechanics, equipment/inventory, allies/combat and world/log views.
 - **Durable campaign records.** Account ownership, partial updates, version checks and event history.
 - **Real rolls, stable receipts.** Reusable Python dice, checks and rarity tools; retrying the same action returns the saved result.
@@ -48,6 +113,8 @@ DnDGPT puts character stats, abilities, summons, equipment and campaign history 
 
 ## How it works
 
+**Python · FastAPI · JavaScript · MCP / MCP Apps · Auth0 OAuth 2.0 / PKCE · Appwrite Functions / TablesDB**
+
 ```mermaid
 flowchart LR
     Player <--> GM["ChatGPT · story & adjudication"]
@@ -62,7 +129,11 @@ The dashboard reads **saved tool updates**, not the chat transcript. After resol
 
 The project began as a local FastAPI/SQLite service exposed through tunnels, later using a fixed ngrok address. The hosted version runs on **Appwrite Functions and TablesDB**, using resources from the **GitHub Student Developer Pack**. Auth0 still handles player sign-in. New hosted games work independently of the creator's PC.
 
-## Host on Appwrite
+## Developer setup
+
+The sections below are for people who want to build or host their own instance. Players can use [Start playing](#start-playing).
+
+### Host on Appwrite
 
 The Python Function serves the backend and the MCP App dashboard resource. A separate website is optional. See the [Appwrite deployment guide](dndgpt-app/APPWRITE_HOSTING.md) and [authentication setup](dndgpt-app/AUTH0_SETUP.md).
 
@@ -72,7 +143,7 @@ Automatic GitHub test CI is **not configured**. Appwrite provides automatic depl
 
 **Current status:** cloud-hosted private beta. Real Appwrite fixture checks and the creator's ChatGPT sign-in, save, display and reopen flow have passed. Independent-player installation and public-directory publication remain separate acceptance steps.
 
-## Connect your own ChatGPT App
+### Package your own ChatGPT integration
 
 1. Deploy the service at a reachable HTTPS address with durable storage.
 2. Configure OAuth and the matching protected resource using the [authentication guide](dndgpt-app/AUTH0_SETUP.md).
@@ -82,9 +153,9 @@ Automatic GitHub test CI is **not configured**. Appwrite provides automatic depl
 
 Players connecting to an existing hosted instance need their ChatGPT account and a DnDGPT sign-in. They do not need their own Appwrite, Auth0 developer or ngrok account.
 
-This repository contains source and connection templates. It is not a one-click public-directory installation. ChatGPT account capabilities and distribution permissions still apply. The internal `dndgpt-system-rebirth` package ID is retained for compatibility.
+This repository contains source and connection templates. ChatGPT account capabilities and distribution permissions still apply.
 
-## Run locally
+### Run locally
 
 Python 3.12 or newer:
 

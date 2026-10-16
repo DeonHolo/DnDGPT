@@ -9,12 +9,18 @@ ROOT = Path(__file__).resolve().parents[1]
 
 @pytest.mark.parametrize("name", ["rulebook-v1.0.txt", "rule-hardener.txt"])
 def test_complete_rules_preserved_except_authorized_edition_labels_and_additions(name):
-    manifest = json.loads((ROOT / "rules/integrity.json").read_text())
+    manifest = json.loads((ROOT / "rules/integrity.json").read_text(encoding="utf-8"))
     entry = manifest[name]
     data = (ROOT / "rules" / name).read_bytes()
     assert len(data) == entry["bytes"]
     assert hashlib.sha256(data).hexdigest() == entry["sha256"]
     original = data
+    # Undo only the recorded display-name edits before proving preservation of
+    # the same edition, amendments, and original source bytes below.
+    for edit in reversed(entry.get("branding_edits", [])):
+        before, after = edit["before"].encode(), edit["after"].encode()
+        assert before and after and original.count(after) == 1
+        original = original.replace(after, before, 1)
     for amendment in reversed(entry.get('amendments', [])):
         # Only explicit additive revisions may be reversed; the original source
         # hash below still proves that no unrelated byte was changed or removed.

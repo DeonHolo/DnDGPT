@@ -74,6 +74,13 @@ def build(plugin, output=None):
         sources.append(browser_report)
     files = [plugin / "plugin.json", legacy_path, skill,
              *(skill.parent / "references").glob("*.txt")]
+    for key in ("logo", "composerIcon", "logoDark", "composerIconDark"):
+        if interface.get(key):
+            asset = (plugin / interface[key]).resolve()
+            if not asset.is_relative_to(plugin) or not asset.is_file():
+                raise ValueError("Brand asset must be an existing file inside the plugin")
+            if asset not in files:
+                files.append(asset)
     if app_reference is not None:
         files.append(plugin / ".app.json")
     connection = plugin / "mcp.json"
