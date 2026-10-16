@@ -55,7 +55,9 @@ Open `http://127.0.0.1:8766/test-host`. This uses generated test credentials and
 
 The service can run as an Appwrite Python Function with private transactional TablesDB records. The dashboard is an MCP App resource inside ChatGPT; a separate website is optional. GitHub supplies source and deployments. See [Appwrite deployment configuration](dndgpt-app/APPWRITE_HOSTING.md).
 
-A real Appwrite fixture probe passed 14 save/reopen, retry, approval and isolation checks. Acceptance of the new hosted endpoint in ChatGPT and with a separate account remains pending. This is not a player-capacity or uptime benchmark.
+A real Appwrite fixture probe passed 14 save/reopen, retry, approval and isolation checks. A separate private connection in regular ChatGPT passed OAuth sign-in, disposable save, actual dashboard display, page reload and fresh readback. Second-account installation and public directory publication remain pending. This is not a player-capacity or uptime benchmark.
+
+The current deployment branch is `appwrite-hosting`, with `dndgpt-app` as the Function root. Pushes affecting `dndgpt-app/**` trigger builds and update the branch-bound domain; two code pushes verified this path. Automatic GitHub test CI is not configured, so this is automatic deployment without a test gate. Packaged GM instructions/rulebooks require a new plugin version and distribution step. Backend/dashboard resource updates keep the stable server address; an open view may need reopening to fetch changed HTML.
 
 ## Connect your own ChatGPT App
 
