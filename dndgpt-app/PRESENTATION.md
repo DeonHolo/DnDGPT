@@ -12,7 +12,7 @@ Use genuine native controls when the client supports them. Guide the model throu
   1. Character & Progression
   2. Skills & Class Abilities
   3. Health & Conditions
-  4. Summons & Combat
+  4. Allies & Combat
   5. Equipment & Inventory
   6. Quest Journal
   7. World & Campaign Log

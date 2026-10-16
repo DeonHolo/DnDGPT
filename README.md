@@ -18,7 +18,7 @@ DnDGPT puts character stats, abilities, summons, equipment and campaign history 
 
 ## Start playing
 
-**Use the hosted DnDGPT service from your own ChatGPT account.** No coding, server, terminal, API key, Appwrite account or ngrok setup needed. You create a DnDGPT login to keep your saves private.
+**Connect DnDGPT to your ChatGPT account, sign in, and load the rules to start playing.** Your DnDGPT login keeps your campaign saves private.
 
 This is a one-time manual connection. DnDGPT is not listed in ChatGPT's public directory yet. Your ChatGPT account must offer **Add custom MCP server**; if that option is missing, this installation route is unavailable on your account.
 
@@ -68,7 +68,7 @@ Download the [DnDGPT rulebook](https://raw.githubusercontent.com/DeonHolo/DnDGPT
 
 Send this to begin:
 
-> Act as my DnDGPT GM using the attached rules. Begin character creation, save my resolved choices with the DnDGPT tools, and open my campaign dashboard. Keep the dashboard updated as we play. Ask for character confirmation and starting the adventure separately.
+> Act as my DnDGPT GM using the attached rules. Begin character creation and open my campaign dashboard. Save our progress and keep the dashboard updated as we play. Ask for character confirmation and starting the adventure separately.
 
 The connection provides the dashboard and save tools; the attached files provide the rules. After a saved choice, you can say **“Open my campaign dashboard.”** Updates appear when ChatGPT saves the result; narration alone does not update it.
 
@@ -79,7 +79,6 @@ The connection provides the dashboard and save tools; the attached files provide
 - **Custom rulebook?** Attach your full version and tell the GM it takes precedence. Extra systems can use supported save fields; they do not automatically add dashboard tabs.
 - **Blank dashboard?** Ask ChatGPT to save your current character choices, then open your campaign dashboard.
 - **App unavailable or old layout?** Reload ChatGPT. If needed, open the DnDGPT connection's settings, select **Refresh tools**, then reload again.
-- **Which plugins do I keep?** Keep your DnDGPT game plugin and its hosted dashboard connection. Old temporary, test, sandbox and PC dashboard connections are not needed for hosted games.
 
 </details>
 
@@ -197,3 +196,5 @@ Current evidence does not establish production uptime, player capacity, measured
 | [PROJECT_PROFILE.md](PROJECT_PROFILE.md) | Architecture history, skills and resume wording |
 
 Created by **Deon Holo**, with AI-assisted development using Codex and ChatGPT. See [CHAT_LED_PLAY.md](dndgpt-app/CHAT_LED_PLAY.md) and [RULES_COVERAGE.md](dndgpt-app/RULES_COVERAGE.md) for implementation detail.
+
+Logo downloads: [transparent PNG](docs/images/dndgpt-logo.png) · [dark square PNG](docs/images/dndgpt-logo-dark.png) · [SVG](docs/images/dndgpt-dice.svg).

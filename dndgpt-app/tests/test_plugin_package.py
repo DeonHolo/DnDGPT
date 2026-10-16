@@ -33,7 +33,9 @@ def test_release_contains_canonical_source_and_complete_rules_without_runtime_da
         legacy = json.loads(archive.read(".codex-plugin/plugin.json"))
         assert manifest["version"] == legacy["version"] == plugin_version
         assert manifest["extensions"]["com.openai"]["interface"] == legacy["interface"]
-        assert archive.read("brand/dndgpt-dice.svg") == (original / "brand/dndgpt-dice.svg").read_bytes()
+        for key in ("logo", "composerIcon"):
+            asset = manifest["extensions"]["com.openai"]["interface"][key].removeprefix("./")
+            assert archive.read(asset) == (original / asset).read_bytes()
         assert manifest["extensions"]["com.openai"]["apps"] == legacy["apps"] == "./.app.json"
         assert json.loads(archive.read(".app.json")) == declarations
         assert archive.read("skills/game-master/references/presentation.txt") == (APP / "PRESENTATION.md").read_bytes()
