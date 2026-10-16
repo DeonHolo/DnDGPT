@@ -347,7 +347,7 @@ function renderChoices(){
   const choices=state?.mode==="sandbox"?
     [["Review sandbox","Read this sandbox's authoritative state and explain what is currently supported. Do not change it."],
      ["Review abilities","Inspect owned abilities and explain legal actions and missing mechanics. Do not roll or spend resources."],
-     ["Review rules","Explain the Version 1.0 rules relevant to my next decision. Do not advance time."]]:
+     ["Review rules","Explain the DnDGPT rules relevant to my next decision. Do not advance time."]]:
     [["Review rules","Review the included DnDGPT rules without starting a campaign."],
      ["How to play","Explain character creation and the separate adventure authorization gates."],
      ["Inspect progress","Show stored campaign progress without rolling or advancing time."]];
@@ -693,7 +693,7 @@ function renderCampaign(next){
   $("location").textContent=next.current_location+" · "+(next.fictional_time_seconds===0?"No fictional time advanced":next.fictional_time_seconds+" seconds elapsed");
   for(const id of ["character","health","summons","equipment","quests","world"])$(id).replaceChildren();
   paragraph($("character"),c.name,"page-lead");
-  paragraph($("character"),c.class_name+" · "+c.rarity+" · Rules "+next.rules_version,"muted");
+  paragraph($("character"),c.class_name+" · "+c.rarity,"muted");
   if(c.title)paragraph($("character"),"Title · "+c.title);
   if(c.background){
     if(typeof c.background==="string"&&c.background.length<160)paragraph($("character"),"Background · "+c.background);
