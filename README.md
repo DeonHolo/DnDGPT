@@ -16,10 +16,6 @@
 
 DnDGPT puts character stats, abilities, summons, equipment and campaign history in one reusable dashboard beside the conversation. The GM saves resolved changes through authenticated tools, so the interface can reopen the latest record without rebuilding a status panel every turn.
 
-![DnDGPT dark-mode dashboard showing a demo character, resource meters and seven chapter navigation](docs/images/dashboard-dark.jpg)
-
-<sub>Current dark-mode interface, captured with disposable demo data in the local host simulator. No player save or private account is shown.</sub>
-
 ## Start playing
 
 **Use the hosted DnDGPT service from your own ChatGPT account.** No coding, server, terminal, API key, Appwrite account or ngrok setup needed. You create a DnDGPT login to keep your saves private.
@@ -96,6 +92,10 @@ The connection provides the dashboard and save tools; the attached files provide
 - **A complete rulebook.** Edition 1.0 rules and the originality hardener ship with the GM skill. ChatGPT handles narration and most adjudication.
 - **Explicit session control.** Character confirmation and starting the adventure are separate approvals. Browsing panels does not advance play.
 
+![DnDGPT dark-mode dashboard showing a demo character, resource meters and seven chapter navigation](docs/images/dashboard-dark.jpg)
+
+<sub>Current dark-mode interface, captured with disposable demo data in the local host simulator. No player save or private account is shown.</sub>
+
 <details>
 <summary><strong>Inside the seven chapters</strong></summary>
 
@@ -148,7 +148,7 @@ Automatic GitHub test CI is **not configured**. Appwrite provides automatic depl
 1. Deploy the service at a reachable HTTPS address with durable storage.
 2. Configure OAuth and the matching protected resource using the [authentication guide](dndgpt-app/AUTH0_SETUP.md).
 3. Create a supported custom MCP App connection in ChatGPT and sign in.
-4. Copy `dndgpt-system-rebirth/.app.example.json` to `.app.json` beside it, replacing the placeholder with your actual App ID.
+4. Copy the [App connection template](dndgpt-system-rebirth/.app.example.json) to `.app.json` beside it, replacing the placeholder with your actual App ID.
 5. Build with `python dndgpt-app/scripts/build_plugin.py`, then verify saving, dashboard rendering and reopening in the actual client.
 
 Players connecting to an existing hosted instance need their ChatGPT account and a DnDGPT sign-in. They do not need their own Appwrite, Auth0 developer or ngrok account.
@@ -193,7 +193,7 @@ Current evidence does not establish production uptime, player capacity, measured
 | `dndgpt-app/rules/` | Complete rules, amendments and integrity manifest |
 | `dndgpt-app/tests/` | Automated checks and disposable host simulator |
 | `dndgpt-app/scripts/` | Packaging, rule audits and backup tools |
-| `dndgpt-system-rebirth/skills/` | GM skill and packaged rule references |
+| [Game Master skill](dndgpt-system-rebirth/skills/game-master/SKILL.md) | GM instructions and packaged rule references |
 | [PROJECT_PROFILE.md](PROJECT_PROFILE.md) | Architecture history, skills and resume wording |
 
 Created by **Deon Holo**, with AI-assisted development using Codex and ChatGPT. See [CHAT_LED_PLAY.md](dndgpt-app/CHAT_LED_PLAY.md) and [RULES_COVERAGE.md](dndgpt-app/RULES_COVERAGE.md) for implementation detail.
