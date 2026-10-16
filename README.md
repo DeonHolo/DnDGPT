@@ -68,7 +68,7 @@ The Python Function serves the backend and the MCP App dashboard resource. A sep
 
 **Deployment flow:** develop locally → run relevant tests → push to `main` → Appwrite builds changes under `dndgpt-app/**` → the stable domain serves the new deployment.
 
-Automatic GitHub test CI is **not configured**. Appwrite provides automatic deployment; tests currently run before pushing. GM instructions and packaged rulebooks need a new plugin version and distribution step. Backend/dashboard changes keep the same server address; an open dashboard may need reopening to fetch updated HTML.
+Automatic GitHub test CI is **not configured**. Appwrite provides automatic deployment; tests currently run before pushing. GM instructions and packaged rulebooks need a new plugin version and distribution step. Backend/dashboard changes keep the same server address. ChatGPT can retain older dashboard HTML: refresh the app's tools in Settings, then reload the ChatGPT page to fetch the new layout.
 
 **Current status:** cloud-hosted private beta. Real Appwrite fixture checks and the creator's ChatGPT sign-in, save, display and reopen flow have passed. Independent-player installation and public-directory publication remain separate acceptance steps.
 
