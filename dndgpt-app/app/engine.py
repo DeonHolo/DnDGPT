@@ -14,6 +14,7 @@ from .rules import ATTRIBUTES, EQUIPMENT_SLOTS, Dice, TurnBudget, award_xp, deri
 from .storage import Store, canonical
 from .version import APP_VERSION, RULES_VERSION
 from . import combat, gear
+from . import records
 
 COMBAT_OPERATIONS = {
     "prepare_combat": ("actors", "order", "obstacles"), "start_combat": (),
@@ -89,8 +90,7 @@ class Engine:
         self.enable_combat = enable_combat
 
     def _get(self, db, owner, campaign_id):
-        row = db.execute("SELECT * FROM campaigns_v1 WHERE id=? AND owner=?",
-                         (campaign_id, owner)).fetchone()
+        row = records.get(db, "campaigns_v1", {"id": campaign_id, "owner": owner})
         if row is None:
             fail(404, "not_found", "Campaign not found")
         state = json.loads(row["data"])
@@ -99,14 +99,15 @@ class Engine:
         return state
 
     def _append(self, db, state, event):
-        last = db.execute("SELECT hash FROM events_v1 WHERE campaign_id=? "
-                          "ORDER BY number DESC LIMIT 1", (state["id"],)).fetchone()
+        rows = records.find(db, "events_v1", {"campaign_id": state["id"]},
+                            order="number", descending=True, limit=1)
+        last = rows[0] if rows else None
         previous = last["hash"] if last else "0" * 64
         event = {**event, "version": state["version"], "state_sha256": state_hash(state),
                  "utc": datetime.now(timezone.utc).isoformat()}
         digest = hashlib.sha256((previous + canonical(event)).encode()).hexdigest()
-        db.execute("INSERT INTO events_v1 VALUES (?,?,?,?,?)",
-                   (state["id"], state["version"], canonical(event), previous, digest))
+        records.insert(db, "events_v1", {"campaign_id": state["id"], "number": state["version"],
+                                        "event": canonical(event), "previous_hash": previous, "hash": digest})
         state["last_event"] = event
         return event
 
@@ -116,8 +117,7 @@ class Engine:
             fail(422, "invalid_name", "Sandbox name must contain 1..80 characters")
         request = canonical({"name": name})
         with self.store.transaction() as db:
-            prior = db.execute("SELECT * FROM creations_v1 WHERE owner=? AND action_id=?",
-                               (owner, action_id)).fetchone()
+            prior = records.get(db, "creations_v1", {"owner": owner, "action_id": action_id})
             if prior:
                 if prior["request"] != request:
                     fail(409, "idempotency_conflict", "action_id already has different arguments")
@@ -142,20 +142,19 @@ class Engine:
                      "rarity_candidates": {}, "reward_ids": [], "scene_ids": [],
                      "notes": "Mechanics test sandbox; character creation is not implemented.",
                      "last_event": None}
-            db.execute("INSERT INTO campaigns_v1 VALUES (?,?,?,?)",
-                       (state["id"], owner, 1, canonical(state)))
+            records.insert(db, "campaigns_v1", {"id": state["id"], "owner": owner,
+                                               "version": 1, "data": canonical(state)})
             self._append(db, state, {"kind": "create_sandbox", "action_id": action_id,
                                      "result": "Created paused sandbox; no gameplay started"})
-            db.execute("UPDATE campaigns_v1 SET data=? WHERE id=?", (canonical(state), state["id"]))
+            records.update(db, "campaigns_v1", {"id": state["id"]}, {"data": canonical(state)})
             result = public_state(state)
-            db.execute("INSERT INTO creations_v1 VALUES (?,?,?,?)",
-                       (owner, action_id, request, canonical(result)))
+            records.insert(db, "creations_v1", {"owner": owner, "action_id": action_id,
+                                               "request": request, "result": canonical(result)})
             return result
 
     def list_campaigns(self, owner):
         with self.store.transaction() as db:
-            rows = db.execute("SELECT id,version,data FROM campaigns_v1 WHERE owner=? "
-                              "ORDER BY rowid DESC LIMIT 100", (owner,)).fetchall()
+            rows = records.find(db, "campaigns_v1", {"owner": owner}, order="rowid", descending=True, limit=100)
             return [{"id": row["id"], "version": row["version"],
                      "name": json.loads(row["data"])["name"]} for row in rows]
 
@@ -392,8 +391,7 @@ class Engine:
                              "kind": kind, "payload": payload})
         with self.store.transaction() as db:
             state = self._get(db, owner, campaign_id)
-            old = db.execute("SELECT * FROM proposals_v1 WHERE campaign_id=? AND action_id=?",
-                             (campaign_id, action_id)).fetchone()
+            old = records.get(db, "proposals_v1", {"campaign_id": campaign_id, "action_id": action_id})
             if old:
                 if old["request"] != request:
                     fail(409, "idempotency_conflict", "action_id already has different arguments")
@@ -413,15 +411,15 @@ class Engine:
             if kind in DEVELOPMENT_OPERATIONS:
                 preview["combat_preview"] = effect_preview
             token = secrets.token_urlsafe(32)
-            db.execute("INSERT INTO proposals_v1 VALUES (?,?,?,?,?,?,?,?,NULL)",
-                       (proposal_id, campaign_id, owner, action_id, request,
-                        canonical(preview), token, time.time()))
+            records.insert(db, "proposals_v1", {"id": proposal_id, "campaign_id": campaign_id,
+                                               "owner": owner, "action_id": action_id, "request": request,
+                                               "preview": canonical(preview), "approval_token": token,
+                                               "created_at": time.time(), "result": None})
             return {"proposal": preview, "committed": False, "_meta": {"approval_token": token}}
 
     def execute_confirmed_action(self, owner, proposal_id, approval_token):
         with self.store.transaction() as db:
-            proposal = db.execute("SELECT * FROM proposals_v1 WHERE id=? AND owner=?",
-                                  (proposal_id, owner)).fetchone()
+            proposal = records.get(db, "proposals_v1", {"id": proposal_id, "owner": owner})
             if proposal is None:
                 fail(404, "not_found", "Proposal not found")
             state = self._get(db, owner, proposal["campaign_id"])
@@ -438,20 +436,19 @@ class Engine:
             event = self._apply(state, request["kind"], request["payload"])
             state["version"] += 1
             event = self._append(db, state, {**event, "action_id": request["action_id"]})
-            db.execute("UPDATE campaigns_v1 SET version=?,data=? WHERE id=? AND owner=?",
-                       (state["version"], canonical(state), state["id"], owner))
+            records.update(db, "campaigns_v1", {"id": state["id"], "owner": owner},
+                           {"version": state["version"], "data": canonical(state)})
             if state.get("mode") == "chat":
                 from .chat_game import snapshot
                 snapshot(db, state)
             result = {"campaign": public_state(state), "event": safe_event(event)}
-            db.execute("UPDATE proposals_v1 SET result=? WHERE id=?", (canonical(result), proposal_id))
+            records.update(db, "proposals_v1", {"id": proposal_id}, {"result": canonical(result)})
             return result
 
     def audit(self, owner, campaign_id, show_rolls=False):
         with self.store.transaction() as db:
             state = self._get(db, owner, campaign_id)
-            rows = db.execute("SELECT * FROM events_v1 WHERE campaign_id=? ORDER BY number",
-                              (campaign_id,)).fetchall()
+            rows = records.find(db, "events_v1", {"campaign_id": campaign_id}, order="number")
             previous, valid = "0" * 64, True
             events = []
             for number, row in enumerate(rows, 1):
@@ -483,9 +480,8 @@ class Engine:
     def pending_approval(self, owner, campaign_id):
         with self.store.transaction() as db:
             state = self._get(db, owner, campaign_id)
-            rows = db.execute("SELECT * FROM proposals_v1 WHERE campaign_id=? AND owner=? "
-                              "AND result IS NULL AND created_at>? ORDER BY created_at DESC LIMIT 10",
-                              (campaign_id, owner, time.time() - 900)).fetchall()
+            rows = records.find(db, "proposals_v1", {"campaign_id": campaign_id, "owner": owner, "result": None},
+                                minimum={"created_at": time.time() - 900}, order="created_at", descending=True, limit=10)
             for row in rows:
                 preview = json.loads(row["preview"])
                 if preview["expected_version"] == state["version"]:
@@ -494,7 +490,7 @@ class Engine:
 
     def get_view_preferences(self, owner):
         with self.store.transaction() as db:
-            row = db.execute("SELECT data FROM ui_preferences_v1 WHERE owner=?", (owner,)).fetchone()
+            row = records.get(db, "ui_preferences_v1", {"owner": owner})
             return json.loads(row["data"]) if row else {"panels": [], "details": [], "hud_hidden": False}
 
     def set_view_preferences(self, owner, preferences):
@@ -517,6 +513,5 @@ class Engine:
                     not isinstance(value, str) or not 1 <= len(value) <= 128 for value in values):
                 fail(422, "invalid_preferences", "Invalid expansion preferences")
         with self.store.transaction() as db:
-            db.execute("INSERT INTO ui_preferences_v1 VALUES (?,?) ON CONFLICT(owner) "
-                       "DO UPDATE SET data=excluded.data", (owner, canonical(preferences)))
+            records.upsert(db, "ui_preferences_v1", {"owner": owner}, {"data": canonical(preferences)})
         return {"view_preferences": preferences}
