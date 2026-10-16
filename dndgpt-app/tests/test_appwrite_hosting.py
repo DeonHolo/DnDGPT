@@ -223,7 +223,7 @@ class Response:
 
 def context(path='/probe', host='fixture.example', body=b''):
     return SimpleNamespace(req=SimpleNamespace(path=path, host=host, method='POST',
-                           bodyBinary=body, queryString='', headers={'host': host}), res=Response())
+                           body_binary=body, query_string='', headers={'host': host}), res=Response())
 
 
 def test_function_bridge_preserves_http_status_headers_and_bytes():

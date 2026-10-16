@@ -10,6 +10,7 @@ GitHub supplies source and automatic builds. Connecting a repository does not co
 - Runtime: Python 3.14
 - Entrypoint: `appwrite_main.py`
 - Keep the imported `main` asynchronous: Appwrite already runs an event loop; await the ASGI dispatch instead of nesting `asyncio.run()`.
+- Python request fields use `body_binary` and `query_string`; JavaScript examples use different field names.
 - Build command: `pip install -r requirements-hosted.txt`
 - Runtime scopes: `tables.read`, `rows.read`, `rows.write`
 - Public HTTP invocation reaches the application's existing OAuth checks. Game data requires a valid issuer, audience, subject and scopes.

@@ -23,7 +23,7 @@ async def dispatch(context, application, resource_url):
     host = context.req.headers.get("host", context.req.host)
     if host.lower() != origin.netloc.lower():
         return context.res.json({"detail": "Unrecognized service host"}, 421)
-    body = context.req.bodyBinary
+    body = context.req.body_binary
     if isinstance(body, str):
         body = body.encode()
     if not isinstance(body, (bytes, bytearray)) or len(body) > 2500000:
@@ -31,7 +31,7 @@ async def dispatch(context, application, resource_url):
     headers = {key: value for key, value in context.req.headers.items()
                if key.lower() not in {"host", "content-length", "connection", "transfer-encoding"}
                and not key.lower().startswith("x-appwrite-")}
-    query = context.req.queryString
+    query = context.req.query_string
     target = path + ("?" + query if query else "")
     async with application.router.lifespan_context(application):
         async with httpx.AsyncClient(transport=httpx.ASGITransport(app=application),
