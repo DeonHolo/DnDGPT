@@ -5,19 +5,22 @@ import zipfile
 
 import pytest
 
-from app.version import APP_VERSION
 from scripts.build_plugin import APP, build
 
 
 def test_release_contains_canonical_source_and_complete_rules_without_runtime_data(tmp_path):
     original = APP.parent / "dndgpt-system-rebirth"
+    plugin_version = json.loads((original / "plugin.json").read_text())["version"]
     plugin = tmp_path / "dndgpt-system-rebirth"
     shutil.copytree(original / "skills", plugin / "skills")
     shutil.copyfile(original / "plugin.json", plugin / "plugin.json")
-    shutil.copyfile(original / ".app.example.json", plugin / ".app.json")
+    binding = original / ".app.json"
+    declarations = (json.loads(binding.read_text()) if binding.exists() else
+                    {"apps": {"engine": {"id": "asdk_app_packaging_fixture"}}})
+    (plugin / ".app.json").write_text(json.dumps(declarations))
     output = tmp_path / "release.zip"
     result = build(plugin, output)
-    assert result["version"] == APP_VERSION
+    assert result["version"] == plugin_version
     with zipfile.ZipFile(output) as archive:
         names = archive.namelist()
         assert len(names) == len(set(names))
@@ -27,10 +30,10 @@ def test_release_contains_canonical_source_and_complete_rules_without_runtime_da
                        for name in names for part in Path(name).parts)
         manifest = json.loads(archive.read("plugin.json"))
         legacy = json.loads(archive.read(".codex-plugin/plugin.json"))
-        assert manifest["version"] == legacy["version"] == APP_VERSION
+        assert manifest["version"] == legacy["version"] == plugin_version
         assert manifest["extensions"]["com.openai"]["interface"] == legacy["interface"]
         assert manifest["extensions"]["com.openai"]["apps"] == legacy["apps"] == "./.app.json"
-        assert json.loads(archive.read(".app.json")) == json.loads((original / ".app.example.json").read_text())
+        assert json.loads(archive.read(".app.json")) == declarations
         assert archive.read("skills/game-master/references/presentation.txt") == (APP / "PRESENTATION.md").read_bytes()
         assert archive.read("assets/prototype/PRESENTATION.md") == (APP / "PRESENTATION.md").read_bytes()
         assert "assets/prototype/INTELLIGENT_UI_RESEARCH.md" in names

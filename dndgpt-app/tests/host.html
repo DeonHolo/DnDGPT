@@ -349,7 +349,7 @@ document.getElementById("run").onclick=async()=>{
   doc.getElementById("nav-character").click();doc.getElementById("nav-summons").click();assert(sections[0].open,"Chapter navigation lost summon expansion");
   for(const width of [340,480,640,1024]){frame.style.width=width+"px";await sleep(60);assert(doc.documentElement.scrollWidth<=frame.contentWindow.innerWidth+1,"Summon overflows at "+width)}frame.style.width="";
  });
- await test("Summons and Combat tabs isolate allies from threats and preserve selection",async()=>{
+ await test("Allies and Combat tabs isolate allies from threats and preserve selection",async()=>{
   const tab=doc.getElementById("combat-tab-summons"),allies=doc.getElementById("combat-page-summons"),combat=doc.getElementById("combat-page-combat");
   tab.focus();tab.dispatchEvent(new KeyboardEvent("keydown",{key:"End",bubbles:true}));
   assert(allies.hidden&&!combat.hidden&&doc.activeElement===doc.getElementById("combat-tab-combat"),"Combat keyboard selection failed");

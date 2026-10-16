@@ -4,6 +4,8 @@ The Python service runs as an **Appwrite Function**. The existing HTML/JavaScrip
 
 GitHub supplies source and automatic builds. Connecting a repository does not convert a local SQLite file into a persistent cloud database.
 
+This project's production branch is `main`. The Function source and its stable domain must both follow that branch. Pushes affecting `dndgpt-app/**` trigger deployments; other paths are outside the configured deployment filter. Run relevant tests before pushing: automatic GitHub test CI is not configured.
+
 ## Deployment configuration
 
 - Repository root directory: `dndgpt-app`

@@ -4,7 +4,7 @@
   "version": "1.0.15",
   "description": "DnDGPT: ChatGPT-led roleplaying with authenticated saved state and a reusable campaign dashboard.",
   "author": {
-    "name": "DnDGPT creator"
+    "name": "Deon Holo"
   },
   "extensions": {
     "com.openai": {
@@ -13,7 +13,7 @@
         "displayName": "DnDGPT",
         "shortDescription": "Cinematic RPG game master",
         "longDescription": "Play with ChatGPT as Game Master using the complete edition 1.0 rules and a reusable seven-page campaign codex. This source template requires your own authenticated server and connected App.",
-        "developerName": "DnDGPT creator",
+        "developerName": "Deon Holo",
         "category": "Entertainment",
         "capabilities": [],
         "defaultPrompt": "Use DnDGPT: System Rebirth V1.0 rules. Do not start or resume any campaign until I explicitly authorize it."

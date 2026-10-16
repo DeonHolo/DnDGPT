@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="340" viewBox="0 0 1280 340" role="img" aria-labelledby="title desc">
+  <title id="title">DnDGPT — The Adventurer's Codex</title>
+  <desc id="desc">An antique-gold wordmark on a dark forest-green field with seven geometric chapter leaves.</desc>
+  <defs>
+    <linearGradient id="forest" x2="1" y2="1"><stop stop-color="#111610"/><stop offset="1" stop-color="#20271c"/></linearGradient>
+    <linearGradient id="gold"><stop stop-color="#e4bf66"/><stop offset="1" stop-color="#93815c"/></linearGradient>
+  </defs>
+  <rect width="1280" height="340" fill="url(#forest)"/>
+  <rect x="18" y="18" width="1244" height="304" rx="3" fill="none" stroke="#9b8863" stroke-opacity=".55"/>
+  <path d="M48 48H1232M48 292H1232" stroke="#9b8863" stroke-opacity=".35"/>
+  <g fill="none" stroke="url(#gold)" stroke-width="1.25">
+    <path d="M949 85 1091 63 1170 199 1028 221Z" opacity=".28"/>
+    <path d="M929 93 1071 71 1150 207 1008 229Z" opacity=".38"/>
+    <path d="M909 101 1051 79 1130 215 988 237Z" opacity=".48"/>
+    <path d="M889 109 1031 87 1110 223 968 245Z" opacity=".58"/>
+    <path d="M869 117 1011 95 1090 231 948 253Z" opacity=".68"/>
+    <path d="M849 125 991 103 1070 239 928 261Z" opacity=".78"/>
+    <path d="M829 133 971 111 1050 247 908 269Z"/>
+  </g>
+  <text x="66" y="92" fill="#e4bf66" font-family="Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="3">THE ADVENTURER'S CODEX</text>
+  <text x="62" y="199" fill="#f1e7d1" font-family="Georgia, 'Times New Roman', serif" font-size="98" letter-spacing="-3">DnDGPT</text>
+  <path d="M66 222H494" stroke="url(#gold)"/>
+  <text x="66" y="261" fill="#c0b49b" font-family="Arial, sans-serif" font-size="20" letter-spacing=".4">Seven chapters. One living record.</text>
+</svg>
