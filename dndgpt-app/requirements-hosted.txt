@@ -1,0 +1,6 @@
+fastapi==0.143.1
+pydantic==2.14.1
+httpx==0.28.1
+mcp==1.29.0
+PyJWT[crypto]==2.15.1
+PyYAML==6.0.3

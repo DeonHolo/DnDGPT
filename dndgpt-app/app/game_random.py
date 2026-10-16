@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 from .engine import fail, identifier
 from .rules import Dice, integer
 from .storage import canonical
+from . import records
 
 
 class GameRandom:
@@ -59,8 +60,7 @@ class GameRandom:
         except (ValueError, TypeError) as error:
             fail(422, 'invalid_roll_request', str(error))
         with self.store.transaction() as db:
-            prior = db.execute('SELECT request,result FROM game_rolls_v1 WHERE owner=? AND action_id=?',
-                               (owner, action_id)).fetchone()
+            prior = records.get(db, 'game_rolls_v1', {'owner': owner, 'action_id': action_id})
             if prior:
                 if prior['request'] != request:
                     fail(409, 'idempotency_conflict', 'action_id already has different roll arguments')
@@ -80,8 +80,8 @@ class GameRandom:
                 results.append({'label': row['label'], 'kind': kind, 'result': result})
             receipt = {'action_id': action_id, 'results': results, 'rng': self.dice.source,
                        'created_at': datetime.now(timezone.utc).isoformat(), 'campaign_changed': False}
-            db.execute('INSERT INTO game_rolls_v1 VALUES (?,?,?,?)',
-                       (owner, action_id, request, canonical(receipt)))
+            records.insert(db, 'game_rolls_v1', {'owner': owner, 'action_id': action_id,
+                                               'request': request, 'result': canonical(receipt)})
             return self.public(receipt)
 
     def get(self, owner, action_id, show_rolls=False):
@@ -89,8 +89,7 @@ class GameRandom:
         if type(show_rolls) is not bool:
             fail(422, 'invalid_roll_request', 'show_rolls must be boolean')
         with self.store.transaction() as db:
-            row = db.execute('SELECT result FROM game_rolls_v1 WHERE owner=? AND action_id=?',
-                             (owner, action_id)).fetchone()
+            row = records.get(db, 'game_rolls_v1', {'owner': owner, 'action_id': action_id})
             if row is None:
                 fail(404, 'not_found', 'Roll receipt not found')
             return self.public(json.loads(row['result']), show_rolls)

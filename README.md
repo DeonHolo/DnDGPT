@@ -4,7 +4,7 @@
 
 ChatGPT runs the story. DnDGPT keeps the character sheet, powers, inventory and world record in a reusable fantasy dashboard beside the conversation. It replaces repeated status-panel generation with one interface backed by saved state.
 
-Built with **Python, FastAPI, SQLite, OAuth 2.0 / PKCE, MCP, MCP Apps and JavaScript**. Normal GM narration stays in ChatGPT; the backend has no model-inference API client.
+Built with **Python, FastAPI, SQLite / Appwrite TablesDB, OAuth 2.0 / PKCE, MCP, MCP Apps and JavaScript**. Normal GM narration stays in ChatGPT; the backend has no model-inference API client.
 
 ## What it does
 
@@ -20,7 +20,7 @@ flowchart LR
     Player <--> ChatGPT[ChatGPT: narration and adjudication]
     ChatGPT --> MCP[Authenticated MCP tools]
     MCP --> Service[FastAPI service]
-    Service <--> DB[(SQLite state and history)]
+    Service <--> DB[(SQLite locally / TablesDB on Appwrite)]
     MCP --> UI[Reusable campaign dashboard]
     UI --> MCP
 ```
@@ -50,6 +50,14 @@ python -m uvicorn tests.host_harness:app --host 127.0.0.1 --port 8766
 ```
 
 Open `http://127.0.0.1:8766/test-host`. This uses generated test credentials and a temporary fixture database. Never expose this test server publicly. It demonstrates UI behavior, not ChatGPT client compatibility.
+
+## Host on Appwrite
+
+The service can run as an Appwrite Python Function with private transactional TablesDB records. The dashboard is an MCP App resource inside ChatGPT; a separate website is optional. GitHub supplies source and deployments. See [Appwrite deployment configuration](dndgpt-app/APPWRITE_HOSTING.md).
+
+A real Appwrite fixture probe passed 14 save/reopen, retry, approval and isolation checks. A separate private connection in regular ChatGPT passed OAuth sign-in, disposable save, actual dashboard display, page reload and fresh readback. Second-account installation and public directory publication remain pending. This is not a player-capacity or uptime benchmark.
+
+The current deployment branch is `appwrite-hosting`, with `dndgpt-app` as the Function root. Pushes affecting `dndgpt-app/**` trigger builds and update the branch-bound domain; two code pushes verified this path. Automatic GitHub test CI is not configured, so this is automatic deployment without a test gate. Packaged GM instructions/rulebooks require a new plugin version and distribution step. Backend/dashboard resource updates keep the stable server address; an open view may need reopening to fetch changed HTML.
 
 ## Connect your own ChatGPT App
 

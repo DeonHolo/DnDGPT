@@ -10,6 +10,7 @@ from .engine import fail, identifier, public_state, safe_event
 from .rules import ATTRIBUTES, EQUIPMENT_SLOTS, derived
 from .storage import canonical
 from .version import RULES_VERSION
+from . import records
 
 COLLECTIONS = {"abilities", "conditions", "summons", "enemies", "inventory", "supplies",
                "quest_log", "world_log", "generation_ledger"}
@@ -201,8 +202,8 @@ def apply_lifecycle(state, kind, payload):
 
 
 def snapshot(db, state):
-    db.execute("INSERT INTO chat_versions_v1 VALUES (?,?,?)",
-               (state["id"], state["version"], canonical(state)))
+    records.insert(db, "chat_versions_v1", {"campaign_id": state["id"], "version": state["version"],
+                                           "data": canonical(state)})
 
 
 class ChatGame:
@@ -216,7 +217,7 @@ class ChatGame:
             fail(422, "invalid_chat_update", "A game needs a name and boolean disposable flag")
         request = canonical({"mode": "chat", "name": name, "disposable": disposable})
         with self.store.transaction() as db:
-            prior = db.execute("SELECT * FROM creations_v1 WHERE owner=? AND action_id=?", (owner, action_id)).fetchone()
+            prior = records.get(db, "creations_v1", {"owner": owner, "action_id": action_id})
             if prior:
                 if prior["request"] != request:
                     fail(409, "idempotency_conflict", "action_id already has different arguments")
@@ -235,12 +236,13 @@ class ChatGame:
                      **{key: [] for key in COLLECTIONS}, "world": {}, "creation": {}, "funds": {},
                      "current_location": "Character creation", "opening_preview": "", "notes": "",
                      "fictional_time_seconds": 0, "advancement": {}, "rarity_candidates": {}, "last_event": None}
-            db.execute("INSERT INTO campaigns_v1 VALUES (?,?,?,?)", (state["id"], owner, 1, canonical(state)))
+            records.insert(db, "campaigns_v1", {"id": state["id"], "owner": owner, "version": 1, "data": canonical(state)})
             self.engine._append(db, state, {"kind": "create_chat_game", "action_id": action_id})
-            db.execute("UPDATE campaigns_v1 SET data=? WHERE id=?", (canonical(state), state["id"]))
+            records.update(db, "campaigns_v1", {"id": state["id"]}, {"data": canonical(state)})
             snapshot(db, state)
             result = public_state(state)
-            db.execute("INSERT INTO creations_v1 VALUES (?,?,?,?)", (owner, action_id, request, canonical(result)))
+            records.insert(db, "creations_v1", {"owner": owner, "action_id": action_id,
+                                               "request": request, "result": canonical(result)})
             return result
 
     def update(self, owner, campaign_id, action_id, expected_version, summary, changes):
@@ -255,7 +257,7 @@ class ChatGame:
             state = self.engine._get(db, owner, campaign_id)
             if state.get("mode") != "chat":
                 fail(422, "chat_mode_required", "Existing campaigns cannot be converted or changed by this tool")
-            prior = db.execute("SELECT * FROM chat_updates_v1 WHERE campaign_id=? AND action_id=?", (campaign_id, action_id)).fetchone()
+            prior = records.get(db, "chat_updates_v1", {"campaign_id": campaign_id, "action_id": action_id})
             if prior:
                 if prior["request"] != request:
                     fail(409, "idempotency_conflict", "action_id already has different arguments")
@@ -265,11 +267,12 @@ class ChatGame:
             state = apply_changes(state, changes)
             state["version"] += 1
             event = self.engine._append(db, state, {"kind": "chat_update", "action_id": action_id, "summary": summary})
-            db.execute("UPDATE campaigns_v1 SET version=?,data=? WHERE id=? AND owner=?",
-                       (state["version"], canonical(state), campaign_id, owner))
+            records.update(db, "campaigns_v1", {"id": campaign_id, "owner": owner},
+                           {"version": state["version"], "data": canonical(state)})
             snapshot(db, state)
             result = {"campaign": public_state(state), "event": safe_event(event)}
-            db.execute("INSERT INTO chat_updates_v1 VALUES (?,?,?,?)", (campaign_id, action_id, request, canonical(result)))
+            records.insert(db, "chat_updates_v1", {"campaign_id": campaign_id, "action_id": action_id,
+                                                  "request": request, "result": canonical(result)})
             return result
 
     def version(self, owner, campaign_id, version):
@@ -278,7 +281,7 @@ class ChatGame:
             state = self.engine._get(db, owner, campaign_id)
             if state.get("mode") != "chat":
                 fail(422, "chat_mode_required", "History is only available for chat-led games")
-            row = db.execute("SELECT data FROM chat_versions_v1 WHERE campaign_id=? AND version=?", (campaign_id, version)).fetchone()
+            row = records.get(db, "chat_versions_v1", {"campaign_id": campaign_id, "version": version})
             if row is None:
                 fail(404, "not_found", "Saved version not found")
             return {"campaign": public_state(json.loads(row["data"])), "current_version": state["version"], "historical": True}

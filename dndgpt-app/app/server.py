@@ -54,12 +54,14 @@ class CreationStart(BaseModel):
 
 
 def create_app(db_path=None, auth_config=None, token_verifier=None, *, enable_creation_drafts=False,
-               enable_combat=False):
+               enable_combat=False, store=None):
     if type(enable_creation_drafts) is not bool:
         raise ValueError("enable_creation_drafts must be boolean")
     config = auth_config or AuthConfig.from_env()
     config.validate()
-    store = Store(db_path or os.getenv("DNDGPT_DB", HERE.parent / "data/campaigns.sqlite3"))
+    if store is not None and (db_path is not None or enable_creation_drafts):
+        raise ValueError("Hosted persistence cannot use a SQLite path or the optional creation adapter")
+    store = store if store is not None else Store(db_path or os.getenv("DNDGPT_DB", HERE.parent / "data/campaigns.sqlite3"))
     engine = Engine(store, enable_combat=enable_combat)
     from .chat_game import ChatGame
     chat_game = ChatGame(engine)
