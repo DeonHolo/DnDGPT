@@ -1,5 +1,4 @@
-"""Appwrite's synchronous function entrypoint for the existing ASGI service."""
-import asyncio
+"""Appwrite's asynchronous function entrypoint for the existing ASGI service."""
 import os
 from functools import lru_cache
 from urllib.parse import urlsplit
@@ -44,7 +43,7 @@ async def dispatch(context, application, resource_url):
     return context.res.binary(response.content, response.status_code, output_headers)
 
 
-def main(context):
+async def main(context):
     client = httpx.Client(timeout=15, follow_redirects=False)
     try:
         api = AppwriteAPI(os.environ["APPWRITE_FUNCTION_API_ENDPOINT"],
@@ -63,7 +62,7 @@ def main(context):
         config.validate()
         from .server import create_app
         application = create_app(auth_config=config, token_verifier=verifier(config), store=store)
-        return asyncio.run(dispatch(context, application, config.resource_url))
+        return await dispatch(context, application, config.resource_url)
     except EngineError as error:
         return context.res.json({"code": error.code, "detail": str(error)}, error.status)
     except (KeyError, ValueError):

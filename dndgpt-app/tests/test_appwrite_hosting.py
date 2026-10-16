@@ -253,8 +253,30 @@ def test_function_bridge_rejects_oversized_body():
 
 def test_missing_hosted_configuration_fails_closed(monkeypatch):
     monkeypatch.delenv('APPWRITE_FUNCTION_API_ENDPOINT', raising=False)
-    result = main(context('/mcp'))
+    result = asyncio.run(main(context('/mcp')))
     assert result.status == 503
+
+
+def test_function_entrypoint_uses_the_existing_runtime_loop(monkeypatch, hosted):
+    from app import appwrite_entry
+    for key, value in {
+        'APPWRITE_FUNCTION_API_ENDPOINT': 'https://fixture.example/v1',
+        'APPWRITE_FUNCTION_PROJECT_ID': 'fixture',
+        'DNDGPT_ENV': 'production',
+        'DNDGPT_RESOURCE_URL': 'https://fixture.example/mcp',
+        'DNDGPT_OAUTH_ISSUER': 'https://issuer.example/',
+        'DNDGPT_JWKS_URL': 'https://issuer.example/.well-known/jwks.json',
+    }.items():
+        monkeypatch.setenv(key, value)
+    monkeypatch.setattr(appwrite_entry, 'AppwriteAPI', lambda *args, **kwargs: hosted[0])
+    async def invoke():
+        health = context('/api/health')
+        health.req.method = 'GET'
+        assert (await main(health)).status == 200
+        denied = await main(context('/mcp'))
+        assert denied.status == 401
+        assert 'resource_metadata=' in denied.headers['www-authenticate']
+    asyncio.run(invoke())
 
 
 def test_hosted_factory_does_not_create_local_database(hosted, tmp_path):

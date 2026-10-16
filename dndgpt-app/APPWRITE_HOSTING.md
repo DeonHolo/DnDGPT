@@ -9,6 +9,7 @@ GitHub supplies source and automatic builds. Connecting a repository does not co
 - Repository root directory: `dndgpt-app`
 - Runtime: Python 3.14
 - Entrypoint: `appwrite_main.py`
+- Keep the imported `main` asynchronous: Appwrite already runs an event loop; await the ASGI dispatch instead of nesting `asyncio.run()`.
 - Build command: `pip install -r requirements-hosted.txt`
 - Runtime scopes: `tables.read`, `rows.read`, `rows.write`
 - Public HTTP invocation reaches the application's existing OAuth checks. Game data requires a valid issuer, audience, subject and scopes.
@@ -26,6 +27,8 @@ DNDGPT_JWKS_URL=https://YOUR-ISSUER/.well-known/jwks.json
 ```
 
 Appwrite supplies `APPWRITE_FUNCTION_API_ENDPOINT`, `APPWRITE_FUNCTION_PROJECT_ID` and the `x-appwrite-key` execution header. No permanent Appwrite API key belongs in the repository.
+
+Set environment variables before deployment, or redeploy after changing them. A domain tied to a VCS branch follows that branch's deployments; activating a separate commit deployment does not retarget the branch domain. Verify the domain's actual deployment ID and HTTP response after rollout.
 
 `app/records.py` keeps persistence calls separate from game rules. SQLite remains the default local backend. `app/appwrite_store.py` stores current records, immutable versions, audit events, approvals and roll receipts in TablesDB transactions. It never persists a database file in a function container. The optional legacy creation-draft adapter is disabled on this backend.
 
