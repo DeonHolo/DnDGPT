@@ -11,4 +11,3 @@ Automatic GitHub test CI is **not configured**. Appwrite provides automatic depl
 **Current status:** cloud-hosted private beta. Real Appwrite fixture checks and the creator's ChatGPT sign-in, save, display and reopen flow have passed. Independent-player installation and public-directory publication remain separate acceptance steps.
 
 For local development and packaging your own integration, see [Developer setup](../README.md#developer-setup).
-
