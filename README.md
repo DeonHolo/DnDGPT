@@ -60,7 +60,7 @@ The client ID is public connection information, not a password.
 
 Review the requested access, click **Create as a plugin**, then **Connect**. On the DnDGPT sign-in page, choose **Sign up** if you are new, or use your existing DnDGPT login.
 
-That page uses Auth0 to handle DnDGPT sign-in. You are creating a player account, not an Auth0 developer account. When ChatGPT shows **Connected**, you are ready.
+That page uses Auth0 to handle DnDGPT sign-in. When ChatGPT shows **Connected**, you are ready.
 
 ### 4. Start a campaign
 
