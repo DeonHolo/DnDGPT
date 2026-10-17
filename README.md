@@ -97,13 +97,9 @@ After a saved choice, you can say **“Open my campaign dashboard.”** Updates 
 
 ![Standalone DnDGPT dashboard with character stats and chapter navigation](docs/images/dashboard-standalone.jpg)
 
-<sub>The dashboard on its own, using disposable demo data.</sub>
-
 **Inside ChatGPT**
 
 ![A DnDGPT test campaign in ChatGPT with the hosted dashboard open beside the conversation](docs/images/campaign-chatgpt.png)
-
-<sub>A real ChatGPT test conversation with the hosted dashboard beside it. The prepared demo remains paused; no adventure was advanced for this capture.</sub>
 
 <details>
 <summary><strong>Inside the seven chapters</strong></summary>
