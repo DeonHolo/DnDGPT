@@ -14,6 +14,8 @@ from app.appwrite_store import AppwriteAPI, AppwriteStore
 from app.chat_game import ChatGame
 from app.engine import Engine, EngineError
 from app.game_random import GameRandom
+from app.campaign_lifecycle import CampaignLifecycle
+
 
 
 @pytest.mark.parametrize('remote', [False, True])
@@ -50,7 +52,7 @@ class MemoryAPI:
         if path == '/tablesdb/transactions':
             self.next_id += 1
             key = str(self.next_id)
-            self.transactions[key] = {'staged': {}, 'base': {}}
+            self.transactions[key] = {'staged': {}, 'deleted': set(), 'base': {}}
             return {'$id': key}
         if path.startswith('/tablesdb/transactions/'):
             key = path.rsplit('/', 1)[1]
@@ -61,11 +63,17 @@ class MemoryAPI:
                 for row_id, row in tx['staged'].items():
                     self.rows[row_id] = copy.deepcopy(row)
                     self.revisions[row_id] = self.revisions.get(row_id, 0) + 1
+                for row_id in tx['deleted']:
+                    self.rows.pop(row_id, None)
+                    self.revisions[row_id] = self.revisions.get(row_id, 0) + 1
+
             self.transactions.pop(key)
             return {'$id': key}
         transaction_id = body.get('transactionId', params.get('transactionId'))
         tx = self.transactions[transaction_id]
         visible = {**self.rows, **tx['staged']}
+        for row_id in tx['deleted']:
+            visible.pop(row_id, None)
         if path.endswith('/rows') and method == 'GET':
             rows = list(visible.values())
             for raw in params['queries[]']:
@@ -88,10 +96,20 @@ class MemoryAPI:
         key = body['rowId'] if method == 'POST' else path.rsplit('/', 1)[1]
         if method == 'GET':
             return self.response(copy.deepcopy(visible.get(key)))
+        if method == 'DELETE':
+            if key not in visible:
+                return None
+            tx['base'].setdefault(key, self.revisions.get(key))
+            tx['staged'].pop(key, None)
+            tx['deleted'].add(key)
+            return {'$id': key}
+
         if method == 'POST' and key in visible:
             raise EngineError(409, 'storage_conflict', 'Duplicate record')
         if method == 'PATCH' and key not in visible:
             return None
+        tx['deleted'].discard(key)
+
         tx['base'].setdefault(key, self.revisions.get(key))
         row = {**visible.get(key, {'$id': key, '$createdAt': self.next_id}), **body['data']}
         tx['staged'][key] = copy.deepcopy(row)
@@ -189,6 +207,37 @@ def test_roll_receipts_survive_reopen_without_campaign_change(hosted):
     assert engine.list_campaigns('owner-a') == []
     with pytest.raises(EngineError, match='Roll receipt not found'):
         random.get('owner-b', 'fixture-roll-001')
+
+
+def test_hosted_campaign_delete_compacts_linked_records(hosted):
+    api, store, engine, game = hosted
+    state = engine.create_sandbox("owner-a", "Hosted deletion fixture", "hosted-delete-create")
+    random = GameRandom(store, engine.dice, engine)
+    rolls = [{"kind": "dice", "label": "Disposable fixture", "sides": 6, "count": 1}]
+    random.roll("owner-a", "hosted-delete-roll", rolls, campaign_id=state["id"])
+
+    lifecycle = CampaignLifecycle(engine)
+    preview = lifecycle.preview_delete("owner-a", state["id"], state["version"])
+    result = lifecycle.delete("owner-a", state["id"], state["version"],
+                              preview["confirmation_token"], True)
+    assert result["deleted"] is True
+    assert result["compacted_receipts"] == 1
+    assert engine.list_campaigns("owner-a") == []
+
+    with store.transaction() as db:
+        assert records.find(db, "events_v1", {"campaign_id": state["id"]}) == []
+        receipt = records.get(db, "game_rolls_v1", {
+            "owner": "owner-a", "action_id": "hosted-delete-roll"
+        })
+        assert receipt["campaign_id"] == ""
+        assert json.loads(receipt["result"]) == {
+            "_campaign_deleted": True, "campaign_id": state["id"]
+        }
+
+    with pytest.raises(EngineError) as deleted:
+        engine.create_sandbox("owner-a", "Hosted deletion fixture", "hosted-delete-create")
+    assert deleted.value.code == "campaign_deleted"
+
 
 
 def test_paginated_events_are_not_truncated(hosted):

@@ -1,9 +1,9 @@
 {
   "rulebook-v1.0.txt": {
     "original_sha256": "fc1cd1ed39a9fc35961d0d1e9a5feb3035015339d435c6a3af80a3515960597b",
-    "sha256": "557441e47603ce8f0b1442a0ca5288ea91d4f9ccd84933d863441190d99773fe",
+    "sha256": "5c9b8134c2de276d28e1057b6ca5cda875d870588a5679c876821697dad48cb9",
     "original_bytes": 324754,
-    "bytes": 336269,
+    "bytes": 341177,
     "replacements": [
       [
         "V4.2",
@@ -53,13 +53,21 @@
         "after": "# END OF DnDGPT\n"
       }
     ],
-    "branding_id": "dndgpt-display-name-2026-10-17"
+    "branding_id": "dndgpt-display-name-2026-10-17",
+    "revisions": [
+      {
+        "id": "resources-utility-and-ui-2026-10-17",
+        "source": "resources-utility-and-ui.json",
+        "before_sha256": "557441e47603ce8f0b1442a0ca5288ea91d4f9ccd84933d863441190d99773fe",
+        "after_sha256": "5c9b8134c2de276d28e1057b6ca5cda875d870588a5679c876821697dad48cb9"
+      }
+    ]
   },
   "rule-hardener.txt": {
     "original_sha256": "bc21947f299ae37dc306581aa7110231809140c332ed4e8b1ceccbb86cbce8da",
-    "sha256": "3a4ba13d199340eace7891900628329968ae6e12e208e7103a713c1a9710a53e",
+    "sha256": "7460f6f3069051dd7cb25650c4cd8bc4990645aa266d6e78b72b28fef4975139",
     "original_bytes": 10370,
-    "bytes": 13619,
+    "bytes": 19769,
     "replacements": [
       [
         "V4.2-R1",
@@ -81,6 +89,14 @@
         "after": "# DnDGPT — RULE HARDENER\r\n"
       }
     ],
-    "branding_id": "dndgpt-display-name-2026-10-17"
+    "branding_id": "dndgpt-display-name-2026-10-17",
+    "revisions": [
+      {
+        "id": "resources-utility-and-ui-2026-10-17",
+        "source": "resources-utility-and-ui.json",
+        "before_sha256": "3a4ba13d199340eace7891900628329968ae6e12e208e7103a713c1a9710a53e",
+        "after_sha256": "7460f6f3069051dd7cb25650c4cd8bc4990645aa266d6e78b72b28fef4975139"
+      }
+    ]
   }
 }

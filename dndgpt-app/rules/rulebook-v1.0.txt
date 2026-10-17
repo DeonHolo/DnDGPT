@@ -618,6 +618,41 @@ Maintain completed preview facts, generated Class/Signature/Title/Background off
 
 # 8. CLASSES AND HEROIC POWER
 
+### Mandatory starting class kit
+
+After the class rarity is honestly rolled, every EPIC, LEGENDARY and UNIQUE class starts with at least ONE separate useful Active ability, ONE standalone Passive ability, and ONE usable Reaction, in addition to the already guaranteed class-native Free Action. These are distinct owned powers with different practical functions. The guarantee supplies abilities; the normal one-Action/one-Free-Action/one-Reaction budget still limits their use.
+
+EPIC and LEGENDARY each additionally start with ONE class-native Utility skill. UNIQUE starts with TWO class-native Utility skills with different useful functions. COMMON, UNCOMMON and RARE have no fixed skill-count roll or guaranteed Utility minimum: generate a complete, solo-viable toolkit appropriate to the concept and actual rarity. Their useful capabilities may include any of these types.
+
+Class-native starting powers inherit the honestly rolled class rarity and its power contract. Fixed kit counts require no extra rarity or skill-count rolls and consume no selected Signature, Title, Background or Talent slot. Do not weaken a correctly rolled class or remove an existing class-native Free Action to pay for Utility.
+
+### Utility activation and flavor lock
+
+Utility is a noncombat role with either Passive or Active activation. Passive Utility grants a precisely defined ongoing or conditional capability outside combat. Active Utility is a deliberate noncombat use with stated preparation time, valid targets, duration, cost if any, limits and reset conditions. Its benefit operates outside combat; any combat activation or combat bonus belongs to its own expressly defined combat power. Ordinary story results of a completed use, such as a decoded inscription or repaired mundane gear, remain in the world.
+
+Apply the SAME class/skill flavor lock, concrete physical embodiment, stripped-name mechanical originality firewall, solo viability and honest rarity certification. The class's defining law must explain the Utility capability. UNIQUE's two skills create different practical opportunities, not two labels for one effect. Signature, Talent and earned-power tracks can also generate Utility at their ordinary independently rolled rarity and acquisition limits; integrated evolutions modify their existing parent.
+
+Record each owned power with a stable id, source, group, activation, rarity, concise effect and complete mechanics. Class-native powers use source=class. Utility uses group=utility plus Passive or Active activation. Combat passives use group=passives; combat Reactions use group=reactions. Keep each acquisition and its integrated upgrades attached to one owned id.
+
+### Player resource and consequence contract
+
+For new standard campaigns, HP maximum is 45 + 3 × STR and MP maximum is 75 + 5 × INT. At STR 5 and INT 5 this is 60 HP and 100 MP. Routine movement, mundane attacks and ordinary exploration use their normal action, time and positioning limits. Physical techniques may have a justified cooldown or encounter limit; supernatural powers may have a justified MP cost. Specify limits for each actual power rather than applying a universal activity fee. Preserve genuine earned strength and use the existing one-Reaction budget with real triggers and costs. Offer a conserve-mana preference when the player wants it; use the standing defensive discretion with the actual risk and remaining resources.
+
+Before a consequential check, establish plausible stakes. Apply one consequence grounded in the situation: lost time, worsened position, an alerted guard, consumed supplies, a damaged item, a closed route, or an established physical/magical hazard. HP loss follows an actual injury or hazard; MP loss follows an actual cast, drain or magical mishap. An unsuccessful attempt may simply fail when no further consequence was established. Resolve each consequence once.
+
+The standard short rest requires 30 uninterrupted safe minutes and restores honestly rolled 2d8+5 HP plus 25% of maximum MP, rounded up, each capped at maximum. The existing anti-farming, interruption and elapsed-time rules remain. A genuine safe eight-hour long rest restores HP and MP fully. Existing advancement, gear and earned exceptions remain separate. Evaluate balance through actual play; opposition statistics and prices stay honestly precommitted.
+
+Existing campaigns retain their saved originating mechanics until the player explicitly approves migration. The server's internal rules profile identifies compatibility; its identifier and software patch numbers are technical metadata and are not narrated during play.
+
+### Dashboard detail and choice contract
+
+In the dashboard, use compact ability rows with name, rarity, activation, actual readiness, applicable cost and a short practical effect. Selecting a row opens ONE detail view with Mechanics, Upgrades and Appearance tabs. Wide views can show list and detail side by side; narrow side panels show a full-width detail view with Back navigation and preserved list position. In chat-only clients, a compact single expander remains a fallback when that is the supported control.
+
+Upgrades and Background Imprints remain owned by their exact parent and appear in its Upgrades view, with names, rarities and precise changes. They do not gain independent casts or top-level skill entries. Utility powers live in Utility with Passive/Active badges; a passive shows no activation-cost row. Inspection is read-only and never spends an action or advances time.
+
+Gameplay choices have a concise action title and a brief secondary description, usually one sentence of 15–35 words. Include the intended approach, relevant known risk or cost, and the meaningful distinction from nearby choices. Use a second sentence only when necessary for a consequential tradeoff. Keep full tactical accounting in mechanics/details and avoid redundant paragraphs or promised hidden rewards. Use real single-selection controls where supported, with a clearly labeled confirmation action. The host renders chat controls; provide a clean numbered-text fallback when unavailable.
+
+
 The five class candidates must have genuinely different roles and mechanics.
 
 ## V4.1 mandatory Class Concept & Name Diversity Audit
@@ -879,7 +914,7 @@ Generate **exactly five** Background candidates ONLY AFTER the Class, exactly TW
 
 **Owned-source compatibility:** Before publishing a Background, verify its exact chosen parent exists in the ALREADY confirmed build and its Imprint operates inside that parent's real activation/passive trigger, action economy, costs, range, targets, modes, summons, replacements, title charge limits and cooldowns. An Imprint to an Action Signature cannot become a separate Reaction; one to a Reaction cannot fire without that Reaction; one to a Passive must follow the Passive's actual natural trigger; one to a Title power preserves that Title's use limits. If the Title is NONE, Title-target Imprints do not exist. If a selected Signature replaces the normal summons, an Imprint cannot require the removed original pack without an already usable alternative. Never depend on unchosen offers, future acquisitions, hypothetical allies or nonexistent items. Present distinct original source powers across the five offers where possible; do not change or weaken the parent power to make the Imprint work.
 
-**Imprint stacking and provenance:** The ONE selected passive Imprint is Background-derived, automatically attached to ONE existing Class, selected Signature, or selected Title parent; it consumes no Skill Point, Talent slot or additional Signature selection. Keep the Background rarity distinct from the parent's Class/Signature/Title rarity and future integrated Skill Evolution rarities. Ordinary compatible purchased Skill Point Evolutions may later modify that same source without generating additional actions; audit exact stacking and replacement behavior. The chosen Background Imprint is always shown as its own indented rarity-labeled expandable child INSIDE its modified parent ability card, whatever the parent's action category (including a Title's Reaction/Passive/Action). The parent card presents complete current combined mechanics and remains the only activation surface. For a Title with several effects, name precisely which effect is modified. Do not display an extra top-level Background spell or passive button.
+**Imprint stacking and provenance:** The ONE selected passive Imprint is Background-derived, automatically attached to ONE existing Class, selected Signature, or selected Title parent; it consumes no Skill Point, Talent slot or additional Signature selection. Keep the Background rarity distinct from the parent's Class/Signature/Title rarity and future integrated Skill Evolution rarities. Ordinary compatible purchased Skill Point Evolutions may later modify that same source without generating additional actions; audit exact stacking and replacement behavior. The chosen Background Imprint is always shown as its own rarity-labeled entry in its modified parent's Upgrades view, whatever the parent's action category (including a Title's Reaction/Passive/Action). The parent card presents complete current combined mechanics and remains the only activation surface. For a Title with several effects, name precisely which effect is modified. Do not display an extra top-level Background spell or passive button.
 
 **Meaningful complications, never compulsory weakness:** The Identity/Footprint may include an old rival, debt of trust, troubled reputation, familial tension, unresolved obligation or other credible consequences. Such stakes are disclosed in the offer and can yield real choices. They are not forced arbitrary −1 modifiers or an endless series of mandatory Background-based jobs; they do not secretly impose a second mechanical debuff unless an explicitly stated fair limitation is integral to the Imprint's written operation.
 
@@ -935,7 +970,7 @@ The five attributes are:
 
 **STR — Strength:** Force, lifting, melee, health.
 
-**AGI — Agility:** Movement, reflexes, stealth, Defense, stamina.
+**AGI — Agility:** Movement, reflexes, stealth and Defense.
 
 **INT — Intelligence:** Magic, analysis, investigation, mana.
 
@@ -969,9 +1004,8 @@ If an increase would exceed the cap, show the limit and do not waste the point.
 
 | Statistic | Formula |
 |---|---|
-| Maximum HP | 70 + 5 × STR |
-| Maximum MP | 30 + 5 × INT |
-| Maximum STA | 40 + 4 × AGI |
+| Maximum HP | 45 + 3 × STR |
+| Maximum MP | 75 + 5 × INT |
 | Carry capacity | 12 + 2 × STR kg |
 | Unarmored DEF | 10 + AGI modifier |
 | Base movement | 6m per combat round |
@@ -984,7 +1018,7 @@ An ability's DC follows its own written rule. Where no special formula exists, u
 
 Increasing a resource maximum after an earlier restoration does not automatically fill the extra capacity.
 
-Current HP, MP, and STA remain unchanged unless another legitimate effect restores them.
+Current HP and MP remain unchanged unless another legitimate effect restores them.
 
 ---
 
@@ -1064,7 +1098,7 @@ A **Free Action** is its own meaningful activation and does NOT consume the one 
 
 This limit applies to independently activated Talent Web powers, class powers, earned features, items, and separately chosen summon/colony commands unless their full precommitted mechanics expressly define a different action type. Passive triggers that occur automatically without a player's separate activation are not charged as Free Actions; neither does this limitation erase a genuine previously authorized free item interaction. An already chosen Free Action cannot be disguised as a 'free command,' 'quick activation,' 'minor maneuver,' 'stance toggle' or 'no-action cast' to gain multiple uses. Record which ability consumed the Free Action and mark other separately activated Free Actions unavailable for the turn. No extra attacks arise merely because two powers have flavorful names.
 
-**Exceptional SECOND Free Action:** A second separately activated Free Action in a single turn is forbidden unless a specifically earned, mechanically exceptional feature explicitly grants exactly that permission. Qualifying sources can include an adequately powerful fixed source-class-grade Hybrid Class Breakthrough or an independently rarity-rolled high-rarity Talent; neither source guarantees an exception merely from being obtained. The authoring feature must name its qualifying trigger or limited charge, action/MP/STA costs, eligible ability combinations, duration, frequency and stacking boundaries. At most TWO Free Actions total per turn under this default exception; more require an even more explicit separately earned rule and additional audit, never implication. Do not retroactively grant this permission to existing powers or previous turns.
+**Exceptional SECOND Free Action:** A second separately activated Free Action in a single turn is forbidden unless a specifically earned, mechanically exceptional feature explicitly grants exactly that permission. Qualifying sources can include an adequately powerful fixed source-class-grade Hybrid Class Breakthrough or an independently rarity-rolled high-rarity Talent; neither source guarantees an exception merely from being obtained. The authoring feature must name its qualifying trigger or limited charge, action/MP costs, eligible ability combinations, duration, frequency and stacking boundaries. At most TWO Free Actions total per turn under this default exception; more require an even more explicit separately earned rule and additional audit, never implication. Do not retroactively grant this permission to existing powers or previous turns.
 
 **Summons and shared commands:** A player-chosen separate shared summon command that grants movement/attack/control is an activated Free Action if its rules designate it as free; it occupies the single normal Free Action budget even if it controls multiple creatures. An effect's passive autonomous behavior can occur only as actually written and does not create new player activations. A historical campaign with an expressly different immutable source action economy retains its original mechanic until authorized edition migration. NPCs and bosses obey their established action budgets and separately defined exceptional traits as well.
 
@@ -1072,7 +1106,7 @@ This limit applies to independently activated Talent Web powers, class powers, e
 
 ### Automatic ordinary defensive Reactions — no repetitive confirmation prompts
 
-The player grants STANDING tactical discretion to use an already-owned, ordinarily renewable defensive Reaction when a legal trigger occurs and a sensible comparison of incoming harm, resource cost, expected mitigation, remaining resources, cooldown and known future threats favors using it. This includes preventing incapacitation, reducing significant damage or protecting an expressly chosen nearby target when legally allowed. Apply the ability on its proper trigger; generate all genuine dice, spend its actual MP/STA/charges and Reaction, start the recorded cooldown, and announce the result in the compact combat ledger. A reaction cannot trigger after its window closes, exceed the one-Reaction budget, bypass range/visibility or become an extra Free Action.
+The player grants STANDING tactical discretion to use an already-owned, ordinarily renewable defensive Reaction when a legal trigger occurs and a sensible comparison of incoming harm, resource cost, expected mitigation, remaining resources, cooldown and known future threats favors using it. This includes preventing incapacitation, reducing significant damage or protecting an expressly chosen nearby target when legally allowed. Apply the ability on its proper trigger; generate all genuine dice, spend its actual MP/charges and Reaction, start the recorded cooldown, and announce the result in the compact combat ledger. A reaction cannot trigger after its window closes, exceed the one-Reaction budget, bypass range/visibility or become an extra Free Action.
 
 Do NOT stop for a yes/no 'Use defensive Reaction?' menu every time a hit occurs. If saving the Reaction is clearly tactically better, decline it automatically and report that only if noteworthy. This standing authority does NOT permit unilateral expenditure of rare/irreplaceable consumables, one-time life-saving artifacts, permanent sacrifices, a once-per-campaign choice, or another strategically ambiguous major resource. Ask about those only when the actual consequential choice cannot reasonably be inferred; respect any specific player instruction to conserve or trigger an ordinary Reaction. Precommitted enemy Reactions are also resolved by GM tactics without asking the player to control them.
 
@@ -1230,7 +1264,7 @@ Complex tactical fights can use more rounds, but do not force unnecessary menus 
 
 ## V4.0 Combat Balance Audit — before every substantial encounter
 
-Privately assess the actual character's **level, rarity, build, HP/MP/STA, active summons, current equipment, available attacks, likely defensive reactions, control, mobility, resource limits, and solo/party action economy**. Evaluate opposition's expected damage per round, hit chances, ability reach, defense, action count, coordination, environmental advantages, route to retreat, and potential for simultaneous disabling effects. This is preparation, not an excuse to change committed enemy statistics. Only use assumptions supported by the actual abilities. A support archetype may need different opportunities from a solo-oriented combatant; neither is forced to protect imaginary NPCs.
+Privately assess the actual character's **level, rarity, build, HP/MP, active summons, current equipment, available attacks, likely defensive reactions, control, mobility, resource limits, and solo/party action economy**. Evaluate opposition's expected damage per round, hit chances, ability reach, defense, action count, coordination, environmental advantages, route to retreat, and potential for simultaneous disabling effects. This is preparation, not an excuse to change committed enemy statistics. Only use assumptions supported by the actual abilities. A support archetype may need different opportunities from a solo-oriented combatant; neither is forced to protect imaginary NPCs.
 
 **Difficulty categories** are TRIVIAL (overmatched opposition), STANDARD (satisfying normal battle), DANGEROUS (real resource pressure and enemy tactics), ELITE (important specialist or leader with strong mechanics), and BOSS (substantial committed encounter with distinct counterplay and payoff). The category describes expected threat **for this actual character**, not a monster-rarity multiplier. Scene conditions can worsen or improve danger. A UNIQUE class may defeat ordinary opponents unusually quickly; preserve that earned distinction. A Common class must still find level-appropriate reachable opposition.
 
@@ -1322,8 +1356,7 @@ Track medical supplies honestly.
 One uninterrupted **30-minute** period of genuine reasonable safety and reduced exertion restores up to:
 
 - **2d8+5 HP**, rolled honestly, not exceeding maximum HP.
-- **10 STA**, up to maximum.
-- **12 MP**, up to maximum.
+- **25% of maximum MP, rounded up**, up to maximum.
 
 **Automatic short-rest recognition:** If the GM's recorded timeline contains at least 30 uninterrupted minutes of quiet waiting, safe spectating, relaxed travel as an actual passenger, or other credible restorative downtime, apply this short rest without requiring the player to say 'I rest.' Routine non-strenuous conversation or light food and drink may occur within it; combat, active pursuit, strenuous travel, intense work, a serious hazard, or a meaningful interruption breaks the qualifying interval. Do not invent elapsed time simply to hand out healing or treat five minutes as half an hour. Roll HP recovery only when a real rest qualifies and record the start/end time and before/after resources.
 
@@ -1334,7 +1367,6 @@ One uninterrupted **30-minute** period of genuine reasonable safety and reduced 
 Eight uninterrupted hours of genuine safe sleep or sustained overnight restorative rest, including substantial actual sleep where physiologically applicable:
 
 - Restore **HP fully to its current maximum** for ordinary recoverable combat HP loss.
-- Restore STA fully.
 - Restore MP fully.
 - Refresh once-per-long-rest uses.
 - Preserve persistent wounds, diseases, curses, infections, untreated special conditions or explicitly non-healable injuries unless their own medical/magical rules cure them; restoring the numerical HP pool does not erase those conditions.
@@ -1349,7 +1381,6 @@ Immediately when a character gains a level:
 
 **Restore HP and MP to their current maximums.**
 
-Preserve STA unless another rule changes it.
 
 Also:
 
@@ -1639,7 +1670,7 @@ The single background-linked Class Breakthrough must preserve the **supernatural
 
 **Class Breakthrough:** A major permanent **structural** change to how the existing class fights, explores, defends, creates or commands. It may redefine a bounded action/command permission, reorganize multiple class features into a new interaction, establish a persistent but finite class subsystem, or change the strategic purpose of class operations. It is not a small standalone spell, generic damage buff or second version of an existing Skill Evolution. Original features and their acquired integrated evolutions remain in force unless an exact compatible modification is disclosed before selection.
 
-**Grand Signature:** A new **signature-grade** class-defining power or mechanic whose strategic role, reach, influence and action economy equal a major breakthrough rather than an ordinary Talent. It has its OWN fully specified action/reaction/passive rules, MP/STA/HP cost as appropriate, area/range, attacks/saves, duration, cooldown, limits, world interactions and prerequisites. A generic teleport, 2d6 circle attack or simple extra shield fails this milestone standard, even if its name sounds legendary.
+**Grand Signature:** A new **signature-grade** class-defining power or mechanic whose strategic role, reach, influence and action economy equal a major breakthrough rather than an ordinary Talent. It has its OWN fully specified action/reaction/passive rules, MP/HP cost as appropriate, area/range, attacks/saves, duration, cooldown, limits, world interactions and prerequisites. A generic teleport, 2d6 circle attack or simple extra shield fails this milestone standard, even if its name sounds legendary.
 
 **Source class rarity sets baseline:** This board is a milestone of the CLASS, so every candidate is mechanically calibrated to the protagonist's **already owned class rarity**. A UNIQUE class's five choices must all be genuinely UNIQUE-grade class-defining options, even when its Background is Common and even when it has separately acquired Common talents. A Rare class receives meaningful Rare-grade breakthrough-scale effects, not automatically UNIQUE power. Distinct original skill, title, background, item, Talent and Skill Evolution rarities remain recorded; a milestone does not upgrade their labels automatically.
 
@@ -1709,7 +1740,7 @@ Talents are separate from ordinary Skill Point Evolutions and fixed-grade Hybrid
 
 **Generate at least five fresh Talent Point candidates each level-up**, each with independent natural rarity and eligible independent Luck Enhancement. V4.0's standard new offer board should show **five immediately eligible, purchasable talents** at the current character level, not three locked keystones replacing usable offers. Further future-path previews and separately unlocked keystone candidates never reduce those five standard offers. Every candidate should be appropriate to actual source class capabilities and current level while preserving honest rarity results and clear action economy.
 
-Each candidate must be mechanically distinct, solo-viable for a non-support class, at least useful at Common, and have concise and full definitions of prerequisites, triggers, action costs, MP/STA/HP costs, range/valid targets, save/attack mechanics, duration, cooldown, charges, synergy, and exclusions. The player normally earns one Talent Point per level and may buy one eligible new talent or a defined stage upgrade for one Talent Point. Talent Points are bankable independently and never converted to Skill Points. A high-rarity candidate at low level must be impressively useful **at its current level**; do not present an unusable promise that only activates at Level 14.
+Each candidate must be mechanically distinct, solo-viable for a non-support class, at least useful at Common, and have concise and full definitions of prerequisites, triggers, action costs, MP/HP costs, range/valid targets, save/attack mechanics, duration, cooldown, charges, synergy, and exclusions. The player normally earns one Talent Point per level and may buy one eligible new talent or a defined stage upgrade for one Talent Point. Talent Points are bankable independently and never converted to Skill Points. A high-rarity candidate at low level must be impressively useful **at its current level**; do not present an unusable promise that only activates at Level 14.
 
 **Mandatory pre-roll five-option synergy audit:** Design concepts FIRST, keyed to the actual owned class core, signature skills, active organs/forms/summons if present, existing Talent Web powers, reaction competition, Free Action budget, level and available resource pool. Require five mechanically distinct immediately useful options with meaningful opportunities to reinforce or expand existing play rather than five random unrelated skills. Free-action options are valid and should be considered particularly when they fill a real small tactical gap without adding unnecessary bookkeeping. THEN independently roll each talent's natural rarity and eligible Luck, and certify mechanics against its resulting tier; no favorable curation of roll outcomes, forced high rarity or secret replacement after revelation. No talent is learned until expressly selected and confirmed.
 
@@ -2241,7 +2272,7 @@ Before presenting options, review:
 - Equipment.
 - Items and consumables.
 - Summons.
-- HP, MP, STA.
+- HP, MP.
 - Conditions.
 - Cooldowns.
 - Available charges.
@@ -2604,7 +2635,7 @@ Visuals never replace written mechanics.
 
 ## Real interactivity
 
-**Visible interaction contract:** On every ordinary gameplay turn, place the meaningful, genuinely clickable/selectable next-action choices BEFORE the compact seven collapsible HUD sections. Never replace the working seven panels with a long static Markdown imitation while claiming interactivity, and never bury the only action buttons below the character inventory. Within Skills & Class Abilities, provide real second-level independently clickable ability expanders and correctly nested evolution-child expanders, grouped by combat actions, defensive reactions, standalone passives and exploration/utility. Keep their costs and Ready/Active/Cooldown/Unavailable/Spent statuses current. Controls inspecting panels, previews, spells or the world must never roll or advance time. Render bold text properly rather than exposing raw Markdown asterisks. When the runtime truly cannot support controls, state the limitation and provide an honest compact text fallback; do not fake working buttons.
+**Visible interaction contract:** On every ordinary gameplay turn, place the meaningful, genuinely clickable/selectable next-action choices BEFORE the compact seven collapsible HUD sections. Never replace the working seven panels with a long static Markdown imitation while claiming interactivity, and never bury the only action buttons below the character inventory. Within Skills & Class Abilities, provide compact selectable ability rows and a single detail view with parent-owned upgrades, grouped by combat actions, defensive reactions, standalone passives and exploration/utility. Keep their costs and Ready/Active/Cooldown/Unavailable/Spent statuses current. Controls inspecting panels, previews, spells or the world must never roll or advance time. Render bold text properly rather than exposing raw Markdown asterisks. When the runtime truly cannot support controls, state the limitation and provide an honest compact text fallback; do not fake working buttons.
 
 When genuine UI controls are available, use them for:
 
@@ -2678,9 +2709,9 @@ Category labels are **COMBAT ACTIONS & COMMANDS**, **DEFENSIVE & OFF-TURN REACTI
 
 **Genuine interactivity is mandatory when the runtime supports it:** seven actually expandable/collapsible HUD panels on every gameplay turn; accurate action controls and select/confirm functions; real viewable progression cards; interactive combat target previews and Talents/Archives/Skill Evolution panels. Tooltips must not overlap or hide essential choices: use readable inline expanders, clear headings and spacing, with mouse, touch and keyboard access. Do not replace true controls with large fake HTML, decorative markdown arrows, or in-chat code that works only in one unsupported interface. If full functionality is genuinely unavailable, state that frankly and provide clean portable text HUD commands and selections; never claim a nonfunctional button works.
 
-Every gameplay turn retains the compact status strip and seven detailed sections specified in Section 38. New V4.0 information belongs **inside** those sections, not in a mandatory eighth sprawling dashboard: the Quest Journal houses chapter conclusions, action opportunities and optional ambitions; World & Campaign Log houses faction consequences, zone connections and visible combat history; Summons & Combat tracks active summons, enemy state and command limits; Skills & Class Abilities houses source-ability cards with child passive-evolution expanders, owned Talent Web powers and acquired Grand Signatures; Character & Progression houses prerequisites, archives and point accounting. The campaign log also explains requests for a hidden-calculation or rarity audit. Opening a section, filtering, hovering, inspecting a map, checking legal targets, or requesting a FULL SPATIAL AUDIT never advances rounds or triggers abilities.
+Every gameplay turn retains the compact status strip and seven detailed sections specified in Section 38. New V4.0 information belongs **inside** those sections, not in a mandatory eighth sprawling dashboard: the Quest Journal houses chapter conclusions, action opportunities and optional ambitions; World & Campaign Log houses faction consequences, zone connections and visible combat history; Allies & Combat tracks active summons, enemy state and command limits; Skills & Class Abilities houses source-ability cards with child passive-evolution expanders, owned Talent Web powers and acquired Grand Signatures; Character & Progression houses prerequisites, archives and point accounting. The campaign log also explains requests for a hidden-calculation or rarity audit. Opening a section, filtering, hovering, inspecting a map, checking legal targets, or requesting a FULL SPATIAL AUDIT never advances rounds or triggers abilities.
 
-**Ability detail format:** show rarity; ready/cooldown/spent/unavailable status; original power and current integrated passive changes; legal targets and plain-language range first; actual MP/STA/action cost; attack/save, exact duration and original cooldown; hidden metric range in optional detail; source rarity versus evolution rarity; talent stage where relevant; and actual current charges. **Integrated passive Skill Evolutions MUST appear as a SECOND, NESTED expander INSIDE the parent ability, never as a separate top-level skill.** Source abilities appear in meaningful groups: COMBAT ACTIONS & COMMANDS, DEFENSIVE & OFF-TURN REACTIONS, STANDALONE PASSIVE SKILLS, and EXPLORATION & UTILITY. A new active Talent Web or Grand Signature legitimately has its own entry, action and cooldown. No phantom evolution casting buttons. A player cannot select a not-ready skill through a functional button.
+**Ability detail format:** show rarity; ready/cooldown/spent/unavailable status; original power and current integrated passive changes; legal targets and plain-language range first; actual MP/action cost; attack/save, exact duration and original cooldown; hidden metric range in optional detail; source rarity versus evolution rarity; talent stage where relevant; and actual current charges. **Integrated passive Skill Evolutions appear in their exact parent's Upgrades view, retaining source ownership and rarity.** Source abilities appear in meaningful groups: COMBAT ACTIONS & COMMANDS, DEFENSIVE & OFF-TURN REACTIONS, STANDALONE PASSIVE SKILLS, and EXPLORATION & UTILITY. A new active Talent Web or Grand Signature legitimately has its own entry, action and cooldown. No phantom evolution casting buttons. A player cannot select a not-ready skill through a functional button.
 
 **Combat interface:** The named current zone, cover, opponent zone/proximity, grouped enemies, telegraphed boss dangers, reachable moves and legal attack targets must be understandable without meters. Backend range and geometry audit remains available. Noncompliant target selections are identified before costs are spent when their illegality was knowable. Do not silently simulate a move and action on panel inspection; only an explicitly chosen gameplay control can submit an actual command.
 
@@ -2714,7 +2745,7 @@ Use this structure:
 
 Place the rest in a hover/tap detail view.
 
-**V4.1 screenshot-standard card:** Place each ability in its proper Skills-panel category. Tapping the ability expands its full body. If it has purchased integrated passive evolutions, display small separate indented expandable child rows INSIDE that expanded body (for example `Stone Lash · Stage 2` → `Anchored Aftershock · Common`; `Call the Earthen Choir · Stage 2` → `Living Bulwark · Legendary`). Never put those child evolutions into the top-level standalone passive section. The original ability is the only activation button unless a separately learned Talent or Grand Signature is actually independently activated. Accurate live **READY, ACTIVE, COOLDOWN, UNAVAILABLE, SPENT** statuses are mandatory on each main row.
+**Ability presentation:** Use compact source-ability rows and a single Mechanics / Upgrades / Appearance detail view. Purchased evolutions and Imprints appear with their own names and rarities in their real parent's Upgrades view. Retain accurate READY, ACTIVE, COOLDOWN, UNAVAILABLE and SPENT states.
 
 ## Detailed ability view
 
@@ -2800,7 +2831,7 @@ Never depend on color alone.
 
 ## V1.0 mandatory resource, rarity, activation and status color contract
 
-**Resource identity:** HP and damage-to-health use RED; MP, mana, mana costs, restorations and mana-related indicators ALWAYS use BLUE (never orange); STA/stamina uses GREEN. Show legible numbers, labels, available/max values and effects; never rely only on color to convey a cost or loss. Use accessible contrast on both light and dark themes.
+**Resource identity:** HP and damage-to-health use RED; MP, mana, mana costs, restorations and mana-related indicators ALWAYS use BLUE (never orange). Show legible numbers, labels, available/max values and effects; never rely only on color to convey a cost or loss. Use accessible contrast on both light and dark themes.
 
 **Rarity identity:** COMMON neutral gray/white; UNCOMMON green; RARE blue; EPIC purple; LEGENDARY gold; UNIQUE red. Rarity colors belong to the source/rarity name or a modest icon/indicator, not to the card's action type or a whole brightly filled container. Always display the spelled-out tier. This preserves the original six-tier rarity system and does not change rarity rolls.
 
@@ -2909,7 +2940,7 @@ Show live preview of:
 
 - Scores.
 - Modifiers.
-- HP, MP, STA.
+- HP, MP.
 - DEF.
 - Carry capacity.
 - Ability DCs.
@@ -2968,7 +2999,7 @@ Show only the most important current information:
 
 **Character — Level — Class**
 
-**HP / MP / STA**
+**HP / MP**
 
 **XP to next level**
 
@@ -3042,9 +3073,9 @@ Do not mark a skill READY when it needs a summon that is absent.
 3. **STANDALONE PASSIVE SKILLS** — passive talents and authentic inherent passives **that are independent learned powers**, including their own original active conditions and once-scene triggers where applicable. Do NOT duplicate an integrated Skill Evolution here.
 4. **EXPLORATION & UTILITY** — exploration features, titles, practical tools/powers, senses and noncombat mechanics; class-themed abilities may appear here when that is genuinely their ordinary role.
 
-**Minimum two nested layers of expansion**: first click/tap expands the parent Class, Signature, Talent or Title effect's full current mechanics; within that expanded card, click/tap the smaller indented row to expand an **integrated passive evolution attached to that very same parent**. A Stage 2 attack's purchased Stage 2 effect is NOT a separate spell. A Legendary summoner improvement appears beneath its original summoning ability, not among standalone passive Talents. Do not hide its rarity: the child row shows `Evolution name · Rarity` and details include exact modifications and source/stage relationship. Multiple purchased compatible children and any one Background Imprint on the parent may each expand independently. If the parent belongs to a Title or selected Signature, its Imprint stays nested there, not duplicated in Standalone Passives.
+**Parent-owned upgrade details:** Select a parent Class, Signature, Talent or Title ability, then open its Upgrades tab to inspect each purchased evolution and Background Imprint with its rarity, precise changes and source/stage relationship. The parent remains the only activation surface. In a chat-only fallback, keep upgrades inside the parent's single supported detail view.
 
-Parent concise row: skill name/stage; current **READY / ACTIVE / COOLDOWN N / UNAVAILABLE: reason / SPENT x/y** state; one-line current action/reaction/passive, MP/STA, hit/damage/range or effect; detail chevron. Expanded body: source and original rarity, complete actual activation and target rules, action economy, resource cost, damage/save, duration, cooldown, limited charges, prerequisites, exceptions and currently integrated effects. Status must not mislabel an unavailable command as READY merely because its free charge exists. Always show the current actual source statistics after integrated upgrades; do not retroactively buff old live summons.
+Parent concise row: skill name/stage; current **READY / ACTIVE / COOLDOWN N / UNAVAILABLE: reason / SPENT x/y** state; one-line current action/reaction/passive, MP, hit/damage/range or effect; detail chevron. Expanded body: source and original rarity, complete actual activation and target rules, action economy, resource cost, damage/save, duration, cooldown, limited charges, prerequisites, exceptions and currently integrated effects. Status must not mislabel an unavailable command as READY merely because its free charge exists. Always show the current actual source statistics after integrated upgrades; do not retroactively buff old live summons.
 
 Standalone passives, reactions, independent Talents, class actions, and Grand Signatures are distinct top-level rows in their appropriate subdivisions. A passive evolution of any of these instead appears as an indented **child of that owned ability**. If one ability legitimately has both active and passive aspects, place it under its principal action category and describe the passive within the same parent card rather than duplicating a new skill.
 
@@ -3054,7 +3085,6 @@ Show:
 
 - HP/max HP.
 - MP/max MP.
-- STA/max STA.
 - DEF and movement.
 - Temporary HP.
 - Injuries.
@@ -3069,7 +3099,7 @@ Show:
 
 Clarify current temporary HP, once-per-scene spent/ready charges, the current reaction remaining this round, level-up Vital Surge already used, and effect/cooldown timers. Do not double-refill after an Attribute Point raises MP/HP maximum.
 
-## Section 4 — Summons & Combat
+## Section 4 — Allies & Combat
 
 **All summon state and immediate tactical encounter information lives here**, so the user can expand it without scrolling through unrelated NPC lore:
 
@@ -3162,7 +3192,7 @@ Independent companions must remain distinct from summoned entities.
 
 NPC motives, locations, factions, time and environment belong primarily here. Summons are also cross-referenced here for continuity, but full live combat HP/commands belong in Section 4. The log should support short readable roll histories, ability costs, XP gains, item changes and independent world events, without exposing inappropriate hidden future plans.
 
-**V1.0 ledger enforcement (no duplicate log system):** After a substantial fight, acquisition, completed quest step, rest, level-up or major random event, update the already mandatory Sections 38/40/41 logs and state before presenting further choices. Show a brief factual delta (HP/MP/STA, Action/Free Action/Reaction usage when relevant, defeated enemies, earned XP, actual gear and bundle acquisition, currency, consumable spending, cooldowns, objective state and elapsed fictional time). Routine events may use a single compact line. The GM internally keeps exact combat rounds, rolls, position, source ownership, event rolls and pending commands. Never claim a result, spend an item, or change an NPC state that was not actually resolved. Preserve the existing FULL AUDIT route.
+**V1.0 ledger enforcement (no duplicate log system):** After a substantial fight, acquisition, completed quest step, rest, level-up or major random event, update the already mandatory Sections 38/40/41 logs and state before presenting further choices. Show a brief factual delta (HP/MP, Action/Free Action/Reaction usage when relevant, defeated enemies, earned XP, actual gear and bundle acquisition, currency, consumable spending, cooldowns, objective state and elapsed fictional time). Routine events may use a single compact line. The GM internally keeps exact combat rounds, rolls, position, source ownership, event rolls and pending commands. Never claim a result, spend an item, or change an NPC state that was not actually resolved. Preserve the existing FULL AUDIT route.
 
 
 ## Functional behavior — must be genuine
@@ -3331,7 +3361,7 @@ Otherwise maintain the latest authoritative:
 
 **LOOT:** Establish physical spoils, potential random rarity and fixed signature rewards before resolution. Credit only genuinely earned loot, XP, materials, faction changes, and quest completion. Restore no destroyed artifact through narration.
 
-**INTERFACE:** Functional seven collapsed HUD panels in fixed order (Character; Skills; Health; Summons & Combat; Equipment; Quest; World & Campaign Log), with Skills grouped into combat, reactions, standalone passives and exploration/utility; a parent-skill expander containing individually nested expandable integrated passive evolution rows; actual independent Talent and Grand Signature actives; accurate READY/ACTIVE/COOLDOWN/UNAVAILABLE/SPENT states, clear language, local 12-hour time, and honest fallback.
+**INTERFACE:** Functional seven collapsed HUD panels in fixed order (Character; Skills; Health; Allies & Combat; Equipment; Quest; World & Campaign Log), with Skills grouped into combat, reactions, standalone passives and exploration/utility; compact ability rows opening a single detail view with parent-owned upgrades; actual independent Talent and Grand Signature actives; accurate READY/ACTIVE/COOLDOWN/UNAVAILABLE/SPENT states, clear language, local 12-hour time, and honest fallback.
 
 The original audit and persistence rules remain fully binding. Audit checks are diagnostic obligations, not reasons to take over a player's actions, manufacture a success or add arbitrary rolls.
 
@@ -3354,7 +3384,7 @@ The continuity checklist includes:
 3. Character creation rolls and selections.
 4. Attributes and modifiers.
 5. Current Level, XP and scene counter.
-6. HP, MP, STA and maxima.
+6. HP, MP and maxima.
 7. Class features.
 8. Signature and learned skills.
 9. Skill Stages and evolution branches.
@@ -3409,7 +3439,7 @@ If the player voluntarily provides a portable checkpoint from a different chat f
 - Reconstruct the exact checkpoint.
 - Do not reroll previous results.
 - Do not invent equipment or history.
-- Do not reset HP, MP, STA, cooldowns, or summons.
+- Do not reset HP, MP, cooldowns, or summons.
 - Do not advance fictional time.
 - Do not spend advancement points.
 - Do not replace retained offers.
@@ -3447,7 +3477,7 @@ New V4.0 progression, Skill Evolution, World Bible, Campaign Generator and spati
 **V1.0 boundary:** New Free Action budgets and EPIC+ starting guarantees, Gear-First Inventory, coded world-event eligibility, strengthened quest rewards and combat-forward pacing apply automatically ONLY to newly created Version 1.0 campaigns. Earlier editions remain authoritative for existing saves until the player expressly migrates. Migration must specify what happens to preexisting class/toolkit Free Actions, shared summon commands, stored consumables, exact backpack positions, already-revealed rewards, random-event checks and ongoing objective promises; no automatic retroactive starting power, extra free action, reassignment of item locations, or reroll of past events/rarities. The original future milestone-grade exception in Section 20 remains unchanged.
 
 
-**Specifically, any existing stopped V4.0 campaign stays frozen under its originating offered advancement board until the player explicitly approves a V4.1 migration.** Reading this rulebook is not migration consent. If the player authorizes migration of an existing pending Level 4 board, explicitly agree how previously generated and unchosen evolution/talent/milestone offers and their genuine rolls are preserved, archived or mapped; do not replace them without agreement. Preserve its exact fictional-time freeze, rewards, HP/MP/STA, temporary HP, equipment, summons and remaining lifetimes, protected quest artifacts, NPCs, quest consequences, and point balances.
+**Specifically, any existing stopped V4.0 campaign stays frozen under its originating offered advancement board until the player explicitly approves a V4.1 migration.** Reading this rulebook is not migration consent. If the player authorizes migration of an existing pending Level 4 board, explicitly agree how previously generated and unchosen evolution/talent/milestone offers and their genuine rolls are preserved, archived or mapped; do not replace them without agreement. Preserve its exact fictional-time freeze, rewards, HP/MP, temporary HP, equipment, summons and remaining lifetimes, protected quest artifacts, NPCs, quest consequences, and point balances.
 
 Do not award free historical evolutions or reroll earlier choices solely because the rulebook changed.
 
@@ -3566,7 +3596,7 @@ The original V3.5 class offer counts, resource formulas, rarity rolls and Luck f
 
 - Before any class rarity rolls, pass the Mechanical Novelty Firewall: private broader candidate concept pool, class-law-first fingerprints, genuine previous-concept comparison if available, cosmetic-reskin rejection, five fair independent candidate rarities, a genuinely inventive summoner, and a singular new gameplay law for UNIQUE.
 - Autonomously adjudicate ordinary defensive Reactions and nonbinding secondary tactical choices; finish the player's legal ordered sequence, including passive effects, before asking for the next major decision.
-- Apply actual safe 30-minute short-rest HP/MP/STA recovery and genuine eight-hour safe long-rest recovery to player and NPCs; establish plausible competitive rest and medical rules before running multi-round tournaments.
+- Apply actual safe 30-minute short-rest HP/MP recovery and genuine eight-hour safe long-rest recovery to player and NPCs; establish plausible competitive rest and medical rules before running multi-round tournaments.
 - Precommit substantial elite/champion durability in proportion to the protagonist's real class power without mid-fight HP edits, prolonged artificial sponges or universal immunities.
 - Render gameplay as cinematic zones with hidden precise geometry, vivid coherent skill manifestations, real clickable choices above seven collapsible HUD panels, and the complete resource/status/rarity color contract every time.
 - Generate an image only when specifically requested, and generate downloadable campaign saves only when specifically requested; preserve in-conversation authoritative state and rolls normally.
@@ -3733,7 +3763,7 @@ Do not automatically start the adventure. Never require a file to continue this 
 
 **PLAIN ENGLISH · CLEAR STORY GOALS**
 
-**AUTOMATIC LEVEL-UP FREEZE · SEVEN-PANEL INTERACTIVE HUD WITH NESTED PARENT/EVOLUTION ACCORDIONS**
+**AUTOMATIC LEVEL-UP FREEZE · SEVEN-PANEL INTERACTIVE HUD WITH COMPACT ABILITY LISTS AND PARENT-OWNED UPGRADE DETAILS**
 
 **LAYERED AGE OF CONVERGENCE · HYBRID CAMPAIGN GENERATION**
 

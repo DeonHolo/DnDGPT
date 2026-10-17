@@ -90,9 +90,11 @@ def build_mcp(engine, config, verifier, creation_repository=None):
                             idempotentHint=True)
 
     from .game_random import GameRandom
-    game_random = GameRandom(engine.store, engine.dice)
+    game_random = GameRandom(engine.store, engine.dice, engine)
     from .chat_game import ChatGame
     chat_game = ChatGame(engine)
+    from .campaign_lifecycle import CampaignLifecycle
+    campaign_lifecycle = CampaignLifecycle(engine)
 
     @server.tool(annotations=read, meta=metadata())
     def read_rules(document: Literal["rulebook", "hardener"] = "rulebook",
@@ -143,7 +145,8 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         return invoke(lambda owner: chat_game.version(owner, campaign_id, version))
 
     @server.tool(annotations=write, meta=metadata(WRITE_SCOPE))
-    def roll_game_random(action_id: str, rolls: list[dict]) -> CallToolResult:
+    def roll_game_random(action_id: str, rolls: list[dict],
+                         campaign_id: str | None = None) -> CallToolResult:
         """Reusable Python rolls for an explicitly authorized chat-led game or generation request.
         Batch1..20 requests with unique label and kind: dice{sides,count=1,modifier=0},
         check{dc,modifier=0,advantage=false,disadvantage=false}, or rarity{luck:1..20 current score}.
@@ -151,9 +154,11 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         never rerolls. Do not retry under a new ID to change an outcome. Interpret the results
         in Chat using the complete rulebook. This tool records rolls, not character/game changes.
         It never starts/resumes a campaign or authorizes rolling for a paused/excluded campaign.
+        Include campaign_id when this roll belongs to a saved campaign so its receipt is removed
+        with that campaign; omit it only for standalone rolls.
         Raw rarity rolls stay hidden by default. No per-roll dashboard confirmation is required.
         """
-        return invoke(lambda owner: game_random.roll(owner, action_id, rolls), True)
+        return invoke(lambda owner: game_random.roll(owner, action_id, rolls, campaign_id), True)
 
     @server.tool(annotations=read, meta=metadata())
     def get_game_roll(action_id: str, show_rolls: bool = False) -> CallToolResult:
@@ -170,6 +175,31 @@ def build_mcp(engine, config, verifier, creation_repository=None):
     def list_campaigns() -> CallToolResult:
         """List this authenticated account's stored sandboxes. Does not start or resume a game."""
         return invoke(lambda owner: {"campaigns": engine.list_campaigns(owner)})
+
+    preview_write = ToolAnnotations(readOnlyHint=False, destructiveHint=False,
+                                    idempotentHint=False, openWorldHint=False)
+
+    @server.tool(annotations=preview_write, meta=metadata(WRITE_SCOPE))
+    def preview_delete_campaign(campaign_id: str, expected_version: int) -> CallToolResult:
+        """Prepare a permanent deletion preview for one owned campaign. This does not delete it.
+        Read the current campaign first, then show its exact name and removal/retention scope to
+        the user. Wait for their explicit approval before calling delete_campaign. The returned
+        one-time confirmation_token expires after 15 minutes.
+        """
+        return invoke(lambda owner: campaign_lifecycle.preview_delete(owner, campaign_id,
+                                                                       expected_version), True)
+
+    @server.tool(annotations=ToolAnnotations(readOnlyHint=False, destructiveHint=True,
+                 idempotentHint=True, openWorldHint=False), meta=metadata(WRITE_SCOPE))
+    def delete_campaign(campaign_id: str, expected_version: int, confirmation_token: str,
+                        confirm_permanent: bool) -> CallToolResult:
+        """Permanently delete exactly one campaign after explicit user approval.
+        Do not call until the user has seen the preview and explicitly approved permanent deletion.
+        Cleanup is bounded; if cleanup_pending is true, retry with the exact same arguments until
+        deleted is true. The campaign will disappear from listings as soon as deletion starts.
+        """
+        return invoke(lambda owner: campaign_lifecycle.delete(
+            owner, campaign_id, expected_version, confirmation_token, confirm_permanent), True)
 
     @server.tool(annotations=read, meta=metadata())
     def get_campaign(campaign_id: str) -> CallToolResult:

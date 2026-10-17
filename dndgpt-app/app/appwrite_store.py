@@ -200,3 +200,13 @@ class AppwriteSession:
             fail(409, "storage_conflict", "Record changed during the update")
         self.locked[key] = row
         self.changed = True
+
+    def delete_record(self, table, where):
+        key = self.row_id(table, where)
+        result = self.store.api.call("DELETE", self.store.path + "/rows/" + key,
+                                     params={"transactionId": self.id})
+        if result is None:
+            return False
+        self.locked.pop(key, None)
+        self.changed = True
+        return True

@@ -90,6 +90,15 @@ class Engine:
         self.enable_combat = enable_combat
 
     def _get(self, db, owner, campaign_id):
+        deletion = records.get(db, "campaign_deletions_v1",
+                               {"owner": owner, "campaign_id": campaign_id})
+        if deletion:
+            try:
+                phase = json.loads(deletion["data"]).get("phase")
+            except (AttributeError, TypeError, json.JSONDecodeError):
+                fail(503, "storage_integrity", "Campaign deletion record is invalid")
+            if phase in {"deleting", "complete"}:
+                fail(410, "campaign_deleted", "This campaign is being deleted or has already been deleted")
         row = records.get(db, "campaigns_v1", {"id": campaign_id, "owner": owner})
         if row is None:
             fail(404, "not_found", "Campaign not found")
@@ -121,7 +130,10 @@ class Engine:
             if prior:
                 if prior["request"] != request:
                     fail(409, "idempotency_conflict", "action_id already has different arguments")
-                return json.loads(prior["result"])
+                result = json.loads(prior["result"])
+                if result.get("_campaign_deleted"):
+                    fail(410, "campaign_deleted", "The campaign created by this action was deleted")
+                return result
             attributes = dict.fromkeys(ATTRIBUTES, 5)
             stats = derived(attributes)
             character = {"name": name.strip(), "attributes": attributes, **stats,
@@ -149,14 +161,24 @@ class Engine:
             records.update(db, "campaigns_v1", {"id": state["id"]}, {"data": canonical(state)})
             result = public_state(state)
             records.insert(db, "creations_v1", {"owner": owner, "action_id": action_id,
+                                               "campaign_id": state["id"],
                                                "request": request, "result": canonical(result)})
             return result
 
     def list_campaigns(self, owner):
         with self.store.transaction() as db:
             rows = records.find(db, "campaigns_v1", {"owner": owner}, order="rowid", descending=True, limit=100)
+            deleting = set()
+            for row in records.find(db, "campaign_deletions_v1", {"owner": owner}, limit=1000):
+                try:
+                    phase = json.loads(row["data"]).get("phase")
+                except (AttributeError, TypeError, json.JSONDecodeError):
+                    fail(503, "storage_integrity", "Campaign deletion record is invalid")
+                if phase in {"deleting", "complete"}:
+                    deleting.add(row["campaign_id"])
             return [{"id": row["id"], "version": row["version"],
-                     "name": json.loads(row["data"])["name"]} for row in rows]
+                     "name": json.loads(row["data"])["name"]} for row in rows
+                    if row["id"] not in deleting]
 
     def get_campaign(self, owner, campaign_id):
         with self.store.transaction() as db:

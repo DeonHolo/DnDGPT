@@ -9,8 +9,8 @@ from . import records
 
 
 class GameRandom:
-    def __init__(self, store, dice=None):
-        self.store, self.dice = store, dice or Dice()
+    def __init__(self, store, dice=None, engine=None):
+        self.store, self.dice, self.engine = store, dice or Dice(), engine
 
     @staticmethod
     def validate(rolls):
@@ -52,19 +52,29 @@ class GameRandom:
                     row['result'] = {key: row['result'][key] for key in ('final_rarity', 'enhanced')}
         return result
 
-    def roll(self, owner, action_id, rolls):
+    def roll(self, owner, action_id, rolls, campaign_id=None):
         identifier(action_id, 'action_id')
+        if campaign_id is not None:
+            identifier(campaign_id, 'campaign_id')
+            if self.engine is None:
+                fail(503, 'campaign_unavailable', 'Campaign-bound rolls require the campaign engine')
         try:
             self.validate(rolls)
-            request = canonical(rolls)
+            request = canonical(rolls) if campaign_id is None else canonical(
+                {'campaign_id': campaign_id, 'rolls': rolls})
         except (ValueError, TypeError) as error:
             fail(422, 'invalid_roll_request', str(error))
         with self.store.transaction() as db:
+            if campaign_id is not None:
+                self.engine._get(db, owner, campaign_id)
             prior = records.get(db, 'game_rolls_v1', {'owner': owner, 'action_id': action_id})
             if prior:
+                previous = json.loads(prior['result'])
+                if previous.get('_campaign_deleted'):
+                    fail(410, 'campaign_deleted', 'This campaign-bound roll receipt was deleted')
                 if prior['request'] != request:
                     fail(409, 'idempotency_conflict', 'action_id already has different roll arguments')
-                return self.public(json.loads(prior['result']))
+                return self.public(previous)
             results = []
             for row in rolls:
                 kind = row['kind']
@@ -81,6 +91,7 @@ class GameRandom:
             receipt = {'action_id': action_id, 'results': results, 'rng': self.dice.source,
                        'created_at': datetime.now(timezone.utc).isoformat(), 'campaign_changed': False}
             records.insert(db, 'game_rolls_v1', {'owner': owner, 'action_id': action_id,
+                                               'campaign_id': campaign_id or '',
                                                'request': request, 'result': canonical(receipt)})
             return self.public(receipt)
 
@@ -92,4 +103,7 @@ class GameRandom:
             row = records.get(db, 'game_rolls_v1', {'owner': owner, 'action_id': action_id})
             if row is None:
                 fail(404, 'not_found', 'Roll receipt not found')
-            return self.public(json.loads(row['result']), show_rolls)
+            result = json.loads(row['result'])
+            if result.get('_campaign_deleted'):
+                fail(410, 'campaign_deleted', 'This campaign-bound roll receipt was deleted')
+            return self.public(result, show_rolls)

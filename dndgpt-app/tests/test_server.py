@@ -93,6 +93,10 @@ def test_mcp_initialization_tools_and_ui_resource(web):
     definitions = rpc(web, "tools/list")["tools"]
     by_name = {item["name"]: item for item in definitions}
     assert {"get_campaign", "propose_action", "execute_confirmed_action", "roll_dice", "audit", "render_dashboard"} <= set(by_name)
+    assert {"preview_delete_campaign", "delete_campaign"} <= set(by_name)
+    assert by_name["preview_delete_campaign"]["annotations"]["destructiveHint"] is False
+    assert by_name["delete_campaign"]["annotations"]["destructiveHint"] is True
+
     render = by_name["render_dashboard"]
     assert render["_meta"]["ui"]["resourceUri"].startswith("ui://dndgpt/")
     assert render["_meta"]["openai/ui"]["entrypoints"] == [{"type": "thread"}]
@@ -109,6 +113,37 @@ def test_mcp_initialization_tools_and_ui_resource(web):
         "availableDisplayModes": ["inline", "fullscreen"], "preferredDisplayMode": "fullscreen"}
     assert resource["text"].count('data-panel="') == 7
     assert "ui/message" in resource["text"]
+
+def test_mcp_campaign_delete_requires_preview_and_explicit_confirmation(web):
+    created = tool(web, "create_sandbox", {
+        "name": "Disposable delete test", "action_id": "delete-create-001"
+    })
+    assert not created.get("isError"), created
+    state = created["structuredContent"]["campaign"]
+    args = {"campaign_id": state["id"], "expected_version": state["version"]}
+
+    preview = tool(web, "preview_delete_campaign", args)
+    assert not preview.get("isError"), preview
+    details = preview["structuredContent"]
+    assert details["campaign_name"] == "Disposable delete test"
+    assert details["deleted"] is False
+    assert web.get("/api/campaigns/" + state["id"]).status_code == 200
+
+    rejected = tool(web, "delete_campaign", {
+        **args, "confirmation_token": details["confirmation_token"],
+        "confirm_permanent": False
+    })
+    assert rejected.get("isError") is True
+
+    deleted = tool(web, "delete_campaign", {
+        **args, "confirmation_token": details["confirmation_token"],
+        "confirm_permanent": True
+    })
+    assert not deleted.get("isError"), deleted
+    assert deleted["structuredContent"]["deleted"] is True
+    assert all(item["id"] != state["id"] for item in web.get("/api/campaigns").json()["campaigns"])
+
+
 
 
 def test_mcp_approval_metadata_hidden_and_commit_shared_with_http(web):

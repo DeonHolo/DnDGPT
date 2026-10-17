@@ -221,7 +221,10 @@ class ChatGame:
             if prior:
                 if prior["request"] != request:
                     fail(409, "idempotency_conflict", "action_id already has different arguments")
-                return json.loads(prior["result"])
+                result = json.loads(prior["result"])
+                if result.get("_campaign_deleted"):
+                    fail(410, "campaign_deleted", "The campaign created by this action was deleted")
+                return result
             attributes = dict.fromkeys(ATTRIBUTES, 5)
             stats = derived(attributes)
             character = {"name": name.strip(), "class_name": "Unassigned", "rarity": "COMMON",
@@ -242,6 +245,7 @@ class ChatGame:
             snapshot(db, state)
             result = public_state(state)
             records.insert(db, "creations_v1", {"owner": owner, "action_id": action_id,
+                                               "campaign_id": state["id"],
                                                "request": request, "result": canonical(result)})
             return result
 

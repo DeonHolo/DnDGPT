@@ -65,6 +65,18 @@ meter::-webkit-meter-optimum-value{border-radius:2px;background:currentColor}met
 .chapter-note{font-size:.75rem;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;margin-top:20px}
 .codex-caption{margin:18px 0 12px;font-size:.62rem}.empty-state{padding:24px 8px;text-align:center;color:var(--muted)}.empty-state svg{width:38px;height:38px;color:var(--gold);margin-bottom:12px}.empty-state h3{color:var(--ink);font-size:1.15rem}.empty-state p{font-size:.82rem;max-width:32ch;margin:8px auto}
 summary{cursor:pointer;min-height:44px;font-weight:550;padding:6px 0;font-size:.86rem}summary::marker{color:var(--gold)}
+details.ability-row{border:1px solid var(--line);border-left:3px solid var(--line);border-radius:6px;padding:0 12px;margin:7px 0;background:var(--paper)}
+details.ability-row[open]{border-color:var(--gold);background:var(--soft)}
+details.ability-row>summary.ability-summary{display:flex;align-items:center;flex-wrap:wrap;gap:6px 8px;min-height:48px;padding:7px 0;list-style:none}
+details.ability-row>summary.ability-summary::-webkit-details-marker{display:none}
+details.ability-row>summary.ability-summary::before{content:"›";flex:none;color:var(--gold);font-size:1.15rem;transition:transform 140ms}
+details.ability-row[open]>summary.ability-summary::before{transform:rotate(90deg)}
+.ability-name{flex:1 1 160px;min-width:0;overflow-wrap:anywhere;font-size:.85rem;font-weight:650}
+.ability-meta{border:1px solid var(--line);border-radius:999px;padding:2px 7px;color:var(--muted);font-size:.75rem;font-weight:600;letter-spacing:.035em;line-height:1.4;white-space:nowrap}
+.ability-status.ready,.ability-status.active,.ability-status.passive{color:var(--positive)}
+.ability-status.cooldown,.ability-status.pending{color:var(--warning)}
+.ability-status.unavailable,.ability-status.spent{color:var(--muted)}
+.ability-cost{color:var(--gold);font-variant-numeric:tabular-nums}
 details{border-left:2px solid var(--line);padding:0 0 0 14px;margin:12px 0}details[open]{border-left-color:var(--gold)}
 details details{margin:10px 0 10px 4px}details p,details pre{margin:8px 0}
 pre{font:.78rem/1.6 var(--font-mono,ui-monospace,monospace);white-space:pre-wrap;overflow-wrap:anywhere}
@@ -115,7 +127,7 @@ pre{font:.78rem/1.6 var(--font-mono,ui-monospace,monospace);white-space:pre-wrap
 @media(min-width:980px){.codex-layout{grid-template-columns:240px minmax(0,1fr);gap:24px}.nav-index{display:block}.section-link{min-height:72px}.nav-title{font-size:.83rem}.companion-page{padding:30px}}
 @media(max-width:400px){body{padding:14px}h1{font-size:1.4rem}.crest{width:32px;height:38px}.masthead{gap:10px}.masthead .badge{font-size:.7rem;padding:4px 7px}.section-link{gap:7px;padding:10px;min-height:82px}.nav-icon{width:18px;height:18px}.nav-title{font-size:.8rem}.companion-page{padding:18px}h2{font-size:1.4rem}.toolbar-label{flex-basis:100%}}
 @media(max-width:480px){#choices{gap:8px}#choices button{flex:1 1 100%}#resources{gap:10px}.resource-label{font-size:.7rem;flex-wrap:wrap}#customForm{flex-wrap:wrap}#custom{flex-basis:100%}.toolbar button{flex:1}#status{padding:14px}.stat-grid{gap:6px}.record-grid{gap:8px}}
-@media(prefers-reduced-motion:reduce){button{transition:none}}
+@media(prefers-reduced-motion:reduce){button,details.ability-row>summary.ability-summary::before{transition:none}}
 </style>
 </head>
 <body>
@@ -366,9 +378,10 @@ function renderResources(character){
 }
 function skillGroup(ability){
   const activation=String(ability.activation||"").toUpperCase().trim().replaceAll(" ","_");
+  const explicit=skillTabs.findIndex(([id],index)=>ability.group===id||ability.group===groups[index]);
+  if(explicit===3)return 3;
   if(activation.startsWith("PASSIVE"))return 2;
   if(activation.startsWith("REACTION"))return 1;
-  const explicit=skillTabs.findIndex(([id],index)=>ability.group===id||ability.group===groups[index]);
   if(explicit>=0)return explicit;
   return 0;
 }
@@ -384,7 +397,7 @@ function skillStatus(ability){
   return state?.mode==="chat"?"RECORDED":"UNAVAILABLE";
 }
 function skillCost(ability){
-  if(skillGroup(ability)===2){
+  if(String(ability.activation||"").toUpperCase().trim().startsWith("PASSIVE")){
     const cost=ability.cost;
     const free=cost===undefined||cost===null||cost===""||cost===0||typeof cost==="string"&&/^(0|none|free|no cost)$/i.test(cost.trim());
     if(free&&[ability.mp_cost,ability.sta_cost].every(value=>value===undefined||value===null||Number(value)===0))return undefined;
@@ -428,12 +441,19 @@ function renderSkills(abilities){
     page.append(element("h3",groups[index],"group"));
     if(!matches.length)paragraph(page,"No owned abilities in this group.","muted");
     for(const ability of matches){
-      const detail=document.createElement("details");detail.dataset.detail="ability-"+ability.id;
-      const summary=document.createElement("summary");
-      summary.append(element("span",ability.name+" · "+(ability.rarity||"COMMON"),"rarity-"+(ability.rarity||"COMMON")));
-      const status=skillStatus(ability);
-      summary.append(element("span"," · "+status+(ability.status_reason?": "+ability.status_reason:"")," "+status.toLowerCase()));
+      const detail=document.createElement("details");detail.className="ability-row";detail.dataset.detail="ability-"+ability.id;
+      const summary=document.createElement("summary");summary.className="ability-summary";
+      const rarity=String(ability.rarity||"COMMON").toUpperCase();
+      summary.append(element("span",ability.name||"Unnamed ability","ability-name rarity-"+rarity));
+      summary.append(element("span",rarity,"ability-meta rarity-"+rarity));
+      const activation=String(ability.activation||"").split(/[·(]/,1)[0].trim();
+      if(activation)summary.append(element("span",briefText(activation,32),"ability-meta ability-type"));
+      const status=skillStatus(ability),statusClass=String(status).toLowerCase().replace(/[^a-z0-9_-]/g,"-");
+      summary.append(element("span",status,"ability-meta ability-status "+statusClass));
+      const cost=skillCost(ability);
+      if((typeof cost==="string"||typeof cost==="number")&&!/\bSTA\b/i.test(String(cost)))summary.append(element("span",cost,"ability-meta ability-cost"));
       detail.append(summary);
+      if(ability.status_reason)paragraph(detail,ability.status_reason,"muted");
       paragraph(detail,ability.activation||"Activation not recorded","muted");
       if(ability.simple||ability.description)renderValue(detail,ability.simple||ability.description);
       renderFacts(detail,[["Cost",skillCost(ability)],["Range",ability.range],["Target",ability.target],
@@ -818,7 +838,7 @@ new ResizeObserver(()=>{if(standard)notify("ui/notifications/size-changed",{heig
   renderChoices();restorePreferences();
   if(window.parent!==window){
     try{
-      const init=await rpc("ui/initialize",{protocolVersion:"2026-01-26",appInfo:{name:"DnDGPT",version:"1.0.15"},appCapabilities:{availableDisplayModes:["inline","pip","fullscreen"]}});
+      const init=await rpc("ui/initialize",{protocolVersion:"2026-01-26",appInfo:{name:"DnDGPT",version:"1.0.16"},appCapabilities:{availableDisplayModes:["inline","pip","fullscreen"]}});
       if(init.protocolVersion!=="2026-01-26")throw new Error("Unsupported MCP Apps protocol version");
       standard=true;hostCapabilities=init.hostCapabilities||{};applyHostContext(init.hostContext);
       notify("ui/notifications/initialized");
