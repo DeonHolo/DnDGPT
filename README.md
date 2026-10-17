@@ -206,6 +206,10 @@ Current evidence does not establish production uptime, player capacity, measured
 
 Created by **Deon Holo**, with AI-assisted development using Codex and ChatGPT. See [CHAT_LED_PLAY.md](dndgpt-app/CHAT_LED_PLAY.md) and [RULES_COVERAGE.md](dndgpt-app/RULES_COVERAGE.md) for implementation detail.
 
+## License
+
+Application code is [MIT licensed](LICENSE). Deon Holo's original rulebook and documentation use [CC BY 4.0](LICENSE-CONTENT.md), allowing reuse and adaptations with credit. Artwork and other third-party material keep their own terms; see [licensing details](LICENSING.md) and [art credits](docs/ARTWORK.md).
+
 ## Support development
 
 [![Support DnDGPT with PayPal](https://img.shields.io/badge/Support%20DnDGPT-PayPal-003087?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/paypalme/deonholo)

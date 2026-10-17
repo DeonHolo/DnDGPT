@@ -11,6 +11,7 @@ import yaml
 
 APP = Path(__file__).resolve().parents[1]
 WORKSPACE = APP.parent
+LICENSE_FILES = ("LICENSE", "LICENSE-CONTENT.md", "LICENSING.md", "LICENSES/CC-BY-4.0.txt", "docs/ARTWORK.md")
 TOP_FILES = ("README.md", "CODEX_HANDOFF.md", "CLIENT_ACCEPTANCE.md", "RULES_COVERAGE.md",
              "PRESENTATION.md", "DESIGN_SYSTEM.md", "INTELLIGENT_UI_RESEARCH.md", "AUTH0_SETUP.md",
              "LAUNCH_PLAN.md", "CREATION_WORKFLOW.md", "POWER_RUNTIME.md", "STARTING_BUILDS.md", "ITEM_RUNTIME.md", "OFFER_VALIDATION.md", "SUMMON_RUNTIME.md",
@@ -75,6 +76,11 @@ def build(plugin, output=None):
         sources.append(browser_report)
     files = [plugin / "plugin.json", legacy_path, skill,
              *(skill.parent / "references").glob("*.txt")]
+    for name in LICENSE_FILES:
+        target = plugin / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(WORKSPACE / name, target)
+        files.append(target)
     for key in ("logo", "composerIcon", "logoDark", "composerIconDark"):
         if interface.get(key):
             asset = (plugin / interface[key]).resolve()

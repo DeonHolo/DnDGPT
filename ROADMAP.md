@@ -11,7 +11,7 @@ Updated: 18 October 2026. Checkboxes mean implemented and checked in the working
 - [x] Record the approved new-game HP/MP, rest and failed-check direction in the rulebook; keep the separate resource removed from the current rules text.
 - [x] Update public README wording for hosted rule access, onboarding, ChatGPT usage expectations and voluntary PayPal support.
 - [x] Implement and target-test the owner-scoped permanent campaign-delete tools: named preview, explicit confirmation, bounded resumable cleanup, Appwrite adapter cleanup and stale-retry protection.
-- [ ] Review and release the documentation and deletion change; record local checks and hosted acceptance separately.
+- [x] Release the documentation, campaign-delete tools and current runtime/UI changes; record local checks and hosted acceptance separately.
 - [x] Apply current starting resources to new standard chat games: HP = 45 + 3 × STR; MP = 75 + 5 × INT. Preserve existing saves and explicit custom-rule builds.
 - [x] Check class-native role counts before confirming a new standard character, including two Utilities for Unique.
 - [x] Make independent Utility eligibility, rarity rolls and creativity/flavor checks explicit in both complete rules documents.
@@ -20,6 +20,7 @@ Updated: 18 October 2026. Checkboxes mean implemented and checked in the working
 - [x] Add swappable dark atmospheres using credited public-domain paintings and a plain option.
 - [x] Recheck the system's identity against its actual rules and primary sources; explain the system-hack description in the README.
 - [x] Add desktop/mobile guidance and suggested thinking levels, including the current Pro-effort UI limitation.
+- [x] Add MIT software licensing, CC BY 4.0 original-content licensing and third-party art exclusions; include license notices in release archives.
 
 ## Future — migration and reliability
 
@@ -47,4 +48,6 @@ Updated: 18 October 2026. Checkboxes mean implemented and checked in the working
 
 ## Release status
 
-The full run passed 388 tests and found two rule-pagination ordering regressions plus one temporary-database failure caused by overlapping test runs. Canonicalizing public campaign state fixes exact retry equality while preserving pagination metadata before long rule text. All three affected tests and current standard-rule/package checks now pass in an isolated focused run: 18 passed. The full suite was not repeated after that correction. Browser checks use disposable local fixtures and cover Utility routing, long metadata, keyboard tabs, timeline search, themes and narrow-screen overflow; tested text colors have a minimum 6.56:1 contrast on the reading surface. Existing player saves have only been inspected, not changed or deleted. Polling remains deferred. Release verification is pending the main-branch push.
+The full run passed 388 tests and found two rule-pagination ordering regressions plus one temporary-database failure caused by overlapping test runs. Canonicalizing public campaign state fixes exact retry equality while preserving pagination metadata before long rule text. All three affected tests and current standard-rule/package checks now pass in an isolated focused run: 18 passed. The full suite was not repeated after that correction. Browser checks use disposable local fixtures and cover Utility routing, long metadata, keyboard tabs, timeline search, themes and narrow-screen overflow; tested text colors have a minimum 6.56:1 contrast on the reading surface. Existing player saves have only been inspected, not changed or deleted. Polling remains deferred.
+
+Main commit `7aff42e` deployed successfully to Appwrite as `6ad402db54bb26193b8d`. Hosted health reports application 1.0.17; both authenticated rules-document hashes match source, and the served HTML contains the ability reader, timeline and both embedded painting assets. This confirms the hosted code and resources; the updated layout has not been rechecked in a live ChatGPT conversation. Existing dashboard instances may need Refresh tools and reopening. The license/package follow-up passed its five packaging tests, including archive copies of both licenses, the content scope and the art credits.

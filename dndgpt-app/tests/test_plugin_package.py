@@ -5,7 +5,7 @@ import zipfile
 
 import pytest
 
-from scripts.build_plugin import APP, build
+from scripts.build_plugin import APP, LICENSE_FILES, build
 
 
 def test_release_contains_canonical_source_and_complete_rules_without_runtime_data(tmp_path):
@@ -29,6 +29,8 @@ def test_release_contains_canonical_source_and_complete_rules_without_runtime_da
         assert not any(name.endswith((".sqlite3", ".db", ".pyc", ".env")) for name in names)
         assert not any(part in {".venv", "__pycache__", ".test-tmp", ".browser-tmp"}
                        for name in names for part in Path(name).parts)
+        for name in LICENSE_FILES:
+            assert archive.read(name) == (APP.parent / name).read_bytes()
         manifest = json.loads(archive.read("plugin.json"))
         legacy = json.loads(archive.read(".codex-plugin/plugin.json"))
         assert manifest["version"] == legacy["version"] == plugin_version
