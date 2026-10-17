@@ -12,8 +12,8 @@ Describe the game as a heavily customized, D&D-inspired fantasy RPG built around
 
 Use genuine native controls when the client supports them. Guide the model through these preferences; do not describe them as a CSS theme or component-registration API.
 
-- Lead with the scene/result and three to five concise, meaningful choices. Keep ordered custom actions available. Choices express an intention in chat; an intention is not an approved database mutation.
-- Use a compact character strip: identity/level/class, labeled HP/MP/STA, XP, and the important current condition or summon status. HP is red, MP blue and STA green; always retain text values and labels.
+- Lead with the scene/result and three to five meaningful choices. Each choice has a short intent label and one brief descriptive sentence explaining the approach and relevant known cost, risk or opportunity. Keep conditions readable without repeating whole ability descriptions. Keep ordered custom actions available. Choices express an intention in chat; an intention is not an approved database mutation.
+- Use a compact character strip: identity/level/class, labeled HP/MP, XP, and the important current condition or ally status. HP is red and MP blue; always retain text values and labels.
 - Retain exactly these seven collapsible HUD groups, in this order, initially collapsed on ordinary gameplay responses unless the player requests otherwise:
   1. Character & Progression
   2. Skills & Class Abilities
@@ -22,7 +22,7 @@ Use genuine native controls when the client supports them. Guide the model throu
   5. Equipment & Inventory
   6. Quest Journal
   7. World & Campaign Log
-- Inside Skills, group combat actions/commands, defensive/off-turn reactions, standalone passives and exploration/utility. Each owned ability expands independently; acquired passive evolutions and Imprints expand inside their parent ability. Do not add a casting button for a passive child.
+- Inside Skills, group combat actions/commands, defensive/off-turn reactions, standalone passives and exploration/utility. In the connected dashboard, select an ability from a compact index and read Overview or Full rules in one inspector. Keep complete conditions, integrated evolutions and Imprints with their parent. Use short metadata labels instead of explanatory tag paragraphs. World uses an article index; Campaign Log uses a searchable timeline. Do not add a casting button for a passive child.
 - Prefer clear hierarchy, breathing room, short summaries, restrained host-compatible accents and explicit rarity/READY/ACTIVE/COOLDOWN/UNAVAILABLE/SPENT labels. Avoid oversized decorative headings, repeated prose, raw Markdown markers and unreadable color-only indicators.
 - Inspection and expansion are view operations: no rolls, time, resource spending, quest changes or automatic actions. Opening a progression panel does not spend points or resume play. Actual level-up retains the rulebook's advancement UI and freeze requirements.
 - Use the latest authoritative engine snapshot when connected. Distinguish proposed effects from committed outcomes. If tools are disconnected or mechanics are unfinished, say so; a polished display is not a saved game.

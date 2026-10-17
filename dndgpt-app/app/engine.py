@@ -13,6 +13,7 @@ from dataclasses import asdict
 from .rules import ATTRIBUTES, EQUIPMENT_SLOTS, Dice, TurnBudget, award_xp, derived, integer
 from .storage import Store, canonical
 from .version import APP_VERSION, RULES_VERSION
+from .scenes import SCENE_IDS
 from . import combat, gear
 from . import records
 
@@ -530,7 +531,8 @@ class Engine:
             fail(422, "invalid_preferences", "world_tab must be world or log")
         if "combat_tab" in preferences and preferences["combat_tab"] not in ("summons", "combat"):
             fail(422, "invalid_preferences", "combat_tab must be summons or combat")
-        if "scene" in preferences and preferences["scene"] not in ("elderwood", "moonkeep", "quiet"):
+        if "scene" in preferences and (not isinstance(preferences["scene"], str) or
+                                       preferences["scene"] not in SCENE_IDS):
             fail(422, "invalid_preferences", "Unknown reading atmosphere")
         if type(preferences["hud_hidden"]) is not bool:
             fail(422, "invalid_preferences", "hud_hidden must be boolean")

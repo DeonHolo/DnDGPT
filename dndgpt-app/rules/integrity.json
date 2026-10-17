@@ -1,9 +1,9 @@
 {
   "rulebook-v1.0.txt": {
     "original_sha256": "fc1cd1ed39a9fc35961d0d1e9a5feb3035015339d435c6a3af80a3515960597b",
-    "sha256": "567e6d85b78e00ff3088933d052c2b04af5f29e560e24e1aaa3404b46cb9cc8d",
+    "sha256": "5ffbd2469819c2e16b9869027bcac3bf4e84b5131f44c4bb9028cf1f6f394e78",
     "original_bytes": 324754,
-    "bytes": 342009,
+    "bytes": 349805,
     "replacements": [
       [
         "V4.2",
@@ -66,14 +66,26 @@
         "source": "utility-eligibility-2026-10-18.json",
         "before_sha256": "5c9b8134c2de276d28e1057b6ca5cda875d870588a5679c876821697dad48cb9",
         "after_sha256": "567e6d85b78e00ff3088933d052c2b04af5f29e560e24e1aaa3404b46cb9cc8d"
+      },
+      {
+        "id": "class-diversity-and-craft-2026-10-18",
+        "source": "class-diversity-and-craft-2026-10-18.json",
+        "before_sha256": "567e6d85b78e00ff3088933d052c2b04af5f29e560e24e1aaa3404b46cb9cc8d",
+        "after_sha256": "07f2dc0acac29cb299b616c5ecfb010bca9e6b8c194744f04b863857c39539e7"
+      },
+      {
+        "id": "world-introduction-2026-10-18",
+        "source": "world-introduction-2026-10-18.json",
+        "before_sha256": "07f2dc0acac29cb299b616c5ecfb010bca9e6b8c194744f04b863857c39539e7",
+        "after_sha256": "5ffbd2469819c2e16b9869027bcac3bf4e84b5131f44c4bb9028cf1f6f394e78"
       }
     ]
   },
   "rule-hardener.txt": {
     "original_sha256": "bc21947f299ae37dc306581aa7110231809140c332ed4e8b1ceccbb86cbce8da",
-    "sha256": "4676b6859af5ac538a2aef0fe450a3b4d1f23c28099942d54ab8a4158e1ce156",
+    "sha256": "f7b8c750d58653d0f4140acdad1430324ed8c3320e1c68ce6e8e179dcb97bbaf",
     "original_bytes": 10370,
-    "bytes": 20601,
+    "bytes": 28397,
     "replacements": [
       [
         "V4.2-R1",
@@ -108,6 +120,18 @@
         "source": "utility-eligibility-2026-10-18.json",
         "before_sha256": "7460f6f3069051dd7cb25650c4cd8bc4990645aa266d6e78b72b28fef4975139",
         "after_sha256": "4676b6859af5ac538a2aef0fe450a3b4d1f23c28099942d54ab8a4158e1ce156"
+      },
+      {
+        "id": "class-diversity-and-craft-2026-10-18",
+        "source": "class-diversity-and-craft-2026-10-18.json",
+        "before_sha256": "4676b6859af5ac538a2aef0fe450a3b4d1f23c28099942d54ab8a4158e1ce156",
+        "after_sha256": "f1f0cfccb2c9673444038d02b395326ec3a171f0ae1912198ab7942dda940025"
+      },
+      {
+        "id": "world-introduction-2026-10-18",
+        "source": "world-introduction-2026-10-18.json",
+        "before_sha256": "f1f0cfccb2c9673444038d02b395326ec3a171f0ae1912198ab7942dda940025",
+        "after_sha256": "f7b8c750d58653d0f4140acdad1430324ed8c3320e1c68ce6e8e179dcb97bbaf"
       }
     ]
   }

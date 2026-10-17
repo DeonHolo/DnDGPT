@@ -6,6 +6,7 @@ import zipfile
 import pytest
 
 from scripts.build_plugin import APP, LICENSE_FILES, build
+from scripts.build_portable_plugin import HOSTED_MCP, build_portable
 
 
 def test_release_contains_canonical_source_and_complete_rules_without_runtime_data(tmp_path):
@@ -35,7 +36,7 @@ def test_release_contains_canonical_source_and_complete_rules_without_runtime_da
         legacy = json.loads(archive.read(".codex-plugin/plugin.json"))
         assert manifest["version"] == legacy["version"] == plugin_version
         assert manifest["extensions"]["com.openai"]["interface"] == legacy["interface"]
-        for key in ("logo", "composerIcon"):
+        for key in ("logo", "composerIcon", "logoDark", "composerIconDark"):
             asset = manifest["extensions"]["com.openai"]["interface"][key].removeprefix("./")
             assert archive.read(asset) == (original / asset).read_bytes()
         assert manifest["extensions"]["com.openai"]["apps"] == legacy["apps"] == "./.app.json"
@@ -75,3 +76,16 @@ def test_undeclared_app_file_is_not_silently_dropped(tmp_path):
     (plugin / ".app.json").write_text('{"apps": {}}')
     with pytest.raises(ValueError, match="no manifest reference"):
         build(plugin, tmp_path / "invalid.zip")
+
+
+def test_portable_ci_release_has_current_rules_and_no_private_app_binding(tmp_path):
+    result = build_portable(tmp_path / "portable.zip")
+    with zipfile.ZipFile(result["archive"]) as archive:
+        assert ".app.json" not in archive.namelist()
+        for name in ("plugin.json", ".codex-plugin/plugin.json"):
+            manifest = json.loads(archive.read(name))
+            assert "apps" not in manifest
+            assert "apps" not in manifest.get("extensions", {}).get("com.openai", {})
+        assert json.loads(archive.read("mcp.json"))["mcpServers"]["dndgpt"]["url"] == HOSTED_MCP
+        for name in ("rulebook-v1.0.txt", "rule-hardener.txt"):
+            assert archive.read("skills/game-master/references/" + name) == (APP / "rules" / name).read_bytes()

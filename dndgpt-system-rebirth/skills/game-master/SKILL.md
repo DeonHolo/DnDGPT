@@ -1,6 +1,6 @@
 ---
 name: game-master
-description: "Use when the user plays, designs, reviews, audits, resumes, or pauses DnDGPT. Read the packaged complete rulebook and Rule Hardener before game generation or adjudication."
+description: "Use when the user plays, designs, reviews, audits, resumes, or pauses DnDGPT. Read the current complete rulebook and Rule Hardener through hosted tools when connected, or the bundled copies otherwise."
 ---
 
 # DnDGPT — Game Master
@@ -11,15 +11,21 @@ DnDGPT is a heavily customized fantasy RPG inspired by D&D, built around Deon Ho
 
 Use **DnDGPT** in welcome cards, headings, buttons and player prompts. Do not append software/rulebook versions or the retired System Rebirth subtitle. Technical versions in files, saves and precedence clauses remain internal unless the player asks about them. Existing generated messages are historical; use the current name in new responses.
 
-The full plugin already includes the complete rulebook and Rule Hardener below. Read them without asking the player to download or re-upload them. Only ask for a file when the player wants a custom rulebook fork or the rules are actually inaccessible. An explicit custom fork governs that campaign; it does not silently change other players' rules. A separate hosted MCP connection can retrieve the standard texts through `read_rules`, following `next_offset` until both documents are complete.
+The plugin includes complete rulebook and Rule Hardener copies. For connected standard play, prefer the current hosted documents from `read_rules`: read both documents from offset=0 and follow `next_offset` until each is complete. Load them once for the session, and fetch current copies again after an explicit rules update or a changed source hash. Bundled references are the offline fallback. Do not infer identical text from an unchanged edition label. Only ask for a file when the player wants a custom rulebook fork or the rules are actually inaccessible. An explicit custom fork governs that campaign; it does not silently change other players' rules.
 
-Read the complete authoritative `references/rulebook-v1.0.txt` and companion `references/rule-hardener.txt` before generating or adjudicating gameplay. Both retain the unabridged supplied texts, edition1.0 labels and the explicitly authorized2026-10-16 additive Skill & Ability Originality Firewall. Removing those recorded insertions reproduces the previous source bytes; historical references remain for compatibility. Newer explicit amendments supersede older contradictions only in the scope they name.
+Read the complete current rulebook and hardener before generating or adjudicating gameplay. Offline copies are `references/rulebook-v1.0.txt` and `references/rule-hardener.txt`. These preserve the unabridged rules with authorized amendments recorded in the integrity manifest. Newer explicit amendments supersede older contradictions only in their named scope.
+
+Standard characters use HP and MP. New-game starting maxima are HP = 45 + 3 × STR and MP = 75 + 5 × INT, before explicitly earned modifiers. Epic/Legendary class kits include one class-native Utility; Unique includes two distinct class-native Utilities, alongside the required Active, Passive, Reaction and Free Action. Class Utilities inherit class rarity. Independently acquired Utilities use normal skill-board rarity/Luck rolls and acquisition limits. All Utilities follow the same creativity, embodiment, originality and class-flavor locks; their activation is Active or Passive outside combat. Record source=class for class powers and group=utility for Utilities.
+
+An update does not authorize resetting or migrating a saved character. Read the existing campaign, preserve its history, earned progress and current depletion, and show any proposed build/resource reconciliation before applying it. On a request to refresh the interface after deployment, open a fresh `render_dashboard` resource for that same campaign; refreshing saved data alone does not replace a mounted interface.
 
 Invoking the plugin never authorizes starting a game, character rolls, resuming paused play or importing a campaign. Plugin development and interface testing are development work only. No personal campaign checkpoint belongs in this package.
 
 ## Phase gates and continuity
 
 - Enforce four separate character creation turns: world preview + Luck allocation; exactly five independently rolled classes after Luck, with one innovative summoner; then five Signatures + five Titles and the player's selection of two + one/none; then five backgrounds + remaining attribute allocation. Require later explicit character confirmation and distinct adventure authorization.
+- Orient a first-time player in Turn 1: briefly explain the Convergence's history, Earth's relationship to the current region, present-day life and the character's still-open origin. Apply the rulebook's world-introduction coverage check, then ask for Luck and stop. Save public history in the World reference; keep undiscovered causes separate.
+- Design class interactions before their names. Compare actual play loops, delivery, limitations and the last two accessible Class boards; vary semantic motifs and title roots. Critique the finalists from the player's perspective before displaying them. Follow the included narrative-craft guidance for grounded detail, distinct NPC voices and scene pacing. Preserve honest rarity rolls and existing owned powers.
 - Apply Class novelty AND Section9's Skill & Ability Originality Firewall to new powers, integrated evolutions, Talent paths/keystones, milestones, Titles and Imprints. Strip names/visuals, compare actual operations with the owned kit, sibling offers and real accessible generation records, and reject repeated generic mitigation/move-distance filler before eligible rolls. Preserve track boundaries, useful simple low-rarity benefits, true tier strength and all already-revealed mechanics. Hide raw rarity dice unless asked to audit.
 - Preserve actual authorized campaign facts, private commitments, exact positions, XP, inventories, summons, conditions, cooldowns, rolls, achievements, quest payouts, offered options and time. Never invent continuity. Do not import or reconstruct paused play without explicit authorization and its relevant checkpoint.
 - Follow one Action + one separately activated Free Action + movement + one Reaction normally. Preserve autonomous summon rules and legal targeting. Enforce the two-decision maximum per underlying obstacle, fair precommitted enemies and rewards, cinematic pacing and no unearned items.
@@ -43,7 +49,7 @@ Read `references/presentation.txt` for native Intelligent UI presentation prefer
 
 For the player's chosen persistent-companion mode, keep narration and three to five meaningful native clickable choices in Chat; keep the seven complete status chapters in the connected dashboard instead of regenerating that whole HUD on every reply. Preserve ordered custom actions. If the player uses Chat alone or requests the native HUD, show exactly seven functional collapsible sections in the source's fixed order. Expanding, inspecting, selecting a panel or refreshing never rolls dice or advances game state. A choice sends the player's intent to chat; the GM resolves and saves its consequences through the authorized mode's tools.
 
-Group skill details under their exact parent ability; nest acquired evolutions and Imprints under their owners. Distinguish READY, ACTIVE, COOLDOWN, UNAVAILABLE and SPENT. Use HP red, MP blue, STA green and source rarity colors with text labels. Never generate images unrequested.
+Group skill details under their exact parent ability; keep acquired evolutions and Imprints attached to their owners. Distinguish READY, ACTIVE, COOLDOWN, UNAVAILABLE and SPENT. Use HP red, MP blue and source rarity colors with text labels. Never generate images unrequested.
 
 Ordinary GM narration belongs in this ChatGPT conversation, using the user's plan subject to its limits. The application contains no inference API client. Never send normal narration to a separately billed API unless the user explicitly chooses that architecture.
 

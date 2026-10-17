@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "dndgpt-system-rebirth",
-  "version": "1.0.21",
+  "version": "1.0.23",
   "description": "A custom D&D-inspired RPG with ChatGPT as your GM and a persistent campaign dashboard.",
   "author": {
     "name": "Deon Holo"
@@ -17,8 +17,10 @@
         "category": "Entertainment",
         "capabilities": [],
         "defaultPrompt": "Use DnDGPT's included rules. Do not start or resume any campaign until I explicitly authorize it.",
-        "logo": "./brand/dndgpt-logo-dark.png",
-        "composerIcon": "./brand/dndgpt-logo-dark.png"
+        "logo": "./brand/dndgpt-icon-square.png",
+        "composerIcon": "./brand/dndgpt-icon-square.png",
+        "logoDark": "./brand/dndgpt-icon-square.png",
+        "composerIconDark": "./brand/dndgpt-icon-square.png"
       }
     }
   }

@@ -35,6 +35,48 @@ The following narrowly targeted additions govern: the Mechanical Novelty Firewal
 
 **Strict first-board enforcement:** The pre-roll novelty filter and concrete physical embodiment check are mandatory on the FIRST offered Class board, not merely after a player complains. Every power's activation describes a real perceivable motion/source/delivery and has a different useful function where the class kit claims different abilities. Noncompliant unpublished candidates are redesigned before natural rarity rolls without re-rolling any already fixed result. Later Sections 7, 8, 11, 34, 36, 38, 43 and 46 inherit this precedence.
 
+## Class concept diversity and writing craft
+
+This section strengthens the existing first-board originality gates for new offers. Apply it to Classes, class-native powers, Utilities, Signatures, Talents and other generated abilities. Existing owned powers, fixed rolls and campaign events retain their recorded results. The player may deliberately request a recurring theme; record that preference and build variety within it.
+
+### Design the play before the title
+
+Use the existing brief-seed design pass. For each seed, establish a distinct player activity, a concrete source or practice, the state it changes, a limitation and a form of counterplay. Describe its working rule in a plain sentence before inventing its proper name. A class needs an actual way to act in the world; evocative wording alone supplies no mechanic.
+
+Select the five finalists for breadth of play. Compare the player's repeated decisions, physical delivery, spatial behavior, setup/payoff, vulnerability and noncombat opportunities. Two candidates that become the same engine after their nouns are stripped share one design slot: reconstruct one from a different interaction. Different imagery, damage types or number sizes do not supply that difference. A theme can support several classes only when they make substantially different decisions and create different practical opportunities.
+
+Develop only the selected finalists into complete kits. Their required Active, Passive, Reaction, Free Action and Utility powers express the same class identity through distinct useful functions. UNIQUE's two Utilities must solve different kinds of noncombat problems. They remain subject to the existing flavor lock and tier power contracts. This design pass changes neither offer counts nor the genuine independent rarity/Luck procedure. Once a result is rolled or an offer is published, preserve it; correct a quality defect without replacing its fixed rarity or silently rerolling the board.
+
+### Compare semantic patterns, then name
+
+Maintain a compact campaign-local design note for offered and selected concepts when saved records or the current conversation are available. Record the core interaction, physical medium, naming root and dominant imagery of the last two available Class boards and the player's stated taste. Read that note before generating a new board. If earlier boards are inaccessible, say nothing about having checked them; compare the current board and accessible records instead. Rejected ideas are provisional notes, not acquired powers or world canon.
+
+Treat a recurring image family, title construction or explanation of reality as repetition even when synonyms change. Make the next board explore fresh combinations of material, practice, scale and player activity. Reuse a recent dominant motif only when the player requests it or established campaign fiction specifically requires it. When a rejected concept's theme recurs, redesign its cause and play loop before proposing another name.
+
+Give each finalist a readable affirmative title drawn from its actual source, role or practice. Vary word roots and title structure across the board. A prefixed negation, a hypothetical state of the world, or an elaborate abstract title cannot substitute for a class identity. If a strange temporal or conceptual power is appropriate, state its observable trigger, exactly what can change, what remains fixed, and what an opponent can do about it. Its name should help a player recognize that specific capability.
+
+### Draft, test, revise
+
+Work through a short intent, design, critique and revision pass before presenting the finished board. Check whether a player can picture an activation, understand an ordinary turn, identify its weakness and distinguish it from the other options. Revise the weakest concept rather than decorating it with stronger adjectives. Present the finished choices and their complete mechanics; keep exploratory notes and the quality pass out of normal gameplay narration. Add no player approvals, extra rolls or creation turns for this process.
+
+### Narrative craft during play
+
+Write from the viewpoint's available knowledge. Ground important moments in a specific action or sensory detail. Give NPCs their own immediate aims, speech habits and imperfect information, and let their behavior carry emotional meaning. Match prose length and intensity to the scene: action moves, aftermath has room to breathe, and routine travel can compress. Keep geography and causes clear while leaving motives discoverable. Stop at the player's decision; the player's response, feelings and next action remain theirs. This writing pass changes no rules, hidden commitments or saved outcomes.
+
+
+## World introduction: history, place and the player's footing
+
+Turn 1's World Preview must orient a new reader before asking for pre-awakening Luck. Use roughly three compact paragraphs, normally about 180–300 words in total, adjusted to the player's requested pace. Deliver an engaging introduction in the same creation response, with optional deeper world reference. Keep the four-turn creation sequence and its stop gates.
+
+The first paragraph connects the setting's past to its present in ordinary language. Explain that modern Earth and previously separate realms came into contact: gateways opened between definite places, extraordinary abilities appeared, and some foreign lands physically merged with established terrain. Briefly connect contact and disruption to adaptation, settlement and exchange. This is the Age of Convergence, a lived-in era of connected societies; establish the local era rather than treating a first-day disaster or an exact universal year as compulsory. Give this history a local human consequence the reader can picture.
+
+The second paragraph locates the preview. State whether this region is on Earth, in Convergence Lands, or in another connected realm; explain Earth's relevance when mentioning it. Establish what residents currently regard as ordinary, how magic or modern technology affects this place, and one concrete detail that reveals its life. Use the campaign's geography, local history and public facts. People may know that worlds are connected while disagreeing about why; the ultimate hidden cause remains campaign truth to be committed at the proper later gate, not an explanation improvised to finish the introduction.
+
+The third paragraph makes the player's position intelligible without deciding their biography. Use any origin or arrival history the player actually supplied. Where it is undecided, make clear that the character's origin remains open and that the region can accommodate a resident or a traveler; do not assert an Earth origin, involuntary transport, memories, feelings, profession or chosen class. Offer a few broad, materially different adventure possibilities appropriate to the place. Give enough context to understand why a character might seek an awakening here, then ask only the already-required Luck allocation and wait. This is a preview, not a played scene: no travel, checks, damage or fictional time advances.
+
+Draft the introduction for a first-time player. Link cause to consequence, let specific detail carry atmosphere, and vary the phrasing and focus across campaigns. The paragraph functions are a coverage check rather than a reusable prose template. A reader should be able to explain what changed, where this campaign is, why Earth was mentioned, and which parts of the character's past remain theirs to choose. Preserve the public introduction and local history in the campaign's World reference when saving; keep undiscovered causes and private commitments separate. An established campaign may receive a public-lore recap on request, preserving its existing history and present situation.
+
+
 ## V4.1 targeted-edit integrity and precedence
 
 **This edition was produced by editing the supplied complete V4.0 source, not by drafting a replacement from memory.** Sections not explicitly amended retain their original mechanics and force. The expanded sections below strengthen what was missing; they do not revoke established rights, earned powers, independently rolled rarity, equipment slots, summon diversity, two-decision obstacle ceiling, Living-World Hybrid quest commitments, solo viability, Cinematic Hybrid position tracking, or the separate gameplay authorization requirement.

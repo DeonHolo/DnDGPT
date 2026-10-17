@@ -21,6 +21,14 @@ Updated: 18 October 2026. Checkboxes mean implemented and checked in the working
 - [x] Recheck the system's identity against its actual rules and primary sources; explain the system-hack description in the README.
 - [x] Add desktop/mobile guidance and suggested thinking levels, including the current Pro-effort UI limitation.
 - [x] Add MIT software licensing, CC BY 4.0 original-content licensing and third-party art exclusions; include license notices in release archives.
+- [x] Restore Classic Codex as the default and add nine licensed human-made fantasy scenes; provide thirteen atmospheres through one dropdown with selected-work credits.
+- [x] Add comfortable development-control padding and compact, initially collapsed connection/development disclosures.
+- [x] Refresh the README's current-interface screenshots and explain the optional backgrounds.
+- [x] Make the GM prefer hosted rules and check bundled copies against backend source before packaging.
+- [x] Add GitHub test/document checks and a portable plugin ZIP artifact; document the separate authenticated ChatGPT package release step.
+- [x] Review the writing-skill repository and strengthen semantic class variety, naming, player-perspective critique and narrative craft in both complete rule documents.
+- [x] Require the World Preview to explain Convergence history, Earth's relevance and the character's open origin before the existing Luck gate.
+- [ ] Verify the plugin listing displays the dice icon after publishing its light/dark icon variants.
 
 ## Future — migration and reliability
 
@@ -29,7 +37,7 @@ Updated: 18 October 2026. Checkboxes mean implemented and checked in the working
 - [ ] Consider an owned domain to reduce connection changes during provider migration.
 - [ ] Rehearse an export/import migration preserving owners, IDs, history and retry receipts.
 - [ ] Measure concurrent-player capacity and database/read costs before broader promotion.
-- [ ] Add automatic test CI, routine backups and a tested restore procedure.
+- [ ] Add routine backups and a tested restore procedure; consider gating deployment on the new CI checks.
 - [ ] Offer an explicit opt-in migration for older campaigns.
 - [ ] Playtest short-rest recovery and defensive MP use.
 - [ ] Explore a separate standard D&D 5e dashboard as a future side project: compare MCP data models and prototype character, spell and encounter views without replacing DnDGPT rules.
@@ -48,6 +56,8 @@ Updated: 18 October 2026. Checkboxes mean implemented and checked in the working
 
 ## Release status
 
-The full run passed 388 tests and found two rule-pagination ordering regressions plus one temporary-database failure caused by overlapping test runs. Canonicalizing public campaign state fixes exact retry equality while preserving pagination metadata before long rule text. All three affected tests and current standard-rule/package checks now pass in an isolated focused run: 18 passed. The full suite was not repeated after that correction. Browser checks use disposable local fixtures and cover Utility routing, long metadata, keyboard tabs, timeline search, themes and narrow-screen overflow; tested text colors have a minimum 6.56:1 contrast on the reading surface. Existing player saves have only been inspected, not changed or deleted. Polling remains deferred.
+The full local suite passed **394 tests** in an isolated run. After the final world-introduction insertion, new invalid-theme cases and package updates, the focused source/rules/theme/package run passed **26 tests**. Integrity tests reverse both new insertions and prove unrelated source text is preserved. Rules edition stays 1.0; application 1.0.18 and plugin package 1.0.23 carry these changes.
 
-Main commit `7aff42e` deployed successfully to Appwrite as `6ad402db54bb26193b8d`. Hosted health reports application 1.0.17; both authenticated rules-document hashes match source, and the served HTML contains the ability reader, timeline and both embedded painting assets. This confirms the hosted code and resources; the updated layout has not been rechecked in a live ChatGPT conversation. Existing dashboard instances may need Refresh tools and reopening. The license/package follow-up passed its five packaging tests, including archive copies of both licenses, the content scope and the art credits.
+Browser checks used disposable local data: all thirteen atmosphere selections and credits worked, the 375-pixel view had no horizontal overflow, both Utilities routed correctly, connection details started collapsed, and development controls had 17-pixel left/bottom insets. Two current screenshots are in the README; the older ChatGPT integration capture is explicitly labeled. The self-contained dashboard resource remains below 1 MiB. No player campaign was changed or deleted. Polling remains deferred.
+
+Backend Git deployments and installed plugin releases are separate. The older 1.0.21 installed package retained obsolete rules after the hosted service changed; 1.0.22 corrected that and made hosted reads take precedence. The new CI checks reference synchronization and builds a portable ZIP. Verify Appwrite deployment, hosted hashes, plugin source read-back and actual ChatGPT rendering separately; a local browser pass alone does not prove host acceptance.
