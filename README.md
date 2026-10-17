@@ -14,7 +14,7 @@
   <a href="PROJECT_PROFILE.md">Portfolio & resume</a>
 </p>
 
-DnDGPT is a heavily customized fantasy RPG built around **Deon Holo's taste in games**. It takes inspiration from D&D and uses its own rules, classes and progression. ChatGPT runs the adventure, while a reusable dashboard tracks character stats, abilities, allies, equipment and campaign history beside the conversation.
+DnDGPT is a heavily customized fantasy RPG built around the author's taste in games. It takes inspiration from D&D and uses its own rules, classes and progression. ChatGPT runs the adventure, while a reusable dashboard tracks character stats, abilities, allies, equipment and campaign history beside the conversation.
 
 ## Start playing
 
