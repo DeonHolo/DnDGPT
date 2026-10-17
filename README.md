@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  A custom D&D-inspired RPG, with ChatGPT as your GM and a saved campaign dashboard.
+  A heavily customized, D&D 5e-inspired homebrew RPG, with ChatGPT as your GM and a saved campaign dashboard.
 </p>
 
 <p align="center">
@@ -14,7 +14,7 @@
   <a href="PROJECT_PROFILE.md">Portfolio & resume</a>
 </p>
 
-DnDGPT is a heavily customized fantasy RPG built around the author's taste in games. It takes inspiration from D&D and uses its own rules, classes and progression. ChatGPT runs the adventure, while a reusable dashboard tracks character stats, abilities, allies, equipment and campaign history beside the conversation.
+DnDGPT is a heavily customized fantasy homebrew RPG inspired by D&D 5e, not a standard 5e ruleset. Its original rules, classes and progression reflect the creator's preferences. ChatGPT runs the adventure, while a reusable dashboard tracks character stats, abilities, allies, equipment and campaign history beside the conversation.
 
 ## Start playing
 
@@ -197,6 +197,10 @@ Current evidence does not establish production uptime, player capacity, measured
 
 Created by **Deon Holo**, with AI-assisted development using Codex and ChatGPT. See [CHAT_LED_PLAY.md](dndgpt-app/CHAT_LED_PLAY.md) and [RULES_COVERAGE.md](dndgpt-app/RULES_COVERAGE.md) for implementation detail.
 
-Enjoy DnDGPT? [Support development through PayPal](https://www.paypal.com/paypalme/deonholo). Contributions are optional and do not unlock features or affect gameplay.
+## Support development
+
+[![Support DnDGPT with PayPal](https://img.shields.io/badge/Support%20DnDGPT-PayPal-003087?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/paypalme/deonholo)
+
+Contributions are optional and do not unlock features or affect gameplay.
 
 Logo downloads: [transparent PNG](docs/images/dndgpt-logo.png) · [dark square PNG](docs/images/dndgpt-logo-dark.png) · [SVG](docs/images/dndgpt-dice.svg).
