@@ -72,6 +72,8 @@ Send this to begin:
 
 After a saved choice, you can say **“Open my campaign dashboard.”** Updates appear when ChatGPT saves the result; narration alone does not update it.
 
+> **Thinking tip:** Use a higher thinking level for character creation, level-ups and complex rules decisions. Instant or Medium is usually enough for regular gameplay. Use whichever of these settings your ChatGPT model offers; this is a recommendation, not a requirement.
+
 <details>
 <summary>Already connected, using custom rules, or having trouble?</summary>
 
@@ -138,15 +140,7 @@ The project began as a local FastAPI/SQLite service exposed through tunnels, lat
 
 The sections below are for people who want to build or host their own instance. Players can use [Start playing](#start-playing).
 
-### Host on Appwrite
-
-The Python Function serves the backend and the MCP App dashboard resource. A separate website is optional. See the [Appwrite deployment guide](dndgpt-app/APPWRITE_HOSTING.md) and [authentication setup](dndgpt-app/AUTH0_SETUP.md).
-
-**Deployment flow:** develop locally → run relevant tests → push to `main` → Appwrite builds changes under `dndgpt-app/**` → the stable domain serves the new deployment.
-
-Automatic GitHub test CI is **not configured**. Appwrite provides automatic deployment; tests currently run before pushing. GM instructions and packaged rulebooks need a new plugin version and distribution step. Backend/dashboard changes keep the same server address. ChatGPT can retain older dashboard HTML: refresh the app's tools in Settings, then reload the ChatGPT page to fetch the new layout.
-
-**Current status:** cloud-hosted private beta. Real Appwrite fixture checks and the creator's ChatGPT sign-in, save, display and reopen flow have passed. Independent-player installation and public-directory publication remain separate acceptance steps.
+Hosting and deployment instructions are in the [maintainer hosting notes](docs/MAINTAINER_HOSTING.md).
 
 ### Package your own ChatGPT integration
 
