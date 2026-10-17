@@ -28,14 +28,14 @@ def rules_page(document, offset):
     text = data.decode("utf-8")
     if type(offset) is not int or not 0 <= offset <= len(text):
         raise EngineError(400, "invalid_rules_offset", "Offset is outside the document")
-    end = min(offset + 20000, len(text))
+    end = min(offset + 8000, len(text))
     if end < len(text):
         boundary = text.rfind("\n", offset, end)
         if boundary > offset:
             end = boundary + 1
-    return {"document": document, "content": text[offset:end], "offset": offset,
+    return {"document": document, "offset": offset,
             "next_offset": end if end < len(text) else None, "total_characters": len(text),
-            "source_sha256": hashlib.sha256(data).hexdigest()}
+            "source_sha256": hashlib.sha256(data).hexdigest(), "content": text[offset:end]}
 
 
 def build_mcp(engine, config, verifier, creation_repository=None):

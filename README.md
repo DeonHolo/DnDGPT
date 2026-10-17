@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  Play a tabletop-style RPG in ChatGPT, with a saved dashboard for your character and campaign.
+  A custom D&D-inspired RPG, with ChatGPT as your GM and a saved campaign dashboard.
 </p>
 
 <p align="center">
@@ -14,11 +14,11 @@
   <a href="PROJECT_PROFILE.md">Portfolio & resume</a>
 </p>
 
-DnDGPT puts character stats, abilities, summons, equipment and campaign history in one reusable dashboard beside the conversation. The GM saves resolved changes through authenticated tools, so the interface can reopen the latest record without rebuilding a status panel every turn.
+DnDGPT is a heavily customized fantasy RPG built around **Deon Holo's taste in games**. It takes inspiration from D&D and uses its own rules, classes and progression. ChatGPT runs the adventure, while a reusable dashboard tracks character stats, abilities, allies, equipment and campaign history beside the conversation.
 
 ## Start playing
 
-**Connect DnDGPT to your ChatGPT account, sign in, and load the rules to start playing.** Your DnDGPT login keeps your campaign saves private.
+**Connect DnDGPT, sign in, and start a chat.** The standard rulebook and Rule Hardener are available through the connection; no TXT uploads are needed. Your DnDGPT login keeps your campaign saves private.
 
 This is a one-time manual connection. DnDGPT is not listed in ChatGPT's public directory yet. Your ChatGPT account must offer **Add custom MCP server**; if that option is missing, this installation route is unavailable on your account.
 
@@ -62,21 +62,23 @@ Review the requested access, click **Create as a plugin**, then **Connect**. On 
 
 That page uses Auth0 to handle DnDGPT sign-in. You are creating a player account, not an Auth0 developer account. When ChatGPT shows **Connected**, you are ready.
 
-### 4. Load the rules and start a chat
+### 4. Start a campaign
 
-Download the [DnDGPT rulebook](https://raw.githubusercontent.com/DeonHolo/DnDGPT/main/dndgpt-app/rules/rulebook-v1.0.txt) and [Rule Hardener](https://raw.githubusercontent.com/DeonHolo/DnDGPT/main/dndgpt-app/rules/rule-hardener.txt) as `.txt` files. Click **Try in chat**, use regular **Chat** mode, and attach both files. You can attach your own complete rulebook fork instead of the standard rulebook.
+Click **Try in chat** and use regular **Chat** mode. DnDGPT provides the complete standard rulebook and Rule Hardener directly. You do not need to download or attach them for standard play.
 
 Send this to begin:
 
-> Act as my DnDGPT GM using the attached rules. Begin character creation and open my campaign dashboard. Save our progress and keep the dashboard updated as we play. Ask for character confirmation and starting the adventure separately.
+> Be my DnDGPT GM. Read the complete standard rulebook and Rule Hardener from the plugin or connected tools, then begin character creation and open my campaign dashboard. Save our progress as we play. Ask for character confirmation and starting the adventure separately.
 
-The connection provides the dashboard and save tools; the attached files provide the rules. After a saved choice, you can say **“Open my campaign dashboard.”** Updates appear when ChatGPT saves the result; narration alone does not update it.
+After a saved choice, you can say **“Open my campaign dashboard.”** Updates appear when ChatGPT saves the result; narration alone does not update it.
 
 <details>
 <summary>Already connected, using custom rules, or having trouble?</summary>
 
 - **Already says Connected?** Click **Try in chat**. You do not need to create another connection.
+- **Connected before hosted rules were added?** Open the connection's settings, select **Refresh tools**, then start a fresh chat. The `read_rules` tool supplies both complete documents in pages.
 - **Custom rulebook?** Attach your full version and tell the GM it takes precedence. Extra systems can use supported save fields; they do not automatically add dashboard tabs.
+- **Want to read or fork the rules?** The [rulebook](https://raw.githubusercontent.com/DeonHolo/DnDGPT/main/dndgpt-app/rules/rulebook-v1.0.txt) and [Rule Hardener](https://raw.githubusercontent.com/DeonHolo/DnDGPT/main/dndgpt-app/rules/rule-hardener.txt) are available separately as optional downloads.
 - **Blank dashboard?** Ask ChatGPT to save your current character choices, then open your campaign dashboard.
 - **App unavailable or old layout?** Reload ChatGPT. If needed, open the DnDGPT connection's settings, select **Refresh tools**, then reload again.
 
@@ -88,12 +90,20 @@ The connection provides the dashboard and save tools; the attached files provide
 - **Details when you need them.** Ability subtabs, expandable mechanics, equipment/inventory, allies/combat and world/log views.
 - **Durable campaign records.** Account ownership, partial updates, version checks and event history.
 - **Real rolls, stable receipts.** Reusable Python dice, checks and rarity tools; retrying the same action returns the saved result.
-- **A complete rulebook.** Edition 1.0 rules and the originality hardener ship with the GM skill. ChatGPT handles narration and most adjudication.
+- **The rules are included.** The complete custom rulebook and originality hardener ship with the GM skill and are readable through the hosted connection. ChatGPT handles narration and most adjudication.
 - **Explicit session control.** Character confirmation and starting the adventure are separate approvals. Browsing panels does not advance play.
 
-![DnDGPT dark-mode dashboard showing a demo character, resource meters and seven chapter navigation](docs/images/dashboard-dark.jpg)
+**Standalone dashboard**
 
-<sub>Current dark-mode interface, captured with disposable demo data in the local host simulator. No player save or private account is shown.</sub>
+![Standalone DnDGPT dashboard with character stats and chapter navigation](docs/images/dashboard-standalone.jpg)
+
+<sub>The dashboard on its own, using disposable demo data.</sub>
+
+**Inside ChatGPT**
+
+![A DnDGPT test campaign in ChatGPT with the hosted dashboard open beside the conversation](docs/images/campaign-chatgpt.png)
+
+<sub>A real ChatGPT test conversation with the hosted dashboard beside it. The prepared demo remains paused; no adventure was advanced for this capture.</sub>
 
 <details>
 <summary><strong>Inside the seven chapters</strong></summary>

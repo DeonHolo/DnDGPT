@@ -164,7 +164,10 @@ def test_hosted_rules_are_complete_paginated_read_only_text(web, tokens, documen
                      "arguments": {"document": document, "offset": offset}}, headers=readonly)
         assert not result.get("isError"), result
         page = result["structuredContent"]
-        assert page["offset"] == offset and len(page["content"]) <= 20000
+        assert page["offset"] == offset and len(page["content"]) <= 8000
+        shown = result["content"][0]["text"]
+        assert shown.index('"next_offset"') < shown.index('"content"')
+        assert len(shown) < 10000
         assert page["source_sha256"] == hashlib.sha256(data).hexdigest()
         assert page["total_characters"] == len(data.decode("utf-8"))
         parts.append(page["content"])
