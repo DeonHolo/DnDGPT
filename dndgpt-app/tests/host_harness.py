@@ -11,7 +11,7 @@ import time
 
 from cryptography.hazmat.primitives.asymmetric import rsa
 from fastapi import FastAPI, Request
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 import httpx
 import jwt
 
@@ -98,7 +98,8 @@ def test_host():
 
 @app.get("/test-widget")
 def test_widget():
-    return FileResponse(HERE.parent / "app/index.html")
+    from app.presentation import dashboard_html
+    return HTMLResponse(dashboard_html())
 
 
 @app.post("/test-rpc")

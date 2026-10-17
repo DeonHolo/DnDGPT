@@ -10,6 +10,7 @@ from .engine import fail, identifier, public_state, safe_event
 from .rules import ATTRIBUTES, EQUIPMENT_SLOTS, derived
 from .storage import canonical
 from .version import RULES_VERSION
+from .standard_rules import PROFILE, starting_resources, uses_standard_rules, class_kit_check
 from . import records
 
 COLLECTIONS = {"abilities", "conditions", "summons", "enemies", "inventory", "supplies",
@@ -149,7 +150,15 @@ def apply_changes(state, changes, *, correction=False):
     for group, ids in changes.get("remove", {}).items():
         projected[group] = [row for row in projected[group] if row["id"] not in ids]
     ch = projected["character"]
-    for resource in ("hp", "mp", "sta"):
+    if uses_standard_rules(projected) and state["phase"] == "character_draft" and "attributes" in changes.get("character", {}):
+        for maximum, value in starting_resources(ch["attributes"]).items():
+            if maximum not in changes["character"]:
+                resource = maximum.removesuffix("_max")
+                ch[resource] = min(value, ch[resource] + max(0, value - ch[maximum]))
+                ch[maximum] = value
+    if uses_standard_rules(projected) and {"sta", "sta_max"} & changes.get("character", {}).keys():
+        fail(422, "unsupported_resource", "Standard characters use HP and MP")
+    for resource in (key for key in ("hp", "mp", "sta") if key in ch):
         if ch[resource] > ch[resource + "_max"]:
             fail(422, "invalid_chat_update", f"{resource} exceeds its recorded maximum")
     inventory = {row["id"] for row in projected["inventory"]}
@@ -178,6 +187,10 @@ def apply_lifecycle(state, kind, payload):
         ch = state["character"]
         if not ch["name"].strip() or ch["class_name"] == "Unassigned" or not ch["class_name"].strip():
             fail(422, "incomplete_character", "Prepare the character and class before confirmation")
+        if uses_standard_rules(state):
+            missing = class_kit_check(state)["missing"]
+            if missing:
+                fail(422, "incomplete_class_kit", "Complete the class kit before confirmation: " + ", ".join(missing))
         state["phase"] = "ready"
     elif kind == "start_chat_adventure":
         if state["phase"] != "ready" or not state["opening_preview"].strip():
@@ -227,13 +240,16 @@ class ChatGame:
                 return result
             attributes = dict.fromkeys(ATTRIBUTES, 5)
             stats = derived(attributes)
+            stats.pop("sta_max")
+            stats.update(starting_resources(attributes))
             character = {"name": name.strip(), "class_name": "Unassigned", "rarity": "COMMON",
                          "attributes": attributes, **stats, "level": 1, "xp": 0, "xp_total": 0,
                          "xp_next": 100, "scene_counter": 0, "attribute_points": 0,
                          "skill_points": 0, "talent_points": 0, "title": None, "background": None,
-                         **{key: stats[key + "_max"] for key in ("hp", "mp", "sta")}}
+                         **{key: stats[key + "_max"] for key in ("hp", "mp")}}
             state = {"id": "chat-" + uuid.uuid4().hex, "name": name.strip(), "version": 1,
-                     "mode": "chat", "rules_version": RULES_VERSION, "phase": "character_draft",
+                     "mode": "chat", "rules_version": RULES_VERSION, "rules_profile": PROFILE,
+                     "phase": "character_draft",
                      "paused": True, "disposable": disposable, "character": character,
                      "level_up_freeze": False, "equipment": dict.fromkeys(EQUIPMENT_SLOTS),
                      **{key: [] for key in COLLECTIONS}, "world": {}, "creation": {}, "funds": {},

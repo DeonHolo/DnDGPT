@@ -48,6 +48,8 @@ def test_release_contains_canonical_source_and_complete_rules_without_runtime_da
         for source in (APP / "app").iterdir():
             if source.is_file() and source.suffix in {".py", ".html"}:
                 assert archive.read("assets/prototype/app/" + source.name) == source.read_bytes()
+        for source in (APP / "app/assets").glob("*.webp"):
+            assert archive.read("assets/prototype/app/assets/" + source.name) == source.read_bytes()
         assert "skills/game-master/references/rulebook-v4.2.txt" not in names
 
 

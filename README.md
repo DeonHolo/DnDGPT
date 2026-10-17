@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  A heavily customized, D&D 5e-inspired homebrew RPG, with ChatGPT as your GM and a saved campaign dashboard.
+  A D&D-inspired system hack, with ChatGPT as your GM and a saved campaign dashboard.
 </p>
 
 <p align="center">
@@ -14,7 +14,9 @@
   <a href="PROJECT_PROFILE.md">Portfolio & resume</a>
 </p>
 
-DnDGPT is a heavily customized fantasy homebrew RPG inspired by D&D 5e, not a standard 5e ruleset. Its original rules, classes and progression reflect the creator's preferences. ChatGPT runs the adventure, while a reusable dashboard tracks character stats, abilities, allies, equipment and campaign history beside the conversation.
+DnDGPT is a heavily customized fantasy RPG with a standalone, D&D-inspired d20 ruleset. It is a substantial **system hack**: five attributes including Luck, HP/MP resources, rarity-based original class kits and its own progression replace major parts of standard D&D. Existing 5e characters, spells and monsters need conversion. “Homebrew” also applies in the broad sense of custom rules; this is a complete game rather than an extra-content pack for 5e. See [the rules comparison and terminology notes](docs/SYSTEM_IDENTITY.md).
+
+ChatGPT runs the adventure, while a reusable dashboard tracks character stats, abilities, allies, equipment and campaign history beside the conversation.
 
 ## Start playing
 
@@ -74,7 +76,9 @@ Send this to begin:
 
 After a saved choice, you can say **“Open my campaign dashboard.”** Updates appear when ChatGPT saves the result; narration alone does not update it.
 
-> **Thinking tip:** Use a higher thinking level for character creation, level-ups and complex rules decisions. Instant or Medium is usually enough for regular gameplay. Use whichever of these settings your ChatGPT model offers; this is a recommendation, not a requirement.
+> **Thinking tip:** For character creation, level-ups and complex build decisions, try **High on Plus** or **Extra High on Pro**. **Pro effort** is another option for deeper text planning on a Pro account, but OpenAI currently lists Intelligent UI as unavailable at Pro effort; switch back to a UI-capable level for interactive choices. For regular play, try **Instant or Medium** for faster turns. These are suggestions, not requirements, and available settings depend on your account. [Model and UI availability](https://help.openai.com/en/articles/20001354-gpt-6-and-other-models-in-chatgpt).
+
+> **Best on a desktop browser:** DnDGPT is designed for playing with the conversation and dashboard side by side. You can also play on mobile when your ChatGPT app/account supports the connection, but you switch between the chat and dashboard instead of seeing both at once.
 
 <details>
 <summary>Already connected, using custom rules, or having trouble?</summary>
@@ -85,6 +89,7 @@ After a saved choice, you can say **“Open my campaign dashboard.”** Updates 
 - **Want to read or fork the rules?** The [rulebook](https://raw.githubusercontent.com/DeonHolo/DnDGPT/main/dndgpt-app/rules/rulebook-v1.0.txt) and [Rule Hardener](https://raw.githubusercontent.com/DeonHolo/DnDGPT/main/dndgpt-app/rules/rule-hardener.txt) are available separately as optional downloads.
 - **Blank dashboard?** Ask ChatGPT to save your current character choices, then open your campaign dashboard.
 - **App unavailable or old layout?** Reload ChatGPT. If needed, open the DnDGPT connection's settings, select **Refresh tools**, then reload again.
+- **An older character still has different starting stats or an incomplete kit?** Saves keep their recorded build. New standard games use the current starting rules; ask the GM explicitly to update an existing draft and complete its class kit if you want to use those rules there.
 
 </details>
 
@@ -93,11 +98,13 @@ After a saved choice, you can say **“Open my campaign dashboard.”** Updates 
 Development plans and completed requests: [project checklist](ROADMAP.md).
 
 - **A saved character sheet.** Resource meters, progression, conditions and saved character choices.
-- **Details when you need them.** Expand an ability to inspect its mechanics; use the Combat, Reactions, Passives and Utility tabs alongside equipment/inventory, allies/combat and world/log chapters.
+- **Details when you need them.** Select an ability in a compact list, then use Overview or Full rules in its inspector. Costs, dice, ranges and conditions have text highlights. World articles use an index; the campaign log is a searchable timeline.
+- **A reading atmosphere you can choose.** Oakwood and Silent Isle use [real public-domain paintings](docs/ARTWORK.md); Quiet Ink keeps the background plain. All three use dark reading surfaces.
 - **Durable campaign records.** Account ownership, partial updates, version checks and event history.
 - **Campaign cleanup.** Ask ChatGPT to preview a save and confirm permanent deletion. This control is in the connected chat tools, not the dashboard; a small marker remains to stop stale retries from restoring it.
 - **Real rolls, stable receipts.** Reusable Python dice, checks and rarity tools; retrying the same action returns the saved result.
 - **The rules are included.** The complete custom rulebook and originality hardener ship with the GM skill and are readable through the hosted connection. ChatGPT handles narration and most adjudication.
+- **Class-native Utility.** Epic and Legendary classes start with one Utility; Unique starts with two distinct Utilities. These inherit the class rarity. Independently acquired Utilities use the normal rarity procedure and the same creativity/flavor checks as other skills; Utility can have Active or Passive activation outside combat.
 - **Explicit session control.** Character confirmation and starting the adventure are separate approvals. Browsing panels does not advance play.
 
 **Standalone dashboard**
@@ -107,6 +114,8 @@ Development plans and completed requests: [project checklist](ROADMAP.md).
 **Inside ChatGPT**
 
 ![A DnDGPT test campaign in ChatGPT with the hosted dashboard open beside the conversation](docs/images/campaign-chatgpt.png)
+
+These integration captures show an earlier dashboard layout. Current ability and world views use the list-and-reader layout described above.
 
 <details>
 <summary><strong>Inside the seven chapters</strong></summary>

@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 
 from fastapi import Depends, FastAPI, HTTPException, Request
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel, ConfigDict, Field, StrictInt
 
 from .auth import AuthConfig, JwtVerifier, READ_SCOPE, WRITE_SCOPE, owner_id
@@ -123,7 +123,8 @@ def create_app(db_path=None, auth_config=None, token_verifier=None, *, enable_cr
 
     @app.get("/")
     def index():
-        return FileResponse(HERE / "index.html")
+        from .presentation import dashboard_html
+        return HTMLResponse(dashboard_html())
 
     @app.get("/api/health")
     def health():

@@ -66,7 +66,7 @@ def test_separate_confirmation_and_adventure_gates(game, engine, draft):
 
 def test_all_seven_page_data_in_one_save_retry_and_reopen(game, engine, draft):
     state = adventure(game, engine, draft)
-    changes = {"character": {"xp": 8, "hp": 90, "attributes": {"INT": 6}},
+    changes = {"character": {"xp": 8, "hp": 50, "attributes": {"INT": 6}},
                "current_location": "Copper Gate", "fictional_time_seconds": 60,
                "world": {"weather": "Rain"}, "funds": {"saltmarks": 3}, "equipment": {"Main Hand": "test-key"},
                "upsert": {"abilities": [{"id": "ink-door", "name": "Ink Door", "activation": "ACTION", "status": "READY"}],
@@ -137,17 +137,17 @@ def test_concurrent_updates_stale_version_and_changed_retry(game, engine, draft)
 
 def test_history_and_reviewed_correction_preserve_lifecycle(game, engine, draft):
     state = adventure(game, engine, draft)
-    old = save(game, state, {"character": {"hp": 80}, "fictional_time_seconds": 30})
-    mistaken = save(game, old, {"character": {"hp": 70}, "fictional_time_seconds": 60})
+    old = save(game, state, {"character": {"hp": 48}, "fictional_time_seconds": 30})
+    mistaken = save(game, old, {"character": {"hp": 40}, "fictional_time_seconds": 60})
     paused = commit(engine, mistaken, "pause")["campaign"]
     with pytest.raises(EngineError):
-        save(game, paused, {"character": {"hp": 80}})
+        save(game, paused, {"character": {"hp": 48}})
     historical = game.version("owner-a", state["id"], old["version"])
     assert historical["historical"] and historical["current_version"] == paused["version"]
     payload = {"changes": {"character": {"hp": historical["campaign"]["character"]["hp"]}, "fictional_time_seconds": 30},
                "reason": "Correct duplicate damage and time"}
     fixed = commit(engine, paused, "correct_chat_state", payload)["campaign"]
-    assert fixed["character"]["hp"] == 80 and fixed["fictional_time_seconds"] == 30
+    assert fixed["character"]["hp"] == 48 and fixed["fictional_time_seconds"] == 30
     assert fixed["paused"] and fixed["phase"] == "adventure"
     assert game.version("owner-a", state["id"], mistaken["version"])["campaign"] == mistaken
     assert engine.audit("owner-a", state["id"])["integrity_valid"]

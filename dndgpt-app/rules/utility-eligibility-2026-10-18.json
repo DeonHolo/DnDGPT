@@ -1,0 +1,19 @@
+{
+  "id": "utility-eligibility-2026-10-18",
+  "files": {
+    "rulebook-v1.0.txt": [
+      {
+        "new_start": 70535,
+        "before": "",
+        "after": "Utility is an eligible skill category on independently generated Signature, Talent and earned-skill boards, alongside combat Active, Passive and Reaction options. Include a class-appropriate Utility candidate when it fits the board's legal acquisition scope; its activation is Active or Passive and its use is outside combat. Independently acquired Utility receives the SAME genuine rarity roll, Luck procedure, tier power contract, creativity/flavor lock, concrete embodiment and stripped-name mechanical originality checks as other skills. Guaranteed starting class Utilities instead inherit the actual class rarity and require no additional rarity roll. Keep the existing number of offers, source slots and acquisition limits; a useful Utility is a real capability, not a renamed mundane task or a second copy of another skill.\n\n"
+      }
+    ],
+    "rule-hardener.txt": [
+      {
+        "new_start": 4650,
+        "before": "",
+        "after": "Utility is an eligible skill category on independently generated Signature, Talent and earned-skill boards, alongside combat Active, Passive and Reaction options. Include a class-appropriate Utility candidate when it fits the board's legal acquisition scope; its activation is Active or Passive and its use is outside combat. Independently acquired Utility receives the SAME genuine rarity roll, Luck procedure, tier power contract, creativity/flavor lock, concrete embodiment and stripped-name mechanical originality checks as other skills. Guaranteed starting class Utilities instead inherit the actual class rarity and require no additional rarity roll. Keep the existing number of offers, source slots and acquisition limits; a useful Utility is a real capability, not a renamed mundane task or a second copy of another skill.\n\n"
+      }
+    ]
+  }
+}

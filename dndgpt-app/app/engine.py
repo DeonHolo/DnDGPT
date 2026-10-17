@@ -68,12 +68,15 @@ def safe_event(event):
 
 def public_state(state):
     result = json.loads(canonical(state))
+    if state.get("mode") == "chat":
+        from .standard_rules import class_kit_check, uses_standard_rules
+        result["rules_check"] = {"current_profile": uses_standard_rules(state), **class_kit_check(state)}
     result["rarity_candidates"] = {
         key: {"final_rarity": roll["final_rarity"], "enhanced": roll["enhanced"]}
         for key, roll in result["rarity_candidates"].items()}
     if result["last_event"]:
         result["last_event"] = safe_event(result["last_event"])
-    return result
+    return json.loads(canonical(result))
 
 
 def state_hash(state):
@@ -517,7 +520,7 @@ class Engine:
 
     def set_view_preferences(self, owner, preferences):
         keys = {"panels", "details", "hud_hidden"}
-        if type(preferences) is not dict or not keys <= set(preferences) <= keys | {"equipment_tab", "skills_tab", "world_tab", "combat_tab"}:
+        if type(preferences) is not dict or not keys <= set(preferences) <= keys | {"equipment_tab", "skills_tab", "world_tab", "combat_tab", "scene"}:
             fail(422, "invalid_preferences", "Preferences require panels, details, hud_hidden; equipment_tab, skills_tab, world_tab and combat_tab are optional")
         if "equipment_tab" in preferences and preferences["equipment_tab"] not in ("equipment", "inventory"):
             fail(422, "invalid_preferences", "equipment_tab must be equipment or inventory")
@@ -527,6 +530,8 @@ class Engine:
             fail(422, "invalid_preferences", "world_tab must be world or log")
         if "combat_tab" in preferences and preferences["combat_tab"] not in ("summons", "combat"):
             fail(422, "invalid_preferences", "combat_tab must be summons or combat")
+        if "scene" in preferences and preferences["scene"] not in ("elderwood", "moonkeep", "quiet"):
+            fail(422, "invalid_preferences", "Unknown reading atmosphere")
         if type(preferences["hud_hidden"]) is not bool:
             fail(422, "invalid_preferences", "hud_hidden must be boolean")
         for key, maximum in (("panels", 7), ("details", 200)):

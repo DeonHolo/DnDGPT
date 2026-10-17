@@ -69,6 +69,7 @@ def build(plugin, output=None):
     for folder, suffixes in (("app", {".py", ".html"}), ("rules", {".txt", ".json"}),
                              ("scripts", {".py"}), ("tests", {".py", ".html"})):
         sources.extend(p for p in (APP / folder).iterdir() if p.is_file() and p.suffix in suffixes)
+    sources.extend((APP / "app/assets").glob("*.webp"))
     browser_report = APP / "test-results/browser.json"
     if browser_report.exists():
         sources.append(browser_report)

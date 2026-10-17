@@ -15,6 +15,8 @@ from mcp.types import (CallToolResult, ReadResourceRequest, ReadResourceResult,
 from .auth import READ_SCOPE, WRITE_SCOPE, owner_id
 from .engine import EngineError
 from .version import APP_VERSION
+from .standard_rules import rules_guidance
+from .presentation import dashboard_html as load_dashboard_html
 
 HTML_PATH = Path(__file__).with_name("index.html")
 MIME_TYPE = "text/html;profile=mcp-app"
@@ -35,11 +37,12 @@ def rules_page(document, offset):
             end = boundary + 1
     return {"document": document, "offset": offset,
             "next_offset": end if end < len(text) else None, "total_characters": len(text),
-            "source_sha256": hashlib.sha256(data).hexdigest(), "content": text[offset:end]}
+            "source_sha256": hashlib.sha256(data).hexdigest(), "content": text[offset:end],
+            "standard_play": rules_guidance()}
 
 
 def build_mcp(engine, config, verifier, creation_repository=None):
-    html = HTML_PATH.read_text(encoding="utf-8")
+    html = load_dashboard_html()
     digest = hashlib.sha256(html.encode()).hexdigest()[:12]
     resource_uri = f"ui://dndgpt/dashboard-v1.0-{digest}.html"
     creation_html = creation_uri = None
@@ -115,7 +118,8 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         for tests. ChatGPT follows the complete rulebook and saves its choices through save_chat_update.
         Reuse exact action_id and arguments after uncertain delivery.
         """
-        return invoke(lambda owner: {"campaign": chat_game.create(owner, name, action_id, disposable)}, True)
+        return invoke(lambda owner: {"campaign": chat_game.create(owner, name, action_id, disposable),
+                                     "standard_play": rules_guidance()}, True)
 
     @server.tool(annotations=write, meta=metadata(WRITE_SCOPE))
     def save_chat_update(campaign_id: str, action_id: str, expected_version: int,

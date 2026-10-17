@@ -1,6 +1,6 @@
 # DnDGPT request tracker
 
-Updated: 17 October 2026. Checkboxes mean implemented and checked in the working files; release status is recorded separately.
+Updated: 18 October 2026. Checkboxes mean implemented and checked in the working files; release status is recorded separately.
 
 ## ASAP — current approved work
 
@@ -12,6 +12,14 @@ Updated: 17 October 2026. Checkboxes mean implemented and checked in the working
 - [x] Update public README wording for hosted rule access, onboarding, ChatGPT usage expectations and voluntary PayPal support.
 - [x] Implement and target-test the owner-scoped permanent campaign-delete tools: named preview, explicit confirmation, bounded resumable cleanup, Appwrite adapter cleanup and stale-retry protection.
 - [ ] Review and release the documentation and deletion change; record local checks and hosted acceptance separately.
+- [x] Apply current starting resources to new standard chat games: HP = 45 + 3 × STR; MP = 75 + 5 × INT. Preserve existing saves and explicit custom-rule builds.
+- [x] Check class-native role counts before confirming a new standard character, including two Utilities for Unique.
+- [x] Make independent Utility eligibility, rarity rolls and creativity/flavor checks explicit in both complete rules documents.
+- [x] Replace skill dropdown stacks with a compact index and ability reader; add text highlights and retain full mechanics.
+- [x] Give World an article index and Campaign Log a searchable timeline.
+- [x] Add swappable dark atmospheres using credited public-domain paintings and a plain option.
+- [x] Recheck the system's identity against its actual rules and primary sources; explain the system-hack description in the README.
+- [x] Add desktop/mobile guidance and suggested thinking levels, including the current Pro-effort UI limitation.
 
 ## Future — migration and reliability
 
@@ -28,11 +36,10 @@ Updated: 17 October 2026. Checkboxes mean implemented and checked in the working
 
 ## Deferred — broader product changes
 
-- [ ] Apply the new-game resource and failed-check model to runtime validation and the dashboard.
-- [x] Compact skill abilities into expandable rows with rarity, activation, status and applicable cost; keep mechanics expandable and Utility-labelled abilities in the Utility tab.
+- [ ] Add further executable adjudication of rest and context-dependent failed-check consequences; the GM currently follows the complete written rules.
 - [ ] Improve descriptive choice cards.
 - [ ] Reduce dashboard polling cost with lightweight change checks and adaptive refresh.
-- [ ] Enforce class-kit guarantees in character creation and runtime validation.
+- [ ] Validate class-kit mechanical distinctness and power quality beyond recorded role counts.
 - [ ] Consolidate duplicated GM/Rule Hardener guidance after checking rule coverage.
 - [ ] Improve onboarding toward public-directory distribution when account/platform requirements permit.
 - [ ] Consider group GM tools or a private rulebook library if players want them.
@@ -40,4 +47,4 @@ Updated: 17 October 2026. Checkboxes mean implemented and checked in the working
 
 ## Release status
 
-The revised rulebook, README, compact skill rows and campaign-delete workflow are implemented. The focused rule, package, MCP, SQLite and Appwrite regression set passes (41 tests). The earlier full run found three rule-integrity/package-sync failures; those were corrected and their affected tests now pass. A full-suite rerun was not repeated after the fixes. Nothing has been deployed or released, and no existing campaign was selected or deleted. Polling and broader resource/runtime changes remain deferred.
+The full run passed 388 tests and found two rule-pagination ordering regressions plus one temporary-database failure caused by overlapping test runs. Canonicalizing public campaign state fixes exact retry equality while preserving pagination metadata before long rule text. All three affected tests and current standard-rule/package checks now pass in an isolated focused run: 18 passed. The full suite was not repeated after that correction. Browser checks use disposable local fixtures and cover Utility routing, long metadata, keyboard tabs, timeline search, themes and narrow-screen overflow; tested text colors have a minimum 6.56:1 contrast on the reading surface. Existing player saves have only been inspected, not changed or deleted. Polling remains deferred. Release verification is pending the main-branch push.
