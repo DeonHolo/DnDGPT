@@ -37,13 +37,18 @@ class Store:
                     FOREIGN KEY(campaign_id) REFERENCES campaigns_v1(id));
                 CREATE TABLE IF NOT EXISTS creations_v1 (
                     owner TEXT NOT NULL, action_id TEXT NOT NULL, request TEXT NOT NULL,
-                    result TEXT NOT NULL, PRIMARY KEY(owner, action_id));
+                    result TEXT NOT NULL, campaign_id TEXT NOT NULL DEFAULT '',
+                    PRIMARY KEY(owner, action_id));
                 CREATE TABLE IF NOT EXISTS ui_preferences_v1 (
                     owner TEXT PRIMARY KEY, data TEXT NOT NULL);
                 CREATE TABLE IF NOT EXISTS game_rolls_v1 (
                     owner TEXT NOT NULL, action_id TEXT NOT NULL,
                     request TEXT NOT NULL, result TEXT NOT NULL,
+                    campaign_id TEXT NOT NULL DEFAULT '',
                     PRIMARY KEY(owner, action_id));
+                CREATE TABLE IF NOT EXISTS campaign_deletions_v1 (
+                    owner TEXT NOT NULL, campaign_id TEXT NOT NULL, data TEXT NOT NULL,
+                    PRIMARY KEY(owner, campaign_id));
                 CREATE TABLE IF NOT EXISTS chat_updates_v1 (
                     campaign_id TEXT NOT NULL, action_id TEXT NOT NULL,
                     request TEXT NOT NULL, result TEXT NOT NULL,
@@ -69,6 +74,13 @@ class Store:
                     PRIMARY KEY(draft_id, number),
                     FOREIGN KEY(draft_id) REFERENCES creation_drafts_v1(id));
             """)
+            for table in ("creations_v1", "game_rolls_v1"):
+                columns = {row[1] for row in db.execute("PRAGMA table_info(" + table + ")")}
+                if "campaign_id" not in columns:
+                    db.execute("ALTER TABLE " + table +
+                               " ADD COLUMN campaign_id TEXT NOT NULL DEFAULT ''")
+            db.execute("CREATE INDEX IF NOT EXISTS creations_campaign ON creations_v1(owner, campaign_id)")
+            db.execute("CREATE INDEX IF NOT EXISTS game_rolls_campaign ON game_rolls_v1(owner, campaign_id)")
 
     @contextmanager
     def transaction(self):

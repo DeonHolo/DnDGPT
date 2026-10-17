@@ -15,6 +15,19 @@ def test_complete_rules_preserved_except_authorized_edition_labels_and_additions
     assert len(data) == entry["bytes"]
     assert hashlib.sha256(data).hexdigest() == entry["sha256"]
     original = data
+    # Reverse recorded resource revisions first, then branding and additive
+    # amendments, so preservation is checked against the real source edition.
+    for revision in reversed(entry.get("revisions", [])):
+        source = json.loads((ROOT / "rules" / revision["source"]).read_text(encoding="utf-8"))
+        assert source["id"] == revision["id"]
+        assert hashlib.sha256(original).hexdigest() == revision["after_sha256"]
+        for edit in reversed(source["files"][name]):
+            start = edit["new_start"]
+            before, after = edit["before"].encode("utf-8"), edit["after"].encode("utf-8")
+            assert original[start:start + len(after)] == after
+            original = original[:start] + before + original[start + len(after):]
+        assert hashlib.sha256(original).hexdigest() == revision["before_sha256"]
+
     # Undo only the recorded display-name edits before proving preservation of
     # the same edition, amendments, and original source bytes below.
     for edit in reversed(entry.get("branding_edits", [])):

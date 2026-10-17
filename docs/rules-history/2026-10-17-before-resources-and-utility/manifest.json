@@ -1,0 +1,10 @@
+{
+  "rulebook-v1.0.txt": {
+    "sha256": "557441e47603ce8f0b1442a0ca5288ea91d4f9ccd84933d863441190d99773fe",
+    "bytes": 336269
+  },
+  "rule-hardener.txt": {
+    "sha256": "3a4ba13d199340eace7891900628329968ae6e12e208e7103a713c1a9710a53e",
+    "bytes": 13619
+  }
+}

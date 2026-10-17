@@ -10,7 +10,7 @@
   <a href="#start-playing">Start playing</a> ·
   <a href="#what-it-does">Dashboard</a> ·
   <a href="#how-it-works">How it works</a> ·
-  <a href="#developer-setup">Developer setup</a> ·
+  <a href="#package-your-own-chatgpt-integration">Build your own</a> ·
   <a href="PROJECT_PROFILE.md">Portfolio & resume</a>
 </p>
 
@@ -19,6 +19,8 @@ DnDGPT is a heavily customized fantasy RPG built around the author's taste in ga
 ## Start playing
 
 **Connect DnDGPT, sign in, and start a chat.** The standard rulebook and Rule Hardener are available through the connection; no TXT uploads are needed. Your DnDGPT login keeps your campaign saves private.
+
+**Cost and ChatGPT plans:** DnDGPT is free to use, with no DnDGPT subscription, API key or API-credit purchase required. Free ChatGPT users can play when their account offers the required plugin/custom MCP connection. A paid ChatGPT plan is recommended for longer sessions because of its larger usage allowance; normal ChatGPT model and tool limits still apply. Connection availability can vary by account and workspace, so check for the setup option below. See [OpenAI's plugin guide](https://learn.chatgpt.com/docs/plugins) and [current plans and limits](https://learn.chatgpt.com/docs/pricing).
 
 This is a one-time manual connection. DnDGPT is not listed in ChatGPT's public directory yet. Your ChatGPT account must offer **Add custom MCP server**; if that option is missing, this installation route is unavailable on your account.
 
@@ -88,9 +90,12 @@ After a saved choice, you can say **“Open my campaign dashboard.”** Updates 
 
 ## What it does
 
+Development plans and completed requests: [project checklist](ROADMAP.md).
+
 - **A saved character sheet.** Resource meters, progression, conditions and saved character choices.
-- **Details when you need them.** Ability subtabs, expandable mechanics, equipment/inventory, allies/combat and world/log views.
+- **Details when you need them.** Expand an ability to inspect its mechanics; use the Combat, Reactions, Passives and Utility tabs alongside equipment/inventory, allies/combat and world/log chapters.
 - **Durable campaign records.** Account ownership, partial updates, version checks and event history.
+- **Campaign cleanup.** Ask ChatGPT to preview a save and confirm permanent deletion. This control is in the connected chat tools, not the dashboard; a small marker remains to stop stale retries from restoring it.
 - **Real rolls, stable receipts.** Reusable Python dice, checks and rarity tools; retrying the same action returns the saved result.
 - **The rules are included.** The complete custom rulebook and originality hardener ship with the GM skill and are readable through the hosted connection. ChatGPT handles narration and most adjudication.
 - **Explicit session control.** Character confirmation and starting the adventure are separate approvals. Browsing panels does not advance play.
@@ -110,7 +115,7 @@ After a saved choice, you can say **“Open my campaign dashboard.”** Updates 
 | --- | --- |
 | Character & Progression | Attributes, class, title, experience and advancement |
 | Skills & Class Abilities | Combat, reactions, passives and utility |
-| Health & Conditions | HP, MP, stamina, defenses and status effects |
+| Health & Conditions | HP, MP, defenses and status effects |
 | Allies & Combat | Companions, summons, enemies and encounter records |
 | Equipment & Inventory | Equipped gear, stored items and supplies |
 | Quest Journal | Objectives, discoveries and rewards |
@@ -134,23 +139,19 @@ flowchart LR
 
 The dashboard reads **saved tool updates**, not the chat transcript. After resolving a turn, the GM calls `save_chat_update`; the dashboard reads the committed state. Narration uses regular ChatGPT. The backend has no model-inference API client.
 
-The project began as a local FastAPI/SQLite service exposed through tunnels, later using a fixed ngrok address. The hosted version runs on **Appwrite Functions and TablesDB**, using resources from the **GitHub Student Developer Pack**. Auth0 still handles player sign-in. New hosted games work independently of the creator's PC.
+The hosted service runs on **Appwrite Functions and TablesDB**, with Auth0 handling sign-in. Each player's saves are private to their own account.
 
-## Developer setup
+## Package your own ChatGPT integration
 
-The sections below are for people who want to build or host their own instance. Players can use [Start playing](#start-playing).
-
-Hosting and deployment instructions are in the [maintainer hosting notes](docs/MAINTAINER_HOSTING.md).
-
-### Package your own ChatGPT integration
+This section is for developers building their own private instance. Players can start with [Start playing](#start-playing).
 
 1. Deploy the service at a reachable HTTPS address with durable storage.
 2. Configure OAuth and the matching protected resource using the [authentication guide](dndgpt-app/AUTH0_SETUP.md).
 3. Create a supported custom MCP App connection in ChatGPT and sign in.
-4. Copy the [App connection template](dndgpt-system-rebirth/.app.example.json) to `.app.json` beside it, replacing the placeholder with your actual App ID.
+4. Copy the packaged `.app.example.json` connection template to `.app.json` beside it, replacing the placeholder with your actual App ID.
 5. Build with `python dndgpt-app/scripts/build_plugin.py`, then verify saving, dashboard rendering and reopening in the actual client.
 
-Players connecting to an existing hosted instance need their ChatGPT account and a DnDGPT sign-in. They do not need their own Appwrite, Auth0 developer or ngrok account.
+Players connecting to an existing hosted instance need only their ChatGPT account and a DnDGPT sign-in.
 
 This repository contains source and connection templates. ChatGPT account capabilities and distribution permissions still apply.
 
@@ -192,9 +193,10 @@ Current evidence does not establish production uptime, player capacity, measured
 | `dndgpt-app/rules/` | Complete rules, amendments and integrity manifest |
 | `dndgpt-app/tests/` | Automated checks and disposable host simulator |
 | `dndgpt-app/scripts/` | Packaging, rule audits and backup tools |
-| [Game Master skill](dndgpt-system-rebirth/skills/game-master/SKILL.md) | GM instructions and packaged rule references |
 | [PROJECT_PROFILE.md](PROJECT_PROFILE.md) | Architecture history, skills and resume wording |
 
 Created by **Deon Holo**, with AI-assisted development using Codex and ChatGPT. See [CHAT_LED_PLAY.md](dndgpt-app/CHAT_LED_PLAY.md) and [RULES_COVERAGE.md](dndgpt-app/RULES_COVERAGE.md) for implementation detail.
+
+Enjoy DnDGPT? [Support development through PayPal](https://www.paypal.com/paypalme/deonholo). Contributions are optional and do not unlock features or affect gameplay.
 
 Logo downloads: [transparent PNG](docs/images/dndgpt-logo.png) · [dark square PNG](docs/images/dndgpt-logo-dark.png) · [SVG](docs/images/dndgpt-dice.svg).

@@ -9,6 +9,7 @@ KEYS = {
     "creations_v1": ("owner", "action_id"),
     "ui_preferences_v1": ("owner",),
     "game_rolls_v1": ("owner", "action_id"),
+    "campaign_deletions_v1": ("owner", "campaign_id"),
     "chat_updates_v1": ("campaign_id", "action_id"),
     "chat_versions_v1": ("campaign_id", "version"),
 }
@@ -77,6 +78,16 @@ def update(db, table, where, values):
     clause, params = predicate(where)
     db.execute("UPDATE " + table + " SET " + ",".join(name(key) + "=?" for key in values) +
                " WHERE " + clause, [*values.values(), *params])
+
+
+def delete(db, table, where):
+    if table not in KEYS or not set(KEYS[table]) <= where.keys():
+        raise ValueError("Unknown table or incomplete record identity")
+    if hasattr(db, "delete_record"):
+        return db.delete_record(table, where)
+    clause, params = predicate(where)
+    cursor = db.execute("DELETE FROM " + table + " WHERE " + clause, params)
+    return cursor.rowcount
 
 
 def upsert(db, table, where, values):
