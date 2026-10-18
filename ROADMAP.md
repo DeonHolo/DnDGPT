@@ -66,6 +66,16 @@ Updated: 18 October 2026. Checkboxes mean implemented and checked in the working
 
 ## Release status
 
+### Readable power reveals and FAQ
+
+Application **1.0.20** and plugin **1.0.25** reinforce descriptive reach from the first creation offer, including inline kits, summon movement/attacks/commands, Full rules and upgrades. Counted paces/steps are measurements too. Exact source distances and movement limits remain private; nonspatial stats and mechanical restrictions are preserved. Companion naming follows individual identity and genuinely accessible history. FAQ is now a standalone README section linked from the top navigation.
+
+**Published and verified:** [source faa1ae2](https://github.com/DeonHolo/DnDGPT/commit/faa1ae213b8faa0c31e7f99f83a8c3cd2623dcac) is active in Appwrite deployment `6ad4250e37fa51cde28f`; health reports 1.0.20. [GitHub CI](https://github.com/DeonHolo/DnDGPT/actions/runs/39087715762) passed **405 tests** and built plugin 1.0.25. The focused local source, standard-rule, server and packaging suite passed **32 tests**. The existing private plugin's page shows 1.0.25; downloading its installed ZIP verified both complete documents and GM skill against source, with its App binding and default prompt preserved. Rulebook SHA-256 is `35de9e975f8ea6fd22c53f315df19c27eb33de2960a02f97d0086de4e38f9f7e`; hardener SHA-256 is `de2fc110ff41c9eb6a7ae499448435cde6609a31ad4000b7b4af7979ce43616d`.
+
+These checks verify delivery and source preservation, not every future model response. Existing chats should read the current complete documents and use readable descriptions; old messages are historical and saved mechanics remain intact. No live campaign was started or modified for this release.
+
+### Atmospheres and upgrade reader
+
 Application 1.0.19 and plugin 1.0.24 contain the 33-choice catalog, Classic rename, separate Upgrades tab, visible campaign-deletion confirmation and DEX/readable-reach guidance. The focused local suite passed 129 tests; the complete local suite passed **405 tests**. Browser checks used disposable local data: all 33 choices switched, only Classic and Quiet Ink had no artwork, the ability reader fit a 375-pixel viewport, and both disclosures started collapsed. Development controls had 17-pixel left and bottom insets. Deletion previews required the exact name and cancellation retained the fixture. No player campaign was changed or deleted.
 
 The self-contained dashboard is 934,444 bytes with 31 AVIF images; its provenance manifest verifies asset hashes and licenses. The README count is checked against the actual catalog. Current screenshots show the Classic surface and a fantasy atmosphere with the Upgrades tab. Gameplay edition remains 1.0; source archives record the DEX amendment.
