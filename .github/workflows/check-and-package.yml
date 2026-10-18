@@ -31,7 +31,9 @@ jobs:
       - name: Check bundled documents match the hosted source
         run: python -m scripts.sync_plugin_rules --check
       - name: Check rules, packaging, ownership and game behavior
-        run: python -m pytest -q --basetemp=.test-tmp/ci
+        run: |
+          python -c "from pathlib import Path; Path('.test-tmp').mkdir(exist_ok=True)"
+          python -m pytest -q --basetemp=.test-tmp/ci
       - name: Build plugin with current rules and a portable MCP connection
         run: python -m scripts.build_portable_plugin
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
