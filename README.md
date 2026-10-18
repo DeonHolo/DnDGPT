@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  A D&D-inspired system hack, with ChatGPT as your GM and a saved campaign dashboard.
+  A homebrew 5e Hack, with ChatGPT as your GM and a saved campaign dashboard.
 </p>
 
 <p align="center">
@@ -14,7 +14,7 @@
   <a href="PROJECT_PROFILE.md">Portfolio & resume</a>
 </p>
 
-DnDGPT is a heavily customized fantasy RPG with a standalone, D&D-inspired d20 ruleset. It is a substantial **system hack**: five attributes including Luck, HP/MP resources, rarity-based original class kits and its own progression replace major parts of standard D&D. Existing 5e characters, spells and monsters need conversion. “Homebrew” also applies in the broad sense of custom rules; this is a complete game rather than an extra-content pack for 5e. See [the rules comparison and terminology notes](docs/SYSTEM_IDENTITY.md).
+DnDGPT is a **5e Hack and homebrew fantasy RPG**, heavily customized around Deon Holo's taste in fantasy games. Its standalone, D&D-inspired d20 rules replace major parts of standard 5e: five attributes including Luck, HP/MP resources, rarity-based original class kits and a custom progression system. Existing 5e characters, spells and monsters need conversion. See [the rules comparison](docs/SYSTEM_IDENTITY.md).
 
 ChatGPT runs the adventure, while a reusable dashboard tracks character stats, abilities, allies, equipment and campaign history beside the conversation.
 
@@ -76,6 +76,8 @@ Send this to begin:
 
 After a saved choice, you can say **“Open my campaign dashboard.”** Updates appear when ChatGPT saves the result; narration alone does not update it.
 
+**Managing saves:** Use the **Saved game** selector at the top of the dashboard. To remove one, select it and click **Delete campaign…**. Review the named campaign and what will be removed or retained, type its name, then choose **Delete permanently**. This cannot be undone. If a large history needs several cleanup batches, use **Continue cleanup** to finish the same deletion.
+
 > **Thinking tip:** For character creation, level-ups and complex build decisions, try **High on Plus** or **Extra High on Pro**. **Pro effort** is another option for deeper text planning on a Pro account, but OpenAI currently lists Intelligent UI as unavailable at Pro effort; switch back to a UI-capable level for interactive choices. For regular play, try **Instant or Medium** for faster turns. These are suggestions, not requirements, and available settings depend on your account. [Model and UI availability](https://help.openai.com/en/articles/20001354-gpt-6-and-other-models-in-chatgpt).
 
 > **Best on a desktop browser:** DnDGPT is designed for playing with the conversation and dashboard side by side. You can also play on mobile when your ChatGPT app/account supports the connection, but you switch between the chat and dashboard instead of seeing both at once.
@@ -84,12 +86,14 @@ After a saved choice, you can say **“Open my campaign dashboard.”** Updates 
 <summary>Already connected, using custom rules, or having trouble?</summary>
 
 - **Already says Connected?** Click **Try in chat**. You do not need to create another connection.
+- **Do other players receive updates?** Anyone connected to the same hosted server uses its deployed backend, dashboard and current rulebook. They do not need to repeat the repository setup. Existing chats and open dashboards may retain older content: refresh the connected app's tools, open a fresh dashboard, and ask the GM to read the current hosted rules. This does not automatically rebuild an existing character.
+- **What if I uploaded my own plugin ZIP?** That is a separate package copy. Updating the creator's private plugin does not replace it. Use **Upload new version** with an updated complete ZIP for changes to bundled skills, artwork or plugin metadata. Hosted rules remain available through the existing server connection. Published-directory plugins have a separate managed update process; see [OpenAI's update guide](https://developers.openai.com/plugins/deploy/submission) and [custom-connection refresh steps](https://developers.openai.com/plugins/deploy/connect-chatgpt).
 - **Where are the rules?** DnDGPT reads the current hosted rulebook and hardener when connected. Complete copies also come with the plugin as a fallback. Standard play needs no separate download or writing plugin.
 - **Connected before hosted rules were added?** Open the connection's settings, select **Refresh tools**, then start a fresh chat. The `read_rules` tool supplies both complete documents in pages.
 - **Custom rulebook?** Attach your full version and tell the GM it takes precedence. Extra systems can use supported save fields; they do not automatically add dashboard tabs.
 - **Want to read or fork the rules?** The [rulebook](https://raw.githubusercontent.com/DeonHolo/DnDGPT/main/dndgpt-app/rules/rulebook-v1.0.txt) and [Rule Hardener](https://raw.githubusercontent.com/DeonHolo/DnDGPT/main/dndgpt-app/rules/rule-hardener.txt) are available separately as optional downloads.
 - **Blank dashboard?** Ask ChatGPT to save your current character choices, then open your campaign dashboard.
-- **App unavailable or old layout?** Reload ChatGPT. If needed, open the DnDGPT connection's settings, select **Refresh tools**, then reload again.
+- **Old layout or only three background buttons?** In DnDGPT settings, open the connected **DnDGPT Cloud Dashboard** app and click **Refresh tools**. Then reload ChatGPT, close the old dashboard, and ask it to **open a fresh campaign dashboard using `render_dashboard`**. A new chat alone can still use a cached tool catalog; **Refresh saved state** only reloads your save. The current interface has a 33-choice **Reading atmosphere** dropdown and an **Upgrades** ability tab. **View options → Connection details** shows the dashboard build for troubleshooting.
 - **Updating an ongoing campaign?** Close the old dashboard, refresh the browser page, then ask ChatGPT to read both complete current documents with `read_rules` and open your existing campaign with a fresh `render_dashboard` call. Refreshing tools updates the connection; it does not rewrite old chat messages, replace a mounted dashboard or migrate a saved character. Review build changes separately, preserving earned progress and current resource depletion. GitHub deploys update the hosted service; bundled DnDGPT plugin files require a separate plugin release.
 - **An older character still has different starting stats or an incomplete kit?** Saves keep their recorded build. New standard games use the current starting rules; ask the GM explicitly to update an existing draft and complete its class kit if you want to use those rules there.
 
@@ -101,24 +105,26 @@ Development plans and completed requests: [project checklist](ROADMAP.md).
 
 - **A saved character sheet.** Resource meters, progression, conditions and saved character choices.
 - **Details when you need them.** Select an ability in a compact list, then use Overview or Full rules in its inspector. Costs, dice, ranges and conditions have text highlights. World articles use an index; the campaign log is a searchable timeline.
-- **Choose your atmosphere.** Classic Codex keeps the original dark green look by default. Open **View options → Reading atmosphere** for a dropdown with thirteen choices: the classic look, Quiet Ink, and eleven [credited paintings and fantasy illustrations](docs/ARTWORK.md). Options include snowy mountains, desert skies, a wizard's tower and dragons; reading panels stay dark. Your choice is saved for your account.
+- **Choose your atmosphere.** Classic keeps the original dark green look by default. Open **View options → Reading atmosphere** for **33 choices**: Classic, Quiet Ink, and 31 [credited paintings and fantasy illustrations](docs/ARTWORK.md). Twenty new scenes feature character-free fantasy environments, including floating castles, mushroom caves, ancient shrines and moonlit forests. Reading panels stay dark, and your choice is saved for your account.
+- **Inspect earned upgrades.** Select an ability, then open **Upgrades** for its saved Evolutions, Background Imprints and other upgrades. **Overview** gives the short description; **Full rules** holds the ability's current mechanics. Upgrades appear after the GM records them on that ability.
+- **Delete campaigns from the dashboard.** Select a saved game and use **Delete campaign…** to review and permanently remove it, with a separate confirmation.
 - **Durable campaign records.** Account ownership, partial updates, version checks and event history.
-- **Campaign cleanup.** Ask ChatGPT to preview a save and confirm permanent deletion. This control is in the connected chat tools, not the dashboard; a small marker remains to stop stale retries from restoring it.
+- **Cinematic positioning.** New standard characters use DEX. Skills show descriptive reach and readable mechanics, while the GM keeps precise movement and targeting checks behind the scenes. Moving, taking cover and spending your Action to Dash still matter.
 - **Real rolls, stable receipts.** Reusable Python dice, checks and rarity tools; retrying the same action returns the saved result.
 - **The rules are included.** The complete custom rulebook and originality hardener ship with the GM skill and are readable through the hosted connection. ChatGPT handles narration and most adjudication.
 - **Variety starts with the class design.** The GM checks different play styles, recent motifs and naming patterns before presenting a board. The [creativity and writing guidance](docs/CREATIVITY_ENGINE.md) is included; players need no extra writing plugin.
 - **Class-native Utility.** Epic and Legendary classes start with one Utility; Unique starts with two distinct Utilities. These inherit the class rarity. Independently acquired Utilities use the normal rarity procedure and the same creativity/flavor checks as other skills; Utility can have Active or Passive activation outside combat.
 - **Explicit session control.** Character confirmation and starting the adventure are separate approvals. Browsing panels does not advance play.
 
-**Classic Codex · current dashboard**
+**Classic · current dashboard**
 
 ![Standalone DnDGPT dashboard with character stats and chapter navigation](docs/images/dashboard-standalone.jpg)
 
-**Choose a different atmosphere**
+**Choose a different atmosphere (33 choices)**
 
 ![DnDGPT's atmosphere selector with a credited fantasy illustration and dark reading panels](docs/images/dashboard-atmosphere.jpg)
 
-These current-interface captures use disposable sample data. Classic Codex is the default; background artwork is optional. Existing saved atmosphere choices are preserved.
+These current-interface captures use disposable sample data. Classic is the default; background artwork is optional. Existing saved atmosphere choices are preserved.
 
 <details>
 <summary>ChatGPT integration example from an earlier release</summary>

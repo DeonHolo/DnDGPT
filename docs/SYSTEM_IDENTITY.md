@@ -1,20 +1,18 @@
 # What kind of RPG is DnDGPT?
 
-Recommended public wording: **a standalone, D&D-inspired d20 RPG built as a substantial system hack for ChatGPT**.
+Recommended public wording: **a 5e Hack and homebrew fantasy RPG, with ChatGPT as your GM**.
 
-“Hack” and “homebrew” overlap in community usage. The practical distinction for a new player is whether they can bring a standard 5e character and use the normal books directly. DnDGPT replaces enough of that framework that conversion is required. Calling it only “5e homebrew” can suggest a compatible class, subclass or extra-content collection; calling it “5e compatible” would overstate what this project supports.
+Both descriptions apply: **5e Hack** describes the substantial changes to D&D-inspired mechanics; **homebrew** describes the creator's custom rules, classes and worldbuilding. DnDGPT is a complete game with its own numerical scales and progression. Players can use it without the standard 5e books, and existing 5e characters, spells and monsters require conversion.
 
 | Area | Standard D&D 5e | DnDGPT |
 | --- | --- | --- |
-| Attributes | Six ability scores | STR, AGI, INT, CHA and LCK |
+| Attributes | Six ability scores | STR, DEX, INT, CHA and LCK |
 | Modifier baseline | Scores of 10–11 give +0 | `floor((Attribute − 5) / 2)` |
 | Magic economy | Spell levels and spell slots | MP and individually specified powers |
 | Classes and progression | Published class progressions | Rarity-generated original class kits, Signatures, Talents and integrated evolution |
 | Shared foundations | d20 checks, advantage/disadvantage, attacks and reactions | Related d20 conventions, with custom numerical scales and action rules |
 
-These observations come from `dndgpt-app/rules/rulebook-v1.0.txt`, especially Attributes, Classes and Heroic Power, Checks and Combat. A shared d20 convention alone does not prove derivation from a particular 5e edition. The repository does not document a comprehensive SRD compatibility target, so the README uses **D&D-inspired system hack**, rather than claiming exact 5e compatibility or a formal classification.
-
-The earlier blanket choice of “homebrew, not hack” was too narrow. A game can be homebrewed and also be a hack. Google AI Overview's “homebrew is always 100% compatible” and “zero learning curve” claims are likewise too absolute. There is no percentage calculation used here to decide the label; this is an editorial description based on the rules above.
+These observations come from `dndgpt-app/rules/rulebook-v1.0.txt`, especially Attributes, Classes and Heroic Power, Checks and Combat. The label describes the game's design; it does not claim drop-in 5e compatibility or official D&D affiliation.
 
 ## Sources checked
 

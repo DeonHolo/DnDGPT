@@ -91,8 +91,10 @@ def validate_changes(changes):
         if type(ch[key]) is not dict:
             fail(422, "invalid_chat_update", f"{key} must be an object")
     if "attributes" in ch:
-        if type(ch["attributes"]) is not dict or set(ch["attributes"]) - set(ATTRIBUTES):
+        if type(ch["attributes"]) is not dict or set(ch["attributes"]) - (set(ATTRIBUTES) | {"AGI"}):
             fail(422, "invalid_chat_update", "Unknown attribute")
+        if {"AGI", "DEX"} <= ch["attributes"].keys():
+            fail(422, "invalid_chat_update", "Use one Dexterity attribute key")
         for key, value in ch["attributes"].items():
             number(value, key, 1, 1000000)
     if "equipment" in changes:
@@ -136,7 +138,14 @@ def apply_changes(state, changes, *, correction=False):
             projected[key] = copy.deepcopy(changes[key])
     for key, value in changes.get("character", {}).items():
         if key == "attributes":
-            projected["character"][key].update(value)
+            attributes = projected["character"][key]
+            values = dict(value)
+            # New campaigns use DEX. Existing saves keep their recorded key.
+            target = "DEX" if "DEX" in attributes else "AGI"
+            alias = "AGI" if target == "DEX" else "DEX"
+            if alias in values:
+                values[target] = values.pop(alias)
+            attributes.update(values)
         else:
             projected["character"][key] = copy.deepcopy(value)
     projected["equipment"].update(changes.get("equipment", {}))

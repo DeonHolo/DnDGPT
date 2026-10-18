@@ -7,7 +7,7 @@ from typing import Callable
 
 RARITIES = ("COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY", "UNIQUE")
 BANDS = (5500, 8000, 9200, 9800, 9970, 10000)
-ATTRIBUTES = ("STR", "AGI", "INT", "CHA", "LCK")
+ATTRIBUTES = ("STR", "DEX", "INT", "CHA", "LCK")
 EQUIPMENT_SLOTS = ("Head", "Face", "Neck", "Shoulders", "Chest", "Arms", "Hands",
                    "Main Hand", "Off-Hand", "Waist", "Legs", "Feet", "Back",
                    "Ring 1", "Ring 2", "Artifact")
@@ -24,13 +24,15 @@ def modifier(score: int) -> int:
 
 
 def derived(attributes: dict) -> dict:
+    if "DEX" not in attributes and "AGI" in attributes:
+        attributes = {**attributes, "DEX": attributes["AGI"]}
     for key in ATTRIBUTES:
         modifier(attributes[key])
     return {"hp_max": 70 + 5 * attributes["STR"],
             "mp_max": 30 + 5 * attributes["INT"],
-            "sta_max": 40 + 4 * attributes["AGI"],
+            "sta_max": 40 + 4 * attributes["DEX"],
             "carry_capacity_kg": 12 + 2 * attributes["STR"],
-            "def": 10 + modifier(attributes["AGI"]), "movement_mm": 6000}
+            "def": 10 + modifier(attributes["DEX"]), "movement_mm": 6000}
 
 
 class Dice:

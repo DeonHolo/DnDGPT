@@ -74,7 +74,7 @@ def test_signed_creation_build_preview_approval_and_confirmation(tmp_path, confi
         transition("choose_sources", {"signature_ids": ["signatures-candidate-0", "signatures-candidate-1"], "title_id": None})
         complete("backgrounds", "classes-candidate-0-power-ACTION")
         transition("choose_background", {"candidate_id": "backgrounds-candidate-0",
-                                         "allocation": {"STR": 2, "AGI": 2, "INT": 2, "CHA": 0, "LCK": 0}})
+                                         "allocation": {"STR": 2, "DEX": 2, "INT": 2, "CHA": 0, "LCK": 0}})
         assert len(draws) == 20 and draft["starting_build"] is None
         before = json.loads(json.dumps(draft))
         forbidden = web.post(f"/api/creation-drafts/{draft['id']}/proposals", json={"action_id": "build-too-early-confirm",

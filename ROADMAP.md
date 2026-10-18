@@ -21,13 +21,19 @@ Updated: 18 October 2026. Checkboxes mean implemented and checked in the working
 - [x] Recheck the system's identity against its actual rules and primary sources; explain the system-hack description in the README.
 - [x] Add desktop/mobile guidance and suggested thinking levels, including the current Pro-effort UI limitation.
 - [x] Add MIT software licensing, CC BY 4.0 original-content licensing and third-party art exclusions; include license notices in release archives.
-- [x] Restore Classic Codex as the default and add nine licensed human-made fantasy scenes; provide thirteen atmospheres through one dropdown with selected-work credits.
+- [x] Restore the original dark green default as Classic, with Quiet Ink immediately underneath it; expand the dropdown to 33 atmospheres with selected-work credits.
+- [x] Add twenty character-free fantasy environments from additional artists; exclude modern farms, industry and modern cities after visual review.
 - [x] Add comfortable development-control padding and compact, initially collapsed connection/development disclosures.
 - [x] Refresh the README's current-interface screenshots and explain the optional backgrounds.
 - [x] Make the GM prefer hosted rules and check bundled copies against backend source before packaging.
 - [x] Add GitHub test/document checks and a portable plugin ZIP artifact; document the separate authenticated ChatGPT package release step.
 - [x] Review the writing-skill repository and strengthen semantic class variety, naming, player-perspective critique and narrative craft in both complete rule documents.
 - [x] Require the World Preview to explain Convergence history, Earth's relevance and the character's open origin before the existing Luck gate.
+- [x] Use 5e Hack and homebrew together in public descriptions; remove search-summary commentary from the terminology document.
+- [x] Use DEX for new standard campaigns, preserve legacy attribute input, and synchronize the complete rulebook and bundled references.
+- [x] Show descriptive skill reach and complete readable mechanics while retaining private movement and targeting checks; see [attribute and distance details](docs/ATTRIBUTE_AND_DISTANCE_OPTIONS.md).
+- [ ] Verify the newly opened ChatGPT dashboard uses the current template after refreshing its connected app metadata.
+- [ ] Release the visible campaign-deletion flow, separate Upgrades tab and dashboard-build diagnostic.
 - [ ] Verify the plugin listing displays the dice icon after publishing its light/dark icon variants.
 
 ## Future — migration and reliability
@@ -45,6 +51,7 @@ Updated: 18 October 2026. Checkboxes mean implemented and checked in the working
 
 ## Deferred — broader product changes
 
+- [ ] Playtest fully band-based distances if desired; cinematic proximity with precise private adjudication is already implemented.
 - [ ] Add further executable adjudication of rest and context-dependent failed-check consequences; the GM currently follows the complete written rules.
 - [ ] Improve descriptive choice cards.
 - [ ] Reduce dashboard polling cost with lightweight change checks and adaptive refresh.
@@ -55,6 +62,12 @@ Updated: 18 October 2026. Checkboxes mean implemented and checked in the working
 - [ ] Revisit paid features only if desired; current preference is voluntary GitHub support.
 
 ## Release status
+
+Application 1.0.19 and plugin source 1.0.24 contain the 33-choice catalog, Classic rename, separate Upgrades tab, visible campaign-deletion confirmation and DEX/readable-reach guidance. The focused local suite passed 129 tests; the complete local suite passed **405 tests**. Hosted publication is being verified separately. Browser checks used disposable local data: all 33 choices switched, only Classic and Quiet Ink had no artwork, the ability reader fit a 375-pixel viewport, and both disclosures started collapsed. Development controls had 17-pixel left and bottom insets. Deletion previews required the exact name and cancellation retained the fixture. No player campaign was changed or deleted.
+
+The self-contained dashboard is 934,444 bytes with 31 AVIF images; its provenance manifest verifies asset hashes and licenses. The README count is checked against the actual catalog. Current screenshots show the Classic surface and a fantasy atmosphere with the Upgrades tab. Gameplay edition remains 1.0; source archives record the DEX amendment.
+
+### Previous release
 
 The full local suite passed **394 tests** in an isolated run. After the final world-introduction insertion, new invalid-theme cases and package updates, the focused source/rules/theme/package run passed **26 tests**. Integrity tests reverse both new insertions and prove unrelated source text is preserved. Rules edition stays 1.0; application 1.0.18 and plugin package 1.0.23 carry these changes.
 

@@ -52,6 +52,11 @@ def class_kit_check(state):
 def rules_guidance():
     return {"resources": ["HP", "MP"], "starting_hp": "45 + 3 * STR",
             "starting_mp": "75 + 5 * INT",
+            "attributes": ["STR", "DEX", "INT", "CHA", "LCK"],
+            "distance_display": "Use descriptive reach and Engaged/Near/Far/Distant in play. "
+                                "Save range_display and complete mechanics_display without meters, "
+                                "retaining exact source mechanics privately for legal range, movement and area checks. "
+                                "Movement remains limited; Dash costs the Action.",
             "class_kits": "Epic/Legendary: Active, Passive, Reaction, Free Action, 1 Utility. "
                           "Unique: Active, Passive, Reaction, Free Action, 2 distinct Utilities.",
             "utility": "An outside-combat role with Active or Passive activation; save group=utility. "

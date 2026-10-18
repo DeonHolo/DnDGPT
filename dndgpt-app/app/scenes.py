@@ -2,8 +2,6 @@
 
 CC_BY = "https://creativecommons.org/licenses/by/4.0/"
 CC0 = "https://creativecommons.org/publicdomain/zero/1.0/"
-OIL_PAINTINGS = "https://opengameart.org/content/oil-painting-landscapes"
-REVOY = "https://www.davidrevoy.com/"
 
 
 def artwork(id, name, asset, artist, title, source, license, license_url,
@@ -14,32 +12,194 @@ def artwork(id, name, asset, artist, title, source, license, license_url,
 
 
 SCENES = (
-    dict(id="classic", name="Classic Codex", palette="forest", opacity=0),
-    artwork("elderwood", "Oakwood", "oakwood.webp", "Caspar David Friedrich",
-            "The Abbey in the Oakwood", "https://commons.wikimedia.org/wiki/File:Caspar_David_Friedrich_-_Abtei_im_Eichwald_-_Google_Art_Project.jpg",
-            "Public domain", "https://creativecommons.org/publicdomain/mark/1.0/", opacity=.42),
-    artwork("moonkeep", "Silent Isle", "silent-isle.webp", "Arnold Böcklin",
-            "Isle of the Dead, third version", "https://commons.wikimedia.org/wiki/File:Arnold_B%C3%B6cklin_-_Die_Toteninsel_III_(Alte_Nationalgalerie,_Berlin).jpg",
-            "Public domain", "https://creativecommons.org/publicdomain/mark/1.0/", "slate", .42),
+    dict(id="classic", name="Classic", palette="forest", opacity=0),
     dict(id="quiet", name="Quiet Ink", palette="ink", opacity=0),
-    artwork("swamp-sunset", "Swamp at Sunset", "swamp-sunset.webp", "JAP",
-            "Sunset in the Swamp", OIL_PAINTINGS, "CC0", CC0, "copper"),
-    artwork("frostpeak", "Frostpeak", "frostpeak.webp", "JAP",
-            "Cold Mountain", OIL_PAINTINGS, "CC0", CC0, "slate", .72),
-    artwork("desert-skies", "Desert Skies", "desert-skies.webp", "JAP",
-            "Clouds in the Desert", OIL_PAINTINGS, "CC0", CC0, "copper", .72),
-    artwork("wizard-tower", "Wizard's Tower", "wizard-tower.webp", "JAP",
-            "Wizard Tower", OIL_PAINTINGS, "CC0", CC0),
-    artwork("azure-valley", "Azure Valley", "azure-valley.webp", "David Revoy",
-            "Fantasy Landscape", REVOY + "article201/fantasy-landscape", "CC BY 4.0", CC_BY, "slate", .72),
-    artwork("rendezvous", "The Rendezvous", "rendezvous.webp", "David Revoy",
-            "The rendezvous", REVOY + "article638/illustration-the-rendezvous", "CC BY 4.0", CC_BY, "violet"),
-    artwork("dragonfire", "Dragonfire", "dragonfire.webp", "David Revoy",
-            "Confront the Dragon", REVOY + "article935/confront-the-dragon", "CC BY 4.0", CC_BY, "copper", .72),
-    artwork("dragon-road", "The Dragon's Road", "dragon-road.webp", "David Revoy",
-            "Introduce the Dragon to the Outside World", REVOY + "article937/introduce-the-dragon-to-the-outside-world", "CC BY 4.0", CC_BY, "forest", .72),
-    artwork("adventurers", "Adventurers", "adventurers.webp", "Albert Weand & Offirmo",
-            "Adventurers", "https://www.offirmo.net/open-source/adventurers-fantasy-illustration/", "CC BY 4.0", CC_BY, "violet", .72),
+    artwork(
+        "elderwood", "Oakwood", "elderwood.avif",
+        "Caspar David Friedrich", "The Abbey in the Oakwood",
+        "https://commons.wikimedia.org/wiki/File:Caspar_David_Friedrich_-_Abtei_im_Eichwald_-_Google_Art_Project.jpg",
+        "Public domain", "https://creativecommons.org/publicdomain/mark/1.0/", "forest", 0.42,
+    ),
+    artwork(
+        "moonkeep", "Silent Isle", "moonkeep.avif",
+        "Arnold Böcklin", "Isle of the Dead, third version",
+        "https://commons.wikimedia.org/wiki/File:Arnold_B%C3%B6cklin_-_Die_Toteninsel_III_(Alte_Nationalgalerie,_Berlin).jpg",
+        "Public domain", "https://creativecommons.org/publicdomain/mark/1.0/", "slate", 0.42,
+    ),
+    artwork(
+        "swamp-sunset", "Swamp at Sunset", "swamp-sunset.avif",
+        "JAP", "Sunset in the Swamp",
+        "https://opengameart.org/content/oil-painting-landscapes",
+        "CC0", CC0, "copper", 0.62,
+    ),
+    artwork(
+        "frostpeak", "Frostpeak", "frostpeak.avif",
+        "JAP", "Cold Mountain",
+        "https://opengameart.org/content/oil-painting-landscapes",
+        "CC0", CC0, "slate", 0.72,
+    ),
+    artwork(
+        "desert-skies", "Desert Skies", "desert-skies.avif",
+        "JAP", "Clouds in the Desert",
+        "https://opengameart.org/content/oil-painting-landscapes",
+        "CC0", CC0, "copper", 0.72,
+    ),
+    artwork(
+        "wizard-tower", "Wizard's Tower", "wizard-tower.avif",
+        "JAP", "Wizard Tower",
+        "https://opengameart.org/content/oil-painting-landscapes",
+        "CC0", CC0, "forest", 0.62,
+    ),
+    artwork(
+        "azure-valley", "Azure Valley", "azure-valley.avif",
+        "David Revoy", "Fantasy Landscape",
+        "https://www.davidrevoy.com/article201/fantasy-landscape",
+        "CC BY 4.0", CC_BY, "slate", 0.72,
+    ),
+    artwork(
+        "rendezvous", "The Rendezvous", "rendezvous.avif",
+        "David Revoy", "The rendezvous",
+        "https://www.davidrevoy.com/article638/illustration-the-rendezvous",
+        "CC BY 4.0", CC_BY, "violet", 0.62,
+    ),
+    artwork(
+        "dragonfire", "Dragonfire", "dragonfire.avif",
+        "David Revoy", "Confront the Dragon",
+        "https://www.davidrevoy.com/article935/confront-the-dragon",
+        "CC BY 4.0", CC_BY, "copper", 0.72,
+    ),
+    artwork(
+        "dragon-road", "The Dragon's Road", "dragon-road.avif",
+        "David Revoy", "Introduce the Dragon to the Outside World",
+        "https://www.davidrevoy.com/article937/introduce-the-dragon-to-the-outside-world",
+        "CC BY 4.0", CC_BY, "forest", 0.72,
+    ),
+    artwork(
+        "adventurers", "Adventurers", "adventurers.avif",
+        "Albert Weand & Offirmo", "Adventurers",
+        "https://www.offirmo.net/open-source/adventurers-fantasy-illustration/",
+        "CC BY 4.0", CC_BY, "violet", 0.72,
+    ),
+    artwork(
+        "mooncap-cavern", "Mooncap Cavern", "mooncap-cavern.avif",
+        "olracadejup / ulfus", "Mixed Fantasy Backgrounds: d15",
+        "https://opengameart.org/content/mixed-fantasy-backgrounds",
+        "CC0", CC0, "slate", 0.65,
+    ),
+    artwork(
+        "sky-citadel", "Sky Citadel", "sky-citadel.avif",
+        "olracadejup / ulfus", "Mixed Fantasy Backgrounds: d20",
+        "https://opengameart.org/content/mixed-fantasy-backgrounds",
+        "CC0", CC0, "slate", 0.65,
+    ),
+    artwork(
+        "root-cellar", "Root Cellar", "root-cellar.avif",
+        "olracadejup / ulfus", "Mixed Fantasy Backgrounds: d23",
+        "https://opengameart.org/content/mixed-fantasy-backgrounds",
+        "CC0", CC0, "copper", 0.65,
+    ),
+    artwork(
+        "wind-shrine", "Wind Shrine", "wind-shrine.avif",
+        "Crisisworks", "Asian Mountain Forest BG",
+        "https://opengameart.org/content/asian-mountain-forest-bg",
+        "CC BY 4.0", CC_BY, "forest", 0.65,
+    ),
+    artwork(
+        "floating-sanctuary", "Floating Sanctuary", "floating-sanctuary.avif",
+        "Eon Cire", "Floating island city",
+        "https://opengameart.org/content/concept-art-studies-bundle-1",
+        "CC0", CC0, "forest", 0.65,
+    ),
+    artwork(
+        "stone-cove", "Stone Cove", "stone-cove.avif",
+        "Eon Cire", "Island cove",
+        "https://opengameart.org/content/concept-art-studies-bundle-1",
+        "CC0", CC0, "slate", 0.65,
+    ),
+    artwork(
+        "mountain-shrine", "Mountain Shrine", "mountain-shrine.avif",
+        "Eon Cire", "Monkey mountain shrine",
+        "https://opengameart.org/content/concept-art-studies-bundle-1",
+        "CC0", CC0, "copper", 0.65,
+    ),
+    artwork(
+        "hillfort", "Hillfort", "hillfort.avif",
+        "Drummyfish", "Fantasy Concept 3",
+        "https://opengameart.org/content/fantasy-concept-3",
+        "CC0", CC0, "forest", 0.65,
+    ),
+    artwork(
+        "dusk-mountains", "Dusk Mountains", "dusk-mountains.avif",
+        "ansimuz / Luis Zuno", "Mountain at Dusk Background",
+        "https://opengameart.org/content/mountain-at-dusk-background",
+        "CC0", CC0, "violet", 0.65,
+    ),
+    artwork(
+        "violet-peaks", "Violet Peaks", "violet-peaks.avif",
+        "titi_son", "Fantasy Background",
+        "https://opengameart.org/content/fantasy-background",
+        "CC0", CC0, "violet", 0.65,
+    ),
+    artwork(
+        "forgotten-shrine", "Forgotten Shrine", "forgotten-shrine.avif",
+        "zonked", "Broken Statue Shrine",
+        "https://opengameart.org/content/broken-statue-shrine",
+        "CC0", CC0, "forest", 0.65,
+    ),
+    artwork(
+        "winter-hollow", "Winter Hollow", "winter-hollow.avif",
+        "dlsxjvb1", "Dark winter background",
+        "https://opengameart.org/content/dark-winter-background",
+        "CC0", CC0, "slate", 0.65,
+    ),
+    artwork(
+        "ancient-gate", "Ancient Gate", "ancient-gate.avif",
+        "zonked", "Ancient Abandoned Teleporter",
+        "https://opengameart.org/content/ancient-abandoned-teleporter",
+        "CC0", CC0, "copper", 0.65,
+    ),
+    artwork(
+        "misty-ramparts", "Misty Ramparts", "misty-ramparts.avif",
+        "Kutejnikov", "Background with ruins",
+        "https://opengameart.org/content/background-with-ruins",
+        "CC0", CC0, "slate", 0.65,
+    ),
+    artwork(
+        "lavender-dusk", "Lavender Dusk", "lavender-dusk.avif",
+        "heartpunch!", "lavenderfield_dusk.png",
+        "https://heartpunchstudio.itch.io/hand-painted-nature-backgrounds-pack",
+        "CC0", CC0, "violet", 0.65,
+    ),
+    artwork(
+        "moonlit-meadow", "Moonlit Meadow", "moonlit-meadow.avif",
+        "heartpunch!", "flowermeadow_nightmoon.png",
+        "https://heartpunchstudio.itch.io/hand-painted-nature-backgrounds-pack",
+        "CC0", CC0, "slate", 0.65,
+    ),
+    artwork(
+        "sunset-hills", "Sunset Hills", "sunset-hills.avif",
+        "heartpunch!", "hillside_sunset.png",
+        "https://heartpunchstudio.itch.io/hand-painted-nature-backgrounds-pack",
+        "CC0", CC0, "copper", 0.65,
+    ),
+    artwork(
+        "glowwood", "Glowwood", "glowwood.avif",
+        "heartpunch!", "clearing_greenlights.png",
+        "https://heartpunchstudio.itch.io/hand-painted-nature-backgrounds-pack",
+        "CC0", CC0, "forest", 0.65,
+    ),
+    artwork(
+        "mountain-dawn", "Mountain Dawn", "mountain-dawn.avif",
+        "heartpunch!", "mountainpath_sunrise.png",
+        "https://heartpunchstudio.itch.io/hand-painted-nature-backgrounds-pack",
+        "CC0", CC0, "copper", 0.65,
+    ),
+    artwork(
+        "moonlit-trail", "Moonlit Trail", "moonlit-trail.avif",
+        "heartpunch!", "foresstpath_moonnight.png",
+        "https://heartpunchstudio.itch.io/hand-painted-nature-backgrounds-pack",
+        "CC0", CC0, "slate", 0.65,
+    ),
 )
 SCENE_IDS = frozenset(scene["id"] for scene in SCENES)
 

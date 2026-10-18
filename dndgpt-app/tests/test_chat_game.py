@@ -3,8 +3,9 @@ from concurrent.futures import ThreadPoolExecutor
 
 import pytest
 
-from app.chat_game import ChatGame
+from app.chat_game import ChatGame, apply_changes, validate_changes
 from app.engine import Engine, EngineError
+from app.rules import ATTRIBUTES, derived
 from app.storage import Store
 from .conftest import commit
 from .test_server import rpc, tool
@@ -42,6 +43,31 @@ def test_new_game_is_owned_paused_and_idempotent(game, engine, draft):
     assert engine.audit("owner-a", draft["id"])["event_count"] == 1
     with pytest.raises(EngineError, match="different arguments"):
         game.create("owner-a", "Different game", "chat-create-001", True)
+
+
+def test_new_campaign_uses_dexterity_with_unchanged_calculations(draft):
+    attributes = draft["character"]["attributes"]
+    assert set(attributes) == set(ATTRIBUTES) == {"STR", "DEX", "INT", "CHA", "LCK"}
+    legacy = {"AGI" if key == "DEX" else key: value for key, value in attributes.items()}
+    assert derived(attributes) == derived(legacy)
+    assert "DEX" not in legacy  # Compatibility calculation does not mutate input.
+
+
+@pytest.mark.parametrize("recorded,incoming", [("DEX", "AGI"), ("AGI", "DEX")])
+def test_attribute_alias_preserves_the_saved_key(draft, recorded, incoming):
+    state = copy.deepcopy(draft)
+    state["character"]["attributes"][recorded] = state["character"]["attributes"].pop("DEX")
+    before = copy.deepcopy(state)
+    changed = apply_changes(state, {"character": {"attributes": {incoming: 8}}})
+    assert changed["character"]["attributes"][recorded] == 8
+    assert incoming not in changed["character"]["attributes"]
+    assert state == before
+
+
+def test_conflicting_dexterity_keys_are_rejected():
+    with pytest.raises(EngineError) as error:
+        validate_changes({"character": {"attributes": {"AGI": 5, "DEX": 6}}})
+    assert error.value.code == "invalid_chat_update"
 
 
 def test_separate_confirmation_and_adventure_gates(game, engine, draft):

@@ -77,6 +77,18 @@ The third paragraph makes the player's position intelligible without deciding th
 Draft the introduction for a first-time player. Link cause to consequence, let specific detail carry atmosphere, and vary the phrasing and focus across campaigns. The paragraph functions are a coverage check rather than a reusable prose template. A reader should be able to explain what changed, where this campaign is, why Earth was mentioned, and which parts of the character's past remain theirs to choose. Preserve the public introduction and local history in the campaign's World reference when saving; keep undiscovered causes and private commitments separate. An established campaign may receive a public-lore recap on request, preserving its existing history and present situation.
 
 
+## Dexterity and player-facing reach
+
+New standard campaigns use **DEX — Dexterity** for the attribute governing coordination, reflexes, precision and agility. Its modifiers, defenses, checks, saves and scaling keep their established values; this is a name change, not extra power. Existing campaign history is not rewritten.
+
+**Write powers for a player who does not think in meters.** Offer boards, skill summaries, ordinary narration and the normal dashboard copy use descriptive reach and concrete targets: melee reach, a nearby target, across the clearing, a small cluster, a narrow line, a short shove, one normal move away, or a route that requires Dash. Use Engaged / Near / Far / Distant for current actor-relative positioning, with named zones, cover and obstacles. Retain meaningful distinctions between short and long reach and between small and wide areas. Before spending resources, say which intended targets or destinations are actually legal; inspection and target previews are free.
+
+**Movement remains a system.** The GM privately tracks the character's actual speed, legal route, reach, line of effect, elevation, difficult terrain and ability-specific distances. One normal move uses the character's normal movement allowance; Dash costs the ordinary Action and grants one additional allowance. Movement can be split around an action when legal. Leaving threatened reach follows the existing Reaction and Disengage rules. A cinematic description never grants unlimited movement, automatic arrival anywhere in a zone, or a larger spell area. Mobility powers, flight, summons, forced movement and teleports keep their own limits. Describe the resulting choice and cost without requiring the player to calculate distances.
+
+**Save both readable and measured mechanics.** On each new or explicitly revised ability, retain the complete authoritative mechanics and exact distances in `mechanics` and source range/area fields for adjudication and spatial audit. Also save `range_display` as a concise descriptive reach label and `mechanics_display` as the complete player-facing rules using descriptive distances. The readable copy must preserve every trigger, condition, action, cost, cooldown, duration, target restriction and counterplay; only the distance presentation changes. Do not replace the authoritative mechanics with a loose summary. Keep both copies synchronized when an ability evolves. The dashboard uses the readable copy by default and can disclose the measured source on request. These fields are separate from the short `simple` overview.
+
+An existing immutable power keeps its exact source mechanics until an authorized change. For a historical campaign, use the current cinematic narration without silently rebuilding its character. A FULL SPATIAL AUDIT or a direct range question can reveal the applicable exact measurements. Custom rulebooks remain an explicit campaign choice.
+
 ## V4.1 targeted-edit integrity and precedence
 
 **This edition was produced by editing the supplied complete V4.0 source, not by drafting a replacement from memory.** Sections not explicitly amended retain their original mechanics and force. The expanded sections below strengthen what was missing; they do not revoke established rights, earned powers, independently rolled rarity, equipment slots, summon diversity, two-decision obstacle ceiling, Living-World Hybrid quest commitments, solo viability, Cinematic Hybrid position tracking, or the separate gameplay authorization requirement.
@@ -1014,7 +1026,7 @@ The five attributes are:
 
 **STR — Strength:** Force, lifting, melee, health.
 
-**AGI — Agility:** Movement, reflexes, stealth and Defense.
+**DEX — Dexterity:** Movement, reflexes, stealth and Defense.
 
 **INT — Intelligence:** Magic, analysis, investigation, mana.
 
@@ -1051,7 +1063,7 @@ If an increase would exceed the cap, show the limit and do not waste the point.
 | Maximum HP | 45 + 3 × STR |
 | Maximum MP | 75 + 5 × INT |
 | Carry capacity | 12 + 2 × STR kg |
-| Unarmored DEF | 10 + AGI modifier |
+| Unarmored DEF | 10 + DEX modifier |
 | Base movement | 6m per combat round |
 
 Recalculate relevant attack bonuses, ability DCs, resource limits, and carrying capacity when attributes change.

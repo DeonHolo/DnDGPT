@@ -1,24 +1,49 @@
 # Dashboard artwork
 
-Classic Codex is the default: the dark green reading surface with no background image. Quiet Ink is a plain charcoal alternative. Under **View options → Reading atmosphere**, players can also select eleven human-made paintings and fantasy illustrations. Artwork is optional and changes no game state.
+The dropdown offers **33 atmospheres**: **Classic**, **Quiet Ink**, and **31 human-made artworks**. Classic is the default dark green surface. Quiet Ink, immediately underneath it, is plain charcoal. Open **View options → Reading atmosphere** to switch; the preference is saved for your account and changes no game state.
 
-| Theme | Artist and work | Source and reuse information |
+The twenty new selections show character-free fantasy environments: castles, caves, shrines, forests and other landscapes. Modern farms, industrial buildings and modern cityscapes were excluded after visual review. Earlier illustration choices remain available.
+
+| Atmosphere | Artist and original work | Source and license |
 | --- | --- | --- |
-| Oakwood | Caspar David Friedrich, *The Abbey in the Oakwood*, 1809–1810 | [Wikimedia Commons file and public-domain notice](https://commons.wikimedia.org/wiki/File:Caspar_David_Friedrich_-_Abtei_im_Eichwald_-_Google_Art_Project.jpg) |
-| Silent Isle | Arnold Böcklin, *Isle of the Dead*, third version, 1883 | [Wikimedia Commons file and public-domain notice](https://commons.wikimedia.org/wiki/File:Arnold_B%C3%B6cklin_-_Die_Toteninsel_III_(Alte_Nationalgalerie,_Berlin).jpg) |
-| Quiet Ink | Plain reading surface | No image |
-| Swamp at Sunset | JAP, *Sunset in the Swamp* | [OpenGameArt, CC0](https://opengameart.org/content/oil-painting-landscapes) |
-| Frostpeak | JAP, *Cold Mountain* | [OpenGameArt, CC0](https://opengameart.org/content/oil-painting-landscapes) |
-| Desert Skies | JAP, *Clouds in the Desert* | [OpenGameArt, CC0](https://opengameart.org/content/oil-painting-landscapes) |
-| Wizard's Tower | JAP, *Wizard Tower* | [OpenGameArt, CC0](https://opengameart.org/content/oil-painting-landscapes) |
-| Azure Valley | David Revoy, *Fantasy Landscape*, 2007 | [Artist's source, CC BY 4.0](https://www.davidrevoy.com/article201/fantasy-landscape) |
-| The Rendezvous | David Revoy, *The rendezvous*, 2018 | [Artist's source, CC BY 4.0](https://www.davidrevoy.com/article638/illustration-the-rendezvous) |
-| Dragonfire | David Revoy, *Confront the Dragon*, 2022 | [Artist's source, CC BY 4.0](https://www.davidrevoy.com/article935/confront-the-dragon) |
-| The Dragon's Road | David Revoy, *Introduce the Dragon to the Outside World*, 2022 | [Artist's source, CC BY 4.0](https://www.davidrevoy.com/article937/introduce-the-dragon-to-the-outside-world) |
-| Adventurers | Albert Weand, artist; Offirmo, commissioner and creative input, *Adventurers*, 2022 | [Canonical credit page, CC BY 4.0](https://www.offirmo.net/open-source/adventurers-fantasy-illustration/) |
+| Classic | Plain dark green | No image |
+| Quiet Ink | Plain charcoal | No image |
+| Oakwood | Caspar David Friedrich, *The Abbey in the Oakwood* | [Source](https://commons.wikimedia.org/wiki/File:Caspar_David_Friedrich_-_Abtei_im_Eichwald_-_Google_Art_Project.jpg) · [Public domain](https://creativecommons.org/publicdomain/mark/1.0/) |
+| Silent Isle | Arnold Böcklin, *Isle of the Dead, third version* | [Source](https://commons.wikimedia.org/wiki/File:Arnold_B%C3%B6cklin_-_Die_Toteninsel_III_(Alte_Nationalgalerie,_Berlin).jpg) · [Public domain](https://creativecommons.org/publicdomain/mark/1.0/) |
+| Swamp at Sunset | JAP, *Sunset in the Swamp* | [Source](https://opengameart.org/content/oil-painting-landscapes) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| Frostpeak | JAP, *Cold Mountain* | [Source](https://opengameart.org/content/oil-painting-landscapes) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| Desert Skies | JAP, *Clouds in the Desert* | [Source](https://opengameart.org/content/oil-painting-landscapes) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| Wizard's Tower | JAP, *Wizard Tower* | [Source](https://opengameart.org/content/oil-painting-landscapes) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| Azure Valley | David Revoy, *Fantasy Landscape* | [Source](https://www.davidrevoy.com/article201/fantasy-landscape) · [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| The Rendezvous | David Revoy, *The rendezvous* | [Source](https://www.davidrevoy.com/article638/illustration-the-rendezvous) · [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| Dragonfire | David Revoy, *Confront the Dragon* | [Source](https://www.davidrevoy.com/article935/confront-the-dragon) · [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| The Dragon's Road | David Revoy, *Introduce the Dragon to the Outside World* | [Source](https://www.davidrevoy.com/article937/introduce-the-dragon-to-the-outside-world) · [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| Adventurers | Albert Weand & Offirmo, *Adventurers* | [Source](https://www.offirmo.net/open-source/adventurers-fantasy-illustration/) · [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| Mooncap Cavern | olracadejup / ulfus, *Mixed Fantasy Backgrounds: d15* | [Source](https://opengameart.org/content/mixed-fantasy-backgrounds) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| Sky Citadel | olracadejup / ulfus, *Mixed Fantasy Backgrounds: d20* | [Source](https://opengameart.org/content/mixed-fantasy-backgrounds) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| Root Cellar | olracadejup / ulfus, *Mixed Fantasy Backgrounds: d23* | [Source](https://opengameart.org/content/mixed-fantasy-backgrounds) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| Floating Sanctuary | Eon Cire, *Floating island city* | [Source](https://opengameart.org/content/concept-art-studies-bundle-1) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| Stone Cove | Eon Cire, *Island cove* | [Source](https://opengameart.org/content/concept-art-studies-bundle-1) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| Mountain Shrine | Eon Cire, *Monkey mountain shrine* | [Source](https://opengameart.org/content/concept-art-studies-bundle-1) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| Violet Peaks | titi_son, *Fantasy Background* | [Source](https://opengameart.org/content/fantasy-background) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| Forgotten Shrine | zonked, *Broken Statue Shrine* | [Source](https://opengameart.org/content/broken-statue-shrine) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| Ancient Gate | zonked, *Ancient Abandoned Teleporter* | [Source](https://opengameart.org/content/ancient-abandoned-teleporter) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| Misty Ramparts | Kutejnikov, *Background with ruins* | [Source](https://opengameart.org/content/background-with-ruins) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| Lavender Dusk | heartpunch!, *lavenderfield_dusk.png* | [Source](https://heartpunchstudio.itch.io/hand-painted-nature-backgrounds-pack) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| Moonlit Meadow | heartpunch!, *flowermeadow_nightmoon.png* | [Source](https://heartpunchstudio.itch.io/hand-painted-nature-backgrounds-pack) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| Sunset Hills | heartpunch!, *hillside_sunset.png* | [Source](https://heartpunchstudio.itch.io/hand-painted-nature-backgrounds-pack) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| Glowwood | heartpunch!, *clearing_greenlights.png* | [Source](https://heartpunchstudio.itch.io/hand-painted-nature-backgrounds-pack) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| Mountain Dawn | heartpunch!, *mountainpath_sunrise.png* | [Source](https://heartpunchstudio.itch.io/hand-painted-nature-backgrounds-pack) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| Moonlit Trail | heartpunch!, *foresstpath_moonnight.png* | [Source](https://heartpunchstudio.itch.io/hand-painted-nature-backgrounds-pack) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| Wind Shrine | Crisisworks, *Asian Mountain Forest BG* | [Source](https://opengameart.org/content/asian-mountain-forest-bg) · [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| Hillfort | Drummyfish, *Fantasy Concept 3* | [Source](https://opengameart.org/content/fantasy-concept-3) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| Dusk Mountains | ansimuz / Luis Zuno, *Mountain at Dusk Background* | [Source](https://opengameart.org/content/mountain-at-dusk-background) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| Winter Hollow | dlsxjvb1, *Dark winter background* | [Source](https://opengameart.org/content/dark-winter-background) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
 
-The first two reproductions are identified by Wikimedia Commons as public-domain two-dimensional artwork. Both paintings are in the Alte Nationalgalerie, Berlin; digital sources are credited on their file pages.
+Wind Shrine uses Crisisworks’ background for [Spirit of the Wind](https://evilartbunny.itch.io/spirit-of-the-wind). Mixed Fantasy Backgrounds was commissioned and released by ulfus; the source filenames credit olracadejup. The heartpunch! scenes come from the artist’s hand-painted nature pack. Source titles and download filenames are retained for traceability.
 
-License links: [CC0](https://creativecommons.org/publicdomain/zero/1.0/) · [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The full CC BY license is included at [LICENSES/CC-BY-4.0.txt](../LICENSES/CC-BY-4.0.txt). Copyright in the modern illustrations remains with their respective artists. These assets are not covered by the software's MIT license.
+The two historical paintings are public-domain reproductions credited on their Wikimedia Commons pages. Modern artwork retains the artists’ licenses; these assets are excluded from the software’s MIT license. [CC0](https://creativecommons.org/publicdomain/zero/1.0/) and [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) terms apply as listed. The full CC BY text is included in [LICENSES/CC-BY-4.0.txt](../LICENSES/CC-BY-4.0.txt).
 
-Images were resized and encoded as WebP; the viewport may crop them to fit. No generative image processing was used. The UI shows the selected work's title, artist, source and license. Each scene's metadata and asset filename are recorded in [app/scenes.py](../dndgpt-app/app/scenes.py). All eleven images are embedded inside the dashboard resource, so opening a campaign sends no image request to third-party art hosts.
+Images were resized and encoded as AVIF, with the first frame used for Dusk Mountains. The viewport may crop them to fit; no generative image processing was used. Every selected artwork shows its title, artist, source and license in the UI. All images are embedded in the dashboard, so opening a campaign sends no image request to an art host.
+
+[ARTWORK_SOURCES.json](ARTWORK_SOURCES.json) records each local asset, source file, license, byte count and SHA-256. [app/scenes.py](../dndgpt-app/app/scenes.py) defines the selectable catalog.

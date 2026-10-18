@@ -31,7 +31,7 @@ def concepts(kind, parent=None):
 
 def power(kind, candidate, rarity, activation="ACTION"):
     program = Program((Effect("DAMAGE", Formula(flat=2), "ARCANE"),),
-                      resolution=Resolution("SAVE", "INT", save_attribute="AGI") if kind == "signatures" else Resolution("ATTACK", "INT"))
+                      resolution=Resolution("SAVE", "INT", save_attribute="DEX") if kind == "signatures" else Resolution("ATTACK", "INT"))
     return Ability(f"{candidate}-power-{activation}", "Structural fixture power",
                    {"classes": "CLASS", "signatures": "SIGNATURE", "titles": "TITLE"}[kind],
                    candidate, rarity, activation,
@@ -85,7 +85,7 @@ def at_confirmation():
     draft = at_background()
     draft = prepared(draft, "backgrounds", owned_abilities(draft)[0].id)
     return choose_background(draft, "backgrounds-candidate-0",
-                             dict(STR=2, AGI=2, INT=2, CHA=0, LCK=0))
+                             dict(STR=2, DEX=2, INT=2, CHA=0, LCK=0))
 
 
 def forbidden_rng(_):
@@ -219,14 +219,14 @@ def test_remaining_points_cap_and_no_retroactive_luck_change():
     draft = at_background(luck=4)
     draft = prepared(draft, "backgrounds", owned_abilities(draft)[0].id)
     with pytest.raises(ValueError, match="maximum is 9"):
-        choose_background(draft, "backgrounds-candidate-0", dict(STR=0, AGI=0, INT=0, CHA=0, LCK=2))
+        choose_background(draft, "backgrounds-candidate-0", dict(STR=0, DEX=0, INT=0, CHA=0, LCK=2))
     with pytest.raises(ValueError, match="remaining"):
-        choose_background(draft, "backgrounds-candidate-0", dict(STR=0, AGI=0, INT=0, CHA=0, LCK=0))
-    final = choose_background(draft, "backgrounds-candidate-0", dict(STR=1, AGI=1, INT=0, CHA=0, LCK=0))
-    assert dict(final.attributes) == dict(STR=6, AGI=6, INT=5, CHA=5, LCK=9)
+        choose_background(draft, "backgrounds-candidate-0", dict(STR=0, DEX=0, INT=0, CHA=0, LCK=0))
+    final = choose_background(draft, "backgrounds-candidate-0", dict(STR=1, DEX=1, INT=0, CHA=0, LCK=0))
+    assert dict(final.attributes) == dict(STR=6, DEX=6, INT=5, CHA=5, LCK=9)
     defaulted = at_background()
     defaulted = prepared(defaulted, "backgrounds", owned_abilities(defaulted)[0].id)
-    final = choose_background(defaulted, "backgrounds-candidate-0", dict(STR=2, AGI=0, INT=0, CHA=0, LCK=4))
+    final = choose_background(defaulted, "backgrounds-candidate-0", dict(STR=2, DEX=0, INT=0, CHA=0, LCK=4))
     assert dict(final.attributes)["LCK"] == 9
     assert all(dict(c.receipt)["luck"] == 5 for entry in final.boards for c in entry.candidates)
 

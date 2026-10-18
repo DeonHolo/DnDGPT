@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 from .scenes import PALETTES, SCENES
+from .version import APP_VERSION
 
 HERE = Path(__file__).resolve().parent
 
@@ -17,11 +18,13 @@ def dashboard_html():
         variables.append(f'--scene-opacity:{scene["opacity"]}')
         if asset := scene.get("asset"):
             data = b64encode((HERE / "assets" / asset).read_bytes()).decode("ascii")
-            variables.append(f'--scene-art:url("data:image/webp;base64,{data}")')
+            mime = "image/avif" if asset.endswith(".avif") else "image/webp"
+            variables.append(f'--scene-art:url("data:{mime};base64,{data}")')
         styles.append(f'html[data-scene="{scene["id"]}"]{{' + ";".join(variables) + "}")
     catalog = json.dumps([{key: value for key, value in scene.items() if key not in
                           ("asset", "palette", "opacity")} for scene in SCENES], ensure_ascii=False)
     return ((HERE / "index.html").read_text(encoding="utf-8")
+            .replace("__DNDGPT_UI_VERSION__", APP_VERSION)
             .replace("/* scene assets */", "\n".join(styles))
             .replace('<script id="sceneCatalog" type="application/json">[]</script>',
                      '<script id="sceneCatalog" type="application/json">' + catalog.replace("<", "\\u003c") + '</script>'))

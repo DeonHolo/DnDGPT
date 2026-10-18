@@ -1,6 +1,6 @@
 # Development handoff
 
-Public source checkpoint: application version 1.0.18, rules edition 1.0; plugin package 1.0.23.
+Source checkpoint: application version 1.0.19, rules edition 1.0; plugin package 1.0.24. Hosted deployment and installed-package acceptance are recorded separately in ROADMAP.md.
 
 Prioritize ChatGPT as GM, one reusable dashboard, batched state updates and reusable Python rolls. Preserve the full rulebook and hardener. Source integrity tests distinguish authorized amendments from unrelated edits.
 
@@ -12,7 +12,13 @@ Do not use development work as authorization to start, resume, import, roll for 
 
 Standard new chat games use `app/standard_rules.py`: HP = 45 + 3 × STR, MP = 75 + 5 × INT. The profile marker distinguishes new standard games from older saves and explicit custom rulebooks. Class confirmation checks the required class-native roles, including two Utilities for Unique. This checks recorded kit counts; the GM still follows the complete hardener to judge creativity, flavor and distinct functionality.
 
-`app/presentation.py` embeds eleven credited human-made paintings/illustrations into the MCP HTML. `app/scenes.py` owns all thirteen atmosphere choices and their credits; Classic Codex is the plain dark green default. Keep `app/assets/` in source deployments and packaged releases. UI tests use disposable data; no real player campaign should be seeded into fixtures or screenshots. Dashboard polling is still unchanged.
+`app/presentation.py` embeds 31 credited human-made artworks into the MCP HTML. `app/scenes.py` owns all 33 atmosphere choices; Classic is the plain dark green default and Quiet Ink is second. The twenty additions are character-free fantasy environments. Modern farms, industry and modern cities were rejected after visual review. AVIF keeps the resource at 934,444 bytes; `docs/ARTWORK_SOURCES.json` records source files, licenses and asset hashes. Keep `app/assets/` in deployments and packages. Polling behavior remains otherwise unchanged.
+
+The top-level Saved game selector exposes Delete campaign with a named preview and exact-name confirmation. Reuse the same preview token/version for bounded cleanup and ambiguous network retries; a new preview cannot resume a deletion already in progress. Confirmed cleanup state is retained in widget state, and stale responses cannot restore the deleted view. Only disposable backend fixtures are deleted in tests; browser checks exercised preview, wrong/correct-name guards and cancellation without clicking permanent deletion.
+
+Skills have Overview, Full rules and Upgrades tabs. The last reads saved Evolutions, Background Imprints, integrated imprints and generic upgrades, retaining all public child fields. Private roll/token fields stay hidden. New standard campaigns use DEX; old saves retain their recorded key, and conflicting AGI/DEX input is rejected. New powers save complete `mechanics_display` and descriptive `range_display` alongside exact canonical `mechanics`. Movement, Dash, reach, areas and obstacles remain privately adjudicated; this is cinematic presentation, not unlimited movement or a band-based rebalance.
+
+Local focused checks passed 129 tests and the complete suite passed 405 tests. The browser fixture verified all 33 selections, two plain surfaces, the three-tab keyboard reader at 375 pixels without overflow, descriptive reach, and 17-pixel development-control insets. UI fixtures and README screenshots contain no real player data. Check ROADMAP.md for hosted and installed-package release evidence.
 
 The GM reads complete hosted rules first; bundled references are the fallback. Backend deployment and plugin package publication are separate. Use `python -m scripts.sync_plugin_rules` after an audited amendment, and preserve the installed plugin's identity and private App binding when updating it. CI checks both copies and creates a portable release ZIP without that personal binding. See `docs/MAINTAINER_HOSTING.md`.
 

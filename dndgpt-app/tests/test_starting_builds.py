@@ -25,7 +25,7 @@ def test_complete_build_calculates_resources_equipment_dc_and_parent_only_imprin
     assert encode(draft) == before and draft.loadout is None
     assert prepared.version == draft.version + 1 and prepared.phase == "character_confirmation"
     assert result["resources"] == {"hp": 105, "mp": 65, "sta": 68}
-    assert result["derived"]["def"] == 12  # AGI 7 plus the declared coat bonus.
+    assert result["derived"]["def"] == 12  # DEX 7 plus the declared coat bonus.
     assert len(result["equipment"]) == 16
     assert result["equipment"]["Main Hand"] == result["equipment"]["Off-Hand"] == "staff"
     assert result["carried_weight_grams"] == 7500  # Both hands refer to one staff.

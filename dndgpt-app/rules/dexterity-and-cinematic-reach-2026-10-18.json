@@ -1,0 +1,34 @@
+{
+  "id": "dexterity-and-cinematic-reach-2026-10-18",
+  "files": {
+    "rulebook-v1.0.txt": [
+      {
+        "new_start": 14998,
+        "before": "",
+        "after": "## Dexterity and player-facing reach\n\nNew standard campaigns use **DEX — Dexterity** for the attribute governing coordination, reflexes, precision and agility. Its modifiers, defenses, checks, saves and scaling keep their established values; this is a name change, not extra power. Existing campaign history is not rewritten.\n\n**Write powers for a player who does not think in meters.** Offer boards, skill summaries, ordinary narration and the normal dashboard copy use descriptive reach and concrete targets: melee reach, a nearby target, across the clearing, a small cluster, a narrow line, a short shove, one normal move away, or a route that requires Dash. Use Engaged / Near / Far / Distant for current actor-relative positioning, with named zones, cover and obstacles. Retain meaningful distinctions between short and long reach and between small and wide areas. Before spending resources, say which intended targets or destinations are actually legal; inspection and target previews are free.\n\n**Movement remains a system.** The GM privately tracks the character's actual speed, legal route, reach, line of effect, elevation, difficult terrain and ability-specific distances. One normal move uses the character's normal movement allowance; Dash costs the ordinary Action and grants one additional allowance. Movement can be split around an action when legal. Leaving threatened reach follows the existing Reaction and Disengage rules. A cinematic description never grants unlimited movement, automatic arrival anywhere in a zone, or a larger spell area. Mobility powers, flight, summons, forced movement and teleports keep their own limits. Describe the resulting choice and cost without requiring the player to calculate distances.\n\n**Save both readable and measured mechanics.** On each new or explicitly revised ability, retain the complete authoritative mechanics and exact distances in `mechanics` and source range/area fields for adjudication and spatial audit. Also save `range_display` as a concise descriptive reach label and `mechanics_display` as the complete player-facing rules using descriptive distances. The readable copy must preserve every trigger, condition, action, cost, cooldown, duration, target restriction and counterplay; only the distance presentation changes. Do not replace the authoritative mechanics with a loose summary. Keep both copies synchronized when an ability evolves. The dashboard uses the readable copy by default and can disclose the measured source on request. These fields are separate from the short `simple` overview.\n\nAn existing immutable power keeps its exact source mechanics until an authorized change. For a historical campaign, use the current cinematic narration without silently rebuilding its character. A FULL SPATIAL AUDIT or a direct range question can reveal the applicable exact measurements. Custom rulebooks remain an explicit campaign choice.\n\n"
+      },
+      {
+        "new_start": 135191,
+        "before": "AGI",
+        "after": "DEX"
+      },
+      {
+        "new_start": 135199,
+        "before": "Agility",
+        "after": "Dexterity"
+      },
+      {
+        "new_start": 136058,
+        "before": "AGI",
+        "after": "DEX"
+      }
+    ],
+    "rule-hardener.txt": [
+      {
+        "new_start": 8251,
+        "before": "",
+        "after": "## Dexterity and player-facing reach\n\nNew standard campaigns use **DEX — Dexterity** for the attribute governing coordination, reflexes, precision and agility. Its modifiers, defenses, checks, saves and scaling keep their established values; this is a name change, not extra power. Existing campaign history is not rewritten.\n\n**Write powers for a player who does not think in meters.** Offer boards, skill summaries, ordinary narration and the normal dashboard copy use descriptive reach and concrete targets: melee reach, a nearby target, across the clearing, a small cluster, a narrow line, a short shove, one normal move away, or a route that requires Dash. Use Engaged / Near / Far / Distant for current actor-relative positioning, with named zones, cover and obstacles. Retain meaningful distinctions between short and long reach and between small and wide areas. Before spending resources, say which intended targets or destinations are actually legal; inspection and target previews are free.\n\n**Movement remains a system.** The GM privately tracks the character's actual speed, legal route, reach, line of effect, elevation, difficult terrain and ability-specific distances. One normal move uses the character's normal movement allowance; Dash costs the ordinary Action and grants one additional allowance. Movement can be split around an action when legal. Leaving threatened reach follows the existing Reaction and Disengage rules. A cinematic description never grants unlimited movement, automatic arrival anywhere in a zone, or a larger spell area. Mobility powers, flight, summons, forced movement and teleports keep their own limits. Describe the resulting choice and cost without requiring the player to calculate distances.\n\n**Save both readable and measured mechanics.** On each new or explicitly revised ability, retain the complete authoritative mechanics and exact distances in `mechanics` and source range/area fields for adjudication and spatial audit. Also save `range_display` as a concise descriptive reach label and `mechanics_display` as the complete player-facing rules using descriptive distances. The readable copy must preserve every trigger, condition, action, cost, cooldown, duration, target restriction and counterplay; only the distance presentation changes. Do not replace the authoritative mechanics with a loose summary. Keep both copies synchronized when an ability evolves. The dashboard uses the readable copy by default and can disclose the measured source on request. These fields are separate from the short `simple` overview.\n\nAn existing immutable power keeps its exact source mechanics until an authorized change. For a historical campaign, use the current cinematic narration without silently rebuilding its character. A FULL SPATIAL AUDIT or a direct range question can reveal the applicable exact measurements. Custom rulebooks remain an explicit campaign choice.\n\n"
+      }
+    ]
+  }
+}

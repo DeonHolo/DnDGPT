@@ -11,7 +11,7 @@ import yaml
 
 APP = Path(__file__).resolve().parents[1]
 WORKSPACE = APP.parent
-LICENSE_FILES = ("LICENSE", "LICENSE-CONTENT.md", "LICENSING.md", "LICENSES/CC-BY-4.0.txt", "docs/ARTWORK.md", "docs/CREATIVITY_ENGINE.md")
+LICENSE_FILES = ("LICENSE", "LICENSE-CONTENT.md", "LICENSING.md", "LICENSES/CC-BY-4.0.txt", "docs/ARTWORK.md", "docs/ARTWORK_SOURCES.json", "docs/CREATIVITY_ENGINE.md")
 TOP_FILES = ("README.md", "CODEX_HANDOFF.md", "CLIENT_ACCEPTANCE.md", "RULES_COVERAGE.md",
              "PRESENTATION.md", "DESIGN_SYSTEM.md", "INTELLIGENT_UI_RESEARCH.md", "AUTH0_SETUP.md",
              "LAUNCH_PLAN.md", "CREATION_WORKFLOW.md", "POWER_RUNTIME.md", "STARTING_BUILDS.md", "ITEM_RUNTIME.md", "OFFER_VALIDATION.md", "SUMMON_RUNTIME.md",
@@ -70,7 +70,7 @@ def build(plugin, output=None):
     for folder, suffixes in (("app", {".py", ".html"}), ("rules", {".txt", ".json"}),
                              ("scripts", {".py"}), ("tests", {".py", ".html"})):
         sources.extend(p for p in (APP / folder).iterdir() if p.is_file() and p.suffix in suffixes)
-    sources.extend((APP / "app/assets").glob("*.webp"))
+    sources.extend((APP / "app/assets").glob("*.avif"))
     browser_report = APP / "test-results/browser.json"
     if browser_report.exists():
         sources.append(browser_report)

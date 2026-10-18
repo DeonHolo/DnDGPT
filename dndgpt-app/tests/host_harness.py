@@ -49,8 +49,11 @@ async def lifespan(app):
             "activation": "Action", "status": "UNAVAILABLE", "status_reason": "Display fixture only",
             "mp_cost": 4, "simple": "A test card for nested expansion.",
             "mechanics": "Renderer fixture; no executable combat mechanics.",
+            "range": "10 m", "range_display": "Near · unobstructed target",
+            "mechanics_display": "Renderer fixture for a Near target; no executable combat mechanics.",
             "evolutions": [{"id": "fixture-evolution", "name": "Fixture Evolution", "rarity": "EPIC",
-                            "mechanics": "Integrated display fixture, not a separate activation."}],
+                            "mechanics": "Integrated display fixture, not a separate activation.",
+                            "private_roll": "HIDDEN_UPGRADE_RECEIPT"}],
             "imprints": [{"id": "fixture-imprint", "name": "Fixture Imprint", "rarity": "COMMON",
                           "mechanics": "Background-child display fixture."}]}]
         for identity, label, activation, group in (

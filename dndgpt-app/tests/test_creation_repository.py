@@ -125,7 +125,7 @@ def test_full_creation_transcript_persists_phases_and_hides_opening(repository):
     parent = owned_abilities(current_contract(repository, draft))[0].id
     draft = prepare_board(repository, draft, "backgrounds", parent)
     draft = commit(repository, draft, "choose_background", {"candidate_id": "backgrounds-candidate-0",
-        "allocation": dict(STR=2, AGI=1, INT=1, CHA=0, LCK=0), "name": "Fixture character"})
+        "allocation": dict(STR=2, DEX=1, INT=1, CHA=0, LCK=0), "name": "Fixture character"})
     assert draft["phase"] == "character_confirmation" and draft["attributes"]["LCK"] == 7
     assert_error("invalid_creation", lambda: repository.propose_transition(
         "owner-a", draft["id"], "skip-confirmation", draft["version"], "authorize_adventure", {"authorized": True}))

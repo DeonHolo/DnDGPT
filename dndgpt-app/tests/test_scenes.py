@@ -1,4 +1,5 @@
 import json
+import hashlib
 from html.parser import HTMLParser
 import pytest
 
@@ -31,12 +32,14 @@ def test_every_background_is_embedded_with_attribution_and_a_bounded_resource():
     parser = Catalog()
     parser.feed(html)
     catalog = json.loads(parser.content)
-    assert len(SCENES) == len(SCENE_IDS) == len(catalog) == 13
+    assert len(SCENES) == len(SCENE_IDS) == len(catalog) == 33
     assert catalog[0]["id"] == "classic"
+    assert catalog[0]["name"] == "Classic"
+    assert catalog[1]["id"] == "quiet"
     assert 'data-scene="classic"' in html
     assert len(html.encode()) < 1024 * 1024
     artworks = [scene for scene in SCENES if scene.get("asset")]
-    assert html.count('data:image/webp;base64,') == len(artworks) == 11
+    assert html.count('data:image/avif;base64,') == len(artworks) == 31
     for scene in artworks:
         assert (HERE / "assets" / scene["asset"]).is_file()
         entry = next(item for item in catalog if item["id"] == scene["id"])
@@ -51,6 +54,22 @@ def test_new_scenes_round_trip_per_owner_without_changing_a_campaign(engine, sta
         assert engine.get_view_preferences("owner-b") != prefs
     assert engine.get_campaign("owner-a", state["id"]) == state
     assert engine.audit("owner-a", state["id"])["event_count"] == 1
+
+
+def test_packaged_art_matches_the_credited_sources_and_readme_count():
+    root = HERE.parents[1]
+    entries = json.loads((root / "docs/ARTWORK_SOURCES.json").read_text(encoding="utf-8"))
+    artworks = [scene for scene in SCENES if scene.get("asset")]
+    assert {item["id"] for item in entries} == {scene["id"] for scene in artworks}
+    for scene in artworks:
+        entry = next(item for item in entries if item["id"] == scene["id"])
+        data = (root / entry["asset"]).read_bytes()
+        assert len(data) == entry["bytes"]
+        assert hashlib.sha256(data).hexdigest() == entry["sha256"]
+        for key in ("name", "artist", "title", "source", "license", "license_url"):
+            assert entry[key] == scene[key]
+    readme = (root / "README.md").read_text(encoding="utf-8")
+    assert f"**Choose a different atmosphere ({len(SCENES)} choices)**" in readme
 
 
 @pytest.mark.parametrize("scene", [None, [], {}, 1, True, "unknown"])

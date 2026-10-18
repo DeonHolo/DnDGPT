@@ -128,7 +128,7 @@ def test_critical_doubles_base_dice_but_not_modifiers_or_integrated_rider():
 
 def test_save_half_resistance_and_immunity_preserve_real_costs():
     spell = power(program=Program((Effect("DAMAGE", Formula(1, 6, 3), "FIRE", save_half=True),),
-                                  resolution=Resolution("SAVE", "INT", save_attribute="AGI")))
+                                  resolution=Resolution("SAVE", "INT", save_attribute="DEX")))
     for ratio, expected in (([1, 2], 2), ([0, 1], 0), ([2, 1], 8)):
         encounter = start(scenario((spell,), enemy_changes={"resistances": {"FIRE": ratio}}))
         result, receipt = cast(encounter, Rolls(12, 6))
