@@ -32,8 +32,8 @@ Updated: 18 October 2026. Checkboxes mean implemented and checked in the working
 - [x] Use 5e Hack and homebrew together in public descriptions; remove search-summary commentary from the terminology document.
 - [x] Use DEX for new standard campaigns, preserve legacy attribute input, and synchronize the complete rulebook and bundled references.
 - [x] Show descriptive skill reach and complete readable mechanics while retaining private movement and targeting checks; see [attribute and distance details](docs/ATTRIBUTE_AND_DISTANCE_OPTIONS.md).
-- [ ] Verify the newly opened ChatGPT dashboard uses the current template after refreshing its connected app metadata.
-- [ ] Release the visible campaign-deletion flow, separate Upgrades tab and dashboard-build diagnostic.
+- [x] Verify refreshed Cloud Dashboard metadata references the current hosted template; an already mounted chat view still needs reopening.
+- [x] Release the visible campaign-deletion flow, separate Upgrades tab and dashboard-build diagnostic.
 - [ ] Verify the plugin listing displays the dice icon after publishing its light/dark icon variants.
 
 ## Future — migration and reliability
@@ -63,9 +63,13 @@ Updated: 18 October 2026. Checkboxes mean implemented and checked in the working
 
 ## Release status
 
-Application 1.0.19 and plugin source 1.0.24 contain the 33-choice catalog, Classic rename, separate Upgrades tab, visible campaign-deletion confirmation and DEX/readable-reach guidance. The focused local suite passed 129 tests; the complete local suite passed **405 tests**. Hosted publication is being verified separately. Browser checks used disposable local data: all 33 choices switched, only Classic and Quiet Ink had no artwork, the ability reader fit a 375-pixel viewport, and both disclosures started collapsed. Development controls had 17-pixel left and bottom insets. Deletion previews required the exact name and cancellation retained the fixture. No player campaign was changed or deleted.
+Application 1.0.19 and plugin 1.0.24 contain the 33-choice catalog, Classic rename, separate Upgrades tab, visible campaign-deletion confirmation and DEX/readable-reach guidance. The focused local suite passed 129 tests; the complete local suite passed **405 tests**. Browser checks used disposable local data: all 33 choices switched, only Classic and Quiet Ink had no artwork, the ability reader fit a 375-pixel viewport, and both disclosures started collapsed. Development controls had 17-pixel left and bottom insets. Deletion previews required the exact name and cancellation retained the fixture. No player campaign was changed or deleted.
 
 The self-contained dashboard is 934,444 bytes with 31 AVIF images; its provenance manifest verifies asset hashes and licenses. The README count is checked against the actual catalog. Current screenshots show the Classic surface and a fantasy atmosphere with the Upgrades tab. Gameplay edition remains 1.0; source archives record the DEX amendment.
+
+**Published and verified:** [source d6b49ec](https://github.com/DeonHolo/DnDGPT/commit/d6b49ec4fd7d8f421e8fcb5086e111be91973139) is live in Appwrite deployment `6ad41b1ad79245f83c91`; health and the authenticated dashboard tool report 1.0.19. Hosted HTML contains all 33 choices, with Classic and Quiet Ink first. [GitHub CI](https://github.com/DeonHolo/DnDGPT/actions/runs/39085125614) passed and built the portable ZIP. The existing private plugin was updated through **Upload new version**, and its page shows 1.0.24. Downloading that installed ZIP proved both complete rules match canonical source and the App binding/default prompt are preserved.
+
+Refreshing **DnDGPT Cloud Dashboard** tools returned HTTP 200. The connector metadata now references `ui://dndgpt/dashboard-v1.0-1f5ab6edf84c.html`, matching the new local template hash. This verifies metadata selection; it does not replace an old mounted dashboard or prove a new campaign's generation quality. Players should reopen the view and read current rules. Server updates are shared by connected players; independently uploaded ZIP copies require their own package update.
 
 ### Previous release
 
