@@ -60,7 +60,8 @@ meter::-webkit-meter-optimum-value{border-radius:2px;background:currentColor}met
 .companion-page{position:relative;padding:24px;background:var(--paper);border:1px solid var(--line);border-radius:8px;min-height:350px;box-shadow:0 10px 30px var(--shadow)}
 .page-heading{padding-bottom:20px;border-bottom:1px solid var(--line);margin-bottom:20px}.page-heading .eyebrow{font-size:.61rem;margin-bottom:9px}
 .page-description{font:italic .9rem/1.5 Georgia,serif;color:var(--muted);margin:8px 0 0}.page-content{font-size:.9rem;overflow-wrap:anywhere}
-.page-content p{margin:10px 0}.page-lead{font:500 1.1rem Georgia,serif}.stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:18px 0}
+.page-content p{margin:10px 0}.page-lead{font:500 1.1rem Georgia,serif}.stat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:18px 0}.stat-grid>.stat:last-child:nth-child(odd){grid-column:1/-1}
+@container(min-width:580px){.stat-grid{grid-template-columns:repeat(5,minmax(0,1fr))}.stat-grid>.stat:last-child:nth-child(odd){grid-column:auto}}
 .reading-layout{display:grid;gap:20px;min-width:0}.reading-index{display:grid;gap:3px;align-content:start;max-height:260px;overflow:auto;scrollbar-width:thin;padding:3px}
 .index-entry{display:block;text-align:left;width:100%;min-width:0;padding:12px;border:0;border-left:2px solid transparent;border-radius:2px;background:transparent}
 .index-entry[aria-pressed="true"]{background:var(--gold-wash);border-left-color:var(--gold)}
@@ -112,7 +113,7 @@ dialog{color:var(--ink);background:var(--paper);border:1px solid var(--line);bor
 .gear-count{font-size:.72rem;margin-left:6px;color:var(--muted)}
 .skills-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .skills-tabs [role="tab"]{min-width:0;padding:10px 8px}.skills-tabs .gear-count{white-space:nowrap}
-#skills,#world{container-type:inline-size}
+#skills,#world,#character{container-type:inline-size}
 @container (min-width:420px){.skills-tabs{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .item-card{margin:10px 0;border:1px solid var(--line);border-radius:5px;padding:0 14px;background:var(--soft)}
 .item-card[open]{border-color:var(--gold)}.item-card>summary{padding:12px 0}
@@ -287,24 +288,54 @@ function highlightText(parent,value){
   if(start<text.length)parent.append(document.createTextNode(text.slice(start)));
 }
 function paragraph(parent,text,className){const node=element("p",undefined,className);highlightText(node,text);parent.append(node)}
-function publicField(key){return !/roll|receipt|token|secret|private|sha256/i.test(key)}
+function publicField(key){return !/roll|receipt|token|secret|private|sha256|(?:^|_)(?:id|source|status|type|kind|group|owned|ready|independent|original|preparation|prepared|already|no_extra|no_additional|parent)(?:_|$)|_(?:mm|cm|m|formula)$|^active_from_/i.test(key)}
 function fieldLabel(key){return key.replaceAll("_"," ").replace(/^./,letter=>letter.toUpperCase())}
+const playerLabels={description:"Description",summary:"Summary",simple:"Summary",text:"",content:"",details:"Details",effect:"Effect",effects:"Effects",mechanics:"Rules",mechanics_display:"Rules",rules:"Rules",changes:"What changed",change_summary:"What changed",change_display:"What changed",delta:"What changed",benefit:"Benefit",benefits:"Benefits",trigger:"Trigger",condition:"Condition",conditions:"Conditions",requirements:"Requirements",prerequisites:"Requirements",limitations:"Limits",limits:"Limits",counterplay:"Counterplay",weaknesses:"Weaknesses",stacking:"Stacking",duration:"Duration",cooldown:"Cooldown",cooldown_rounds:"Cooldown",cooldown_remaining:"Cooldown remaining",mp_cost:"MP cost",cost_mp:"MP cost",cost:"Cost",damage:"Damage",damage_type:"Damage type",healing:"Healing",hp:"HP",hp_max:"Maximum HP",def:"DEF",defense:"Defense",attack:"Attack",attack_bonus:"Attack bonus",attack_save:"Attack / save",save:"Save",dc:"DC",target:"Target",targets:"Targets",quantity:"Quantity",charges:"Charges",remaining:"Remaining",maximum:"Maximum",uses:"Uses",durability:"Durability",stats:"Stats",bonus:"Bonuses",bonuses:"Bonuses",resistances:"Resistances",immunities:"Immunities",vulnerabilities:"Vulnerabilities",recovery:"Recovery",revival:"Recovery",autonomy:"Autonomous turn",command:"Command",command_rules:"Commands",command_cost:"Command cost",appearance:"Appearance",look:"Appearance",personality:"Personality",behavior:"Behavior",law:"Nature",nature:"Nature",abilities:"Abilities",growth:"Growth",pace:"Growth",marks:"Marks",evolution_marks:"Evolution marks",rank:"Rank",location:"Location",objective:"Objective",objectives:"Objectives",progress:"Progress",rewards:"Rewards",reward:"Reward",consequences:"Consequences",outcome:"Outcome",clues:"Clues",lead:"Lead",quest:"Quest",history:"History",preview:"Preview",public_preview:"World preview",region:"Region",realm:"Realm",setting:"Setting",lore:"Lore",factions:"Factions",places:"Places",people:"People",geography:"Geography",political_tensions:"Political tensions",threats:"Threats",rumors:"Rumors",rumours:"Rumors",origin:"Origin",biography:"Biography",backstory:"Backstory",footprint:"Footprint",manifestation:"Manifestation",visual:"Manifestation",navigation:"Navigation",str:"STR",dex:"DEX",int:"INT",cha:"CHA",lck:"LCK"};
+Object.assign(playerLabels,{name:"Name",title:"Title",identity:"Identity",constraints:"Limits",core_law:"Nature",tactics:"Tactics",steps:"Steps",on_hit:"On hit",on_miss:"On miss",scaling:"Scaling",dice:"Dice",amount:"Amount",current:"Current",max:"Maximum",modifier:"Modifier",resource:"Resource",manifestation:"Manifestation",visual:"Appearance"});
+function meaningful(value,label=""){
+  if(value===undefined||value===null||typeof value==="boolean")return false;
+  if(Array.isArray(value))return value.some(entry=>meaningful(entry,label));
+  if(typeof value==="object")return Object.keys(value).length>0;
+  const text=String(value).trim();
+  if(!text||/^(?:none|no|yes|n\/?a|not applicable|unspecified|null|undefined|false|true|not recorded)$/i.test(text)||/^[a-z][a-z0-9]*(?:_[a-z0-9]+)+$/.test(text))return false;
+  if(/cost|cooldown/i.test(label)&&(/^[-−]?0+(?:\.0+)?(?:\s*(?:mp|hp|rounds?|turns?|seconds?))?$/i.test(text)||/^(?:MP|HP)\s*0$/i.test(text)||/^[-−]\s*\d+(?:\.\d+)?(?:\s*(?:mp|hp|rounds?|turns?|seconds?))?$/i.test(text)||/^(?:free|passive|at will|no\b|none\b)/i.test(text)||Number(value)<0))return false;
+  return true;
+}
+function playerFields(record){
+  const entries=[];
+  const prose=["change_display","changes","change_summary","delta","mechanics_display","mechanics","rules","effect","effects","text","content","description","summary","simple"];
+  const chosen=prose.find(key=>meaningful(record[key]));
+  for(const [key,value]of Object.entries(record)){
+    const normalized=key.toLowerCase().replaceAll(" ","_");
+    if(!publicField(key)||prose.includes(key)&&key!==chosen)continue;
+    const label=playerLabels[normalized]??(/^rank\d+$/i.test(key)?"Rank "+key.slice(4):undefined);
+    if(label===undefined||!meaningful(value,label))continue;
+    entries.push([label,value]);
+  }
+  return entries;
+}
 function briefText(value,limit=100){
   const text=typeof value==="string"?value.replace(/\s+/g," ").trim():"";
   if(text.length<=limit)return text;
   const cut=text.slice(0,limit-1),space=cut.lastIndexOf(" ");return cut.slice(0,space>limit/2?space:cut.length)+"…";
 }
+function displayLine(line){
+  const withoutMeta=line.replace(/^(?:Integrated Passive\s*[·—|:]\s*)?(?:(?:COMMON|UNCOMMON|RARE|EPIC|LEGENDARY|UNIQUE)\s*[·—|:]\s*)?/i,"").trim();
+  if(/^No (?:extra|additional) (?:(?:Actions?|Free Actions?|Reactions?|MP|HP|costs?|activation|cooldown|resources?|or|and)[,\s]*)+\.?$/i.test(withoutMeta))return "";
+  if(/^(?:Source|Parent|Original)\b.+\b(?:unchanged|remain.+(?:recorded|same)|as recorded)\b/i.test(line))return "";
+  return line;
+}
 function renderValue(parent,value,depth=0){
-  if(value===null||value===undefined||value==="")return;
+  if(!meaningful(value)||depth>12)return;
   if(Array.isArray(value)){
     const list=element("ul",undefined,"mechanics-list");
     for(const entry of value){const row=element("li");renderValue(row,entry,depth+1);if(row.childNodes.length)list.append(row)}
     if(list.childNodes.length)parent.append(list);return;
   }
   if(typeof value==="object"){
-    renderFacts(parent,Object.entries(value).filter(([key])=>publicField(key)).map(([key,item])=>[fieldLabel(key),item]),depth+1);return;
+    renderFacts(parent,playerFields(value),depth+1);return;
   }
-  const text=typeof value==="boolean"?(value?"Yes":"No"):String(value),lines=text.split(/\n+/).filter(line=>line.trim());
+  const text=String(value),lines=text.split(/\n+/).map(displayLine).filter(line=>line.trim());
   for(const line of lines){
     const sentences=line.length>280?line.split(/(?<=[.!?])\s+(?=[A-Z])/):[line];
     if(sentences.length<3)paragraph(parent,line);
@@ -314,12 +345,12 @@ function renderValue(parent,value,depth=0){
 function renderFacts(parent,pairs,depth=0){
   const facts=element("dl",undefined,"record-facts");
   for(const [label,value]of pairs){
-    if(value===undefined||value===null||value==="")continue;
+    if(!meaningful(value,label))continue;
     const definition=element("dd");
     if(value&&typeof value==="object"){
       renderValue(definition,value,depth);
     }else renderValue(definition,value,depth);
-    if(definition.childNodes.length)facts.append(element("dt",label),definition);
+    if(definition.childNodes.length){if(label)facts.append(element("dt",label));facts.append(definition)}
   }
   if(facts.childNodes.length)parent.append(facts);
 }
@@ -468,11 +499,19 @@ function skillStatus(ability){
   return state?.mode==="chat"?"RECORDED":"UNAVAILABLE";
 }
 function skillCost(ability){
-  if(String(ability.activation||"").toUpperCase().trim().startsWith("PASSIVE"))return undefined;
-  if(ability.cost!==undefined&&ability.cost!==null&&ability.cost!=="")return ability.cost;
+  const cost=typeof ability.cost==="string"&&/^passive/i.test(ability.activation||"")?ability.cost.split(";")[0].trim():ability.cost;
+  if(meaningful(cost,"Cost")){
+    if(typeof ability.cost==="object")return Object.entries(ability.cost).filter(([key,value])=>/^(?:mp|hp|charges?|gold)$/i.test(key)&&Number(value)>0).map(([key,value])=>value+" "+key.toUpperCase()).join(" · ")||undefined;
+    return typeof cost==="number"?cost+" MP":cost;
+  }
   const parts=[];
-  if(ability.mp_cost!==undefined)parts.push("MP "+ability.mp_cost);
+  const mp=ability.mp_cost??ability.cost_mp;if(Number(mp)>0)parts.push(mp+" MP");
   return parts.join(" · ")||undefined;
+}
+function skillCooldown(ability){
+  if(Number(ability.cooldown_remaining)>0)return ability.cooldown_remaining+" rounds remaining";
+  const value=[ability.cooldown,ability.cooldown_rounds].find(value=>meaningful(value,"Cooldown"));
+  return meaningful(value,"Cooldown")?(typeof value==="number"?value+" rounds":value):undefined;
 }
 function activationLabel(ability){
   const value=String(ability.activation||"").replaceAll("_"," ").trim();
@@ -493,16 +532,32 @@ function readingLayout(parent){
   const layout=element("div",undefined,"reading-layout"),index=element("div",undefined,"reading-index"),article=element("article",undefined,"reading-article");
   layout.append(index,article);parent.append(layout);return {index,article};
 }
+function upgradeContent(upgrade,parent){
+  const sentences=value=>String(value).split(/\n+|(?<=[.!?])\s+(?=[A-Z])/).map(line=>line.trim()).filter(Boolean);
+  const normalize=text=>text.toLowerCase().replace(/[^a-z0-9]+/g," ").trim();
+  const parentCopies=[parent.mechanics_display,parent.mechanics,parent.effect,parent.effects,parent.rules].filter(Boolean);
+  const inherited=new Set(parentCopies.flatMap(value=>(Array.isArray(value)?value:[value]).filter(v=>typeof v==="string").flatMap(sentences)).map(normalize));
+  for(const key of ["change_display","changes","change_summary","delta","effect","effects","mechanics_display","mechanics","description","summary","simple"]){
+    const value=upgrade[key];if(!meaningful(value))continue;
+    if(typeof value==="object"&&!Array.isArray(value)){
+      if(key==="changes"||key==="delta")return Object.fromEntries(Object.entries(value).map(([field,change])=>[field,change&&typeof change==="object"&&!Array.isArray(change)&&"after" in change?change.after:change]));
+      return value;
+    }
+    const explicit=["change_display","changes","change_summary","delta"].includes(key);
+    const lines=(Array.isArray(value)?value:[value]).flatMap(entry=>typeof entry==="string"?sentences(entry):[entry]).filter(line=>typeof line!=="string"||displayLine(line)&&(explicit||!inherited.has(normalize(line))));
+    if(lines.length)return lines;
+  }
+}
 function renderAbilityInspector(article,ability){
   article.replaceChildren();const rarity=String(ability.rarity||"COMMON").toUpperCase();
   const suffix=String(ability.id||"ability").replace(/[^a-z0-9_-]/gi,"-");
   article.append(element("h3",ability.name||"Unnamed ability","rarity-"+rarity));
-  paragraph(article,[rarity,activationLabel(ability),skillStatus(ability)].join(" · "),"article-meta");
+  paragraph(article,[rarity,activationLabel(ability)].join(" · "),"article-meta");
   const facts=element("dl",undefined,"ability-facts");
   for(const [label,value]of [["Cost",skillCost(ability)],["Reach",readableReach(ability)],["Target",ability.target],
-    ["Attack / save",ability.attack_save],["Duration",ability.duration],["Cooldown",ability.cooldown_remaining!==undefined?ability.cooldown_remaining+" rounds remaining":ability.cooldown]]){
-    if(value===undefined||value===null||value==="")continue;
-    const pair=element("div"),dd=element("dd");pair.append(element("dt",label),dd);highlightText(dd,typeof value==="object"?JSON.stringify(value):value);facts.append(pair);
+    ["Attack / save",ability.attack_save],["Damage",ability.damage],["Duration",ability.duration],["Cooldown",skillCooldown(ability)]]){
+    if(!meaningful(value,label))continue;
+    const pair=element("div"),dd=element("dd");pair.append(element("dt",label),dd);renderValue(dd,value);if(dd.childNodes.length)facts.append(pair);
   }
   if(facts.childNodes.length)article.append(facts);
   const upgradeFields=[["evolutions","Evolution"],["imprints","Background imprint"],["integrated_imprints","Integrated imprint"],["upgrades","Upgrade"]];
@@ -517,35 +572,33 @@ function renderAbilityInspector(article,ability){
     tabs.append(button);
   }
   article.append(tabs,...Object.values(panels));
-  const sourceMechanics=ability.mechanics??ability.effect,mechanics=ability.mechanics_display??sourceMechanics,overview=ability.simple||ability.description;
+  const mechanics=ability.mechanics_display??ability.mechanics??ability.effect??ability.effects??ability.rules,overview=ability.simple||ability.description;
   if(overview)renderValue(panels.overview,overview);
   else if(typeof mechanics==="string"){
     const first=mechanics.split(/(?<=[.!?])\s+(?=[A-Z])/)[0];paragraph(panels.overview,briefText(first,420));
     if(first!==mechanics||first.length>420)paragraph(panels.overview,"Excerpt · Full rules includes every condition and limit.","muted");
   }else if(mechanics)renderValue(panels.overview,mechanics);else paragraph(panels.overview,"Full mechanics have not been recorded.","muted");
   if(skillGroup(ability)===3)paragraph(panels.overview,"Outside combat · "+activationLabel(ability),"chapter-note");
-  if(ability.status_reason)paragraph(panels.rules,ability.status_reason,"muted");
+  if(ability.ready===false&&meaningful(ability.status_reason))paragraph(panels.rules,ability.status_reason,"muted");
   if(mechanics)renderValue(panels.rules,mechanics);else paragraph(panels.rules,"Full mechanics have not been recorded.","muted");
-  renderFacts(panels.rules,[["Activation",ability.activation],["Prerequisites",ability.prerequisites],["Stacking",ability.stacking],
-    ["Resource note",activationLabel(ability)==="Passive"?ability.cost:undefined],["Manifestation",ability.manifestation??ability.visual]]);
-  if(ability.mechanics_display&&sourceMechanics&&JSON.stringify(ability.mechanics_display)!==JSON.stringify(sourceMechanics)){
-    const source=element("details");source.append(element("summary","Measured source"));renderValue(source,sourceMechanics);renderFacts(source,[["Source range",ability.range]]);panels.rules.append(source);
-  }
+  const passiveRequirement=activationLabel(ability)==="Passive"&&typeof ability.cost==="string"?ability.cost.split(";").slice(1).join(";").trim():undefined;
+  renderFacts(panels.rules,[["Requirements",ability.prerequisites||passiveRequirement],["Stacking",ability.stacking],["Limits",ability.limitations??ability.limits],
+    ["Counterplay",ability.counterplay],["Manifestation",ability.manifestation??ability.visual]]);
   if(upgrades.length){
-    paragraph(panels.upgrades,"Recorded additions and changes to this ability. Its current mechanics are under Full rules.","chapter-note");
+    paragraph(panels.upgrades,"What changed. Full rules includes the combined ability.","chapter-note");
     const list=element("div",undefined,"upgrade-list");
     for(const {label,value}of upgrades){
       const section=element("section",undefined,"source-note");paragraph(section,label,"eyebrow");
       if(value&&typeof value==="object"){
         section.append(element("h4",value.name||label));
-        renderFacts(section,Object.entries(value).filter(([key])=>publicField(key)&&!["id","name"].includes(key)).map(([key,detail])=>[fieldLabel(key),detail]));
+        const change=upgradeContent(value,ability);
+        if(change)renderValue(section,change);else if(!value.name)paragraph(section,"Ask your GM to record what this upgrade changes.","muted");
+        renderFacts(section,[["Damage",value.damage],["Duration",value.duration],["Limits",value.limitations??value.limits],["Counterplay",value.counterplay]]);
       }else renderValue(section,value);
       list.append(section);
     }
     panels.upgrades.append(list);
   }else paragraph(panels.upgrades,"No upgrades recorded for this ability yet. Earned Evolutions and Background Imprints appear here when your GM saves them.","muted");
-  const shown=new Set(["id","name","rarity","activation","status","status_reason","cost","mp_cost","range","range_display","target","attack_save","duration","cooldown","cooldown_remaining","mechanics","mechanics_display","effect","prerequisites","stacking","manifestation","visual","evolutions","imprints","integrated_imprints","upgrades","group","ready"]);
-  renderFacts(panels.rules,Object.entries(ability).filter(([key])=>publicField(key)&&!shown.has(key)).map(([key,value])=>[fieldLabel(key),value]));
   [...tabs.children].find(button=>button.id==="ability-view-"+abilityView+"-"+suffix)?.click();
 }
 function selectSkillTab(id,save=true){
@@ -638,16 +691,13 @@ function renderItem(parent,item,scope,index){
   detail.append(summary);const fields=element("dl",undefined,"item-fields");
   const pairs=[["Description",item.description],["Stats",item.stats],["Bonuses",item.bonus],["Damage",item.damage],["Defense",item.defense],
     ["Effects",item.effects??item.mechanics],["Requirements",item.requirements],["Weight",item.weight_kg===undefined?undefined:item.weight_kg+" kg"],
-    ["Charges",item.charges],["Uses",item.uses],["Durability",item.durability],["Source",item.source]];
+    ["Charges",item.charges],["Uses",item.uses],["Durability",item.durability]];
   for(const [label,value]of pairs){
     if(value===undefined||value===null||value==="")continue;
     const definition=element("dd");renderValue(definition,value);if(definition.childNodes.length)fields.append(element("dt",label),definition);
   }
   if(item.quest_item===true)fields.append(element("dt","Category"),element("dd","Quest item"));
   if(fields.children.length)detail.append(fields);else paragraph(detail,"More details have not been recorded.","muted");
-  const known=new Set(["id","name","rarity","summary","simple","item_type","quantity","description","stats","bonus","damage","defense","effects","mechanics","requirements","weight_kg","charges","uses","durability","source","quest_item","owner","source_id"]);
-  const extra=Object.entries(item).filter(([key])=>!known.has(key)&&publicField(key));
-  if(extra.length)renderValue(recordDetail(detail,"Further details",detail.dataset.detail+"-other"),Object.fromEntries(extra));
   parent.append(detail);
 }
 function renderRecords(parent,records,empty){
@@ -657,28 +707,31 @@ function renderRecords(parent,records,empty){
     const heading=record.name||record.title||record.summary||record.text;
     const detail=recordDetail(parent,briefText(heading)||"Entry "+(index+1),itemDetailKey(parent.id,record,index));
     if(typeof heading==="string"&&heading.length>100&&(heading===record.name||heading===record.title))renderFacts(detail,[["Full title",heading]]);
-    renderValue(detail,Object.fromEntries(Object.entries(record).filter(([key])=>publicField(key)&&!["id","name","title"].includes(key))));
+    const progress={completed:"Completed",complete:"Completed",failed:"Failed",active:"In progress"}[String(record.status||"").toLowerCase()];
+    if(progress)paragraph(detail,progress,"chapter-note");
+    renderValue(detail,record);
   }
 }
 function renderActors(parent,records,scope){
   records.forEach((actor,index)=>{
     const card=element("article",undefined,"actor-card"),key=itemDetailKey(scope,actor,index);
     card.append(element("h3",actor.name||"Unnamed creature"));
-    const meta=[actor.rarity,actor.permanent===true?"Permanent":undefined,actor.autonomous===true?"Autonomous":undefined,
-      actor.evolution_rank!==undefined?"Rank "+actor.evolution_rank:undefined,
-      actor.status==="creation_draft_not_in_play"?"Creation draft · not in play":actor.status?fieldLabel(String(actor.status)):undefined];
-    paragraph(card,meta.filter(Boolean).join(" · "),"actor-meta");
+    const meta=[actor.rarity,actor.permanent===true?"Permanent companion":undefined,actor.autonomous===true?"Acts independently":undefined,
+      Number(actor.evolution_rank)>0?"Rank "+actor.evolution_rank:undefined];
+    if(meta.some(Boolean))paragraph(card,meta.filter(Boolean).join(" · "),"actor-meta");
     const stats=element("dl",undefined,"actor-stats");
     for(const [label,value]of [["HP",actor.hp===undefined?undefined:actor.hp+(actor.hp_max===undefined?"":" / "+actor.hp_max)],
-      ["Defense",actor.def],["Movement",actor.move??(actor.move_m===undefined?undefined:actor.move_m+" m")]])if(value!==undefined){
-      const stat=element("div",undefined,"actor-stat");stat.append(element("dt",label),element("dd",value));stats.append(stat);
+      ["DEF",actor.def],["Damage",actor.damage],["Attack bonus",actor.attack_bonus]])if(meaningful(value,label)){
+      const stat=element("div",undefined,"actor-stat"),valueNode=element("dd");renderValue(valueNode,value);if(valueNode.childNodes.length){stat.append(element("dt",label),valueNode);stats.append(stat)}
     }
     if(stats.children.length)card.append(stats);
     const add=(label,suffix,pairs)=>{
-      if(!pairs.some(([,value])=>value!==undefined&&value!==null&&value!==""))return;
-      renderFacts(recordDetail(card,label,key+"-"+suffix),pairs);
+      const content=element("div");renderFacts(content,pairs);if(!content.childNodes.length)return;
+      recordDetail(card,label,key+"-"+suffix).append(...content.childNodes);
     };
-    add("Combat & instincts","combat",[["Attack",actor.attack],["Autonomous turn",actor.autonomy],["Abilities",actor.abilities],["Conditions",actor.conditions]]);
+    add("Combat & instincts","combat",[["Attack",actor.attack],["Reach",readableReach(actor)],["Autonomous turn",actor.autonomy],
+      ["Commands",actor.command_rules??actor.command],["Command cost",actor.command_cost],["Duration",actor.duration],
+      ["Abilities",actor.abilities],["Conditions",actor.conditions]]);
     add("Nature & interior","nature",[["Appearance",actor.look??actor.description],["Nature",actor.law]]);
     const growth=actor.growth;
     if(growth||actor.evolution_marks!==undefined){
@@ -691,10 +744,7 @@ function renderActors(parent,records,scope){
         }
       }else renderValue(evolution,growth);
     }
-    add("Recovery & permanence","recovery",[["Recovery",actor.revival]]);
-    const known=new Set(["id","name","rarity","permanent","autonomous","evolution_rank","status","hp","hp_max","def","move","move_m","attack","autonomy","abilities","conditions","look","description","law","growth","evolution_marks","revival","owner","source_id","source"]);
-    const extra=Object.entries(actor).filter(([field])=>!known.has(field)&&publicField(field)).map(([field,value])=>[fieldLabel(field),value]);
-    add("Further details","other",extra);parent.append(card);
+    add("Recovery","recovery",[["Recovery",actor.recovery??actor.revival]]);parent.append(card);
   });
 }
 function selectCombatTab(id,save=true){
@@ -751,7 +801,8 @@ function renderWorld(next){
     page.setAttribute("role","tabpanel");page.setAttribute("aria-labelledby",button.id);page.tabIndex=0;root.append(page);
   }
   const world=$("world-page-world"),log=$("world-page-log");
-  const entries=Object.entries(next.world||{}).filter(([name])=>publicField(name));
+  const entries=Object.entries(next.world||{}).filter(([name,value])=>publicField(name)&&!["title","name"].includes(name)&&meaningful(value)&&(
+    typeof value!=="object"||Array.isArray(value)||playerFields(value).length));
   if(!entries.length)paragraph(world,"No world details recorded.","muted");
   if(entries.length){
     const {index,article}=readingLayout(world),selected=entries.find(([key])=>key===selectedWorld)||entries[0];
@@ -772,7 +823,7 @@ function renderWorld(next){
     label.append(element("span","Search the campaign log"),search);log.append(label);
     const timeline=element("div");timeline.setAttribute("aria-live","polite");const more=element("button","Show earlier entries");more.type="button";
     let visible=8;
-    const publicRecord=row=>typeof row==="object"?Object.fromEntries(Object.entries(row).filter(([key])=>publicField(key)&&key!=="id")):row;
+    const publicRecord=row=>row&&typeof row==="object"?Object.fromEntries([["name",row.name||row.title],...["date","timestamp","location"].map(key=>[key,row[key]]),...playerFields(row)]):row;
     const draw=()=>{
       timeline.replaceChildren();const query=search.value.trim().toLowerCase(),matches=records.filter(row=>JSON.stringify(publicRecord(row)).toLowerCase().includes(query));
       for(const [index,row]of matches.slice(0,visible).entries()){
@@ -780,14 +831,13 @@ function renderWorld(next){
         entry.append(element("h3",record.name||record.title||"Campaign entry"));
         const stamp=record.date||record.timestamp||record.location;if(stamp)paragraph(entry,String(stamp),"entry-meta");
         if(typeof record==="string")renderValue(entry,record);
-        else renderValue(entry,Object.fromEntries(Object.entries(record).filter(([key])=>!["name","title","date","timestamp","location"].includes(key))));
+        else renderValue(entry,Object.fromEntries(Object.entries(row).filter(([key])=>!["name","title","date","timestamp","location"].includes(key))));
         timeline.append(entry);
       }
       if(!matches.length)paragraph(timeline,"No entries match your search.","muted");more.hidden=matches.length<=visible;
     };
     search.oninput=()=>{visible=8;draw()};more.onclick=()=>{visible+=8;draw()};log.append(timeline,more);draw();
   }
-  if(next.last_event?.kind)paragraph(log,"Last saved update: "+next.last_event.kind.replaceAll("_"," ")+".","chapter-note");
   selectWorldTab(worldTab,false);
 }
 function selectGearTab(id,save=true){
@@ -874,7 +924,8 @@ function renderCampaign(next){
     renderValue(recordDetail($("character"),label,"character-"+key),c[key]);
   }
   const attributes=element("div",undefined,"stat-grid");
-  for(const [key,value]of Object.entries(c.attributes||{})){
+  for(const key of ["STR","DEX","INT","CHA","LCK"]){
+    const value=c.attributes?.[key]??(key==="DEX"?c.attributes?.AGI:undefined);if(value===undefined)continue;
     const stat=element("div",undefined,"stat"),modifier=Math.floor((value-5)/2);
     stat.append(element("span",key,"stat-label"),element("strong",value,"stat-value"),element("span",(modifier>=0?"+":"")+modifier+" modifier","stat-mod"));attributes.append(stat);
   }
@@ -884,7 +935,8 @@ function renderCampaign(next){
     const record=element("div",undefined,"record");record.append(element("span",label,"eyebrow"),element("strong",value));progression.append(record);
   }
   $("character").append(progression);
-  paragraph($("character"),"Unspent Attribute / Skill / Talent points: "+[c.attribute_points,c.skill_points,c.talent_points].join(" / "));
+  const unspent=[["Attribute",c.attribute_points],["Skill",c.skill_points],["Talent",c.talent_points]].filter(([,value])=>value>0);
+  if(unspent.length)paragraph($("character"),"Unspent points · "+unspent.map(([label,value])=>label+" "+value).join(" · "));
   if(next.phase==="character_draft")paragraph($("character"),"Character draft · review your choices in chat, then confirm here. The adventure stays paused.","pending");
   if(next.phase==="ready")paragraph($("character"),"Character confirmed · review the opening in chat. Starting the adventure needs your separate approval.","pending");
   if(next.level_up_freeze)paragraph($("character"),next.mode==="chat"?"Advancement choices are pending. Resolve them with your Game Master in chat before continuing.":"Advancement is frozen. Full offer generation and spending across all tracks remain pending implementation. Attribute previews do not resume play.","pending");

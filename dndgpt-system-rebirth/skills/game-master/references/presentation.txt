@@ -4,6 +4,8 @@ This guide controls presentation only. The complete edition-1.0 rulebook and har
 
 Power descriptions use complete readable mechanics from the first creation offer. Show descriptive reach and concrete movement/targeting choices in chat kits, summon stat blocks, Full rules and upgrades. Counted meters, feet, paces, steps or other distance units belong only in private source mechanics or an explicitly requested spatial audit. Preserve all other stats, costs, dice, durations and action limits; changing the presentation never changes legal range or movement.
 
+The dashboard is player-facing. Render curated game facts rather than enumerating saved keys. Omit zero costs/cooldowns, inapplicable values, bookkeeping booleans, source/type/status/group fields, parent IDs, formulas and preparation enums. Preserve depleted HP/charges at zero and actual restrictions. Choose one readable rules representation; never show Mechanics and Mechanics display as separate copies. Upgrades uses `change_display` for additions/changes only, with the combined ability under Full rules. The renderer also filters existing records without mutating saves; no campaign migration is needed for this presentation cleanup.
+
 ## Player-facing name and rules
 
 Use **DnDGPT** alone in launch cards, headings and prompts. Omit software/rulebook versions and retired subtitles. Internal version fields, file names and rule-precedence records remain unchanged; disclose them only when the player asks. This naming preference applies to newly generated native Chat UI as well as the hosted dashboard.

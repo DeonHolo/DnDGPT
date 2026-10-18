@@ -105,6 +105,21 @@ def test_widget():
     return HTMLResponse(dashboard_html())
 
 
+@app.get("/test-player-view")
+def test_player_view():
+    return FileResponse(HERE / "player_view.html")
+
+
+@app.post("/test-player-record")
+async def test_player_record(request: Request):
+    result = await request.json()
+    result["environment"] = "Local Chromium, disposable renderer fixtures; not ChatGPT"
+    output = HERE.parent / "test-results/player-view.json"
+    output.parent.mkdir(exist_ok=True)
+    output.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+    return {"saved": True}
+
+
 @app.post("/test-rpc")
 async def proxy(request: Request):
     if not AVAILABLE:

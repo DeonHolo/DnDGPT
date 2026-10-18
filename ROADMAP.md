@@ -66,6 +66,12 @@ Updated: 18 October 2026. Checkboxes mean implemented and checked in the working
 
 ## Release status
 
+### Player-facing details
+
+Application **1.0.21** and plugin **1.0.26** curate player-facing facts instead of rendering arbitrary saved fields. Empty costs and cooldowns, parent IDs, preparation codes, internal flags and duplicate mechanics copies are hidden. Damage, HP, DEF, duration, real costs/cooldowns, depleted resources and meaningful counterplay remain. Upgrades prefer an explicit change summary and filter copied parent sentences in legacy entries. Five attributes use a balanced responsive layout. The complete rulebook, Rule Hardener and GM skill reinforce this writing contract through an additive, reversible source amendment.
+
+Disposable local Chromium checks passed **12 cases**, including upgrade deltas already present in combined parent rules, zero HP/charges, readable companions/world records, 375/700/1100-pixel layouts and no input or saved-game mutation. The focused local source, standard-rule, server, packaging and atmosphere suite passed **41 tests**; canonical plugin references match. The self-contained dashboard is 940,263 bytes. Hosted deployment and installed-package verification are recorded after publication below.
+
 ### Readable power reveals and FAQ
 
 Application **1.0.20** and plugin **1.0.25** reinforce descriptive reach from the first creation offer, including inline kits, summon movement/attacks/commands, Full rules and upgrades. Counted paces/steps are measurements too. Exact source distances and movement limits remain private; nonspatial stats and mechanical restrictions are preserved. Companion naming follows individual identity and genuinely accessible history. FAQ is now a standalone README section linked from the top navigation.

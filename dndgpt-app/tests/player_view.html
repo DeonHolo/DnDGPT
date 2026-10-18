@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DnDGPT player-view regression checks</title>
+<style>body{margin:20px;background:#141813;color:#eee7d5;font:15px/1.6 system-ui}button{padding:12px}iframe{width:1100px;max-width:100%;height:850px;border:1px solid #b3a16e}li.pass{color:#b8d79c}li.fail{color:#ffaaa2}</style>
+<h1>Player-view regression checks</h1><p>Disposable renderer fixtures. These checks do not play or modify a campaign.</p>
+<button id="run">Run checks</button><p id="result" role="status">Ready</p><ol id="results"></ol>
+<iframe id="widget" src="/test-widget" title="Dashboard fixture"></iframe>
+<script>
+const frame=document.getElementById('widget'),results=[];
+const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+const assert=(condition,message)=>{if(!condition)throw new Error(message)};
+async function test(name,fn){try{await fn();results.push({name,passed:true})}catch(error){results.push({name,passed:false,error:error.message})}const item=document.createElement('li');item.className=results.at(-1).passed?'pass':'fail';item.textContent=(results.at(-1).passed?'PASS ':'FAIL ')+name+(results.at(-1).error?': '+results.at(-1).error:'');document.getElementById('results').append(item)}
+document.getElementById('run').onclick=async()=>{
+ document.getElementById('run').disabled=true;
+ const before=await(await fetch('/test-state')).json(),w=frame.contentWindow,d=frame.contentDocument;
+ const fixture=structuredClone(before.campaign);fixture.mode='chat';fixture.phase='character_draft';fixture.version+=5000;
+ fixture.character.attributes={CHA:5,DEX:7,INT:5,LCK:9,STR:5};
+ const full='Choose one visible creature in Near reach. On a hit, deal 1d8+2 damage. A sealed barrier blocks the effect.';
+ const change='The marked trail remains visible until the scene ends. Teleportation or a sealed barrier interrupts the trail.';
+ const upgrade={id:'upgrade-1',name:'Recorded trail upgrade',rarity:'UNIQUE',effect:change,description:'Follow the marked trail.',mechanics:full+' '+change,mechanics_display:change,group:'upgrades',independent_activation:false,no_extra_action:true,no_extra_cost:true,owned:true,parent_ability_id:'sig-1',parent_ability_name:'Fixture trail',parent_activation:'Passive',parent_cooldown_rounds:0,parent_cost_mp:0,parent_source:'signature',source:'background',status:'DRAFT',type:'integrated_passive',optional_background_lead:'ENGINE_ONLY'};
+ fixture.abilities=[{id:'sig-1',name:'Fixture trail',rarity:'UNIQUE',activation:'Passive',simple:'Follow a marked trail.',mechanics:'HIDDEN_MEASURED_SOURCE 6m',mechanics_display:full,effect:full,mp_cost:0,cost:0,cooldown:0,cooldown_remaining:0,source:'signature',status:'DRAFT',type:'integrated_passive',upgrades:[upgrade],imprints:[{...upgrade,id:'copy-2',name:'Legacy copied-parent upgrade',effect:full+' '+change,mechanics:full,mechanics_display:full}],ready:true},
+ {id:'active-1',name:'Fixture paid action',rarity:'RARE',activation:'Action',mechanics_display:full,cost:0,mp_cost:4,cooldown_rounds:3,cooldown_remaining:0,damage:'1d8+2',duration:'2 rounds',target:'One visible creature',ready:true},
+ {id:'passive-2',name:'Fixture component passive',activation:'Passive',cost:'0 MP; requires an earned component',mechanics_display:'A recorded passive effect.'}];
+ fixture.summons=[{id:'ally-1',name:'Fixture guardian',rarity:'UNIQUE',hp:0,hp_max:18,def:12,damage:'1d8+2 piercing',attack_bonus:6,duration:'Permanent',range_display:'Engaged · within melee reach',appearance:'A stone guardian.',look:'A stone guardian.',recovery:'At 0 HP, withdraws until a long rest.',command_cost:'none',movement_mm:6000,attack_reach_mm:2000,kind:'permanent_autonomous_companion',independent:true,persistent:true,active_from_adventure_start:true,already_summoned:true,omen_fangs:0,original_attack_formula:'INTERNAL_FORMULA',source:'class',status:'DRAFT',parent_id:'sig-1',no_extra_action:true}];
+ fixture.world={public_preview:'A valley beneath ancient ruins.',political_tensions:'Two guilds contest the bridge.',preparation_stage:'broad_world_preview_only',type:'internal_world_type',title:'World record'};
+ fixture.quest_log=[{name:'Fixture request',text:'Inspect the old bridge.',kind:'optional_background_lead',rewards:'A guide to the northern pass.',no_extra_action:true,status:'ACTIVE'}];
+ fixture.world_log=[{name:'Bridge discovery',text:'The old bridge still stands.',kind:'optional_background_lead',source:'generation',type:'internal_event',group:'world'}];
+ fixture.inventory=[{id:'charm',name:'Fixture charm',charges:{remaining:0,maximum:3},description:'A renderer fixture.'}];fixture.equipment={};
+ const frozen=JSON.stringify(fixture);w.renderCampaign(fixture);await wait(80);
+ await test('Passive inspector omits empty costs and technical metadata',()=>{
+  d.getElementById('nav-skills').click();d.getElementById('skill-tab-passives').click();const article=d.querySelector('#skill-page-passives .reading-article');
+  article.querySelector('[id^="ability-view-rules-"]').click();const visible=article.innerText;
+  for(const text of ['Cooldown','Cost','DRAFT','signature','integrated_passive','Mechanics display','HIDDEN_MEASURED_SOURCE','6m','Source'])assert(!visible.includes(text),'Leaked '+text);
+  assert(visible.includes('1d8+2')&&visible.includes('sealed barrier'),'Damage or counterplay was lost');
+  assert(!article.querySelector('summary'),'Measured source disclosure remains in player view');
+ });
+ await test('Upgrades show each change once without parent mechanics or bookkeeping',()=>{
+  const article=d.querySelector('#skill-page-passives .reading-article');article.querySelector('[id^="ability-view-upgrades-"]').click();
+  const cards=article.querySelectorAll('.upgrade-list>.source-note');assert(cards.length===2,'Upgrade records missing');
+  for(const card of cards){const text=card.innerText;assert(text.includes('marked trail remains visible'),'Change missing');assert(!text.includes('deal 1d8+2'),'Parent rules repeated');assert(text.split('marked trail remains visible').length===2,'Change repeated');for(const token of ['Mechanics display','Parent ability','Independent','Source','Status','Type','No extra','Owned','sig-1','ENGINE_ONLY'])assert(!text.includes(token),'Leaked '+token)}
+ });
+ await test('Paid actions retain meaningful cost, cooldown, duration and damage',()=>{
+  d.getElementById('skill-tab-combat').click();const article=d.querySelector('#skill-page-combat .reading-article');const text=article.innerText;
+  for(const token of ['4 MP','3 rounds','2 rounds','1d8+2','One visible creature'])assert(text.includes(token),'Missing '+token);
+  assert(!text.includes('0 rounds')&&!text.includes('0 MP'),'Empty cost/cooldown shown');
+ });
+ await test('Explicit upgrade deltas survive inclusion in the combined parent rules',()=>{
+  const article=d.createElement('article');w.renderAbilityInspector(article,{...fixture.abilities[0],mechanics_display:full+' '+change,imprints:[],upgrades:[{name:'Combined-rules upgrade',change_display:change}]});
+  const text=article.querySelector('[id^="ability-copy-upgrades-"]').textContent;assert(text.includes('marked trail remains visible'),'Explicit delta was removed with parent text');assert(!text.includes('deal 1d8+2'),'Complete parent was repeated');
+ });
+ await test('Resource costs support structured records and real passive costs',()=>{
+  const article=d.createElement('article');w.renderAbilityInspector(article,{...fixture.abilities[1],cost:{mp:4,hp:0},cooldown:0});const text=article.querySelector('.ability-facts').textContent;
+  assert(text.includes('4 MP')&&text.includes('3 rounds')&&!text.includes('0 HP'),'Structured costs or cooldown fallback are incorrect');
+  w.renderAbilityInspector(article,{...fixture.abilities[0],cost:2});assert(article.querySelector('.ability-facts').textContent.includes('2 MP'),'A real passive resource cost was hidden');
+  assert(!w.meaningful('-1 MP','Cost')&&!w.meaningful('-1 rounds','Cooldown'),'Negative metadata placeholder was shown');
+ });
+ await test('Structured mechanics select one readable copy and keep gameplay restrictions',()=>{
+  const node=d.createElement('div');w.renderValue(node,{mechanics:'Repeated rules.',mechanics_display:'Readable rules.',rules:'Repeated rules.',constraints:'Cannot cross a sealed barrier.',hp:0,def:12,kind:'optional_background_lead'});const text=node.textContent;
+  assert(text.includes('Readable rules.')&&!text.includes('Repeated rules.'),'Mechanics aliases duplicated');assert(text.includes('sealed barrier')&&text.includes('12'),'Useful restriction or DEF was lost');assert(!text.includes('optional_background_lead'),'Engine enum leaked');
+ });
+ await test('Legacy passive requirements remain visible',()=>{
+  d.getElementById('skill-tab-passives').click();d.querySelector('[data-ability-id="passive-2"]').click();const article=d.querySelector('#skill-page-passives .reading-article');article.querySelector('[id^="ability-view-rules-"]').click();assert(article.innerText.includes('requires an earned component'),'Real requirement was hidden');
+ });
+ await test('Companions retain depleted HP, DEF, attack, damage and recovery without internals',()=>{
+  d.getElementById('nav-summons').click();const card=d.querySelector('.actor-card');for(const detail of card.querySelectorAll('details'))detail.open=true;const text=card.innerText;
+  for(const token of ['0 / 18','12','1d8+2','6','Permanent','At 0 HP','Engaged'])assert(text.includes(token),'Missing '+token);
+  for(const token of ['6000','2000','Movement mm','Attack reach mm','Original','INTERNAL_FORMULA','Already summoned','Active from','none','DRAFT','permanent_autonomous_companion','Omen fangs'])assert(!text.includes(token),'Leaked '+token);
+ });
+ await test('World and journal show story without preparation codes',()=>{
+  d.getElementById('nav-world').click();let text=d.getElementById('world').innerText;assert(text.includes('valley'),'World preview missing');assert(!text.includes('Preparation')&&!text.includes('broad_world_preview_only'),'Preparation metadata shown');
+  d.getElementById('world-tab-log').click();text=d.getElementById('world').innerText;assert(text.includes('old bridge still stands'),'Journal text missing');assert(!text.includes('optional_background_lead')&&!text.includes('generation'),'Journal internals shown');
+  d.getElementById('nav-quests').click();for(const detail of d.querySelectorAll('#quests details'))detail.open=true;text=d.getElementById('quests').innerText;assert(text.includes('northern pass'),'Reward hidden');assert(!text.includes('optional_background_lead'),'Quest code shown');
+ });
+ await test('Zero remaining item charges stay visible',()=>{
+  d.getElementById('nav-equipment').click();d.getElementById('tab-inventory').click();const card=d.querySelector('#gear-inventory .item-card');card.open=true;
+  const remaining=[...card.querySelectorAll('dt')].find(label=>label.textContent==='Remaining');assert(remaining?.nextElementSibling.textContent==='0','Depleted charges hidden');
+ });
+ await test('Attributes use a balanced responsive layout and canonical order',async()=>{
+  d.getElementById('nav-character').click();assert([...d.querySelectorAll('.stat-label')].map(n=>n.textContent).join(',')==='STR,DEX,INT,CHA,LCK','Attribute order is unstable');
+  for(const width of [375,700,1100]){frame.style.width=width+'px';await wait(80);const rects=[...d.querySelectorAll('.stat')].map(n=>n.getBoundingClientRect());assert(d.documentElement.scrollWidth<=w.innerWidth+1,'Horizontal overflow at '+width);if(width<1000){assert(Math.abs(rects[0].width-rects[1].width)<1&&Math.abs(rects[2].width-rects[3].width)<1,'Unequal paired attributes');assert(Math.abs(rects[4].width-(rects[0].width*2+parseFloat(w.getComputedStyle(d.querySelector('.stat-grid')).gap)))<2,'Luck does not fill its row')}else assert(rects.every(r=>Math.abs(r.top-rects[0].top)<1),'Wide view did not fit all five attributes')}
+  frame.style.width='1100px';
+ });
+ await test('Inspection preserves input records and persisted campaign state',async()=>{
+  assert(JSON.stringify(fixture)===frozen,'Renderer mutated its input');const after=await(await fetch('/test-state')).json();assert(JSON.stringify(after.campaign)===JSON.stringify(before.campaign),'Campaign changed');assert(after.audit.event_count===before.audit.event_count,'Game event created');
+ });
+ document.getElementById('result').textContent=results.filter(r=>r.passed).length+'/'+results.length+' passed';
+ await fetch('/test-player-record',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({results,passed:results.every(r=>r.passed)})});
+ d.getElementById('nav-skills').click();d.getElementById('skill-tab-passives').click();d.querySelector('[data-ability-id="sig-1"]').click();d.querySelector('#skill-page-passives [id^="ability-view-upgrades-"]').click();
+};
+if(new URLSearchParams(location.search).has('autorun'))window.addEventListener('load',()=>document.getElementById('run').click());
+</script></html>
