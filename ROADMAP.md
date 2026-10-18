@@ -4,6 +4,9 @@ Updated: 18 October 2026. Checkboxes mean implemented and checked in the working
 
 ## ASAP — current approved work
 
+- [x] Give the player-facing FAQ its own README section and top navigation link.
+- [x] Apply descriptive reach to the first power reveal, summon stats, commands, Full rules and upgrades; counted paces/steps are measurements too. Preserve exact source mechanics privately.
+- [x] Derive companion names from individual identity and accessible naming records, with honest limits on cross-chat comparisons.
 - [x] Pull the latest GitHub README while preserving direct edits.
 - [x] Archive the prior complete rulebook and Rule Hardener with integrity hashes; keep the gameplay-facing rulebook label at Version 1.0.
 - [x] Add the Epic, Legendary and Unique class-skill guarantee to the complete rulebook.

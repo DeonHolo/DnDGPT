@@ -1,6 +1,8 @@
 # Development handoff
 
-Source checkpoint: application version 1.0.19, rules edition 1.0; plugin package 1.0.24. Hosted deployment and installed-package acceptance are recorded separately in ROADMAP.md.
+Source checkpoint: application version 1.0.20, rules edition 1.0; plugin package 1.0.25. Hosted deployment and installed-package acceptance are recorded separately in ROADMAP.md.
+
+Player-facing power text uses descriptive reach from the first creation offer, including summon movement, attacks and commands. Counted paces/steps are measured distances too; preserve numerical source mechanics privately and retain all nonspatial stats. The `readable-power-reveals-2026-10-18.json` revision records reversible presentation edits. The GM skill, presentation guide and hosted `standard_play` guidance reinforce the same rule. Companion names derive from concrete individual identity and accessible naming history; no shared memory of separate chats is assumed.
 
 Prioritize ChatGPT as GM, one reusable dashboard, batched state updates and reusable Python rolls. Preserve the full rulebook and hardener. Source integrity tests distinguish authorized amendments from unrelated edits.
 

@@ -106,6 +106,8 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         No file upload is needed for standard rules. Start each document at offset=0;
         next_offset identifies its next page, or is null when the complete document is read.
         Read both complete documents before standard character generation or adjudication.
+        Player-facing starting kits and summon stats use descriptive reach, not counted
+        distance units. Exact spatial mechanics stay private unless explicitly requested.
         A player's explicit custom rulebook takes precedence for that campaign.
         Reading rules never creates a campaign, rolls dice, resumes play or changes saves.
         """

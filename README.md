@@ -10,6 +10,7 @@
   <a href="#start-playing">Start playing</a> ·
   <a href="#what-it-does">Dashboard</a> ·
   <a href="#how-it-works">How it works</a> ·
+  <a href="#faq">FAQ</a> ·
   <a href="#package-your-own-chatgpt-integration">Build your own</a> ·
   <a href="PROJECT_PROFILE.md">Portfolio & resume</a>
 </p>
@@ -82,8 +83,7 @@ After a saved choice, you can say **“Open my campaign dashboard.”** Updates 
 
 > **Best on a desktop browser:** DnDGPT is designed for playing with the conversation and dashboard side by side. You can also play on mobile when your ChatGPT app/account supports the connection, but you switch between the chat and dashboard instead of seeing both at once.
 
-<details>
-<summary>FAQ</summary>
+## FAQ
 
 - **I'm already connected. How do I start?** Click **Try in chat**, then use the starting prompt above to begin a campaign or ask the GM to open one you've already saved.
 - **Do I need to download the rules?** The complete rulebook and Rule Hardener are included and available through your connection. You can start playing without attaching files or installing an extra writing plugin. If you'd like to read them yourself, open the [rulebook](https://raw.githubusercontent.com/DeonHolo/DnDGPT/main/dndgpt-app/rules/rulebook-v1.0.txt) or [Rule Hardener](https://raw.githubusercontent.com/DeonHolo/DnDGPT/main/dndgpt-app/rules/rule-hardener.txt).
@@ -92,8 +92,6 @@ After a saved choice, you can say **“Open my campaign dashboard.”** Updates 
 - **Will an update change my character?** Your saved character and progress stay as recorded. To use new character-building rules with an existing character, ask the GM to review the changes with you while preserving your earned progress and current resources.
 - **Can I use my own rulebook?** Attach your complete rulebook and tell the GM to use it instead of the standard rules. The dashboard can show information in its existing sections; custom mechanics may need to stay in the chat.
 - **Why is my dashboard empty?** Select your campaign under **Saved game**. If character details are missing, ask the GM to save your current character choices and reopen that campaign. If it still appears empty, try the refresh steps above.
-
-</details>
 
 ## What it does
 
