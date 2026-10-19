@@ -37,29 +37,21 @@ https://dndgpt-deonholo.fra.appwrite.run/mcp
 
 ### 2. Fill in the sign-in settings
 
-Open the advanced OAuth settings. Choose **User-Defined OAuth Client**, then copy these values:
+Open the advanced OAuth settings. Under **Registration method**, choose **User-Defined OAuth Client**, then follow the fields in this order:
 
 | Field | Value |
 | --- | --- |
-| Client ID | `0vMIwqvc8C7y68Mf1P4BLMcVii38ETri` |
-| Token authentication method | **None** |
-| Client secret | Leave empty |
+| Callback URL | Leave the default value |
+| OAuth Client ID | `0vMIwqvc8C7y68Mf1P4BLMcVii38ETri` |
+| OAuth Client Secret | Leave empty |
+| Token endpoint auth method | **None** |
 | Scopes | `campaign:read` and `campaign:write` |
 | Base scopes | `offline_access` |
 | OpenID Connect / OIDC | **Off** |
 
-The client ID is public connection information, not a password.
+The OAuth Client ID is public connection information, not a password.
 
-<details>
-<summary>If ChatGPT asks for authorization and token URLs</summary>
-
-| Field | Value |
-| --- | --- |
-| Authorization URL | `https://dev-ixieupunvjp8krl6.us.auth0.com/authorize` |
-| Token URL | `https://dev-ixieupunvjp8krl6.us.auth0.com/oauth/token` |
-| Resource | `https://dndgpt-deonholo.fra.appwrite.run/mcp` |
-
-</details>
+Leave the auto-filled **Authorization URL**, **Token URL**, and **Resource** values unchanged.
 
 ### 3. Connect and sign in
 
