@@ -1,9 +1,9 @@
 {
   "rulebook-v1.0.txt": {
     "original_sha256": "fc1cd1ed39a9fc35961d0d1e9a5feb3035015339d435c6a3af80a3515960597b",
-    "sha256": "b8c403b61bcf204021043a5448ab2392b14557ff7149eabb37aae76889d47113",
+    "sha256": "f764e3b5f21d225054dc45209298a3f21a6c18b2fa5f6a85d688a34c316db978",
     "original_bytes": 324754,
-    "bytes": 364551,
+    "bytes": 371770,
     "replacements": [
       [
         "V4.2",
@@ -102,14 +102,20 @@
         "source": "polished-intelligent-ui-2026-10-19.json",
         "before_sha256": "07f5bad95acfe1a9d2da1e84dfafb908a8830c67fbca1c893e18c77cb0f588d4",
         "after_sha256": "b8c403b61bcf204021043a5448ab2392b14557ff7149eabb37aae76889d47113"
+      },
+      {
+        "id": "generation-breadth-and-world-2026-10-19",
+        "source": "generation-breadth-and-world-2026-10-19.json",
+        "before_sha256": "b8c403b61bcf204021043a5448ab2392b14557ff7149eabb37aae76889d47113",
+        "after_sha256": "f764e3b5f21d225054dc45209298a3f21a6c18b2fa5f6a85d688a34c316db978"
       }
     ]
   },
   "rule-hardener.txt": {
     "original_sha256": "bc21947f299ae37dc306581aa7110231809140c332ed4e8b1ceccbb86cbce8da",
-    "sha256": "49dc3b8fe3f2b14e18cd44711116d063a16e90ada550bc2749f0bc1d7de6fa18",
+    "sha256": "77842568009dcce2d259834cdc76219bca7c6824b1c632d668740f0a8197d74e",
     "original_bytes": 10370,
-    "bytes": 43484,
+    "bytes": 50703,
     "replacements": [
       [
         "V4.2-R1",
@@ -180,6 +186,12 @@
         "source": "polished-intelligent-ui-2026-10-19.json",
         "before_sha256": "aa38b171360bbeb04784fac3197a96d3b246446749cf2888aed2ea8e4170f2cb",
         "after_sha256": "49dc3b8fe3f2b14e18cd44711116d063a16e90ada550bc2749f0bc1d7de6fa18"
+      },
+      {
+        "id": "generation-breadth-and-world-2026-10-19",
+        "source": "generation-breadth-and-world-2026-10-19.json",
+        "before_sha256": "49dc3b8fe3f2b14e18cd44711116d063a16e90ada550bc2749f0bc1d7de6fa18",
+        "after_sha256": "77842568009dcce2d259834cdc76219bca7c6824b1c632d668740f0a8197d74e"
       }
     ]
   }

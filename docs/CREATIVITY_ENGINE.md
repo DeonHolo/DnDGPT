@@ -1,5 +1,17 @@
 # Class variety and writing craft
 
+## Skill direction and world context
+
+The October 19 revision adds a comparison of trigger, operation, payoff and limits. Point-marking and repeated-hit echoes count as repeated mechanical families even when their names change. The GM should consider different player decisions before naming a power, then check the finished kit against the current board and available campaign history. Reactions can attack or disrupt; Utility can be Active or Passive. The starting region must be described before Class generation so specialized abilities have ordinary uses in the world the player is entering.
+
+This is generation guidance, not a new catalog or a claim of guaranteed novelty. It preserves rarity rolls and existing owned powers. The revision is recorded in `dndgpt-app/rules/generation-breadth-and-world-2026-10-19.json`; integrity checks reverse it before verifying the previous source.
+
+Research informing this design:
+
+- [Prompting Diverse Ideas: Increasing AI Idea Variance](https://arxiv.org/abs/2402.01727) studies how prompting affects the spread of generated ideas. Applying its broad lesson here is a design inference: compare distinct mechanical directions before selecting finished offers. The study does not establish that this game prompt produces original abilities.
+- [Fate Core's Building Stunts](https://fate-srd.com/fate-core/building-stunts) distinguishes new permitted actions, bonuses and bounded rules exceptions, and warns against abilities whose conditions rarely occur. Those distinctions inform the design questions and ordinary-use audit; no Fate mechanics or example abilities were copied.
+- [D&D's rules glossary](https://www.dndbeyond.com/sources/dnd/br-2024/rules-glossary#Reaction) defines Reaction through timing and a trigger. DnDGPT keeps its own action budget and mechanics; a defensive role is not inherent in the word Reaction.
+
 The existing rules already required a first-board novelty audit and 12–15 brief seeds before five Class offers. More fantasy adjectives did not address the reported repetition: bell/choir imagery, negated-word titles, and powers explained through unrealized futures. These are semantic habits; changing a noun leaves the underlying habit intact.
 
 ## What changed

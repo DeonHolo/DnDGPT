@@ -104,7 +104,7 @@ pre{font:.78rem/1.6 var(--font-mono,ui-monospace,monospace);white-space:pre-wrap
 .settings-disclosure>summary{padding:10px 14px;color:var(--muted);font-size:.78rem;min-height:44px}.settings-disclosure[open]>summary{color:var(--gold)}
 .disclosure-body{padding:0 16px 16px;display:grid;gap:12px}.disclosure-body p,.disclosure-body pre{margin:0}.disclosure-body pre:empty{display:none}
 .development-tools #choices{margin:0}.development-tools #newSandbox{justify-self:start}.connection-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.session-picker{margin:0 0 12px}.session-picker select{flex:1;min-width:150px}.danger{color:#f1b4a8;border-color:#a56559}.danger:disabled{opacity:.5}
+.session-picker{margin:18px 0 14px}.session-picker select{flex:1;min-width:150px}.danger{color:#f1b4a8;border-color:#a56559}.danger:disabled{opacity:.5}
 dialog{color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;width:min(560px,calc(100% - 32px));max-height:calc(100dvh - 32px);overflow:auto;padding:24px;box-sizing:border-box}dialog::backdrop{background:rgb(0 0 0 / .78)}dialog h2{font-size:1.5rem;margin-top:0}dialog li{margin:8px 0}dialog input{width:100%;box-sizing:border-box}dialog .row{margin-top:18px}dialog .row button{flex:1}#deleteStatus{min-height:1.5em}#deleteStatus:empty{display:none}.upgrade-list{display:grid;gap:20px}.upgrade-list .source-note{margin:0}
 #diagnostics #connection{margin:0}#mode{display:inline-block}#customForm{margin:12px 0}
 .gear-tabs{display:flex;gap:8px;border-bottom:1px solid var(--line);margin:0 0 18px;padding-bottom:12px}
@@ -242,7 +242,7 @@ const uiVersion=document.documentElement.dataset.uiVersion;
 $("uiBuild").textContent="Dashboard build "+uiVersion;
 const sceneCatalog=JSON.parse(document.getElementById("sceneCatalog").textContent);
 if(!sceneCatalog.length)sceneCatalog.push({id:"classic",name:"Classic"});
-const groups=["Combat Actions & Commands","Defensive & Off-Turn Reactions","Standalone Passive Skills","Exploration & Utility"];
+const groups=["Combat Actions & Commands","Off-Turn Reactions","Standalone Passive Skills","Exploration & Utility"];
 const skillTabs=[["combat","Combat"],["reactions","Reactions"],["passives","Passives"],["utility","Utility"]];
 
 function notify(method,params={}){window.parent.postMessage({jsonrpc:"2.0",method,params},"*")}
@@ -257,7 +257,7 @@ function rpc(method,params){
 }
 function notice(text){$("notice").textContent=text}
 function updateSyncStatus(){
-  const status=$("syncStatus"), checked=lastVerifiedAt?.toLocaleTimeString();
+  const status=$("syncStatus"), checked=lastVerifiedAt?.toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit"});
   status.dataset.state=syncIssue?"stale":lastVerifiedAt?"saved":"waiting";
   status.textContent=syncIssue?
     (state?"Connection lost · showing last saved snapshot.":"Saved state unavailable.")+(checked?" Last checked "+checked+".":"")+" Refresh to reconnect.":
