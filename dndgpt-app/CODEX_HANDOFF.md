@@ -1,6 +1,8 @@
 # Development handoff
 
-Source checkpoint: application version 1.0.21, rules edition 1.0; plugin package 1.0.26. Hosted deployment and installed-package acceptance are recorded separately in ROADMAP.md.
+Source checkpoint: application version 1.0.22, rules edition 1.0; plugin package 1.0.27. Hosted deployment and installed-package acceptance are recorded separately in ROADMAP.md.
+
+The `polished-intelligent-ui-2026-10-19.json` revision adds the native event/action card contract to both complete books: genuine clickable choices, original non-emoji icons, crisp hierarchy, meaningful accessible accents and concise consequential metadata. Presentation-only requests never replay actions or change saved outcomes. Native styling remains host-controlled; preserve functional fallbacks and all offer counts, confirmation gates and mechanics.
 
 Player-facing power text uses descriptive reach from the first creation offer, including summon movement, attacks and commands. Counted paces/steps are measured distances too; preserve numerical source mechanics privately and retain all nonspatial stats. The `readable-power-reveals-2026-10-18.json` revision records reversible presentation edits. The GM skill, presentation guide and hosted `standard_play` guidance reinforce the same rule. Companion names derive from concrete individual identity and accessible naming history; no shared memory of separate chats is assumed.
 

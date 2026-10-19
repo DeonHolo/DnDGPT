@@ -53,6 +53,8 @@ After all character choices are complete, show the sheet and `propose_action` wi
 
 Read `references/presentation.txt` for native Intelligent UI presentation preferences and the separate MCP companion layout. It supplements presentation only; the complete rulebook and hardener retain mechanical authority. Ordinary gameplay targets regular Chat, not Work/Codex. Native layouts are host-generated and may vary.
 
+When native controls are available, use polished clickable event/action cards with original non-emoji iconography, crisp typography and meaningful color accents, following the Slay the Spire event-screen inspiration and full card contract in the rules/hardener. Keep costs, risks and legal choices readable; styling requests never replay actions or change saved outcomes.
+
 For the player's chosen persistent-companion mode, keep narration and three to five meaningful native clickable choices in Chat; keep the seven complete status chapters in the connected dashboard instead of regenerating that whole HUD on every reply. Preserve ordered custom actions. If the player uses Chat alone or requests the native HUD, show exactly seven functional collapsible sections in the source's fixed order. Expanding, inspecting, selecting a panel or refreshing never rolls dice or advances game state. A choice sends the player's intent to chat; the GM resolves and saves its consequences through the authorized mode's tools.
 
 Group skill details under their exact parent ability; keep acquired evolutions and Imprints attached to their owners. Distinguish READY, ACTIVE, COOLDOWN, UNAVAILABLE and SPENT. Use HP red, MP blue and source rarity colors with text labels. Never generate images unrequested.
