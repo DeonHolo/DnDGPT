@@ -4,71 +4,84 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="google-site-verification" content="DK_U9kqZWfFpZFRMSChUUZxh9t-nIk6MK9AdgDtjxNA">
-  <meta name="description" content="DnDGPT is a homebrew fantasy RPG with ChatGPT as your GM and a saved campaign dashboard beside the conversation.">
+  <meta name="description" content="A fantasy RPG MCP app for ChatGPT. Create original classes and abilities, shape your adventure, and keep a saved campaign dashboard beside the conversation.">
   <title>DnDGPT | Your next adventure. A GM in your chat.</title>
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="DnDGPT">
   <meta property="og:title" content="DnDGPT | Your next adventure. A GM in your chat.">
-  <meta property="og:description" content="Play a homebrew fantasy RPG in ChatGPT, with a saved dashboard for your character, abilities, companions, and campaign.">
+  <meta property="og:description" content="ChatGPT creates your classes, abilities and story. DnDGPT keeps your character and campaign together in a saved dashboard beside the conversation.">
   <meta property="og:url" content="https://deonholo.github.io/DnDGPT/">
-  <meta property="og:image" content="https://deonholo.github.io/DnDGPT/images/chatgpt-side-by-side.png">
+  <meta property="og:image" content="https://deonholo.github.io/DnDGPT/images/chatgpt-side-by-side.png?v=2e97658e179a">
   <meta property="og:image:width" content="1280">
   <meta property="og:image:height" content="720">
-  <meta property="og:image:alt" content="A real ChatGPT demo conversation beside DnDGPT's campaign dashboard.">
+  <meta property="og:image:alt" content="ChatGPT beside DnDGPT's saved campaign dashboard, with the Glowwood fantasy atmosphere.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="DnDGPT | Your next adventure. A GM in your chat.">
-  <meta name="twitter:description" content="Play a homebrew fantasy RPG in ChatGPT, with your character and campaign dashboard beside the conversation.">
-  <meta name="twitter:image" content="https://deonholo.github.io/DnDGPT/images/chatgpt-side-by-side.png">
-  <meta name="twitter:image:alt" content="A real ChatGPT demo conversation beside DnDGPT's campaign dashboard.">
+  <meta name="twitter:description" content="A fantasy RPG MCP app for ChatGPT, with original classes, freeform play and a saved campaign dashboard.">
+  <meta name="twitter:image" content="https://deonholo.github.io/DnDGPT/images/chatgpt-side-by-side.png?v=2e97658e179a">
   <link rel="canonical" href="https://deonholo.github.io/DnDGPT/">
   <link rel="icon" href="images/dndgpt-logo-dark.png">
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+  <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400,500,700,800&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="site.css">
+  <script src="vendor/gsap.min.js" defer></script>
+  <script src="vendor/ScrollTrigger.min.js" defer></script>
+  <script src="site.js" defer></script>
 </head>
-<body>
+<body class="landing">
   <a class="skip" href="#main">Skip to content</a>
-  <header>
+  <div class="ambient" aria-hidden="true"><div class="sunlight"></div><div class="motes"></div></div>
+  <header class="site-header">
     <a class="brand" href="./"><img src="images/dndgpt-logo-dark.png" alt="" width="44" height="44">DnDGPT</a>
-    <nav aria-label="Main navigation"><a href="#start">How to play</a><a href="https://github.com/DeonHolo/DnDGPT#faq">FAQ</a><a href="https://github.com/DeonHolo/DnDGPT">GitHub</a></nav>
+    <nav aria-label="Main navigation"><a href="#campaign">The campaign</a><a href="#why">Why I made it</a><a href="https://github.com/DeonHolo/DnDGPT#faq">FAQ</a><a class="nav-play" href="https://github.com/DeonHolo/DnDGPT#start-playing">Start playing <span aria-hidden="true">↗</span></a></nav>
   </header>
   <main id="main">
     <section class="hero" aria-labelledby="intro">
-      <p class="eyebrow">A homebrew fantasy RPG for ChatGPT</p>
-      <h1 id="intro">Your next adventure.<br>A GM in your chat.</h1>
-      <p class="lead">Create a class, meet your companions, and find out what waits beyond the next gate. ChatGPT runs the story. DnDGPT keeps your character, abilities, and campaign progress together in a dashboard beside the conversation.</p>
-      <div class="actions"><a class="button" href="https://github.com/DeonHolo/DnDGPT#start-playing">Start playing</a><a class="button secondary" href="#start">See how it works</a></div>
-      <p class="small">DnDGPT is free to use with a ChatGPT account that supports custom MCP connections. A paid ChatGPT subscription is recommended for longer play sessions and higher message limits. Availability and limits vary by plan and workspace. <a href="https://chatgpt.com/pricing/">Compare ChatGPT plans.</a></p>
+      <div class="hero-art" aria-hidden="true"><img src="images/glowwood.avif" alt="" width="1000" height="563"><div class="portal-ring"></div></div>
+      <div class="hero-copy">
+        <p class="eyebrow">A fantasy RPG MCP app for ChatGPT</p>
+        <h1 id="intro"><span>Your next adventure.</span><span>A GM in your chat.</span></h1>
+        <p class="lead">Create a class, meet your companions, and find out what waits beyond the next gate. ChatGPT runs the story. DnDGPT keeps your character, abilities and campaign progress in a saved dashboard beside the conversation.</p>
+        <p class="creative-note">ChatGPT creates your classes and abilities within the game's lore and rules. You can write your own, revise its ideas, or change the campaign's direction.</p>
+        <div class="actions"><a class="button" href="https://github.com/DeonHolo/DnDGPT#start-playing">Start playing <span aria-hidden="true">↗</span></a><a class="button secondary" href="#campaign">See it in ChatGPT <span aria-hidden="true">↓</span></a></div>
+        <p class="hero-note">Free to use. Bring a ChatGPT account with custom MCP connections.</p>
+      </div>
+      <a class="scroll-cue" href="#campaign"><span class="scroll-line" aria-hidden="true"></span>Take a look inside</a>
     </section>
-    <section aria-labelledby="chat-preview-title">
-      <p class="eyebrow">Inside ChatGPT</p>
-      <h2 id="chat-preview-title">Your conversation and campaign, side by side.</h2>
-      <figure class="preview">
-        <a href="images/chatgpt-side-by-side.png" aria-label="Open full-size ChatGPT and DnDGPT screenshot"><img src="images/chatgpt-side-by-side.png" alt="ChatGPT guiding character confirmation on the left, with DnDGPT's saved campaign dashboard on the right" width="1280" height="720" loading="lazy"></a>
-        <figcaption>Actual ChatGPT capture from The Glassbridge Job demo. The dashboard opens beside your conversation on desktop. Interface details may vary by release.</figcaption>
-      </figure>
+    <section class="campaign-section" id="campaign" aria-labelledby="campaign-title">
+      <div class="section-intro"><p class="eyebrow">Inside ChatGPT</p><h2 id="campaign-title">Your conversation and campaign,<br><em>side by side.</em></h2><p>Play in the chat. Check your character, read an ability, or catch up on the story in the dashboard.</p></div>
+      <div class="capture-gallery" aria-label="DnDGPT screenshots">
+        <div class="gallery-controls" role="group" aria-label="Choose a screenshot"><button class="view-button" aria-pressed="true" data-view="conversation">In ChatGPT</button><button class="view-button" aria-pressed="false" data-view="standalone">Classic dashboard</button></div>
+        <figure class="preview capture" id="conversation-view">
+          <a href="images/chatgpt-side-by-side.png?v=2e97658e179a" aria-label="Open full-size ChatGPT and DnDGPT screenshot"><img src="images/chatgpt-side-by-side.png?v=2e97658e179a" alt="ChatGPT's conversation on the left, with DnDGPT's saved campaign dashboard and Glowwood fantasy background on the right" width="1280" height="720" loading="lazy"></a>
+          <figcaption><span>Your conversation and campaign, side by side.</span><span>Choose from 33 reading atmospheres, including Classic, Quiet Ink and fantasy artwork. Interface details may vary.</span></figcaption>
+        </figure>
+        <figure class="preview capture" id="standalone-view" hidden>
+          <a href="images/dashboard-standalone.jpg" aria-label="Open full-size Classic dashboard preview"><img src="images/dashboard-standalone.jpg" alt="DnDGPT's original dark green Classic dashboard showing a character sheet and chapter navigation" width="1280" height="720" loading="lazy"></a>
+          <figcaption><span>The Classic dashboard.</span><span>Preview using disposable sample data. Your adventure is played in ChatGPT.</span></figcaption>
+        </figure>
+      </div>
     </section>
-    <p class="eyebrow">A closer look at the dashboard</p>
-    <figure class="preview">
-      <img src="images/dashboard-standalone.jpg" alt="DnDGPT's dark green campaign dashboard showing a character sheet and chapter navigation" width="1440" loading="lazy">
-      <figcaption>Campaign dashboard preview using disposable sample data. Your adventure is played in ChatGPT.</figcaption>
-    </figure>
-    <section class="features" aria-label="Inside your campaign">
-      <article><h2>Your kind of hero</h2><p>Original class kits, five attributes including Luck, and abilities that grow with earned upgrades. A standalone 5e Hack with its own rules and progression.</p></article>
-      <article><h2>A readable spellbook</h2><p>Browse your powers, inspect their full rules, and see what each upgrade adds. Keep companions, equipment, and quests close at hand.</p></article>
-      <article><h2>A story you can return to</h2><p>Saved character choices and campaign history survive across chats. Ask the GM to save your progress, then reopen your campaign dashboard.</p></article>
+    <section class="creation-section" aria-labelledby="creation-title">
+      <div class="section-intro"><p class="eyebrow">Made for your campaign</p><h2 id="creation-title">A class worth <span class="inline-landscape" aria-hidden="true"></span><br><em>getting curious about.</em></h2></div>
+      <div class="feature-panels">
+        <details open><summary><span class="feature-symbol" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20 3 35 12v17L20 37 5 29V12Z M20 3 11 20l9 17 9-17Z M5 12l30 17M35 12 5 29"/></svg></span><span>ChatGPT creates the kit</span><span class="expand-mark" aria-hidden="true">+</span></summary><div class="feature-body"><p>Your classes and abilities are generated for the campaign, rather than chosen from a fixed catalog. The rules include a uniqueness gate: ChatGPT checks the proposed mechanics, practical uses and identity before offering them. It guides the model; it cannot guarantee originality every time.</p></div></details>
+        <details><summary><span class="feature-symbol" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="m4 9 10-4 12 5 10-4v27l-10 4-12-5-10 4Zm10-4v27m12-22v27M18 18l4 6m0-6-4 6"/></svg></span><span>A world to build from</span><span class="expand-mark" aria-hidden="true">+</span></summary><div class="feature-body"><p>The rulebook supplies the Age of Convergence lore and the game rules. ChatGPT builds your campaign's region, people and adventure from that setting. Five attributes including Luck, HP and MP, rarity rolls and earned upgrades give the homebrew system its own progression.</p></div></details>
+        <details><summary><span class="feature-symbol" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="m8 31 3-11L28 3l9 9-17 17-12 2Zm3-11 9 9M25 6l9 9M5 37h30"/></svg></span><span>You can write your own</span><span class="expand-mark" aria-hidden="true">+</span></summary><div class="feature-body"><p>Type your own class or ability, revise an offer, or ask for a different setting, tone or way of playing. You can also change how ChatGPT writes and presents its responses. Agree on any rule changes with the GM before using them in the campaign.</p></div></details>
+      </div>
     </section>
-    <section class="getting-started" id="start" aria-labelledby="start-title">
-      <p class="eyebrow">From conversation to campaign</p>
-      <h2 id="start-title">Connect once. Start a story.</h2>
-      <ol>
-        <li>Add DnDGPT as a custom MCP connection using the <a href="https://github.com/DeonHolo/DnDGPT#start-playing">setup guide</a>.</li>
-        <li>Sign in with Google or a DnDGPT email account.</li>
-        <li>Ask ChatGPT to read the included rulebook and Rule Hardener, guide character creation, and open your campaign dashboard.</li>
-      </ol>
-      <p>The complete rules are available through the connection. No separate rule upload or paid model API key is needed. DnDGPT is independently maintained and is not currently listed in ChatGPT's public directory.</p>
-      <p class="notice">Already have saved campaigns? Keep using the same sign-in method. Google and email accounts are not automatically linked. The dashboard reflects saved updates, so ask your GM to save important choices.</p>
-      <p>Read our <a href="privacy.html">Privacy Policy</a> and <a href="terms.html">Terms of Service</a> before connecting.</p>
+    <section class="journey" aria-labelledby="journey-title">
+      <div class="journey-copy"><p class="eyebrow">Keep the adventure together</p><h2 id="journey-title">The story moves.<br><em>Your sheet stays close.</em></h2><p>DnDGPT is a standalone 5e Hack with D&amp;D-inspired d20 rules. ChatGPT handles the GM conversation; the connected service stores the campaign updates it saves.</p><a class="text-link" href="https://github.com/DeonHolo/DnDGPT#what-it-does">Explore the dashboard <span aria-hidden="true">↗</span></a><div class="clover-grove" aria-hidden="true"><img class="luck-clover clover-1" src="images/luck-clover.svg" width="360" height="400" alt="" loading="lazy"><img class="luck-clover clover-2" src="images/luck-clover.svg" width="360" height="400" alt="" loading="lazy"><img class="luck-clover clover-3" src="images/luck-clover.svg" width="360" height="400" alt="" loading="lazy"></div></div>
+      <div class="journey-entries">
+        <article><p class="eyebrow">Character &amp; progression</p><h3>Know what your hero can do.</h3><p>Check attributes, resources, class abilities and earned upgrades without searching through the conversation.</p></article>
+        <article><p class="eyebrow">Companions &amp; possessions</p><h3>Keep the useful details handy.</h3><p>Read companion commands, look through equipment, and check the things you've picked up.</p></article>
+        <article><p class="eyebrow">World &amp; campaign log</p><h3>Come back to a saved campaign.</h3><p>Your account keeps the updates sent through DnDGPT's tools. Auth0 handles sign-in; Appwrite stores the saves.</p><a class="text-link" href="https://github.com/DeonHolo/DnDGPT/blob/main/docs/CAMPAIGN_STORAGE.md">Where your saves live <span aria-hidden="true">↗</span></a></article>
+      </div>
     </section>
+    <section class="origin" id="why" aria-labelledby="why-title"><div class="origin-art" aria-hidden="true"><img src="images/glowwood.avif" alt="" width="1000" height="563" loading="lazy"></div><div class="origin-copy"><p class="eyebrow">From Deon</p><h2 id="why-title">Why I made this.</h2><p>I thought ChatGPT's Intelligent UI was cool, and it gave me an idea: I could use the conversation for a fantasy RPG and keep the character sheet beside it.</p><p>I wanted to try unusual classes and abilities without digging through chat every time I forgot what one did. That's where DnDGPT started. ChatGPT handles the GM side, and the dashboard gives me somewhere to check my character and pick the campaign up later.</p><a class="text-link" href="https://github.com/DeonHolo/DnDGPT">The project is on GitHub <span aria-hidden="true">↗</span></a></div></section>
+    <section class="getting-started" id="start" aria-labelledby="start-title"><p class="eyebrow">When you're ready</p><h2 id="start-title">Start with a conversation.</h2><ol><li><strong>Add DnDGPT to ChatGPT.</strong> Follow the connection guide and sign in.</li><li><strong>Create your campaign.</strong> Use the starting prompt, or tell ChatGPT what you want to play.</li><li><strong>Open your dashboard.</strong> Ask the GM to save your choices and open the campaign beside the chat.</li></ol><div class="actions"><a class="button" href="https://github.com/DeonHolo/DnDGPT#start-playing">Open the setup guide <span aria-hidden="true">↗</span></a><a class="button secondary" href="https://github.com/DeonHolo/DnDGPT#faq">Read the FAQ</a></div><p class="small">DnDGPT is free to use with a ChatGPT account that supports custom MCP connections. A paid ChatGPT subscription is recommended for longer play sessions and higher message limits. Availability and limits vary by plan and workspace. <a href="https://chatgpt.com/pricing/">Compare ChatGPT plans.</a></p></section>
   </main>
-  <footer><p>Created by Deon Holo. An independent homebrew project.</p><nav aria-label="Footer"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="https://github.com/DeonHolo/DnDGPT/issues">Support</a></nav></footer>
+  <footer><div><a class="brand" href="./">DnDGPT</a><p>An independent project by Deon Holo.</p><p>Not affiliated with OpenAI or Wizards of the Coast.</p></div><nav aria-label="Footer navigation"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="https://github.com/DeonHolo/DnDGPT/blob/main/docs/ARTWORK.md">Art credits</a><a href="https://github.com/DeonHolo/DnDGPT/issues">Support</a></nav></footer>
 </body>
 </html>

@@ -69,7 +69,7 @@ def test_packaged_art_matches_the_credited_sources_and_readme_count():
         for key in ("name", "artist", "title", "source", "license", "license_url"):
             assert entry[key] == scene[key]
     readme = (root / "README.md").read_text(encoding="utf-8")
-    assert f"**Choose a different atmosphere ({len(SCENES)} choices)**" in readme
+    assert f"**{len(SCENES)} reading atmospheres**" in readme
 
 
 @pytest.mark.parametrize("scene", [None, [], {}, 1, True, "unknown"])

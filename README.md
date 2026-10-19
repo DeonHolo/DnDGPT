@@ -16,9 +16,17 @@
   <a href="PROJECT_PROFILE.md">Portfolio & resume</a>
 </p>
 
-DnDGPT is a **5e Hack and homebrew fantasy RPG**, heavily customized around Deon Holo's taste in fantasy games. Its standalone, D&D-inspired d20 rules replace major parts of standard 5e: five attributes including Luck, HP/MP resources, rarity-based original class kits and a custom progression system. Existing 5e characters, spells and monsters need conversion. See [the rules comparison](docs/SYSTEM_IDENTITY.md).
+DnDGPT is an **MCP app for ChatGPT**: a hosted MCP server connects your conversation to a saved campaign dashboard. The installable plugin adds the GM instructions and bundled rules.
 
-ChatGPT runs the adventure, while a reusable dashboard tracks character stats, abilities, allies, equipment and campaign history beside the conversation.
+I built it as a **5e Hack and homebrew fantasy RPG**, around what I enjoy in fantasy games. Its standalone, D&D-inspired d20 rules replace major parts of standard 5e: five attributes including Luck, HP/MP resources, rarity-based original class kits and a custom progression system. Existing 5e characters, spells and monsters need conversion. See [the rules comparison](docs/SYSTEM_IDENTITY.md).
+
+**ChatGPT creates your classes, abilities and adventure.** The rulebook supplies the Age of Convergence lore, game rules and a uniqueness gate that checks proposed powers for different mechanics, useful choices and a clear identity. Classes and abilities are generated for your campaign rather than picked from a fixed catalog. The gate guides ChatGPT; it cannot guarantee an original result every time.
+
+You can write your own class or ability, ask ChatGPT to revise an offer, or change the setting, tone, difficulty and way the GM responds. Tell the GM which standard rules you want to override and agree on the changes before playing. DnDGPT keeps the resulting character, abilities, companions and campaign progress together in a dashboard beside the conversation.
+
+### Why I made this
+
+I thought ChatGPT's Intelligent UI was cool, and it gave me an idea: I could use the conversation for a fantasy RPG and keep the character sheet beside it. I wanted to try unusual classes and abilities without digging through chat every time I forgot what one did. That's where DnDGPT started. ChatGPT handles the GM side, and the dashboard gives me somewhere to check my character and pick the campaign up later.
 
 ## Start playing
 
@@ -80,18 +88,21 @@ After a saved choice, you can say **“Open my campaign dashboard.”** Updates 
 
 ## FAQ
 
-- **I'm already connected. How do I start?** Click **Try in chat**, then use the starting prompt above to begin a campaign or ask the GM to open one you've already saved.
+- **I'm already connected. How do I start?** Click **Try in chat**, or type **@** in a normal ChatGPT message and select **DnDGPT** from the plugin picker. Then use the starting prompt above to begin a campaign or ask the GM to open one you've already saved.
 - **Do I need to download the rules?** The complete rulebook and Rule Hardener are included and available through your connection. You can start playing without attaching files or installing an extra writing plugin. If you'd like to read them yourself, open the [rulebook](https://raw.githubusercontent.com/DeonHolo/DnDGPT/main/dndgpt-app/rules/rulebook-v1.0.txt) or [Rule Hardener](https://raw.githubusercontent.com/DeonHolo/DnDGPT/main/dndgpt-app/rules/rule-hardener.txt).
-- **How do I get dashboard and rule updates?** Updates are available through your existing **DnDGPT Cloud Dashboard** connection. You can keep using your saved campaigns; an open dashboard or ongoing chat may need refreshing to pick up changes.
-- **How do I refresh my dashboard and rules?** In DnDGPT's settings, open **DnDGPT Cloud Dashboard → Refresh tools**. Close the dashboard and reload ChatGPT. In your campaign chat, ask: **“Read the latest complete rulebook and Rule Hardener, then reopen my saved campaign dashboard.”** The dashboard's **Refresh saved state** button reloads your campaign progress; use the connection's **Refresh tools** for updates.
+- **How do I get dashboard and rule updates?** Hosted updates are available through the **DnDGPT** connection you added during setup. You can keep your saved campaigns; an open dashboard or ongoing chat may need refreshing to pick up changes.
+- **How do I refresh my dashboard and rules?** Open **Plugin settings → DnDGPT → Refresh tools** under **Manage app**. Close the dashboard and reload ChatGPT. In your campaign chat, ask: **“Read the latest complete rulebook and Rule Hardener, then reopen my saved campaign dashboard.”** The dashboard's **Refresh saved state** button reloads campaign progress; **Refresh tools** updates the connected tool catalog. If you separately added a developer connection named **DnDGPT Cloud Dashboard**, refresh that entry instead. The normal setup does not require a second plugin.
 - **Will an update change my character?** Your saved character and progress stay as recorded. To use new character-building rules with an existing character, ask the GM to review the changes with you while preserving your earned progress and current resources.
 - **What does Reach mean?** **Engaged** means within melee reach. **Near** means reachable with one normal move along a clear route. **Far** needs extra movement or a suitable ranged ability. **Distant** needs longer travel or special movement. The GM still checks obstacles and each power's limits.
 - **Can I use my own rulebook?** Attach your complete rulebook and tell the GM to use it instead of the standard rules. The dashboard can show information in its existing sections; custom mechanics may need to stay in the chat.
 - **Why is my dashboard empty?** Select your campaign under **Saved game**. If character details are missing, ask the GM to save your current character choices and reopen that campaign. If it still appears empty, try the refresh steps above.
+- **Where are my saves?** The hosted campaign data lives in Appwrite. Auth0 handles sign-in and access to your account. Google sign-in does not save campaigns to Google Drive. See [how saves work](docs/CAMPAIGN_STORAGE.md), including the different approach used by Questforge.
 
 ## What it does
 
 Development plans and completed requests: [project checklist](ROADMAP.md).
+
+For other approaches to AI campaigns and MCP games, see [related projects](docs/RELATED_PROJECTS.md).
 
 - **A saved character sheet.** Resource meters, progression, conditions and saved character choices.
 - **Details when you need them.** Select an ability in a compact list, then use Overview or Full rules in its inspector. Damage, HP, DEF, duration and actual costs or cooldowns stay visible; empty costs and internal bookkeeping stay out of the way. World articles use an index; the campaign log is a searchable timeline.
@@ -110,20 +121,13 @@ Development plans and completed requests: [project checklist](ROADMAP.md).
 
 ![Standalone DnDGPT dashboard with character stats and chapter navigation](docs/images/dashboard-standalone.jpg)
 
-**Choose a different atmosphere (33 choices)**
+The standalone dashboard preview uses disposable sample data and the default Classic colors.
 
-![DnDGPT's atmosphere selector with a credited fantasy illustration and dark reading panels](docs/images/dashboard-atmosphere.jpg)
+![ChatGPT's conversation beside the saved DnDGPT campaign dashboard with a fantasy atmosphere](docs/images/chatgpt-side-by-side.png)
 
-These current-interface captures use disposable sample data. Classic is the default; background artwork is optional. Existing saved atmosphere choices are preserved.
+Your conversation and campaign, side by side. Choose from **33 reading atmospheres**, including Classic, Quiet Ink and credited fantasy artwork. Interface details may vary.
 
-<details>
-<summary>ChatGPT integration example from an earlier release</summary>
-
-![A DnDGPT test campaign in ChatGPT with the hosted dashboard open beside the conversation](docs/images/campaign-chatgpt.png)
-
-This earlier integration capture shows how desktop play pairs the chat and dashboard. Current controls, resource displays and ability readers are shown in the screenshots above.
-
-</details>
+ChatGPT creates the in-chat **Intelligent UI**: the choice cards, icons, colors and arrangement. DnDGPT's rules guide its presentation, so campaigns may share a style, but the generated interface will not look identical every time. Ask ChatGPT to change the layout, make the choices easier to read or adjust its use of color. The saved campaign dashboard shown beside the conversation is DnDGPT's separate interface.
 
 <details>
 <summary><strong>Inside the seven chapters</strong></summary>
@@ -217,6 +221,8 @@ Created by **Deon Holo**, with AI-assisted development using Codex and ChatGPT. 
 ## License
 
 Application code is [MIT licensed](LICENSE). Deon Holo's original rulebook and documentation use [CC BY 4.0](LICENSE-CONTENT.md), allowing reuse and adaptations with credit. Artwork and other third-party material keep their own terms; see [licensing details](LICENSING.md) and [art credits](docs/ARTWORK.md).
+
+DnDGPT is an independent fan project. It is not affiliated with, endorsed by, sponsored by or approved by OpenAI or Wizards of the Coast. ChatGPT and Dungeons & Dragons belong to their respective owners. See the hosted service's [Terms](https://deonholo.github.io/DnDGPT/terms.html) and [Privacy Policy](https://deonholo.github.io/DnDGPT/privacy.html).
 
 ## Support development
 
