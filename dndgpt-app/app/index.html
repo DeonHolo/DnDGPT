@@ -79,6 +79,7 @@ meter::-webkit-meter-optimum-value{border-radius:2px;background:currentColor}met
 .journal-search{display:block;margin-bottom:18px}.journal-search span{display:block;font-size:.75rem;color:var(--muted);margin-bottom:7px}.journal-search input{width:100%}
 .journal-entry{position:relative;margin-left:5px;padding:0 0 24px 20px;border-left:1px solid var(--line)}.journal-entry::before{content:"";position:absolute;top:8px;left:-4px;width:7px;height:7px;background:var(--gold);transform:rotate(45deg)}
 .journal-entry h3{font:600 1rem/1.4 Georgia,serif}.journal-entry .entry-meta{margin-bottom:8px}.journal-entry:last-child{padding-bottom:4px}
+.ability-flavor{font:italic 1rem/1.65 Georgia,"Times New Roman",serif;color:var(--muted);margin:10px 0 20px}.character-story{margin:22px 0;padding:18px 0;border-block:1px solid var(--line)}.character-story h3{font-size:1.15rem}.character-story p{font:400 1rem/1.75 Georgia,"Times New Roman",serif}.pov-note{margin:14px 0 0;padding:12px 16px;border-left:2px solid var(--gold);background:var(--soft)}.pov-note .pov-label{font-size:.67rem;font-weight:600;line-height:1.4;letter-spacing:.08em;color:var(--gold)}.pov-note p{font:italic 1rem/1.65 Georgia,"Times New Roman",serif;margin:6px 0}
 .scene-controls{display:grid;gap:7px}.scene-controls label{font-size:.82rem;color:var(--muted)}#sceneSelect{width:100%;min-height:44px}#artCredit{margin:0;line-height:1.6}#artCredit a{color:var(--gold)}
 html[data-artwork="true"] .masthead{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:14px 16px}
 html[data-artwork="true"] .toolbar{background:var(--paper);border-radius:4px;padding:8px 12px}
@@ -552,6 +553,7 @@ function renderAbilityInspector(article,ability){
   article.replaceChildren();const rarity=String(ability.rarity||"COMMON").toUpperCase();
   const suffix=String(ability.id||"ability").replace(/[^a-z0-9_-]/gi,"-");
   article.append(element("h3",ability.name||"Unnamed ability","rarity-"+rarity));
+  if(typeof ability.flavor_text==="string"&&ability.flavor_text.trim())article.append(element("p",ability.flavor_text,"ability-flavor"));
   paragraph(article,[rarity,activationLabel(ability)].join(" · "),"article-meta");
   const facts=element("dl",undefined,"ability-facts");
   for(const [label,value]of [["Cost",skillCost(ability)],["Reach",readableReach(ability)],["Target",ability.target],
@@ -591,6 +593,7 @@ function renderAbilityInspector(article,ability){
       const section=element("section",undefined,"source-note");paragraph(section,label,"eyebrow");
       if(value&&typeof value==="object"){
         section.append(element("h4",value.name||label));
+        if(typeof value.flavor_text==="string"&&value.flavor_text.trim())section.append(element("p",value.flavor_text,"ability-flavor"));
         const change=upgradeContent(value,ability);
         if(change)renderValue(section,change);else if(!value.name)paragraph(section,"Ask your GM to record what this upgrade changes.","muted");
         renderFacts(section,[["Damage",value.damage],["Duration",value.duration],["Limits",value.limitations??value.limits],["Counterplay",value.counterplay]]);
@@ -823,7 +826,7 @@ function renderWorld(next){
     label.append(element("span","Search the campaign log"),search);log.append(label);
     const timeline=element("div");timeline.setAttribute("aria-live","polite");const more=element("button","Show earlier entries");more.type="button";
     let visible=8;
-    const publicRecord=row=>row&&typeof row==="object"?Object.fromEntries([["name",row.name||row.title],...["date","timestamp","location"].map(key=>[key,row[key]]),...playerFields(row)]):row;
+    const publicRecord=row=>row&&typeof row==="object"?Object.fromEntries([["name",row.name||row.title],...["date","timestamp","location","pov"].map(key=>[key,row[key]]),...playerFields(row)]):row;
     const draw=()=>{
       timeline.replaceChildren();const query=search.value.trim().toLowerCase(),matches=records.filter(row=>JSON.stringify(publicRecord(row)).toLowerCase().includes(query));
       for(const [index,row]of matches.slice(0,visible).entries()){
@@ -832,6 +835,10 @@ function renderWorld(next){
         const stamp=record.date||record.timestamp||record.location;if(stamp)paragraph(entry,String(stamp),"entry-meta");
         if(typeof record==="string")renderValue(entry,record);
         else renderValue(entry,Object.fromEntries(Object.entries(row).filter(([key])=>!["name","title","date","timestamp","location"].includes(key))));
+        if(typeof row?.pov==="string"&&row.pov.trim()){
+          const note=element("aside",undefined,"pov-note"),approved=row.pov_source==="player";
+          note.append(element("span",approved?"POV":"POV · draft","pov-label"),element("p",row.pov));entry.append(note);
+        }
         timeline.append(entry);
       }
       if(!matches.length)paragraph(timeline,"No entries match your search.","muted");more.hidden=matches.length<=visible;
@@ -915,6 +922,10 @@ function renderCampaign(next){
   for(const id of ["character","health","summons","equipment","quests","world"])$(id).replaceChildren();
   paragraph($("character"),c.name,"page-lead");
   paragraph($("character"),c.class_name+" · "+c.rarity,"muted");
+  const story=recordDetail($("character"),"Your story","character-story");story.className="character-story";
+  if(typeof c.story_summary==="string"&&c.story_summary.trim()){
+    for(const text of c.story_summary.split(/\n\s*\n/).filter(text=>text.trim()))story.append(element("p",text));
+  }else story.append(element("p","Ask your GM to draft your story from your chosen class and the world around you. You can write or revise it in chat.","muted"));
   if(c.title)paragraph($("character"),"Title · "+c.title);
   if(c.background){
     if(typeof c.background==="string"&&c.background.length<160)paragraph($("character"),"Background · "+c.background);

@@ -1,0 +1,20 @@
+{
+  "id": "interactive-term-colors-2026-10-19",
+  "scope": "Append the player's in-chat color convention; preserve existing palette and mechanics",
+  "files": {
+    "rulebook-v1.0.txt": [
+      {
+        "new_start": 314579,
+        "before": "",
+        "after": "### Standing inline-term and action-accent convention\n\nAppend this convention to the existing Intelligent UI and glossary palette. In future in-chat gameplay, use red for known dangerous enemies and damage warnings, blue for skills, interactive mechanics and mana, and green for beneficial effects and readiness. For example, a known dangerous Bastion Sentinel is red, a skill such as Marginmarks is blue, and a beneficial Dodge effect is green. A summon-producing skill may be blue as a skill; the individual creature uses the existing character/summon category treatment. Rarity-specific colors take precedence for special rewards, equipment and progression offers when their actual rarity is the relevant fact. Keep the existing Common, Uncommon, Rare, Epic, Legendary and UNIQUE palette intact; never invent rarity from an accent.\n\nHighlight useful terms inside natural sentences, with a restrained underline or supported inspect indicator and real hover, tap and keyboard definitions when available. Pair every color with a readable name, category or explicit label. Action-card accents may distinguish a known defensive/supportive approach in green, aggressive danger in red and tactical analysis or repositioning in blue. Do not recolor neutral Action/Free Action/Reaction/Passive timing labels, imply guaranteed outcomes or conceal known costs. Keep normal prose calm and all text legible on its background. Apply the honest glossary fallback when the host cannot render the interaction. These chat presentation conventions do not themselves restyle the separate connected dashboard or change any gameplay state.\n\n"
+      }
+    ],
+    "rule-hardener.txt": [
+      {
+        "new_start": 60469,
+        "before": "",
+        "after": "### Standing inline-term and action-accent convention\n\nAppend this convention to the existing Intelligent UI and glossary palette. In future in-chat gameplay, use red for known dangerous enemies and damage warnings, blue for skills, interactive mechanics and mana, and green for beneficial effects and readiness. For example, a known dangerous Bastion Sentinel is red, a skill such as Marginmarks is blue, and a beneficial Dodge effect is green. A summon-producing skill may be blue as a skill; the individual creature uses the existing character/summon category treatment. Rarity-specific colors take precedence for special rewards, equipment and progression offers when their actual rarity is the relevant fact. Keep the existing Common, Uncommon, Rare, Epic, Legendary and UNIQUE palette intact; never invent rarity from an accent.\n\nHighlight useful terms inside natural sentences, with a restrained underline or supported inspect indicator and real hover, tap and keyboard definitions when available. Pair every color with a readable name, category or explicit label. Action-card accents may distinguish a known defensive/supportive approach in green, aggressive danger in red and tactical analysis or repositioning in blue. Do not recolor neutral Action/Free Action/Reaction/Passive timing labels, imply guaranteed outcomes or conceal known costs. Keep normal prose calm and all text legible on its background. Apply the honest glossary fallback when the host cannot render the interaction. These chat presentation conventions do not themselves restyle the separate connected dashboard or change any gameplay state.\n\n"
+      }
+    ]
+  }
+}

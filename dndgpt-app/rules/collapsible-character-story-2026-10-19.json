@@ -1,0 +1,20 @@
+{
+  "id": "collapsible-character-story-2026-10-19",
+  "scope": "Player-requested collapsible character story; view preference only",
+  "files": {
+    "rulebook-v1.0.txt": [
+      {
+        "new_start": 14018,
+        "before": "",
+        "after": "Keep **Your story** collapsed by default behind a labeled expand/collapse control. Remember the player's open/closed preference where supported. Hiding it changes no story, stats or campaign state.\n\n"
+      }
+    ],
+    "rule-hardener.txt": [
+      {
+        "new_start": 6880,
+        "before": "",
+        "after": "Keep **Your story** collapsed by default behind a labeled expand/collapse control. Remember the player's open/closed preference where supported. Hiding it changes no story, stats or campaign state.\n\n"
+      }
+    ]
+  }
+}

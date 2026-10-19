@@ -17,17 +17,26 @@ from .engine import EngineError
 from .version import APP_VERSION
 from .standard_rules import rules_guidance
 from .presentation import dashboard_html as load_dashboard_html
+from .rule_sections import sections as rule_sections, index_text as rule_index
 
 HTML_PATH = Path(__file__).with_name("index.html")
 MIME_TYPE = "text/html;profile=mcp-app"
 RULE_FILES = {"rulebook": "rulebook-v1.0.txt", "hardener": "rule-hardener.txt"}
 
 
-def rules_page(document, offset):
-    if document not in RULE_FILES:
-        raise EngineError(400, "invalid_rules_document", "Choose rulebook or hardener")
-    data = (HTML_PATH.parent.parent / "rules" / RULE_FILES[document]).read_bytes()
+def rules_page(document, offset, section=None):
+    if document not in {*RULE_FILES, "index"}:
+        raise EngineError(400, "invalid_rules_document", "Choose rulebook, hardener or index")
+    data = (HTML_PATH.parent.parent / "rules" / RULE_FILES.get(document, RULE_FILES["rulebook"])).read_bytes()
     text = data.decode("utf-8")
+    source_length = len(text)
+    if section is not None:
+        if document != "rulebook" or not isinstance(section, str) or section not in rule_sections(text):
+            raise EngineError(400, "invalid_rules_section", "Choose a rulebook section from document=index")
+        selected = rule_sections(text)[section]
+        text = text[selected["start"]:selected["end"]]
+    elif document == "index":
+        text = rule_index(text)
     if type(offset) is not int or not 0 <= offset <= len(text):
         raise EngineError(400, "invalid_rules_offset", "Offset is outside the document")
     end = min(offset + 8000, len(text))
@@ -37,8 +46,10 @@ def rules_page(document, offset):
             end = boundary + 1
     return {"document": document, "offset": offset,
             "next_offset": end if end < len(text) else None, "total_characters": len(text),
-            "source_sha256": hashlib.sha256(data).hexdigest(), "content": text[offset:end],
-            "standard_play": rules_guidance()}
+            "source_sha256": hashlib.sha256(data).hexdigest(), "section": section,
+            "scope": "section" if section is not None else "index" if document == "index" else "document",
+            "source_characters": source_length, "content": text[offset:end],
+            "standard_play": rules_guidance() if offset == 0 and document == "hardener" else {}}
 
 
 def build_mcp(engine, config, verifier, creation_repository=None):
@@ -100,18 +111,21 @@ def build_mcp(engine, config, verifier, creation_repository=None):
     campaign_lifecycle = CampaignLifecycle(engine)
 
     @server.tool(annotations=read, meta=metadata())
-    def read_rules(document: Literal["rulebook", "hardener"] = "rulebook",
-                   offset: int = 0) -> CallToolResult:
-        """Read the standard DnDGPT rulebook or Rule Hardener from the hosted service.
-        No file upload is needed for standard rules. Start each document at offset=0;
-        next_offset identifies its next page, or is null when the complete document is read.
-        Read both complete documents before standard character generation or adjudication.
+    def read_rules(document: Literal["rulebook", "hardener", "index"] = "rulebook",
+                   offset: int = 0, section: str | None = None) -> CallToolResult:
+        """Read DnDGPT's current execution checklist, rule index or canonical rules.
+        First read document=hardener completely, then document=index. Before a decision,
+        fetch relevant rulebook chapters/amendments using a section key from the index.
+        Start at offset=0; follow next_offset with the SAME document and section until null.
+        Null completes the requested selection, not every rule. Cache by source_sha256;
+        refresh after changed hashes, missing context or an explicit rules update.
+        Omit section to read the complete document for an audit or offline fallback.
         Player-facing starting kits and summon stats use descriptive reach, not counted
         distance units. Exact spatial mechanics stay private unless explicitly requested.
         A player's explicit custom rulebook takes precedence for that campaign.
         Reading rules never creates a campaign, rolls dice, resumes play or changes saves.
         """
-        return invoke(lambda owner: rules_page(document, offset))
+        return invoke(lambda owner: rules_page(document, offset, section))
 
     @server.tool(annotations=write, meta=metadata(WRITE_SCOPE))
     def create_chat_game(name: str, action_id: str, disposable: bool = False) -> CallToolResult:

@@ -17,7 +17,7 @@ COLLECTIONS = {"abilities", "conditions", "summons", "enemies", "inventory", "su
                "quest_log", "world_log", "generation_ledger"}
 TEXT_FIELDS = {"name", "current_location", "opening_preview", "notes"}
 OBJECT_FIELDS = {"world", "creation", "advancement", "funds"}
-CHARACTER_TEXT = {"name", "class_name", "rarity", "title", "background", "biography", "appearance"}
+CHARACTER_TEXT = {"name", "class_name", "rarity", "title", "background", "biography", "appearance", "story_summary"}
 CHARACTER_NUMBERS = {"level", "xp", "xp_total", "xp_next", "scene_counter", "attribute_points",
                      "skill_points", "talent_points", "hp", "hp_max", "mp", "mp_max", "sta",
                      "sta_max", "defense", "physical_defense", "magical_defense", "initiative",
@@ -117,7 +117,7 @@ def validate_changes(changes):
                 if type(key) is not str or not 1 <= len(key) <= 128 or not key.strip():
                     fail(422, "invalid_chat_update", "Each record needs a stable 1..128 character id")
                 if operation != "remove":
-                    for field in ("name", "rarity", "group", "activation", "status", "status_reason", "simple", "description"):
+                    for field in ("name", "rarity", "group", "activation", "status", "status_reason", "simple", "description", "flavor_text", "pov", "pov_source"):
                         if field in row:
                             text(row[field], field)
                     for field in ("evolutions", "imprints"):

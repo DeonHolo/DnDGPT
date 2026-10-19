@@ -1,0 +1,72 @@
+# DnDGPT rule index
+
+Load the compact hardener first. Fetch relevant amendments and chapters before using their rules.
+Use read_rules(document='rulebook', section=KEY, offset=0); follow next_offset with the SAME section.
+Offsets are relative to the requested selection. Finishing a section is not a complete manual read.
+An omitted section still governs play; fetch it when the situation needs it.
+
+World preview: loading, world-preview, story, 4.
+Class offers: creation-order, generation, class-craft, reach, 5, 6, 7, 8. Read 9/10/11 for their creation stage.
+Combat: reach, 12, 13, 14; also 15/16/29/30 when applicable.
+Advancement: 17, 18 and the applicable track in 19 through 22; interfaces 37/38.
+Presentation: story, dashboard-writing, 33, 34, 35, 38, 39. Chapter 33 contains the full inline glossary specification.
+Equipment: 23 through 28. Story/quests: 31, 32, 32A. Saves/compatibility: 40 through 42.
+
+## Current amendments
+loading | Rules loading and checklist precedence | 2498 characters
+creation-order | V1.0 surgical four-turn creation and in-chat continuation precedence | 1844 characters
+story | Story flavor, character identity and player voice | 6960 characters
+generation | Generation breadth, reaction roles and a playable world | 7219 characters
+class-craft | Class concept diversity and writing craft | 5673 characters
+world-preview | World introduction: history, place and the player's footing | 3089 characters
+reach | Dexterity and player-facing reach | 2918 characters
+dashboard-writing | Player-facing dashboard writing contract | 5862 characters
+
+## Full chapters
+1 | THE CORE EXPERIENCE | 1127 characters
+2 | THE TWO-DECISION OBSTACLE RULE | 1183 characters
+3 | CINEMATIC PACING | 4320 characters
+4 | THE WORLD — THE AGE OF CONVERGENCE (V4.0 WORLD BIBLE) | 15719 characters
+5 | SIX-TIER RARITY SYSTEM | 18635 characters
+6 | LUCK ENHANCEMENT | 1650 characters
+7 | CHARACTER CREATION — V4.0 HYBRID GENERATION (FIVE PHASES) | 14097 characters
+8 | CLASSES AND HEROIC POWER | 25015 characters
+9 | SIGNATURE SKILLS | 11950 characters
+10 | STARTING TITLES | 951 characters
+11 | BACKGROUNDS — IDENTITY, INTEGRATED IMPRINT AND WORLD FOOTPRINT | 18277 characters
+12 | ATTRIBUTES AND RESOURCES | 1486 characters
+13 | DICE AND DIFFICULTY | 1228 characters
+14 | COMBAT | 29379 characters
+15 | CONDITIONS AND INJURIES | 1038 characters
+16 | REST AND VITAL SURGE | 3339 characters
+17 | EXPERIENCE AND FAST LEVELING | 1715 characters
+18 | LEVEL-UP AND TIME FREEZE | 1888 characters
+19 | SKILL EVOLUTION SYSTEM — V4.0 INTEGRATED PASSIVE EVOLUTIONS | 19314 characters
+20 | HYBRID BREAKTHROUGHS — CLASS BREAKTHROUGHS & GRAND SIGNATURES (V4.1) | 12977 characters
+21 | TALENT WEB — V4.0 HYBRID WEB | 13295 characters
+22 | CLASS EVOLUTION AND RARITY ASCENSION | 1150 characters
+23 | EQUIPMENT — SIXTEEN SLOTS | 954 characters
+24 | INVENTORY AND CARRY WEIGHT | 6095 characters
+25 | QUICK-USE REFERENCES | 609 characters
+26 | EQUIPMENT ACTION ECONOMY | 1194 characters
+27 | LOOT, EQUIPMENT RARITY AND CRAFTING | 8507 characters
+28 | DURABILITY | 560 characters
+29 | SUMMONS AND COMPANIONS | 2654 characters
+30 | FORTUNE CHECKS | 700 characters
+31 | CHARACTER-AWARE GAMEPLAY OPTIONS | 867 characters
+32 | QUESTS, NPCS AND STORY CLARITY | 19774 characters
+32A | LIVING-WORLD RANDOM EVENT ENGINE — V1.0 CODE-ROLLED, CONTEXTUAL, AUDITABLE | 9598 characters
+33 | INTELLIGENT INTERACTIVE UI | 25667 characters
+34 | SIMPLIFIED ABILITY DISPLAY | 4283 characters
+35 | RARITY COLORS AND VISUAL PRIORITY | 2594 characters
+36 | CHARACTER CREATION INTERFACE | 1655 characters
+37 | V4.1 LEVEL-UP INTERFACE | 4447 characters
+38 | MANDATORY SEVEN-SECTION HUD — V4.1 FUNCTIONAL, GROUPED & NESTED | 12048 characters
+39 | GAMEPLAY OPTION UI | 553 characters
+40 | PERSISTENCE AND INTERNAL AUDITS | 6487 characters
+41 | IN-CHAT CONTINUITY; OPTIONAL MANUAL EXPORT ONLY | 7568 characters
+42 | VERSION COMPATIBILITY | 3135 characters
+43 | COMPLETE V1.0 NEW GAME PROCEDURE | 7191 characters
+44 | ABSOLUTE GAME MASTER RESTRICTIONS | 7991 characters
+45 | PRIMARY DIRECTIVE — VERSION 1.0 | 7039 characters
+46 | INITIAL RESPONSE INSTRUCTION | 3311 characters

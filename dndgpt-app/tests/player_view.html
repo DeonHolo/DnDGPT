@@ -83,6 +83,27 @@ document.getElementById('run').onclick=async()=>{
  await test('Inspection preserves input records and persisted campaign state',async()=>{
   assert(JSON.stringify(fixture)===frozen,'Renderer mutated its input');const after=await(await fetch('/test-state')).json();assert(JSON.stringify(after.campaign)===JSON.stringify(before.campaign),'Campaign changed');assert(after.audit.event_count===before.audit.event_count,'Game event created');
  });
+ await test('Ability flavor is separate italic text and cannot inject HTML',()=>{
+  const article=d.createElement('article'),line='<img src=x onerror=alert(1)> The wick remembers rain.';
+  w.renderAbilityInspector(article,{...fixture.abilities[1],flavor_text:line});
+  assert(article.querySelector('.ability-flavor')?.textContent===line,'Flavor line was omitted or changed');
+  assert(!article.querySelector('img'),'Flavor was parsed as HTML');
+  d.body.append(article);assert(w.getComputedStyle(article.querySelector('.ability-flavor')).fontStyle==='italic','Flavor is not italic');article.remove();
+ });
+ await test('Character story and POV drafts have dedicated readable areas',()=>{
+  const revised=structuredClone(fixture);revised.version+=1;revised.character.story_summary='My own story.\n\nI keep the harbour lamps lit.';
+  revised.world_log=[{id:'pov-test',name:'At the gate',text:'The gate opened.',pov:'I did not expect that.',pov_source:'gm_draft'}];
+  w.renderCampaign(structuredClone(revised));d.getElementById('nav-character').click();
+  const story=d.querySelector('.character-story');assert(story.tagName==='DETAILS'&&!story.open,'Story is not collapsed by default');
+  assert(story.textContent.includes('My own story.')&&story.querySelectorAll('p').length===2,'Story paragraphs missing');
+  story.querySelector('summary').click();assert(story.open,'Story cannot expand');story.querySelector('summary').click();assert(!story.open,'Story cannot hide');
+  d.getElementById('nav-world').click();d.getElementById('world-tab-log').click();
+  assert(d.querySelector('.pov-label').textContent==='POV · draft','GM thought presented as approved');
+  revised.version+=1;revised.world_log[0].pov_source='player';w.renderCampaign(structuredClone(revised));
+  assert(d.querySelector('.pov-label').textContent==='POV','Player reflection mislabeled');
+  revised.version+=1;revised.character.story_summary='';w.renderCampaign(structuredClone(revised));
+  assert(d.querySelector('.character-story').textContent.includes('Ask your GM'),'Missing portrait was invented');
+ });
  document.getElementById('result').textContent=results.filter(r=>r.passed).length+'/'+results.length+' passed';
  await fetch('/test-player-record',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({results,passed:results.every(r=>r.passed)})});
  d.getElementById('nav-skills').click();d.getElementById('skill-tab-passives').click();d.querySelector('[data-ability-id="sig-1"]').click();d.querySelector('#skill-page-passives [id^="ability-view-upgrades-"]').click();

@@ -12,7 +12,7 @@ Backend/dashboard changes keep the same server address. ChatGPT can retain older
 
 ## Where the rules live
 
-The authoritative editable documents are `dndgpt-app/rules/rulebook-v1.0.txt` and `dndgpt-app/rules/rule-hardener.txt`. Appwrite deploys those files; the authenticated `read_rules` tool serves the complete text in pages with document hashes. The GM skill reads the hosted documents first when available. It must not treat a failed or partial fetch as a successful complete read.
+The authoritative editable documents are `dndgpt-app/rules/rulebook-v1.0.txt` and `dndgpt-app/rules/rule-hardener.txt`. Appwrite deploys those files. The authenticated `read_rules` tool serves full documents, a source-derived index (`document=index`), or exact rulebook sections (`section=KEY`) in pages with the canonical document hash. The GM loads the compact hardener and index, then retrieves all applicable chapters/amendments before deciding. Offsets are relative to the requested selection; a completed section is not a complete manual read. Failed or partial reads must never be reported as complete. Full-document access remains available for audits and offline fallback.
 
 The plugin also contains copies under `skills/game-master/references/`. They make the package self-contained and provide a fallback when the hosted tools are unavailable. Existing custom-rule campaigns keep their explicitly chosen rules. Merely changing either document does not migrate saved characters, spend resources, replace published offers or advance play.
 

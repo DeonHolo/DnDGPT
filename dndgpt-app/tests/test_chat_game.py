@@ -126,6 +126,43 @@ def test_no_writes_to_legacy_campaign(game, engine, state):
         engine.propose_action("owner-a", state["id"], "legacy-start-001", 1, "start_chat_adventure", {})
 
 
+def test_story_flavor_and_pov_persist_without_changing_play(game, engine, draft):
+    before = copy.deepcopy(draft)
+    changes = {
+        "character": {"story_summary": "I repair crossing gates outside the old harbour."},
+        "world": {"earth_connection": "A stone causeway joined this coast to Cebu during the Convergence."},
+        "upsert": {
+            "abilities": [{"id": "lantern", "name": "Lantern", "flavor_text": "The wick burns with yesterday's rain."}],
+            "world_log": [{"id": "reflection", "text": "The character draft was reviewed.",
+                           "pov": "I wonder who keeps the lamps lit here.", "pov_source": "gm_draft"}],
+        },
+    }
+    state = save(game, draft, changes)
+    reopened = Engine(Store(engine.store.path)); reopened.store.initialize()
+    saved = reopened.get_campaign("owner-a", state["id"])
+    assert saved["character"]["story_summary"] == changes["character"]["story_summary"]
+    assert saved["abilities"][0]["flavor_text"] == changes["upsert"]["abilities"][0]["flavor_text"]
+    assert saved["world_log"][0]["pov_source"] == "gm_draft"
+    assert saved["world"]["earth_connection"] == changes["world"]["earth_connection"]
+    for key in ("hp", "mp", "attributes", "level", "xp"):
+        assert saved["character"][key] == before["character"][key]
+    assert saved["fictional_time_seconds"] == 0 and saved["paused"]
+    revised = save(game, saved, {"character": {"story_summary": "My own version."},
+                               "upsert": {"world_log": [{"id": "reflection", "pov": "My words.", "pov_source": "player"}]}})
+    assert revised["character"]["story_summary"] == "My own version."
+    assert revised["world_log"][0]["pov"] == "My words."
+
+
+@pytest.mark.parametrize("changes", [
+    {"character": {"story_summary": {"html": "not text"}}},
+    {"upsert": {"abilities": [{"id": "bad", "flavor_text": ["not text"]}]}},
+    {"upsert": {"world_log": [{"id": "bad", "pov": {"thought": "not text"}}]}},
+])
+def test_story_fields_require_text(changes):
+    with pytest.raises(EngineError):
+        validate_changes(changes)
+
+
 @pytest.mark.parametrize("changes", [
     {"phase": "adventure"}, {"paused": False}, {"owner": "owner-b"}, {"version": 99},
     {"character": {"hp": True}}, {"character": {"hp": -1}}, {"character": {"hp": 9999}},

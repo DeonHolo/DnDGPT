@@ -1,9 +1,9 @@
 {
   "rulebook-v1.0.txt": {
     "original_sha256": "fc1cd1ed39a9fc35961d0d1e9a5feb3035015339d435c6a3af80a3515960597b",
-    "sha256": "f764e3b5f21d225054dc45209298a3f21a6c18b2fa5f6a85d688a34c316db978",
+    "sha256": "dc11c162ae84112ad28b62bb19bfc93fcb23249f8bad50399cccca92f8bb82c8",
     "original_bytes": 324754,
-    "bytes": 371770,
+    "bytes": 391298,
     "replacements": [
       [
         "V4.2",
@@ -108,14 +108,38 @@
         "source": "generation-breadth-and-world-2026-10-19.json",
         "before_sha256": "b8c403b61bcf204021043a5448ab2392b14557ff7149eabb37aae76889d47113",
         "after_sha256": "f764e3b5f21d225054dc45209298a3f21a6c18b2fa5f6a85d688a34c316db978"
+      },
+      {
+        "id": "flavor-and-inline-codex-2026-10-19",
+        "source": "flavor-and-inline-codex-2026-10-19.json",
+        "before_sha256": "f764e3b5f21d225054dc45209298a3f21a6c18b2fa5f6a85d688a34c316db978",
+        "after_sha256": "f48d2798141ebd3c23886331cef013936bab796ac0f600ecc8f6f3d37bd6b0a2"
+      },
+      {
+        "id": "interactive-term-colors-2026-10-19",
+        "source": "interactive-term-colors-2026-10-19.json",
+        "before_sha256": "f48d2798141ebd3c23886331cef013936bab796ac0f600ecc8f6f3d37bd6b0a2",
+        "after_sha256": "43f37932c89cb87465d23645fcc6fa4a2bd8669c2776e3c4fba40ca62bfc9347"
+      },
+      {
+        "id": "indexed-rules-and-compact-hardener-2026-10-19",
+        "source": "indexed-rules-and-compact-hardener-2026-10-19.json",
+        "before_sha256": "43f37932c89cb87465d23645fcc6fa4a2bd8669c2776e3c4fba40ca62bfc9347",
+        "after_sha256": "fb55dfe5c60770435f73c72aacdcfccffd7898fd5205595e652e3900c0702698"
+      },
+      {
+        "id": "collapsible-character-story-2026-10-19",
+        "source": "collapsible-character-story-2026-10-19.json",
+        "before_sha256": "fb55dfe5c60770435f73c72aacdcfccffd7898fd5205595e652e3900c0702698",
+        "after_sha256": "dc11c162ae84112ad28b62bb19bfc93fcb23249f8bad50399cccca92f8bb82c8"
       }
     ]
   },
   "rule-hardener.txt": {
     "original_sha256": "bc21947f299ae37dc306581aa7110231809140c332ed4e8b1ceccbb86cbce8da",
-    "sha256": "77842568009dcce2d259834cdc76219bca7c6824b1c632d668740f0a8197d74e",
+    "sha256": "d528d19b702c4681241b3b7b6bbb710a18525b879446e6cb898597d559a09643",
     "original_bytes": 10370,
-    "bytes": 50703,
+    "bytes": 7847,
     "replacements": [
       [
         "V4.2-R1",
@@ -192,6 +216,30 @@
         "source": "generation-breadth-and-world-2026-10-19.json",
         "before_sha256": "49dc3b8fe3f2b14e18cd44711116d063a16e90ada550bc2749f0bc1d7de6fa18",
         "after_sha256": "77842568009dcce2d259834cdc76219bca7c6824b1c632d668740f0a8197d74e"
+      },
+      {
+        "id": "flavor-and-inline-codex-2026-10-19",
+        "source": "flavor-and-inline-codex-2026-10-19.json",
+        "before_sha256": "77842568009dcce2d259834cdc76219bca7c6824b1c632d668740f0a8197d74e",
+        "after_sha256": "57ca7117ddcee7bd695847cccd74e8dcd3fc2a664fd0ff95eb25da460c415198"
+      },
+      {
+        "id": "interactive-term-colors-2026-10-19",
+        "source": "interactive-term-colors-2026-10-19.json",
+        "before_sha256": "57ca7117ddcee7bd695847cccd74e8dcd3fc2a664fd0ff95eb25da460c415198",
+        "after_sha256": "ca4d4d54925380c4cbf82bf459bef25de16ed7839029e5ef9f462487aa8d8649"
+      },
+      {
+        "id": "indexed-rules-and-compact-hardener-2026-10-19",
+        "source": "indexed-rules-and-compact-hardener-2026-10-19.json",
+        "before_sha256": "ca4d4d54925380c4cbf82bf459bef25de16ed7839029e5ef9f462487aa8d8649",
+        "after_sha256": "59b52911dd74cfddcfacf15b341a533e4e74a4f05f77e5840537b4233f2d383b"
+      },
+      {
+        "id": "collapsible-character-story-2026-10-19",
+        "source": "collapsible-character-story-2026-10-19.json",
+        "before_sha256": "59b52911dd74cfddcfacf15b341a533e4e74a4f05f77e5840537b4233f2d383b",
+        "after_sha256": "d528d19b702c4681241b3b7b6bbb710a18525b879446e6cb898597d559a09643"
       }
     ]
   }

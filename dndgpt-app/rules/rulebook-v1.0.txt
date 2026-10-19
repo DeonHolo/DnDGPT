@@ -35,6 +35,46 @@ The following narrowly targeted additions govern: the Mechanical Novelty Firewal
 
 **Strict first-board enforcement:** The pre-roll novelty filter and concrete physical embodiment check are mandatory on the FIRST offered Class board, not merely after a player complains. Every power's activation describes a real perceivable motion/source/delivery and has a different useful function where the class kit claims different abilities. Noncompliant unpublished candidates are redesigned before natural rarity rolls without re-rolling any already fixed result. Later Sections 7, 8, 11, 34, 36, 38, 43 and 46 inherit this precedence.
 
+## Rules loading and checklist precedence
+
+This explicit loading revision supersedes older blanket instructions to read the complete rulebook AND a duplicate hardener before every standard campaign session. The full rulebook remains authoritative and unabridged. The Rule Hardener is now a compact execution checklist, not a second complete manual, an independent validator or a substitute for missing rules. Its section references bind the complete referenced rules, including every requirement in the inline glossary specification in Chapter 33.
+
+For connected standard play, first load the current hardener completely and obtain the current rule index. Before generating, presenting or resolving a situation, fetch the relevant canonical chapters and newer amendments through read_rules using the index's section keys. Follow next_offset with the SAME document and section until the requested selection is complete. The end of one section does not mean the whole manual was read. Consult every applicable rule even when it is not repeated in the checklist. Specific newer amendments override older text only in their stated scope. The index identifies related sections and creation-stage dependencies; read those before using them rather than guessing from a title or an overview.
+
+Reuse sections already available in the current context while their source hash remains current. Refresh the checklist, index and relevant source after an explicit rules update, a changed hash or loss of context. If a required section is missing, retrieve it before adjudication. For an explicit full rules audit, or when the interface can only read entire bundled files, load the complete documents once through the available supported reader. Use the bundled index and exact headings for offline lookup when supported. If necessary source cannot be accessed, state the limitation and pause the dependent decision; never claim a complete read, fabricate mechanics or silently substitute stock D&D. A player's explicit custom fork remains the authority for that campaign.
+
+This changes retrieval and prompt organization only. No saved character, offer, roll, acquisition count, resource, world fact, confirmation gate or gameplay event is migrated. Tool-call logs can show which pages were fetched; a returned hash or checklist cannot prove that a language model understood or followed them. Assess actual adherence with representative gameplay evaluations, separate from document integrity and transport tests.
+
+## Story flavor, character identity and player voice
+
+This amendment governs new prose and its presentation. Preserve established world facts, chosen powers, genuine rolls, resources, acquisition limits and the four-turn creation sequence. Player corrections and explicitly chosen custom rules take precedence within their scope. Adding flavor never authorizes a gameplay action or a retroactive campaign rewrite.
+
+### Where this place met Earth
+
+In the Turn 1 World Preview, include two to four concrete sentences explaining HOW this particular world or region connected to Earth and WHERE that connection occurred. Name an Earth country, region, coast, city or recognizable geographic anchor; identify the incoming land or world; describe the public physical event, such as an enduring crossing or a geographical overlap; and give one visible consequence for routes, buildings, ecology or everyday life. Distinguish the origin world, present location and route between them. A known portal and a merged landmass are different arrangements: choose what fits this place rather than asserting both by habit. If the exact origin is genuinely unknown, state the known location and public evidence while leaving the uncertainty intact. Do not reveal a hidden cause or make the player's birthplace, arrival or personal history compulsory. Save these public facts in World alongside the local environment and history. For an existing campaign, use established geography; offer a missing connection as a proposed addition and wait for player agreement before making it canon.
+
+### Short flavor text on powers
+
+Give each newly generated skill, spell, Signature, Talent and other usable ability a short, specific flavor line, normally one sentence of about 8 to 30 words. Describe a sensory manifestation, local saying, craft practice or small piece of lore that belongs to THIS power and its class or world. Avoid interchangeable praise and grand claims. Display it in italics or the host's equivalent restrained flavor-text style immediately below the power's name, separate from its simple overview, complete rules and numerical facts. Save it as `flavor_text`; an integrated upgrade may have its own line when it adds a distinct image or story detail. Flavor never adds a trigger, damage, range, cost, condition, promise of success or secret property. If imagery could imply an extra capability, make the actual limits clear in the rules. Keep the flavor line with the owned ability through ordinary saves and refreshes. Existing powers may receive presentation-only flavor consistent with their saved mechanics; never reconstruct or reroll them to do so.
+
+### Your story in Character & Progression
+
+Keep a dedicated, readable **Your story** area within Character & Progression, not an eighth HUD section. Generate a concise character portrait from the player's actual selections and the established public world: explain what the chosen Class means in practice, how an actually selected Title or Background relates to it, and how that person fits the starting region and its Earth connection. Begin with the selected Class when it is locked; treat unchosen Title and Background as undecided. Refine the portrait as those choices become fixed, then show it in the final character preview. Normally use one or two short paragraphs of roughly 60 to 120 words, adjusting to the player's preference. Save the current portrait in `character.story_summary` and show it separately from stats, class rules and longer biography. Do not duplicate the same paragraph across all those views.
+
+This portrait is an editable interpretation of the selected build, not a compulsory personality or a hidden backstory reveal. The player may replace it, write their own, reject a suggested connection, or request a different voice at any time. Preserve their exact authored version unless they ask for editing. Do not invent binding memories, relatives, loyalties, traumas, beliefs, motives, alignment or prior deeds; make any new connective history an explicit proposal. A class can suggest training or capabilities without dictating how the player thinks. Do not silently overwrite player-authored story text when abilities evolve. Existing campaigns with no portrait get an honest empty state or a proposed draft, never a fabricated past.
+
+Keep **Your story** collapsed by default behind a labeled expand/collapse control. Remember the player's open/closed preference where supported. Hiding it changes no story, stats or campaign state.
+
+### POV notes in the Campaign Log
+
+After a meaningful event, the World & Campaign Log may include a brief first-person **POV** note alongside the factual entry: a journal line or immediate thought, usually one or two sentences. Keep the factual outcome separate. Save the reflection as `pov`, with `pov_source` set to `player` for words supplied or approved by the player, or `gm_draft` for a proposed reflection. Display an explicit **POV · draft** label for the latter; never present a GM's invented feeling as the player's actual thought. Use only what the character could perceive or know. Match the player's established voice when available, leave room for silence, and avoid attaching a reaction to every routine update. A player can edit, replace, remove or disable these notes. A reflection never counts as a chosen action, confession, promise, moral commitment or mechanically relevant fact. Do not advance time, spend resources or fabricate an event to obtain one.
+
+### No-ai-slop writing contract
+
+Apply these portable editorial principles from the no-ai-slop skill to narration, flavor lines, character portraits, POV drafts, tooltips and player-facing dashboard text. They are embedded here so play does not depend on a local skill file. Keep the player's own vocabulary, humor, bluntness and uncertainty. Make the minimum useful edit to their writing and preserve facts and intended meaning. Use concrete subjects, actions, objects and consequences; remove stock praise, generic introductions, inflated importance, abstract filler and repeated restatements. Let the scene supply the interest. Avoid repeated binary contrasts, dramatic colon reveals, self-answered rhetorical questions, fake-profound last lines and robotic strings of equally shaped sentences. Do not default to em dashes, emoji headings, decorative bold or needless lists. Vary rhythm when it helps the voice. Do not force an editing report, a request to paste a draft or a marketing structure into gameplay.
+
+Before presenting prose, check that it belongs to the current person, power or place, preserves player intent and known facts, reads naturally, and introduces no new mechanics or hidden knowledge. Repair the wording without rerolling an offer or changing its rarity. Short flavor can be evocative and strange; precision does not require dry administrative prose. Never claim that a writing checklist proves human authorship or guarantees originality.
+
 ## Generation breadth, reaction roles and a playable world
 
 This revision governs future generation and strengthens the existing originality gates. Preserve owned abilities, published offers, genuine rolls, action budgets and the four-turn creation sequence. It adds no acquisition slots or extra rarity rolls.
@@ -2845,6 +2885,212 @@ When native Intelligent UI is available, present meaningful decisions as polishe
 - **Meaningful color:** Use accents on icons, titles, important values and brief consequence labels so the reader can distinguish approaches at a glance. Apply the established HP, MP, rarity and readiness palette consistently, always with text labels and numbers. An approach accent may communicate a known threat, analysis, protection or recovery; it must not recolor the neutral Action/Free Action/Reaction/Passive labels or imply an unearned rarity, guaranteed success or an unavailable benefit. Keep ordinary prose calm and readable. Avoid rainbow paragraphs and decorative highlights with no meaning.
 - **Accessible real interaction:** Maintain strong text/background contrast, visible keyboard focus, clear selected/disabled states and readable labels alongside icons and colors. Essential risks and costs stay visible without hovering. Every offered control must submit the stated intent or open the stated view; mark unavailable actions with the actual reason instead of suggesting they are legal. When native controls are genuinely unavailable, explain that once and use the compact portable text fallback. A rendered picture of a button, inert HTML/code block or decorative card is not a clickable interface. Exact fonts, icons and layouts remain host-controlled preferences, not a guaranteed CSS or component API.
 - **Truthful state and presentation-only revisions:** Build status and legal choices from the latest authoritative saved state when connected. Clearly distinguish proposed effects, narrated-but-unsaved events and committed outcomes; a polished card never proves a save. Requests to restyle, recolor, add icons, reorganize or redisplay are view operations: do not roll, advance a round, spend resources, replay an attack or manufacture a new result. Selecting an action submits the player's intent; resolve and save only through the existing authorized gameplay and confirmation flow.
+
+
+
+# DnDGPT — Intelligent UI: Interactive Glossary & Tooltip System
+
+Add the following as a **permanent, mandatory Intelligent UI feature** in the DnDGPT Rulebook and Rule Hardener.
+
+## 1. Core Feature: Contextual Interactive Glossary
+
+During gameplay, important terms appearing in narrative text, combat reports, action choices, and interface descriptions should be interactively inspectable.
+
+Eligible terms include:
+
+- Character and NPC names
+- Enemies, bosses, and summons
+- Skills, spells, talents, titles, and passive abilities
+- Status effects and combat mechanics
+- Important locations, factions, and organizations
+- Equipment, artifacts, materials, and quest items
+- Rarities and important progression terminology
+
+When a player **hovers over a highlighted term on desktop or taps it on mobile**, display a small, elegant floating information panel explaining what the term means.
+
+The purpose is to make DnDGPT understandable without forcing the player to leave the story, open the full HUD, or repeatedly ask what something does.
+
+## 2. CRITICAL: Preserve Natural Inline Text
+
+Glossary terms MUST behave like ordinary words inside a paragraph.
+
+**Never allow an interactive term to create its own line, paragraph, block, or unnecessary whitespace.**
+
+Requirements:
+
+- Terms remain inline with surrounding text.
+- Sentences wrap naturally around highlighted terms.
+- No artificial blank lines or vertical gaps.
+- The tooltip must not push, resize, or reflow the narrative.
+- Do not place block-level UI wrappers around individual words.
+- Avoid popover implementations that turn inline terms into separate layout blocks.
+- Use genuine inline interactive elements with a floating overlay whenever the interface supports them.
+
+This rule takes priority over decorative styling.
+
+## 3. Tooltip Visual Design
+
+Tooltips should resemble premium RPG interface elements inspired by polished game encyclopedias and Slay the Spire-style contextual explanations.
+
+Each tooltip should include:
+
+**Category:** Small, uppercase, color-coded label.
+
+**Title:** The exact name of the character, ability, item, or term.
+
+**Description:** A concise, readable explanation of what it is or what it does.
+
+**Mechanical Details:** When relevant, show current HP, MP cost, cooldown, damage, duration, rarity, or important restrictions.
+
+Visual requirements:
+
+- Dark, subtly contrasting background
+- Rounded corners
+- Thin, restrained border
+- Comfortable internal padding of approximately 14–18px
+- Clear spacing between category, title, description, and statistics
+- Soft shadow that separates the tooltip from the underlying content
+- Strong text contrast and legible font sizes
+- Maximum width around 280–320px, adjusted for narrow screens
+- No text touching tooltip edges
+- No excessively large tooltip panels
+- No overlapping or clipped information
+
+Favor clarity and a sleek, sophisticated appearance over decoration.
+
+## 4. Smart Tooltip Positioning
+
+Tooltips should automatically position themselves intelligently.
+
+- Prefer opening below the relevant word.
+- Open above when insufficient space exists below.
+- Adjust horizontally to stay within the viewport.
+- Never overflow offscreen or behind other interface elements.
+- Never obscure their own trigger so severely that interaction becomes difficult.
+- Reposition when scrolling or resizing where supported.
+- Tooltips should float above the text without changing paragraph dimensions.
+
+When supported, use a floating overlay positioned relative to the trigger's actual screen coordinates.
+
+## 5. Desktop, Mobile, and Accessibility
+
+Support multiple interaction methods:
+
+**Desktop:** Hover to reveal, moving away to dismiss.
+
+**Mobile:** Tap to reveal, tap again or outside to dismiss.
+
+**Keyboard:** Focus to reveal, Escape to dismiss.
+
+Ensure that interactive terms have accessible names, readable contrast, and visible keyboard focus indications.
+
+Do not rely exclusively on hover because touchscreen users cannot hover.
+
+## 6. Meaningful Color Coding
+
+Apply consistent colors across highlighted text and tooltip accents:
+
+- **Common:** Neutral gray
+- **Uncommon:** Green
+- **Rare:** Blue
+- **Epic:** Purple
+- **Legendary:** Gold
+- **UNIQUE:** Red
+- **MP / Mana:** Blue
+- **Ready / Beneficial effects:** Green
+- **Dangerous enemies / Damage warnings:** Red
+- **Skills and interactive mechanics:** Blue
+- **Characters and summons:** Subtle purple
+- **Locations and important world concepts:** Muted gold
+
+Rarity colors take precedence when a specific rarity is important.
+
+Avoid excessive highlighting, distracting animations, emoji-based iconography, and unreadable combinations.
+
+## 7. Dynamic Accuracy
+
+Tooltips must always reflect the authoritative current campaign state.
+
+For example:
+
+- A wounded summon shows its current HP.
+- An upgraded skill displays its actual upgraded mechanics.
+- An ability on cooldown displays the correct remaining cooldown.
+- A consumed limited-use ability displays its spent status.
+- An unidentified artifact must not reveal undiscovered properties.
+- Enemy descriptions must not expose hidden mechanics, secret weaknesses, or unrevealed lore.
+
+Never invent statistics or display stale tooltip information.
+
+Update contextual information when the underlying game state changes.
+
+## 8. Integration With Gameplay
+
+The glossary system must work alongside:
+
+- Cinematic narrative
+- Combat resolution summaries
+- Clickable next-action choices
+- Quest updates
+- Inventory and equipment descriptions
+- Skill and talent advancement interfaces
+- The existing seven-section Intelligent HUD
+
+Do not replace existing gameplay interfaces.
+
+Do not require opening the full dashboard merely to learn the meaning of a highlighted term.
+
+Avoid highlighting every word or repeating the same tooltip excessively. Prioritize terms that genuinely help the player understand decisions and consequences.
+
+## 9. Technical Implementation and Fallback
+
+When a runtime supports custom interactive HTML/CSS/JavaScript components, implement genuine inline glossary triggers and intelligently positioned floating tooltips.
+
+Use the platform's supported components and interaction APIs when they can satisfy all layout requirements.
+
+**Do not use an inline popover implementation if it breaks paragraphs or introduces unwanted spacing.**
+
+If custom interactive components are unavailable, retain readable normal prose and provide a compact glossary or expandable definitions through supported controls.
+
+Never pretend a tooltip is interactive when the current interface cannot actually display it.
+
+Do not silently substitute an inferior implementation while claiming full compliance.
+
+## 10. Rule Hardener Enforcement
+
+Before displaying gameplay containing interactive glossary terms, verify:
+
+1. Highlighted terms remain naturally inline.
+2. Paragraph spacing is unaffected.
+3. Tooltips have sufficient padding and readable typography.
+4. Tooltip positions remain within the viewport.
+5. Desktop hover and mobile tap work where supported.
+6. All displayed mechanics match authoritative saved state.
+7. Colors are consistent with DnDGPT conventions.
+8. No hidden information is revealed.
+9. No existing HUD or gameplay functionality is broken.
+
+If any requirement fails, correct the implementation or use the honest fallback.
+
+**This is a presentation-layer requirement, not a gameplay mechanic.**
+
+It must never independently advance fictional time, alter dice rolls, change character statistics, spend resources, or modify campaign state.
+
+## 11. Persistence
+
+Treat this feature as a permanent DnDGPT interface standard across future gameplay sessions and compatible campaigns.
+
+Preserve it during Rulebook revisions, Rule Hardener updates, and interface redesigns unless the player explicitly changes or removes it.
+
+**Primary design principle: Interactive knowledge should be available precisely where the player encounters it, without disrupting the reading experience.**
+
+### Standing inline-term and action-accent convention
+
+Append this convention to the existing Intelligent UI and glossary palette. In future in-chat gameplay, use red for known dangerous enemies and damage warnings, blue for skills, interactive mechanics and mana, and green for beneficial effects and readiness. For example, a known dangerous Bastion Sentinel is red, a skill such as Marginmarks is blue, and a beneficial Dodge effect is green. A summon-producing skill may be blue as a skill; the individual creature uses the existing character/summon category treatment. Rarity-specific colors take precedence for special rewards, equipment and progression offers when their actual rarity is the relevant fact. Keep the existing Common, Uncommon, Rare, Epic, Legendary and UNIQUE palette intact; never invent rarity from an accent.
+
+Highlight useful terms inside natural sentences, with a restrained underline or supported inspect indicator and real hover, tap and keyboard definitions when available. Pair every color with a readable name, category or explicit label. Action-card accents may distinguish a known defensive/supportive approach in green, aggressive danger in red and tactical analysis or repositioning in blue. Do not recolor neutral Action/Free Action/Reaction/Passive timing labels, imply guaranteed outcomes or conceal known costs. Keep normal prose calm and all text legible on its background. Apply the honest glossary fallback when the host cannot render the interaction. These chat presentation conventions do not themselves restyle the separate connected dashboard or change any gameplay state.
+
+Implementation precedence: this complete inline-glossary standard supersedes older advice to use inline expanders when that advice would break paragraph flow. It is a presentation standard within Intelligent UI / Presentation Standards. Host support determines whether real floating tooltips or the explicitly disclosed compact fallback is available. Adding this document does not install a new ChatGPT rendering API. Preserve it for existing compatible campaigns without changing their saved mechanics.
 
 Every gameplay turn retains the compact status strip and seven detailed sections specified in Section 38. New V4.0 information belongs **inside** those sections, not in a mandatory eighth sprawling dashboard: the Quest Journal houses chapter conclusions, action opportunities and optional ambitions; World & Campaign Log houses faction consequences, zone connections and visible combat history; Allies & Combat tracks active summons, enemy state and command limits; Skills & Class Abilities houses source-ability cards with child passive-evolution expanders, owned Talent Web powers and acquired Grand Signatures; Character & Progression houses prerequisites, archives and point accounting. The campaign log also explains requests for a hidden-calculation or rarity audit. Opening a section, filtering, hovering, inspecting a map, checking legal targets, or requesting a FULL SPATIAL AUDIT never advances rounds or triggers abilities.
 
