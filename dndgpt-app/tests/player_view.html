@@ -158,6 +158,33 @@ document.getElementById('run').onclick=async()=>{
   w.setAmbientMotion(true,false);w.selectLayout('original',false);d.getElementById('custom').value='';
  });
 
+ await test('Story panels have a complete border, inner padding and outer space in every layout',async()=>{
+  const samples=['','I kept the harbour lamps lit.\n\nThe crossing changed the coastline, and my work changed with it.',Array(12).fill('A long character history stays inside the reading panel. '+ 'Unbroken'.repeat(35)).join('\n\n')];
+  for(const width of [375,700,1100]){
+   frame.style.width=width+'px';await wait(35);
+   for(const layout of ['original','reclaimed','orrery','ember']){
+    for(const text of samples){
+     const record=structuredClone(fixture);record.version+=100;record.character.story_summary=text;
+     w.renderCampaign(record);await wait(5);d.getElementById('nav-character').click();
+     w.selectLayout(layout,false);w.selectScene('violet-peaks',false);
+     const story=d.querySelector('.character-story'),summary=story.querySelector('summary'),copy=story.querySelector('.story-copy');
+     const style=w.getComputedStyle(story),inset=w.getComputedStyle(copy);
+     for(const edge of ['Top','Right','Bottom','Left'])assert(style['border'+edge+'Width']==='1px','Incomplete story border: '+layout+'/'+width);
+     assert(Number(style.marginTop.replace('px',''))>=22&&Number(style.marginBottom.replace('px',''))>=22,'Missing outside spacing');
+     assert(Number(inset.paddingLeft.replace('px',''))>=18&&Number(inset.paddingRight.replace('px',''))>=18,'Missing inside spacing');
+     story.open=false;const closed=story.getBoundingClientRect().height;summary.click();
+     assert(story.open&&story.getBoundingClientRect().height>closed+35,'Story did not expand');
+     const box=story.getBoundingClientRect(),first=copy.querySelector('p').getBoundingClientRect(),last=copy.querySelector('p:last-child').getBoundingClientRect();
+     assert(first.left>=box.left+18&&first.right<=box.right-18,'Story text touches border');
+     assert(copy.scrollWidth<=copy.clientWidth+1&&story.scrollWidth<=story.clientWidth+1,'Long story overflows');
+     assert(box.bottom-last.bottom>=18,'Story has no bottom padding');
+     summary.click();assert(!story.open&&story.getBoundingClientRect().height<=closed+1,'Story did not collapse cleanly');
+    }
+   }
+  }
+  frame.style.width='1100px';w.selectLayout('original',false);
+ });
+
  await test('Layout inspection never writes campaign state or gameplay history',async()=>{
   const after=await(await fetch('/test-state')).json();
   assert(JSON.stringify(after.campaign)===JSON.stringify(before.campaign),'Authoritative campaign changed');

@@ -1,5 +1,11 @@
 /* The same campaign controls and records, with four independent reading layouts. */
 .dashboard-surface,.dashboard-shell{min-width:0}
+.character-story,.character-story[open]{margin:24px 0;padding:0;border:1px solid var(--line);border-radius:6px;background:var(--soft);min-width:0}
+.character-story>summary{min-height:48px;padding:14px 20px;list-style-position:inside;line-height:1.5}
+.character-story[open]>summary{border-bottom:1px solid var(--line)}
+.character-story>.story-copy{padding:16px 20px 20px;overflow-wrap:anywhere}
+.character-story .story-copy>p{margin:0;max-width:70ch;font:400 1rem/1.75 Georgia,"Times New Roman",serif}
+.character-story .story-copy>p+p{margin-top:14px}
 .appearance-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 .scene-controls{min-width:0;align-content:start}.scene-controls label{line-height:1.4;min-height:1.4em}
 .select-field{display:block;position:relative;min-width:0;color:var(--ink)}

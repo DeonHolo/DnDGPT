@@ -951,9 +951,10 @@ function renderCampaign(next){
   paragraph($("character"),c.name,"page-lead");
   paragraph($("character"),c.class_name+" · "+c.rarity,"muted");
   const story=recordDetail($("character"),"Your story","character-story");story.className="character-story";
+  const storyCopy=element("div",undefined,"story-copy");story.append(storyCopy);
   if(typeof c.story_summary==="string"&&c.story_summary.trim()){
-    for(const text of c.story_summary.split(/\n\s*\n/).filter(text=>text.trim()))story.append(element("p",text));
-  }else story.append(element("p","Ask your GM to draft your story from your chosen class and the world around you. You can write or revise it in chat.","muted"));
+    for(const text of c.story_summary.split(/\n\s*\n/).filter(text=>text.trim()))storyCopy.append(element("p",text));
+  }else storyCopy.append(element("p","Ask your GM to draft your story from your chosen class and the world around you. You can write or revise it in chat.","muted"));
   if(c.title)paragraph($("character"),"Title · "+c.title);
   if(c.background){
     if(typeof c.background==="string"&&c.background.length<160)paragraph($("character"),"Background · "+c.background);
