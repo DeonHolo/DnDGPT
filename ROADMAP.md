@@ -66,6 +66,14 @@ Updated: 18 October 2026. Checkboxes mean implemented and checked in the working
 
 ## Release status
 
+### Native event and action cards — 19 October 2026
+
+Both complete books now carry the same polished native-card contract: genuine clickable choices, original non-emoji iconography, crisp hierarchy, purposeful accessible accents and concise consequential cost/risk lines. It uses Slay the Spire's event-screen readability as inspiration. Offer counts, action legality, confirmation gates, mechanics and saved outcomes are preserved; restyling never replays an action. The GM skill and presentation guide reinforce this preference. Exact native layouts remain controlled by ChatGPT.
+
+**Published and verified:** [source 089d568](https://github.com/DeonHolo/DnDGPT/commit/089d56864ee3dc1ab9f5de2ff2b9999ebe7a8e3b) is active in Appwrite deployment `6ad58204b3e133a13906`. [GitHub CI](https://github.com/DeonHolo/DnDGPT/actions/runs/39190709346) passed **405 tests** and built the portable release; the focused local source, standard-rule and packaging suite passed **18 tests**. The existing private plugin is **1.0.27**. Its downloaded installed archive matches the canonical rulebook, hardener, GM skill and presentation bytes exactly; identity, App binding, metadata, audience and default prompt are preserved. The text source reader normalizes the hardener's line endings, so the archive was used for byte verification.
+
+Authenticated hosted `read_rules` returns rulebook SHA-256 `b8c403b61bcf204021043a5448ab2392b14557ff7149eabb37aae76889d47113` and hardener SHA-256 `49dc3b8fe3f2b14e18cd44711116d063a16e90ada550bc2749f0bc1d7de6fa18`, matching source and the installed archive. The additive `polished-intelligent-ui-2026-10-19.json` revision proves all unrelated source bytes are unchanged. A direct anonymous health probe from the local terminal returned HTTP 403; this record relies on deployment metadata and authenticated rule reads, not a successful anonymous health check. Native generated-card appearance was not re-playtested for this instruction-only release. No campaign was created, advanced or modified.
+
 ### Player-facing details
 
 Application **1.0.21** and plugin **1.0.26** curate player-facing facts instead of rendering arbitrary saved fields. Empty costs and cooldowns, parent IDs, preparation codes, internal flags and duplicate mechanics copies are hidden. Damage, HP, DEF, duration, real costs/cooldowns, depleted resources and meaningful counterplay remain. Upgrades prefer an explicit change summary and filter copied parent sentences in legacy entries. Five attributes use a balanced responsive layout. The complete rulebook, Rule Hardener and GM skill reinforce this writing contract through an additive, reversible source amendment.
