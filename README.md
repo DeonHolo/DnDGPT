@@ -7,6 +7,7 @@
 </p>
 
 <p align="center">
+  <a href="https://deonholo.github.io/DnDGPT/">Website</a> ·
   <a href="#start-playing">Start playing</a> ·
   <a href="#what-it-does">Dashboard</a> ·
   <a href="#how-it-works">How it works</a> ·
@@ -55,9 +56,11 @@ Leave the auto-filled **Authorization URL**, **Token URL**, and **Resource** val
 
 ### 3. Connect and sign in
 
-Review the requested access, click **Create as a plugin**, then **Connect**. On the DnDGPT sign-in page, choose **Sign up** if you are new, or use your existing DnDGPT login.
+Review the requested access, click **Create as a plugin**, then **Connect**. On the DnDGPT sign-in page, choose **Continue with Google**, or **Sign up** to create an email account. If you already have DnDGPT saves, use the same sign-in method as before: Google and email accounts are not automatically linked.
 
 That page uses Auth0 to handle DnDGPT sign-in. When ChatGPT shows **Connected**, you are ready.
+
+Read the [Privacy Policy](https://deonholo.github.io/DnDGPT/privacy.html) and [Terms of Service](https://deonholo.github.io/DnDGPT/terms.html) before connecting. Already registered with email? Choose **Log in** rather than signing up again.
 
 ### 4. Start a campaign
 
