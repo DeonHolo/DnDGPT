@@ -4,7 +4,7 @@
 <button id="run">Run approval tests</button><p id="summary" role="status">Ready</p><pre id="results"></pre><iframe id="widget" title="Disposable approval test dashboard" src="/test-widget"></iframe>
 <script>
 const frame=document.getElementById("widget"),results=[],calls=[],messages=[];
-let nextId=3000,initialized=0,active=null;
+let nextId=3000,initialized=0,active=null,completedReads=0;
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 async function until(fn){for(let i=0;i<150;i++){if(await fn())return;await sleep(80)}throw Error("Timed out waiting for UI")}
 function assert(value,message){if(!value)throw Error(message)}
@@ -15,7 +15,7 @@ async function audit(){return(await tool('audit',{campaign_id:active.id})).struc
 async function view(){return tool('render_dashboard',{campaign_id:active.id})}
 async function expire(proposal){await fetch('/test-expire-approval',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({proposal_id:proposal.structuredContent.proposal.id})})}
 function deliver(result){frame.contentWindow.postMessage({jsonrpc:'2.0',method:'ui/notifications/tool-result',params:result},location.origin)}
-async function refresh(doc){const count=calls.length;doc.getElementById('refresh').click();await until(()=>calls.length>count&&doc.getElementById('syncStatus').dataset.state==='saved');await sleep(80)}
+async function refresh(doc){const count=completedReads;doc.getElementById('refresh').click();await until(()=>completedReads>count&&doc.getElementById('syncStatus').dataset.state==='saved');await sleep(30)}
 async function test(name,run){try{await run();results.push({name,passed:true})}catch(error){results.push({name,passed:false,error:error.message})}document.getElementById('results').textContent=results.map(r=>(r.passed?'PASS ':'FAIL ')+r.name+(r.error?': '+r.error:'')).join('\n')}
 window.addEventListener('message',async event=>{
  if(event.source!==frame.contentWindow||event.data?.jsonrpc!=='2.0')return;
@@ -23,7 +23,7 @@ window.addEventListener('message',async event=>{
  let result,error;
  try{
   if(m.method==='ui/initialize')result={protocolVersion:'2026-01-26',hostCapabilities:{serverTools:{},message:{text:{}}},hostContext:{theme:'dark',displayMode:'inline'}};
-  else if(m.method==='tools/call'){calls.push(m.params.name);const args=m.params.name==='render_dashboard'&&active?{campaign_id:active.id}:m.params.arguments;result=await tool(m.params.name,args)}
+  else if(m.method==='tools/call'){calls.push(m.params.name);const args=m.params.name==='render_dashboard'&&active?{campaign_id:active.id}:m.params.arguments;result=await tool(m.params.name,args);if(['get_campaign','render_dashboard'].includes(m.params.name))completedReads++}
   else if(m.method==='ui/message'){messages.push(m.params);result={}}
   else throw Error('Unsupported host method: '+m.method);
  }catch(e){error={code:-32000,message:e.message}}

@@ -21,4 +21,8 @@ The pending confirmation was stored against the current save version, but was ol
 
 ## Release status
 
-Candidate dashboard: 1.0.28. Candidate plugin: 1.0.33. Deployment and private-plugin publication have not yet been verified.
+Dashboard 1.0.28 is live from commit `7b48713fd324bd2b980b02bb8c7c361a693a1f03`. Appwrite deployment `6ad68f4b10a19e99bcbc` is ready and active. The public health endpoint reports 1.0.28; the served renderer matches the candidate after normalizing line endings (including embedded SVGs) and the hosting edge's beacon. This is a source check, not visual acceptance.
+
+GitHub [check and package](https://github.com/DeonHolo/DnDGPT/actions/runs/39329871778) passed **434 tests**. [Pages](https://github.com/DeonHolo/DnDGPT/actions/runs/39329871353) also succeeded.
+
+The portable 1.0.33 ZIP is built (`dist/dndgpt-system-rebirth-1.0.33.zip`, SHA-256 `625e054d4106c42a161f1b4926723723484dcf8377c8826ee88edac60f0e32c2`). Private-plugin upload and browser interaction checks remain pending browser access. The currently connected DnDGPT identity could not read the affected campaign (owner-isolated 404); the maintainer's read-only project inspection remains the source for its state check. Connections and permissions were not changed.

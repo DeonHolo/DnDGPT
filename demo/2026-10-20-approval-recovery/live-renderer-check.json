@@ -1,0 +1,23 @@
+{
+  "health": {
+    "status": "ok",
+    "version": "1.0.28",
+    "rules_version": "1.0",
+    "engine": "incremental sandbox",
+    "persistent_db": true,
+    "oauth_configured": true,
+    "chatgpt_integration": false,
+    "live_client_verification": "pending",
+    "model_api_calls": false,
+    "creation_drafts_enabled": false,
+    "sandbox_combat_enabled": false,
+    "character_creation": false,
+    "chat_led_saved_state": true,
+    "gm_adjudication": "ChatGPT"
+  },
+  "renderer_equivalent": true,
+  "contains_review_again": true,
+  "contains_expiry_status": true,
+  "local_renderer_sha256": "9fd7633e01b684f1698024dfe08dcff5704547abc5669d26c9b2125a00be287c",
+  "public_preview_only": true
+}
