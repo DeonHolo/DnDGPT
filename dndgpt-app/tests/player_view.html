@@ -185,6 +185,30 @@ document.getElementById('run').onclick=async()=>{
   frame.style.width='1100px';w.selectLayout('original',false);
  });
 
+ await test('Ember frames every chapter and the character status with inset content',async()=>{
+  for(const width of [375,700,1100]){
+   frame.style.width=width+'px';await wait(35);w.selectLayout('ember',false);
+   for(const scene of ['classic','glowwood','moonlit-trail']){
+    w.selectScene(scene,false);
+    for(const id of ['character','skills','health','summons','equipment','quests','world']){
+     d.getElementById('nav-'+id).click();
+     for(const node of [d.getElementById('status'),d.getElementById('page-'+id)]){
+      const style=w.getComputedStyle(node),box=node.getBoundingClientRect();
+      for(const edge of ['Top','Right','Bottom','Left'])assert(Number(style['border'+edge+'Width'].replace('px',''))>=1,'Missing '+edge+' border: '+id+'/'+width+'/'+scene);
+      for(const edge of ['Left','Right'])assert(Number(style['padding'+edge].replace('px',''))>=16,'Missing '+edge+' padding: '+id+'/'+width);
+      const content=node.id==='status'?d.getElementById('resources'):node.querySelector('.page-heading');
+      const inner=content.getBoundingClientRect();
+      assert(inner.left>=box.left+16&&inner.right<=box.right-16,'Content touches frame: '+id+'/'+width);
+      assert(box.right<=d.documentElement.clientWidth+1&&node.scrollWidth<=node.clientWidth+1,'Framed panel overflows: '+id+'/'+width);
+     }
+    }
+    const toolbar=w.getComputedStyle(d.querySelector('.toolbar'));
+    assert(toolbar.borderLeftWidth==='1px'&&Number(toolbar.paddingLeft.replace('px',''))>=12,'Overview label has no frame or inset');
+   }
+  }
+  frame.style.width='1100px';w.selectLayout('original',false);
+ });
+
  await test('Layout inspection never writes campaign state or gameplay history',async()=>{
   const after=await(await fetch('/test-state')).json();
   assert(JSON.stringify(after.campaign)===JSON.stringify(before.campaign),'Authoritative campaign changed');
