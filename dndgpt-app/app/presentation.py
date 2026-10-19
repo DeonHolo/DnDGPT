@@ -23,8 +23,14 @@ def dashboard_html():
         styles.append(f'html[data-scene="{scene["id"]}"]{{' + ";".join(variables) + "}")
     catalog = json.dumps([{key: value for key, value in scene.items() if key not in
                           ("asset", "palette", "opacity")} for scene in SCENES], ensure_ascii=False)
+    layout_art = []
+    for name in ("ivy", "lantern", "orrery", "forge"):
+        data = b64encode((HERE / "assets/layouts" / f"{name}.svg").read_bytes()).decode("ascii")
+        layout_art.append(f'--layout-{name}:url("data:image/svg+xml;base64,{data}")')
+    layouts = ":root{" + ";".join(layout_art) + "}\n" + (HERE / "layouts.css").read_text(encoding="utf-8")
     return ((HERE / "index.html").read_text(encoding="utf-8")
             .replace("__DNDGPT_UI_VERSION__", APP_VERSION)
             .replace("/* scene assets */", "\n".join(styles))
+            .replace("/* dashboard layouts */", layouts)
             .replace('<script id="sceneCatalog" type="application/json">[]</script>',
                      '<script id="sceneCatalog" type="application/json">' + catalog.replace("<", "\\u003c") + '</script>'))

@@ -521,8 +521,8 @@ class Engine:
 
     def set_view_preferences(self, owner, preferences):
         keys = {"panels", "details", "hud_hidden"}
-        if type(preferences) is not dict or not keys <= set(preferences) <= keys | {"equipment_tab", "skills_tab", "world_tab", "combat_tab", "scene"}:
-            fail(422, "invalid_preferences", "Preferences require panels, details, hud_hidden; equipment_tab, skills_tab, world_tab and combat_tab are optional")
+        if type(preferences) is not dict or not keys <= set(preferences) <= keys | {"equipment_tab", "skills_tab", "world_tab", "combat_tab", "scene", "layout", "ambient_motion"}:
+            fail(422, "invalid_preferences", "Preferences require panels, details and hud_hidden; display choices are optional")
         if "equipment_tab" in preferences and preferences["equipment_tab"] not in ("equipment", "inventory"):
             fail(422, "invalid_preferences", "equipment_tab must be equipment or inventory")
         if "skills_tab" in preferences and preferences["skills_tab"] not in ("combat", "reactions", "passives", "utility"):
@@ -536,6 +536,11 @@ class Engine:
             fail(422, "invalid_preferences", "Unknown reading atmosphere")
         if type(preferences["hud_hidden"]) is not bool:
             fail(422, "invalid_preferences", "hud_hidden must be boolean")
+        if "layout" in preferences and (not isinstance(preferences["layout"], str) or
+                                         preferences["layout"] not in ("original", "reclaimed", "orrery", "ember")):
+            fail(422, "invalid_preferences", "Unknown dashboard layout")
+        if "ambient_motion" in preferences and type(preferences["ambient_motion"]) is not bool:
+            fail(422, "invalid_preferences", "ambient_motion must be boolean")
         for key, maximum in (("panels", 7), ("details", 200)):
             values = preferences[key]
             if type(values) is not list or len(values) > maximum or any(

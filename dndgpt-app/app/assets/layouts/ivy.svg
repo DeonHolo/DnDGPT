@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 1000" fill="none">
+<defs>
+ <linearGradient id="leaf" x1="0" y1="-35" x2="12" y2="22" gradientUnits="userSpaceOnUse"><stop stop-color="#9daf72"/><stop offset=".42" stop-color="#4e7149"/><stop offset="1" stop-color="#193e35"/></linearGradient>
+ <linearGradient id="young" x1="0" y1="-30" x2="0" y2="25" gradientUnits="userSpaceOnUse"><stop stop-color="#bec890"/><stop offset="1" stop-color="#5e784a"/></linearGradient>
+ <g id="leaflet"><path d="M0 27C-7 13-29 14-29-3L-17-5-22-23-6-15 0-37 7-17 23-25 18-8 31-5C30 12 9 15 0 27Z" fill="url(#leaf)" stroke="#a6b782" stroke-opacity=".45" stroke-width=".6"/><path d="M0 26V-29M0 5-20-2M0-4-13-17M0 7 22-3M0-6 15-18" stroke="#d7d7a3" stroke-opacity=".38" stroke-width=".65"/><path d="m0 24 2 15" stroke="#849265" stroke-width="1.1"/></g>
+ <g id="bud"><path d="M0 18C-19 1-11-19 0-25 14-10 17 5 0 18Z" fill="url(#young)" stroke="#bdc394" stroke-width=".7"/><path d="M0 18V-18" stroke="#d9dbb5" stroke-width=".6"/></g>
+</defs>
+<g stroke-linecap="round">
+ <path d="M69 1030C122 916 37 876 95 758S185 603 110 492 58 317 118 218 88 71 148-24" stroke="#101e1a" stroke-width="9"/>
+ <path d="M69 1030C122 916 37 876 95 758S185 603 110 492 58 317 118 218 88 71 148-24" stroke="#617349" stroke-width="4.5"/>
+ <path d="M71 1030C124 916 39 876 97 758S187 603 112 492 60 317 120 218 90 71 150-24" stroke="#c5b37b" stroke-opacity=".5" stroke-width=".8"/>
+ <path d="M91 775C15 752 25 703 65 723S117 709 87 689M133 647C217 650 207 597 177 613S141 615 165 585M84 390C13 375 13 322 44 333S70 342 47 302M114 229C201 219 192 162 164 181S128 181 158 153M115 104C49 77 52 47 76 53" stroke="#75845a" stroke-width="1.3"/>
+ <path d="M83 901C124 883 139 916 116 931S91 913 108 917M110 509C177 484 190 526 162 542S139 516 159 524" stroke="#7b9062" stroke-width="1"/>
+</g>
+<g opacity=".98">
+ <use href="#leaflet" transform="translate(113 55) rotate(-72) scale(1.1)"/><use href="#leaflet" transform="translate(113 103) rotate(55) scale(.84)"/>
+ <use href="#bud" transform="translate(147 9) rotate(35) scale(.7)"/><use href="#leaflet" transform="translate(126 162) rotate(-78) scale(.9)"/>
+ <use href="#leaflet" transform="translate(118 221) rotate(68) scale(1.12)"/><use href="#bud" transform="translate(166 183) rotate(60) scale(.7)"/>
+ <use href="#leaflet" transform="translate(83 283) rotate(-69) scale(.88)"/><use href="#leaflet" transform="translate(76 341) rotate(61) scale(1.03)"/>
+ <use href="#leaflet" transform="translate(86 399) rotate(-57) scale(1.17)"/><use href="#leaflet" transform="translate(107 466) rotate(80) scale(.8)"/>
+ <use href="#leaflet" transform="translate(131 532) rotate(-82) scale(.95)"/><use href="#leaflet" transform="translate(145 590) rotate(63) scale(1.1)"/>
+ <use href="#leaflet" transform="translate(134 648) rotate(-67) scale(.82)"/><use href="#leaflet" transform="translate(106 710) rotate(67) scale(1.1)"/>
+ <use href="#bud" transform="translate(51 727) rotate(-80) scale(.8)"/><use href="#leaflet" transform="translate(82 774) rotate(-68) scale(1.05)"/>
+ <use href="#leaflet" transform="translate(72 840) rotate(73) scale(.85)"/><use href="#leaflet" transform="translate(84 898) rotate(-70) scale(1.12)"/>
+ <use href="#leaflet" transform="translate(83 963) rotate(68) scale(.96)"/>
+</g>
+<g fill="#cbbf83"><circle cx="84" cy="391" r="2"/><circle cx="89" cy="398" r="2.4"/><circle cx="82" cy="403" r="1.6"/><circle cx="143" cy="592" r="1.8"/><circle cx="150" cy="597" r="2.2"/></g>
+</svg>

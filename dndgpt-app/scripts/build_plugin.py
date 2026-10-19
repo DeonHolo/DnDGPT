@@ -67,10 +67,11 @@ def build(plugin, output=None):
     legacy_path.write_text(json.dumps(legacy, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
     sources = [APP / name for name in TOP_FILES]
-    for folder, suffixes in (("app", {".py", ".html"}), ("rules", {".txt", ".json"}),
+    for folder, suffixes in (("app", {".py", ".html", ".css"}), ("rules", {".txt", ".json"}),
                              ("scripts", {".py"}), ("tests", {".py", ".html"})):
         sources.extend(p for p in (APP / folder).iterdir() if p.is_file() and p.suffix in suffixes)
     sources.extend((APP / "app/assets").glob("*.avif"))
+    sources.extend((APP / "app/assets/layouts").glob("*.svg"))
     browser_report = APP / "test-results/browser.json"
     if browser_report.exists():
         sources.append(browser_report)

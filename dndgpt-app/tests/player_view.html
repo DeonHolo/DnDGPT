@@ -104,6 +104,65 @@ document.getElementById('run').onclick=async()=>{
   revised.version+=1;revised.character.story_summary='';w.renderCampaign(structuredClone(revised));
   assert(d.querySelector('.character-story').textContent.includes('Ask your GM'),'Missing portrait was invented');
  });
+ await test('Layouts hot-swap the same controls and preserve the current view and draft',()=>{
+  d.getElementById('nav-skills').click();d.getElementById('skill-tab-passives').click();
+  const article=d.querySelector('#skill-page-passives .reading-article');article.querySelector('[id^="ability-view-upgrades-"]').click();
+  d.getElementById('custom').value='Unsent renderer test draft';
+  w.selectScene('glowwood',false);
+  const nav=d.getElementById('sectionNav'),input=d.getElementById('custom'),version=d.getElementById('stateVersion').textContent;
+  for(const layout of ['reclaimed','orrery','ember','original','reclaimed','original']){
+   w.selectLayout(layout,false);
+   assert(d.documentElement.dataset.layout===layout,'Layout did not switch');
+   assert(d.getElementById('sectionNav')===nav&&d.querySelectorAll('#sectionNav').length===1,'Navigation duplicated or replaced');
+   assert(input===d.getElementById('custom')&&input.value==='Unsent renderer test draft','Draft lost');
+   assert(d.querySelector('#sectionNav [aria-current="page"]').dataset.target==='skills','Chapter lost');
+   assert(article.querySelector('[id^="ability-view-upgrades-"]').getAttribute('aria-selected')==='true','Ability subtab lost');
+   assert(d.documentElement.dataset.scene==='glowwood','Atmosphere changed with layout');
+   assert(d.getElementById('stateVersion').textContent===version,'Campaign version changed');
+   assert(!d.getElementById('page-skills').hidden,'Current page disappeared');
+   assert(d.getElementById('layoutRail').contains(nav)===['reclaimed','ember'].includes(layout),'Wrong navigation placement');
+  }
+ });
+ await test('Appearance selectors stay side by side and controls fit narrow and wide views',async()=>{
+  d.getElementById('viewSettings').open=true;
+  for(const width of [375,700,1100]){
+   frame.style.width=width+'px';await wait(40);
+   for(const layout of ['original','reclaimed','orrery','ember']){
+    w.selectLayout(layout,false);await wait(30);
+    const scene=d.getElementById('sceneSelect').getBoundingClientRect(),choice=d.getElementById('layoutSelect').getBoundingClientRect();
+    assert(scene.right<choice.left&&Math.abs(scene.y-choice.y)<2,'Selectors not adjacent: '+layout+'/'+width);
+    for(const id of ['session','sceneSelect','layoutSelect','deleteCampaign','custom','send','resources']){
+     const box=d.getElementById(id).getBoundingClientRect();
+     assert(box.left>=0&&box.right<=d.documentElement.clientWidth+1,'Clipped '+id+' in '+layout+'/'+width);
+    }
+    assert(d.documentElement.scrollWidth<=d.documentElement.clientWidth+1,'Page overflow: '+layout+'/'+width);
+   }
+  }
+  frame.style.width='1100px';w.selectLayout('original',false);
+ });
+ await test('Custom dropdown arrows have an inset and Delete Campaign has no dots',()=>{
+  for(const id of ['session','sceneSelect']){
+   const select=d.getElementById(id),style=w.getComputedStyle(select),arrow=w.getComputedStyle(select.parentElement,'::after');
+   assert(style.appearance==='none'&&Number(style.paddingRight.replace('px',''))>=38,'Missing arrow clearance');
+   assert(arrow.right==='16px'&&arrow.pointerEvents==='none','Arrow hugs border or blocks clicks');
+  }
+  w.updateSyncStatus();assert(d.getElementById('deleteCampaign').textContent==='Delete Campaign','Wrong delete label');
+ });
+ await test('Decorative motion can stop and hiding the codex also hides its side navigation',()=>{
+  w.selectLayout('reclaimed',false);w.setAmbientMotion(false,false);
+  assert(w.getComputedStyle(d.querySelector('.layout-botany span')).animationName==='none','Motion still running');
+  const width=d.querySelector('.dashboard-surface').getBoundingClientRect().width;
+  d.getElementById('hideHud').click();assert(d.getElementById('hud').hidden&&d.getElementById('layoutRail').hidden,'Sidebar remains visible');
+  assert(d.querySelector('.dashboard-surface').getBoundingClientRect().width>=width,'Hiding the codex shrinks the dashboard');
+  d.getElementById('hideHud').click();assert(!d.getElementById('hud').hidden&&!d.getElementById('layoutRail').hidden,'Codex did not return');
+  w.setAmbientMotion(true,false);w.selectLayout('original',false);d.getElementById('custom').value='';
+ });
+
+ await test('Layout inspection never writes campaign state or gameplay history',async()=>{
+  const after=await(await fetch('/test-state')).json();
+  assert(JSON.stringify(after.campaign)===JSON.stringify(before.campaign),'Authoritative campaign changed');
+  assert(JSON.stringify(after.audit)===JSON.stringify(before.audit),'Gameplay history changed');
+ });
  document.getElementById('result').textContent=results.filter(r=>r.passed).length+'/'+results.length+' passed';
  await fetch('/test-player-record',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({results,passed:results.every(r=>r.passed)})});
  d.getElementById('nav-skills').click();d.getElementById('skill-tab-passives').click();d.querySelector('[data-ability-id="sig-1"]').click();d.querySelector('#skill-page-passives [id^="ability-view-upgrades-"]').click();

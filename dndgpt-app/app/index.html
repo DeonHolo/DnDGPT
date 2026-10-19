@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-scene="classic" data-ui-version="__DNDGPT_UI_VERSION__">
+<html lang="en" data-scene="classic" data-layout="original" data-ui-version="__DNDGPT_UI_VERSION__">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>DnDGPT · Campaign dashboard</title>
@@ -148,16 +148,22 @@ dialog{color:var(--ink);background:var(--paper);border:1px solid var(--line);bor
 @media(max-width:400px){body{padding:14px}h1{font-size:1.4rem}.crest{width:32px;height:38px}.masthead{gap:10px}.masthead .badge{font-size:.7rem;padding:4px 7px}.section-link{gap:7px;padding:10px;min-height:82px}.nav-icon{width:18px;height:18px}.nav-title{font-size:.8rem}.companion-page{padding:18px}h2{font-size:1.4rem}.toolbar-label{flex-basis:100%}}
 @media(max-width:480px){#choices{gap:8px}#choices button{flex:1 1 100%}#resources{gap:10px}.resource-label{font-size:.7rem;flex-wrap:wrap}#customForm{flex-wrap:wrap}#custom{flex-basis:100%}.toolbar button{flex:1}#status{padding:14px}.stat-grid{gap:6px}.record-grid{gap:8px}}
 @media(prefers-reduced-motion:reduce){button{transition:none}}
+/* dashboard layouts */
 </style>
 </head>
 <body>
 <a class="skip-link" href="#companionContent">Skip to chapter</a>
+<div class="layout-botany" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+<div class="dashboard-shell">
+<aside id="layoutRail" class="layout-rail" hidden><div class="rail-brand" aria-hidden="true">DnDGPT<span>Your campaign record</span></div><div id="layoutEmblem" class="layout-emblem" aria-hidden="true"></div></aside>
+<div class="dashboard-surface">
 <header class="masthead row"><svg class="crest" viewBox="0 0 48 52" fill="none" aria-hidden="true"><path d="m24 2 21 12v24L24 50 3 38V14L24 2Z" stroke="currentColor" stroke-width="1.5"/><path d="m24 2-10 18 10 18 10-18L24 2ZM3 14l11 6L3 38l21 0 21 0-11-18 11-6M24 38v12" stroke="currentColor" stroke-width="1"/><text x="24" y="28" text-anchor="middle" fill="currentColor" font-family="Georgia,serif" font-size="11">20</text></svg><div class="identity"><p class="eyebrow">Campaign dashboard</p><h1>DnDGPT</h1></div></header>
-<div class="row session-picker"><label for="session">Saved game</label><select id="session"><option value="">Select a saved game</option></select><button id="deleteCampaign" class="danger" type="button" disabled>Delete campaign…</button></div>
+<div class="row session-picker"><label for="session">Saved game</label><span class="select-field session-field"><select id="session"><option value="">Select a saved game</option></select></span><button id="deleteCampaign" class="danger" type="button" disabled>Delete Campaign</button></div>
 <details id="viewSettings" class="view-options"><summary>View options</summary>
 <div class="settings-body">
 <div class="row"><button id="refresh" type="button">Refresh saved state</button><button id="hideHud" type="button">Hide codex</button></div>
-<div class="scene-controls"><label for="sceneSelect">Reading atmosphere</label><select id="sceneSelect" aria-describedby="artCredit"><option value="classic">Classic</option></select></div>
+<div class="appearance-controls"><div class="scene-controls"><label for="sceneSelect">Reading atmosphere</label><span class="select-field"><select id="sceneSelect" aria-describedby="artCredit"><option value="classic">Classic</option></select></span></div><div class="scene-controls"><label for="layoutSelect">Dashboard layout</label><span class="select-field"><select id="layoutSelect"><option value="original">Original</option><option value="reclaimed">Reclaimed Codex</option><option value="orrery">The Orrery</option><option value="ember">Ember Ledger</option></select></span></div></div>
+<label class="motion-control"><input id="ambientMotion" type="checkbox" checked> Ambient motion</label>
 <p class="muted" id="artCredit">Classic dark green, without background artwork.</p>
 <details id="diagnostics" class="settings-disclosure"><summary>Connection details</summary><div class="disclosure-body"><p id="connection" class="muted">Connecting…</p><p id="uiBuild" class="muted"></p><div class="connection-meta"><span id="mode" class="badge">Inline</span><span id="stateVersion" class="muted">No saved state selected</span></div><pre id="lastEvent"></pre></div></details>
 <details id="developmentTools" class="development-tools settings-disclosure"><summary>Development tools</summary><div class="disclosure-body"><p class="muted">Test sandbox controls. These inspect test data; they are not adventure choices.</p><nav id="choices" class="row" aria-label="Development shortcuts"></nav><button id="newSandbox" type="button">New test sandbox</button></div></details>
@@ -202,6 +208,7 @@ dialog{color:var(--ink);background:var(--paper);border:1px solid var(--line);bor
 <section class="companion-page" id="page-quests" data-panel="quests" aria-labelledby="title-quests" hidden><header class="page-heading"><p class="eyebrow">Chapter 06</p><h2 id="title-quests">Quest Journal</h2><p class="page-description">Promises made. Paths still unwritten.</p></header><div id="quests" class="page-content"><p class="empty muted">Choose a stored sandbox to view this chapter.</p></div></section>
 <section class="companion-page" id="page-world" data-panel="world" aria-labelledby="title-world" hidden><header class="page-heading"><p class="eyebrow">Chapter 07</p><h2 id="title-world">World &amp; Campaign Log</h2><p class="page-description">Places discovered, and the story so far.</p></header><div id="world" class="page-content"><p class="empty muted">Choose a stored sandbox to view this chapter.</p></div></section></main>
 </div>
+</div></div>
 <script id="companionNavigation">
 "use strict";
 function selectCompanionPage(id){
@@ -236,7 +243,7 @@ let preferences=window.openai?.widgetState?.view_preferences||{panels:[],details
 let preferencesLoaded=Boolean(window.openai?.widgetState?.view_preferences), restoring=false, savingTimer, pollingTimer, polling=false, busy=false;
 let lastSelected=window.openai?.widgetState?.campaign_id||null;
 let dismissedProposal=null, lastVerifiedAt=null, syncIssue=false, gearTab="equipment", skillTab="combat", worldTab="world", combatTab="summons";
-let selectedAbilities={}, selectedWorld=null, abilityView="overview", scene="classic";
+let selectedAbilities={}, selectedWorld=null, abilityView="overview", scene="classic", layout="original", ambientMotion=true;
 let deletion=window.openai?.widgetState?.campaign_deletion||null, deleting=false, deletionStarted=Boolean(deletion);
 const deletedCampaigns=new Set();
 const uiVersion=document.documentElement.dataset.uiVersion;
@@ -267,7 +274,7 @@ function updateSyncStatus(){
   const outdated=pending&&pending.proposal.expected_version!==state?.version;
   $("confirm").disabled=busy||deleting||syncIssue||!lastVerifiedAt||!pending||Boolean(outdated);
   $("confirm").title=syncIssue||!lastVerifiedAt?"Refresh saved state before approving.":outdated?"State changed. Request a new action preview.":"";
-  $("deleteCampaign").textContent=deletionStarted?"Continue deletion…":"Delete campaign…";
+  $("deleteCampaign").textContent=deletionStarted?"Continue deletion":"Delete Campaign";
   $("deleteCampaign").disabled=busy||deleting||(!deletionStarted&&(!state||$("session").value!==state.id||syncIssue||!lastVerifiedAt));
   $("confirmDelete").disabled=deleting||!deletion||(!deletionStarted&&($("deleteName").value!==deletion.campaign_name||state?.id!==deletion.campaign_id||state?.version!==deletion.expected_version));
   $("cancelDelete").disabled=deleting;
@@ -383,7 +390,7 @@ function persistPreferences(){
     skills_tab:skillTab,
     world_tab:worldTab,
     combat_tab:combatTab,
-    scene
+    scene, layout, ambient_motion:ambientMotion
   };
   try{window.openai?.setWidgetState?.({campaign_id:state?.id||lastSelected,view_preferences:preferences,campaign_deletion:deletionStarted?deletion:null})}catch{}
   clearTimeout(savingTimer);
@@ -401,6 +408,8 @@ function restorePreferences(){
   selectCombatTab(preferences.combat_tab,false);
   selectScene(preferences.scene||scene,false);
   $("hud").hidden=preferences.hud_hidden;
+  selectLayout(preferences.layout||"original",false);
+  setAmbientMotion(preferences.ambient_motion!==false,false);
   $("hideHud").textContent=$("hud").hidden?"Show codex":"Hide codex";
   // toggle events are queued; restore guard lasts until they have fired.
   setTimeout(()=>{restoring=false},0);
@@ -468,6 +477,25 @@ function selectScene(value,save=true){
 }
 $("sceneSelect").replaceChildren(...sceneCatalog.map(option=>{const node=element("option",option.name);node.value=option.id;return node}));
 $("sceneSelect").onchange=event=>selectScene(event.target.value);
+function updateLayoutRail(){
+  $("layoutRail").hidden=!["reclaimed","ember"].includes(layout)||$("hud").hidden;
+}
+function selectLayout(value,save=true){
+  layout=["original","reclaimed","orrery","ember"].includes(value)?value:"original";
+  const nav=$("sectionNav"),sidebar=["reclaimed","ember"].includes(layout);
+  if(sidebar)$("layoutRail").insertBefore(nav,$("layoutEmblem"));
+  else $("hud").prepend(nav);
+  document.documentElement.dataset.layout=layout;
+  $("layoutSelect").value=layout;updateLayoutRail();
+  if(save)persistPreferences();
+}
+function setAmbientMotion(enabled,save=true){
+  ambientMotion=enabled;document.documentElement.dataset.motion=enabled?"on":"off";
+  $("ambientMotion").checked=enabled;
+  if(save)persistPreferences();
+}
+$("layoutSelect").onchange=event=>selectLayout(event.target.value);
+$("ambientMotion").onchange=event=>setAmbientMotion(event.target.checked);
 function renderResources(character){
   $("resources").replaceChildren(...["hp","mp"].map(key=>{
     const resource=element("div",undefined,key),label=element("div",undefined,"resource-label");
@@ -1093,7 +1121,7 @@ window.addEventListener("openai:set_globals",event=>{
   applyHostContext({theme:globals.theme||hostContext.theme,displayMode:globals.displayMode||hostContext.displayMode});
 });
 $("customForm").onsubmit=event=>{event.preventDefault();const text=$("custom").value.trim();if(text)sendPrompt(text)};
-$("hideHud").onclick=()=>{$("hud").hidden=!$("hud").hidden;$("hideHud").textContent=$("hud").hidden?"Show codex":"Hide codex";persistPreferences()};
+$("hideHud").onclick=()=>{$("hud").hidden=!$("hud").hidden;$("hideHud").textContent=$("hud").hidden?"Show codex":"Hide codex";updateLayoutRail();persistPreferences()};
 $("refresh").onclick=()=>refresh().catch(error=>notice(error.message));
 $("session").onchange=()=>{updateSyncStatus();const id=$("session").value;if(id)callTool("get_campaign",{campaign_id:id}).then(()=>persistPreferences()).catch(error=>notice(error.message))};
 $("deleteCampaign").onclick=previewDeletion;

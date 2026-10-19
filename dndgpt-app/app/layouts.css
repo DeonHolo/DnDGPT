@@ -1,0 +1,92 @@
+/* The same campaign controls and records, with four independent reading layouts. */
+.dashboard-surface,.dashboard-shell{min-width:0}
+.appearance-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.scene-controls{min-width:0;align-content:start}.scene-controls label{line-height:1.4;min-height:1.4em}
+.select-field{display:block;position:relative;min-width:0;color:var(--ink)}
+.select-field::after{content:"";position:absolute;right:16px;top:50%;width:7px;height:7px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:translateY(-70%) rotate(45deg);pointer-events:none}
+.select-field select{appearance:none;-webkit-appearance:none;width:100%;min-width:0;min-height:44px;padding-right:40px;background-image:none}
+.select-field option{color:var(--ink);background:var(--soft)}
+.session-field{flex:1;min-width:120px}.session-picker{margin-top:20px;margin-bottom:16px;gap:10px}
+#layoutSelect{width:100%;font-size:.85rem}#sceneSelect{font-size:.85rem}.motion-control{display:flex;align-items:center;gap:9px;font-size:.8rem;color:var(--muted);width:fit-content;min-height:36px}.motion-control input{accent-color:var(--gold);width:16px;height:16px;margin:0}
+.layout-botany,.layout-emblem{pointer-events:none}.layout-botany{display:none}.layout-rail{min-width:0}
+/* Palette belongs to the layout; atmosphere remains the independent background art. */
+html[data-layout="reclaimed"]{color-scheme:light;--surface:#203b2e;--paper:#e9e1c9;--soft:#e2d8bc;--ink:#303c31;--muted:#646552;--line:#c4b798;--gold:#806226;--gold-wash:#d9d0ad;--accent:#954d39;--focus:#5d642b;--hp:#a04d4c;--mp:#376e96;--positive:#386748;--warning:#775323;--rare:#26688b;--epic:#795394;--shadow:#061f1930;--layout-heading:Georgia,"Times New Roman",serif}
+html[data-layout="orrery"]{--surface:#0a1425;--paper:#121e31;--soft:#19273c;--ink:#e0e0d5;--muted:#9caabd;--line:#455366;--gold:#d1b47c;--gold-wash:#29364a;--accent:#d09b89;--focus:#ead4a2;--hp:#d79383;--mp:#88b8d6;--positive:#9fc4a6;--warning:#e6c391;--rare:#96c4e7;--epic:#c8acdd;--shadow:#02071555;--layout-heading:Georgia,"Times New Roman",serif}
+html[data-layout="ember"]{--surface:#1b1d1b;--paper:#282a26;--soft:#30322b;--ink:#e0d6c2;--muted:#aca491;--line:#56564b;--gold:#dda773;--gold-wash:#443a2d;--accent:#e99179;--focus:#f2c291;--hp:#d98c76;--mp:#8eb7bf;--positive:#b5bf8d;--warning:#e3bd82;--rare:#98c0cc;--epic:#c8b5d1;--shadow:#0003;--layout-heading:var(--font-sans,system-ui),sans-serif}
+html:not([data-layout="original"]) body{max-width:1240px;position:relative;isolation:isolate}
+html:not([data-layout="original"]) :is(.masthead,.toolbar,#status,.companion-page){border-radius:2px;background:var(--paper);box-shadow:none}
+html:not([data-layout="original"]) .masthead{position:relative;min-height:128px;padding:12px 96px 24px 0;border:0;border-bottom:1px solid var(--line);background:none}
+html:not([data-layout="original"]) .masthead::after{content:"";position:absolute;right:0;top:4px;width:84px;height:112px;background:var(--layout-art) center/contain no-repeat;pointer-events:none}
+html:not([data-layout="original"]) h1{font:500 clamp(2rem,4vw,3.2rem)/1.1 var(--layout-heading);letter-spacing:-.035em}
+html:not([data-layout="original"]) .companion-page{padding:24px 0;border:0;min-width:0}
+html:not([data-layout="original"]) .page-heading{border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:24px}
+html:not([data-layout="original"]) .page-heading h2{font-family:var(--layout-heading);font-size:1.7rem}
+html:not([data-layout="original"]) #status{margin:20px 0 8px;padding:20px 0;border:0;border-block:1px solid var(--line)}
+html:not([data-layout="original"]) .toolbar{background:none;padding:0;margin-top:22px}
+html:not([data-layout="original"]) .section-link{border:0;border-bottom:1px solid var(--line);border-radius:0;background:none;box-shadow:none}
+html:not([data-layout="original"]) .section-link[aria-current="page"]{background:var(--gold-wash);box-shadow:inset 2px 0 var(--gold)}
+html:not([data-layout="original"]) .stat{background:none;border:0;border-right:1px solid var(--line);border-radius:0}
+html:not([data-layout="original"]) .stat:last-child{border-right:0}
+html:not([data-layout="original"]) .stat-grid{border-block:1px solid var(--line);padding:16px 0}
+html:not([data-layout="original"]) .record{border-radius:0}
+html:not([data-layout="original"]) .view-options{background:none;border-color:var(--line)}
+html:not([data-layout="original"]) .danger{color:var(--accent);border-color:var(--accent)}
+html:not([data-layout="original"]) #customForm{margin-top:20px}
+html:not([data-layout="original"]) #hero{font-size:1.5rem}
+.rail-brand{font:500 1.8rem/1.3 Georgia,serif;padding:0 10px 26px;border-bottom:1px solid #8e9e6a70}.rail-brand span{display:block;font:500 .6rem/1.5 system-ui;letter-spacing:.13em;text-transform:uppercase;margin-top:5px}
+.layout-emblem{height:220px;max-width:170px;margin:30px auto 0;background:var(--layout-art) center/contain no-repeat}
+/* Vellum folio reclaimed by ivy. Leaves stay outside the reading and control areas. */
+html[data-layout="reclaimed"]{--layout-art:var(--layout-lantern)}
+html[data-layout="reclaimed"] .dashboard-shell{position:relative;padding:8px;z-index:1}
+html[data-layout="reclaimed"] .dashboard-surface{position:relative;padding:28px 32px 32px;background:var(--paper);border:1px solid #b8af85;border-radius:3px 16px 3px 3px;box-shadow:0 18px 70px #051d1b70,inset 0 0 70px #b7a27125}
+html[data-layout="reclaimed"] .dashboard-surface::before{content:"";position:absolute;inset:7px;border:1px solid #9b96782b;pointer-events:none}
+html[data-layout="reclaimed"] .layout-rail{color:#d3d3b4;padding:18px 12px}
+html[data-layout="reclaimed"] .layout-rail .section-link{color:#c1cbb5;border-color:#a4ab7a25}
+html[data-layout="reclaimed"] .layout-rail :is(.nav-icon,.panel-preview){color:#adb99b}
+html[data-layout="reclaimed"] .layout-rail .section-link[aria-current="page"]{color:#f0dfab;background:#80936030;box-shadow:inset 2px 0 #c7bd80}
+html[data-layout="reclaimed"] .layout-botany{display:block;position:absolute;inset:0;overflow:hidden;z-index:3}
+.layout-botany span{position:absolute;top:-14px;left:-57px;width:130px;height:900px;max-height:100%;background:var(--layout-ivy) top center/100% 100% no-repeat;transform-origin:50% 0;animation:layout-ivy 8s ease-in-out infinite alternate;filter:drop-shadow(2px 4px 2px #07291b25)}
+.layout-botany span:nth-child(2){left:auto;right:-60px;scale:-1 1;animation-delay:-3s}
+.layout-botany span:nth-child(3){left:auto;right:70px;top:-425px;height:540px;rotate:78deg;animation-delay:-5s}
+.layout-botany span:nth-child(4){top:auto;bottom:-510px;left:80px;height:600px;rotate:55deg;animation-delay:-2s}
+/* Observatory: centered masthead, a chapter ribbon and a blue reading plate. */
+html[data-layout="orrery"]{--layout-art:var(--layout-orrery)}
+html[data-layout="orrery"] .dashboard-shell{position:relative;padding:10px 20px}
+html[data-layout="orrery"] .dashboard-shell::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background-image:radial-gradient(circle,#c7cdb88c .75px,transparent 1px),radial-gradient(circle,#a8bace75 .6px,transparent 1px);background-size:93px 77px,151px 127px;background-position:20px 20px,70px 32px;opacity:.35;mask-image:linear-gradient(#000,transparent 80%)}
+html[data-layout="orrery"] .masthead{display:flex;justify-content:center;text-align:center;padding:34px 15px 26px;border:0;min-height:170px}
+html[data-layout="orrery"] .masthead .crest{display:none}html[data-layout="orrery"] .masthead .identity{flex:0 1 640px;z-index:1}
+html[data-layout="orrery"] .masthead::after{width:190px;height:190px;top:-10px;right:calc(50% - 95px);opacity:.22;animation:layout-orbit 100s linear infinite}
+html[data-layout="orrery"] #status{max-width:620px;margin:28px auto 8px;padding:22px 24px;background:#121e31e8;text-align:center;border-color:#45536688}
+html[data-layout="orrery"] .codex-layout{grid-template-columns:minmax(0,1fr);gap:24px}
+html[data-layout="orrery"] .section-nav{display:flex;overflow-x:auto;border-block:1px solid var(--line);gap:0;scrollbar-width:thin}
+html[data-layout="orrery"] .section-link{flex:1 0 132px;width:auto;min-height:74px;border:0;border-bottom:2px solid transparent;padding:14px 12px;gap:8px}
+html[data-layout="orrery"] .section-link[aria-current="page"]{box-shadow:none;background:#b6a77b0a;border-bottom-color:var(--gold)}
+html[data-layout="orrery"] .section-link .panel-preview,html[data-layout="orrery"] .nav-index{display:none}
+html[data-layout="orrery"] .nav-title{font-size:.72rem}
+html[data-layout="orrery"] .companion-page{background:linear-gradient(135deg,#19273c,#111d30);border:1px solid var(--line);border-top-color:#998866;border-radius:60px 6px 6px 6px;padding:30px;box-shadow:0 18px 45px var(--shadow)}
+html[data-layout="orrery"] .page-heading{padding-left:12px}
+/* Riveted iron spine and copper ledger, with segmented resource meters. */
+html[data-layout="ember"]{--layout-art:var(--layout-forge)}
+html[data-layout="ember"] .dashboard-shell{gap:28px;padding:12px 6px}
+html[data-layout="ember"] .layout-rail{position:relative;padding:24px 16px;background:linear-gradient(145deg,#37352e,#252823 70%);border:1px solid #656150;border-top:3px solid #aa8060;box-shadow:0 20px 40px #0003}
+html[data-layout="ember"] .layout-rail::before{content:"";position:absolute;inset:8px;pointer-events:none;background:radial-gradient(circle at 0 0,#ac9577 3px,transparent 4px),radial-gradient(circle at 100% 0,#ac9577 3px,transparent 4px),radial-gradient(circle at 0 100%,#ac9577 3px,transparent 4px),radial-gradient(circle at 100% 100%,#ac9577 3px,transparent 4px)}
+html[data-layout="ember"] .rail-brand{font:650 1.6rem/1.2 system-ui;border-color:var(--line)}
+html[data-layout="ember"] .dashboard-surface{padding:0 12px 24px}
+html[data-layout="ember"] .masthead{border-top:1px solid var(--line);border-bottom:0}
+html[data-layout="ember"] .masthead .crest{display:none}
+html[data-layout="ember"] .layout-emblem,html[data-layout="ember"] .masthead::after{animation:layout-forge 8s ease-in-out infinite alternate}
+html[data-layout="ember"] .companion-page{padding:0 0 24px 24px;border-left:1px solid var(--line);background:#282a26f5}
+html[data-layout="ember"] .stat-grid{background:#c8b1830b;border:1px solid var(--line)}
+html[data-layout="ember"] meter::-webkit-meter-optimum-value{background:repeating-linear-gradient(90deg,currentColor 0 14px,transparent 14px 17px)}
+html[data-layout="ember"] meter::-moz-meter-bar{background:repeating-linear-gradient(90deg,currentColor 0 14px,transparent 14px 17px)}
+html[data-layout="ember"] .reading-article{padding:22px;border:1px solid var(--line);border-top:2px solid var(--gold);background:#36352d55}
+@media(min-width:760px){html:is([data-layout="reclaimed"],[data-layout="ember"]) .dashboard-shell{display:grid;grid-template-columns:210px minmax(0,1fr);gap:26px;align-items:start}html:is([data-layout="reclaimed"],[data-layout="ember"]) .section-nav{display:grid;grid-template-columns:1fr;gap:4px;margin-top:24px}html:is([data-layout="reclaimed"],[data-layout="ember"]) .codex-layout{grid-template-columns:minmax(0,1fr)}html:is([data-layout="reclaimed"],[data-layout="ember"]) .nav-index{display:none}}
+@media(max-width:759px){html:is([data-layout="reclaimed"],[data-layout="ember"]) .layout-rail{padding:10px 10px 14px;margin:0 0 20px}html:is([data-layout="reclaimed"],[data-layout="ember"]) .rail-brand{font-size:1.4rem;padding:4px 2px 12px}.rail-brand span{display:none}html:is([data-layout="reclaimed"],[data-layout="ember"]) .section-nav{display:flex;overflow:auto;margin-top:12px;gap:6px}html:is([data-layout="reclaimed"],[data-layout="ember"]) .section-link{flex:0 0 148px;min-height:58px;padding:10px 8px}html:is([data-layout="reclaimed"],[data-layout="ember"]) .section-link :is(.panel-preview,.nav-index){display:none}html:is([data-layout="reclaimed"],[data-layout="ember"]) .layout-emblem{display:none}html[data-layout="reclaimed"] .dashboard-surface{padding:24px}html[data-layout="reclaimed"] .layout-rail{color:#d3d3b4;background:#183427e8}html:is([data-layout="reclaimed"],[data-layout="ember"]) .codex-layout{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:480px){.session-field{flex-basis:calc(100% - 90px)}.session-picker #deleteCampaign{margin-left:auto}html:not([data-layout="original"]) .masthead{padding-right:66px;min-height:110px}html:not([data-layout="original"]) .masthead::after{width:60px;height:84px}html:not([data-layout="original"]) .masthead .crest{display:none}html[data-layout="reclaimed"] .dashboard-shell,html[data-layout="orrery"] .dashboard-shell,html[data-layout="ember"] .dashboard-shell{padding:0}html[data-layout="reclaimed"] .dashboard-surface{padding:22px 19px}html[data-layout="orrery"] .masthead{padding:30px 10px}html[data-layout="orrery"] .masthead::after{width:160px;height:160px;right:calc(50% - 80px)}html[data-layout="orrery"] .companion-page{padding:24px 18px;border-top-left-radius:40px}html[data-layout="ember"] .dashboard-surface{padding:0 4px}html[data-layout="ember"] .companion-page{padding-left:16px}.layout-botany span{width:95px;left:-49px}.layout-botany span:nth-child(2){right:-49px}.layout-botany span:nth-child(3){right:-35px}}
+@keyframes layout-ivy{from{transform:rotate(-1.2deg)}to{transform:rotate(1.2deg)}}
+html:is([data-layout="reclaimed"],[data-layout="ember"]) .dashboard-shell:has(.layout-rail[hidden]){grid-template-columns:minmax(0,1fr)}
+@keyframes layout-orbit{to{transform:rotate(360deg)}}
+@keyframes layout-forge{from{filter:drop-shadow(0 0 5px #b45d2620)}to{filter:drop-shadow(0 0 20px #d484383d)}}
+html[data-motion="off"] :is(.layout-botany span,.layout-emblem,.masthead::after){animation:none!important}
+@media(prefers-reduced-motion:reduce){.layout-botany span,.layout-emblem,.masthead::after{animation:none!important}}
+@media(forced-colors:active){.select-field::after{display:none}.select-field select{appearance:auto}}

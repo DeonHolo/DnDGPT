@@ -1,0 +1,1 @@
+Original SVG illustrations from the October 19, 2026 DnDGPT dashboard design studies: ivy, lantern, orrery and forge. These illustrations use the repository's MIT license. They are embedded into the dashboard resource; loading a layout makes no external image or font request.
