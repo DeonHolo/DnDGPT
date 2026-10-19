@@ -123,7 +123,7 @@ For other approaches to AI campaigns and MCP games, see [related projects](docs/
 
 The standalone dashboard preview uses disposable sample data and the default Classic colors.
 
-![ChatGPT's conversation beside the saved DnDGPT campaign dashboard with a fantasy atmosphere](docs/images/chatgpt-side-by-side.png)
+![ChatGPT's native Intelligent UI event cards beside the saved DnDGPT campaign dashboard with the Glowwood atmosphere](docs/images/chatgpt-side-by-side.png)
 
 Your conversation and campaign, side by side. Choose from **33 reading atmospheres**, including Classic, Quiet Ink and credited fantasy artwork. Interface details may vary.
 
