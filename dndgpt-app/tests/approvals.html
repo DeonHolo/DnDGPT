@@ -1,0 +1,97 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DnDGPT · Approval recovery tests</title>
+<style>body{font:14px system-ui;background:#101510;color:#eee;margin:20px}iframe{display:block;width:700px;height:820px;border:1px solid #65705e}pre{white-space:pre-wrap}.pass{color:#9fd39b}.fail{color:#ff9c9c}</style>
+<h1>Approval recovery · disposable test campaigns</h1><p>Simulated MCP Apps host, real local tool transport. This is not ChatGPT.</p>
+<button id="run">Run approval tests</button><p id="summary" role="status">Ready</p><pre id="results"></pre><iframe id="widget" title="Disposable approval test dashboard" src="/test-widget"></iframe>
+<script>
+const frame=document.getElementById("widget"),results=[],calls=[],messages=[];
+let nextId=3000,initialized=0,active=null;
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+async function until(fn){for(let i=0;i<150;i++){if(await fn())return;await sleep(80)}throw Error("Timed out waiting for UI")}
+function assert(value,message){if(!value)throw Error(message)}
+async function rpc(method,params){const response=await fetch('/test-rpc',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:nextId++,method,params})});const body=await response.json();if(body.error)throw Error(body.error.message);return body.result}
+async function tool(name,args={}){return rpc('tools/call',{name,arguments:args})}
+async function state(){return(await tool('get_campaign',{campaign_id:active.id})).structuredContent.campaign}
+async function audit(){return(await tool('audit',{campaign_id:active.id})).structuredContent}
+async function view(){return tool('render_dashboard',{campaign_id:active.id})}
+async function expire(proposal){await fetch('/test-expire-approval',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({proposal_id:proposal.structuredContent.proposal.id})})}
+function deliver(result){frame.contentWindow.postMessage({jsonrpc:'2.0',method:'ui/notifications/tool-result',params:result},location.origin)}
+async function refresh(doc){const count=calls.length;doc.getElementById('refresh').click();await until(()=>calls.length>count&&doc.getElementById('syncStatus').dataset.state==='saved');await sleep(80)}
+async function test(name,run){try{await run();results.push({name,passed:true})}catch(error){results.push({name,passed:false,error:error.message})}document.getElementById('results').textContent=results.map(r=>(r.passed?'PASS ':'FAIL ')+r.name+(r.error?': '+r.error:'')).join('\n')}
+window.addEventListener('message',async event=>{
+ if(event.source!==frame.contentWindow||event.data?.jsonrpc!=='2.0')return;
+ const m=event.data;if(m.method==='ui/notifications/initialized'){initialized++;return}if(m.id===undefined)return;
+ let result,error;
+ try{
+  if(m.method==='ui/initialize')result={protocolVersion:'2026-01-26',hostCapabilities:{serverTools:{},message:{text:{}}},hostContext:{theme:'dark',displayMode:'inline'}};
+  else if(m.method==='tools/call'){calls.push(m.params.name);const args=m.params.name==='render_dashboard'&&active?{campaign_id:active.id}:m.params.arguments;result=await tool(m.params.name,args)}
+  else if(m.method==='ui/message'){messages.push(m.params);result={}}
+  else throw Error('Unsupported host method: '+m.method);
+ }catch(e){error={code:-32000,message:e.message}}
+ frame.contentWindow.postMessage({jsonrpc:'2.0',id:m.id,...(error?{error}:{result})},location.origin);
+});
+document.getElementById('run').onclick=async()=>{
+ document.getElementById('run').disabled=true;
+ await until(()=>initialized>0);let doc=frame.contentDocument;
+ const created=await tool('create_chat_game',{name:'Disposable confirmation test',action_id:'browser-chat-create',disposable:true});active=created.structuredContent.campaign;
+ active=(await tool('save_chat_update',{campaign_id:active.id,action_id:'browser-chat-draft',expected_version:active.version,summary:'Prepare test character',changes:{character:{name:'Approval Test Scribe',class_name:'Door Scribe'},opening_preview:'A sealed test gate.'}})).structuredContent.campaign;
+ const proposed=await tool('propose_action',{campaign_id:active.id,action_id:'browser-chat-confirm',expected_version:active.version,kind:'confirm_chat_character',payload:{}});
+ await expire(proposed);deliver(await view());await until(()=>doc.getElementById('hero').textContent.includes('Approval Test Scribe'));await refresh(doc);
+ const before=await state(),beforeAudit=await audit();let refreshed;
+ await test('Expired character confirmation remains visible in every layout and width',async()=>{
+  doc.getElementById('viewSettings').open=true;
+  for(const width of [375,700,1100])for(const layout of ['original','reclaimed','orrery','ember']){
+   frame.style.width=width+'px';const select=doc.getElementById('layoutSelect');select.value=layout;select.dispatchEvent(new Event('change',{bubbles:true}));await sleep(30);
+   assert(frame.contentWindow.innerWidth===width,'Fixture width differs from requested viewport');
+   const panel=doc.getElementById('approval'),button=doc.getElementById('confirm'),box=panel.getBoundingClientRect(),b=button.getBoundingClientRect();
+   assert(!panel.hidden&&box.width>0&&!button.disabled,'Approval missing or disabled: '+layout+'/'+width);
+   assert(button.textContent==='Review again'&&b.left>box.left&&b.right<box.right,'Review control clipped: '+layout+'/'+width);
+   assert(!doc.getElementById('approvalExpiry').hidden,'Expiration explanation missing');
+   for(const chapter of doc.querySelectorAll('#sectionNav button')){chapter.click();assert(!panel.hidden,'Chapter switch hid approval')}
+  }
+  assert(JSON.stringify(await state())===JSON.stringify(before)&&JSON.stringify(await audit())===JSON.stringify(beforeAudit),'Layout/navigation changed campaign');
+ });
+ await test('Reload recovers expired proposal; reviewing again does not confirm or send chat',async()=>{
+  const count=initialized;frame.src='/test-widget?approval-reload';await until(()=>initialized>count);doc=frame.contentDocument;
+  await until(()=>doc.getElementById('confirm').textContent==='Review again'&&!doc.getElementById('confirm').disabled);
+  const sent=messages.length,executions=calls.filter(c=>c==='execute_confirmed_action').length;doc.getElementById('confirm').click();
+  await until(()=>doc.getElementById('confirm').textContent==='Confirm character'&&!doc.getElementById('confirm').disabled);
+  refreshed=(await view())._meta.approval;
+  assert(!refreshed.expired&&refreshed.proposal.id!==proposed.structuredContent.proposal.id,'Fresh proposal missing');
+  assert(messages.length===sent&&calls.filter(c=>c==='execute_confirmed_action').length===executions,'Review executed or sent chat');
+  assert(JSON.stringify(await state())===JSON.stringify(before)&&JSON.stringify(await audit())===JSON.stringify(beforeAudit),'Review changed character/save/audit');
+ });
+ await test('Fresh confirmation survives layout switching, hiding codex, and refresh',async()=>{
+  doc.getElementById('viewSettings').open=true;
+  for(const layout of ['original','reclaimed','orrery','ember']){
+   const select=doc.getElementById('layoutSelect');select.value=layout;select.dispatchEvent(new Event('change',{bubbles:true}));
+   doc.getElementById('hideHud').click();assert(!doc.getElementById('approval').hidden,'Hide codex hid confirmation');doc.getElementById('hideHud').click();
+   await refresh(doc);assert(doc.getElementById('confirm').textContent==='Confirm character'&&!doc.getElementById('confirm').disabled,'Refresh lost approval');
+  }
+ });
+ await test('ChatGPT compatibility metadata supports direct and nested forms',async()=>{
+  const result=await view();for(const metadata of [result._meta,{mcp_tool_result:{_meta:result._meta}}]){
+   deliver({structuredContent:{campaign:result.structuredContent.campaign},_meta:{approval:null}});await until(()=>doc.getElementById('approval').hidden);
+   frame.contentWindow.dispatchEvent(new frame.contentWindow.CustomEvent('openai:set_globals',{detail:{globals:{toolOutput:result.structuredContent,toolResponseMetadata:metadata}}}));
+   assert(!doc.getElementById('approval').hidden&&doc.getElementById('confirm').textContent==='Confirm character','Compatibility metadata lost approval');
+  }
+ });
+ await test('Confirm character executes once and stays paused; adventure requires separate approval',async()=>{
+  const button=doc.getElementById('confirm');button.click();button.click();await until(async()=>(await state()).phase==='ready');await until(()=>messages.length>0);
+  const after=await state();assert(after.version===before.version+1&&after.paused&&after.fictional_time_seconds===0,'Confirmation advanced adventure or duplicated');
+  assert(JSON.stringify(after.character)===JSON.stringify(before.character),'Confirmation changed character');assert(doc.getElementById('approval').hidden,'Completed approval remained');
+  const replay=await tool('execute_confirmed_action',{proposal_id:refreshed.proposal.id,approval_token:refreshed.approval_token});assert(replay.structuredContent.campaign.version===after.version,'Retry duplicated confirmation');
+  const start=await tool('propose_action',{campaign_id:active.id,action_id:'browser-chat-start',expected_version:after.version,kind:'start_chat_adventure',payload:{}});deliver(await view());
+  await until(()=>doc.getElementById('confirm').textContent==='Begin adventure');assert((await state()).paused,'Viewing start proposal started adventure');
+  await expire(start);await refresh(doc);assert(doc.getElementById('confirm').textContent==='Review again','Expired start hidden');
+ });
+ await test('Switching campaigns clears an unrelated approval even at the same version',async()=>{
+  const other=(await tool('create_chat_game',{name:'Second disposable campaign',action_id:'browser-chat-other',disposable:true})).structuredContent.campaign;
+  const saved=(await tool('save_chat_update',{campaign_id:other.id,action_id:'browser-other-draft',expected_version:1,summary:'Second test draft',changes:{character:{class_name:'Test'}}})).structuredContent.campaign;
+  const sameVersion=(await tool('save_chat_update',{campaign_id:other.id,action_id:'browser-other-notes',expected_version:saved.version,summary:'Same version regression fixture',changes:{notes:'Display only'}})).structuredContent.campaign;
+  deliver({structuredContent:{campaign:sameVersion}});await until(()=>doc.getElementById('hero').textContent.includes('Second disposable campaign'));assert(doc.getElementById('approval').hidden,'Other campaign retained approval');
+ });
+ document.getElementById('summary').textContent=results.filter(r=>r.passed).length+'/'+results.length+' passed';
+ await fetch('/test-approval-record',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({results,passed:results.every(r=>r.passed),layouts:['original','reclaimed','orrery','ember'],widths:[375,700,1100]})});
+};
+if(location.search.includes('autorun'))document.getElementById('run').click();
+</script></html>

@@ -110,6 +110,30 @@ def test_player_view():
     return FileResponse(HERE / "player_view.html")
 
 
+@app.get("/test-approvals")
+def test_approvals():
+    return FileResponse(HERE / "approvals.html")
+
+
+@app.post("/test-expire-approval")
+async def test_expire_approval(request: Request):
+    from app import records
+    body = await request.json()
+    with INNER.state.engine.store.transaction() as db:
+        records.update(db, "proposals_v1", {"id": body["proposal_id"], "owner": OWNER}, {"created_at": time.time() - 901})
+    return {"expired": True}
+
+
+@app.post("/test-approval-record")
+async def test_approval_record(request: Request):
+    result = await request.json()
+    result["environment"] = "Local Chromium, simulated MCP Apps host and disposable campaigns; not ChatGPT"
+    output = HERE.parent / "test-results/approvals.json"
+    output.parent.mkdir(exist_ok=True)
+    output.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+    return {"saved": True}
+
+
 @app.post("/test-player-record")
 async def test_player_record(request: Request):
     result = await request.json()
@@ -125,7 +149,8 @@ async def proxy(request: Request):
     if not AVAILABLE:
         return JSONResponse({"error": {"code": -32000, "message": "Connection unavailable (test fixture)"}}, status_code=503)
     body = await request.json()
-    if body.get("method") == "tools/call" and body.get("params", {}).get("name") == "render_dashboard":
+    if (body.get("method") == "tools/call" and body.get("params", {}).get("name") == "render_dashboard"
+            and not body["params"].get("arguments", {}).get("campaign_id")):
         body["params"]["arguments"] = {"campaign_id": CAMPAIGN_ID}
     async with httpx.AsyncClient(transport=httpx.ASGITransport(app=INNER),
                                 base_url="http://127.0.0.1:8766") as client:

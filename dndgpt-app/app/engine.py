@@ -422,7 +422,8 @@ class Engine:
                 if old["request"] != request:
                     fail(409, "idempotency_conflict", "action_id already has different arguments")
                 return {"proposal": json.loads(old["preview"]), "committed": old["result"] is not None,
-                        "_meta": {"approval_token": old["approval_token"]}}
+                        "_meta": {"approval_token": old["approval_token"],
+                                  "approval_expires_at": old["created_at"] + 900}}
             if state["version"] != expected_version:
                 fail(409, "version_conflict", f"Current version is {state['version']}")
             projected = copy.deepcopy(state)
@@ -437,11 +438,13 @@ class Engine:
             if kind in DEVELOPMENT_OPERATIONS:
                 preview["combat_preview"] = effect_preview
             token = secrets.token_urlsafe(32)
+            created_at = time.time()
             records.insert(db, "proposals_v1", {"id": proposal_id, "campaign_id": campaign_id,
                                                "owner": owner, "action_id": action_id, "request": request,
                                                "preview": canonical(preview), "approval_token": token,
-                                               "created_at": time.time(), "result": None})
-            return {"proposal": preview, "committed": False, "_meta": {"approval_token": token}}
+                                               "created_at": created_at, "result": None})
+            return {"proposal": preview, "committed": False,
+                    "_meta": {"approval_token": token, "approval_expires_at": created_at + 900}}
 
     def execute_confirmed_action(self, owner, proposal_id, approval_token):
         with self.store.transaction() as db:
@@ -507,11 +510,15 @@ class Engine:
         with self.store.transaction() as db:
             state = self._get(db, owner, campaign_id)
             rows = records.find(db, "proposals_v1", {"campaign_id": campaign_id, "owner": owner, "result": None},
-                                minimum={"created_at": time.time() - 900}, order="created_at", descending=True, limit=10)
+                                order="created_at", descending=True, limit=10)
             for row in rows:
                 preview = json.loads(row["preview"])
                 if preview["expected_version"] == state["version"]:
-                    return {"approval": {"proposal": preview, "approval_token": row["approval_token"]}}
+                    expires_at = row["created_at"] + 900
+                    approval = {"proposal": preview, "expires_at": expires_at, "expired": time.time() > expires_at}
+                    if not approval["expired"]:
+                        approval["approval_token"] = row["approval_token"]
+                    return {"approval": approval}
             return {"approval": None}
 
     def get_view_preferences(self, owner):

@@ -180,6 +180,7 @@ dialog{color:var(--ink);background:var(--paper);border:1px solid var(--line);bor
 <textarea id="fallback" aria-label="Prompt to copy into chat" rows="3" readonly hidden></textarea>
 <section id="approval" aria-label="Review proposed action" hidden>
 <h2>Review proposed action</h2><p id="approvalLabel"></p><pre id="approvalSummary"></pre>
+<p id="approvalExpiry" class="muted" role="status" hidden></p>
 <div class="row"><button id="confirm" type="button">Approve this action</button><button id="decline" type="button">Dismiss preview</button></div>
 <p class="muted">Only approval commits the displayed command. Browsing chapters never uses an action.</p>
 </section>
@@ -271,7 +272,14 @@ function updateSyncStatus(){
     (state?"Connection lost · showing last saved snapshot.":"Saved state unavailable.")+(checked?" Last checked "+checked+".":"")+" Refresh to reconnect.":
     lastVerifiedAt?(state?"Saved":"No saved game selected")+" · checked "+checked:
     state?"Verifying saved snapshot…":"Waiting for saved state…";
-  const outdated=pending&&pending.proposal.expected_version!==state?.version;
+  const outdated=pending&&(pending.proposal.campaign_id!==state?.id||pending.proposal.expected_version!==state?.version);
+  const expired=approvalExpired(pending);
+  if(pending){
+    const labels={confirm_chat_character:"Confirm character",start_chat_adventure:"Begin adventure",correct_chat_state:"Approve correction"};
+    $("confirm").textContent=expired?"Review again":labels[pending.proposal.kind]||"Approve this action";
+    $("approvalExpiry").hidden=!expired;
+    $("approvalExpiry").textContent=expired?"This review expired after 15 minutes. Review again, then confirm. Your saved game has not changed.":"";
+  }
   $("confirm").disabled=busy||deleting||syncIssue||!lastVerifiedAt||!pending||Boolean(outdated);
   $("confirm").title=syncIssue||!lastVerifiedAt?"Refresh saved state before approving.":outdated?"State changed. Request a new action preview.":"";
   $("deleteCampaign").textContent=deletionStarted?"Continue deletion":"Delete Campaign";
@@ -929,6 +937,7 @@ function renderCampaign(next){
   const changed=!state||state.id!==next.id||state.version!==next.version;
   if(changed)lastVerifiedAt=null;
   state=next;lastSelected=next.id;
+  if(pending&&(pending.proposal.campaign_id!==next.id||pending.proposal.expected_version!==next.version))showApproval(null);
   $("session").value=next.id;
   if(!changed)return;
   const c=next.character,gear=gearRecords(next);
@@ -1004,18 +1013,19 @@ function receive(result){
   if(data.campaign&&!deletedCampaigns.has(data.campaign.id))renderCampaign(data.campaign);
   const meta=result?._meta||{};
   if(meta.approval!==undefined)showApproval(meta.approval);
-  else if(data.proposal&&meta.approval_token)showApproval({proposal:data.proposal,approval_token:meta.approval_token});
+  else if(data.proposal&&!data.committed&&meta.approval_token)showApproval({proposal:data.proposal,approval_token:meta.approval_token,expires_at:meta.approval_expires_at});
   updateSyncStatus();
 }
+function approvalExpired(approval){return Boolean(approval&&(approval.expired||(approval.expires_at&&Date.now()>approval.expires_at*1000)))}
+function toolMetadata(metadata){return metadata?.mcp_tool_result?._meta||metadata||{}}
 function showApproval(approval){
+  if(approval&&(approval.proposal.campaign_id!==state?.id||approval.proposal.expected_version!==state?.version))return;
   if(approval?.proposal.id===dismissedProposal)return;
   pending=approval;
   $("approval").hidden=!approval;
   updateSyncStatus();
   if(!approval)return;
   const p=approval.proposal;
-  const chatLabels={confirm_chat_character:"Confirm character",start_chat_adventure:"Begin adventure",correct_chat_state:"Approve correction"};
-  $("confirm").textContent=chatLabels[p.kind]||"Approve this action";
   $("approvalLabel").textContent=p.kind.replaceAll("_"," ")+" · version "+p.expected_version;
   const deltas={};
   for(const key of Object.keys(p.character_before||{}))if(JSON.stringify(p.character_before[key])!==JSON.stringify(p.character_after?.[key]))deltas[key]={before:p.character_before[key],after:p.character_after?.[key]};
@@ -1118,7 +1128,7 @@ window.addEventListener("message",event=>{
 });
 window.addEventListener("openai:set_globals",event=>{
   const globals=event.detail?.globals||{};
-  if(globals.toolOutput)receive({structuredContent:globals.toolOutput,_meta:globals.toolResponseMetadata?.mcp_tool_result?._meta||{}});
+  if(globals.toolOutput)receive({structuredContent:globals.toolOutput,_meta:toolMetadata(globals.toolResponseMetadata)});
   applyHostContext({theme:globals.theme||hostContext.theme,displayMode:globals.displayMode||hostContext.displayMode});
 });
 $("customForm").onsubmit=event=>{event.preventDefault();const text=$("custom").value.trim();if(text)sendPrompt(text)};
@@ -1133,14 +1143,22 @@ $("deleteDialog").addEventListener("cancel",event=>{if(deleting)event.preventDef
 $("newSandbox").onclick=()=>sendPrompt("Create a new empty PAUSED development sandbox only. Do not generate a character, world, gameplay rolls or adventure.");
 $("decline").onclick=()=>{dismissedProposal=pending?.proposal.id;showApproval(null);notice("Preview dismissed. Nothing committed.")};
 $("confirm").onclick=async()=>{
-  if(busy||!pending||syncIssue||!lastVerifiedAt||pending.proposal.expected_version!==state?.version)return;
+  if(busy||deleting||!pending||syncIssue||!lastVerifiedAt||pending.proposal.campaign_id!==state?.id||pending.proposal.expected_version!==state?.version)return;
   const approval=pending;busy=true;$("confirm").disabled=true;
   try{
+    if(approvalExpired(approval)){
+      const p=approval.proposal;
+      await callTool("propose_action",{campaign_id:state.id,action_id:"review-"+crypto.randomUUID(),expected_version:state.version,kind:p.kind,payload:p.payload});
+      notice("Review refreshed. Check the preview, then confirm when you are ready.");return;
+    }
     await callTool("execute_confirmed_action",{proposal_id:approval.proposal.id,approval_token:approval.approval_token});
     showApproval(null);notice("Action committed.");
     const followup=state?.disposable?"Disposable development acceptance only. Read this test record and report its current phase, paused state and version. No further writes, story generation or rolls.":approval.proposal.kind==="confirm_chat_character"?"My character is confirmed. Read saved state. If an opening_preview is already saved, present it; otherwise prepare and save it. Do not start the adventure; wait for my separate authorization.":approval.proposal.kind==="start_chat_adventure"?"I approved starting this adventure. Read saved state and begin the opening scene. Save any changes once through save_chat_update.":"Describe the already committed result of proposal "+approval.proposal.id+". Read current state; do not execute or reroll it again.";
     await sendPrompt(followup);
-  }catch(error){notice(error.message+". Retry this same approval if delivery was uncertain.")}
+  }catch(error){
+    if(error.code==="proposal_expired"){showApproval({...approval,expired:true});await refresh().catch(()=>{});notice("This review expired. Review again before confirming.")}
+    else notice(error.message+". Retry this same approval if delivery was uncertain.");
+  }
   finally{busy=false;updateSyncStatus()}
 };
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&(standard||window.openai?.callTool))refresh().catch(error=>notice(error.message))});
@@ -1160,7 +1178,7 @@ new ResizeObserver(()=>{if(standard)notify("ui/notifications/size-changed",{heig
       $("connection").textContent=window.openai?.callTool?"ChatGPT compatibility bridge available.":"Host connection unavailable. Prompt-copy preview only.";
     }
   }else $("connection").textContent="Local preview · not connected to a ChatGPT conversation.";
-  if(window.openai?.toolOutput)receive({structuredContent:window.openai.toolOutput,_meta:window.openai.toolResponseMetadata?.mcp_tool_result?._meta||{}});
+  if(window.openai?.toolOutput)receive({structuredContent:window.openai.toolOutput,_meta:toolMetadata(window.openai.toolResponseMetadata)});
   if(standard||window.openai?.callTool){
     try{await refresh()}catch(error){notice(error.message)}
     pollingTimer=setInterval(()=>refresh().catch(error=>notice(error.message)),8000);
