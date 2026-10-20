@@ -24,7 +24,7 @@ def test_index_covers_every_chapter_and_required_current_amendment():
     assert "loading |" in index["content"] and "33 |" in index["content"]
 
 
-@pytest.mark.parametrize("key", ["4", "8", "33", "38", "loading", "story", "creation-order", "utility", "continuity", "story-ui"])
+@pytest.mark.parametrize("key", ["4", "8", "33", "38", "loading", "story", "creation-order", "utility", "continuity", "story-ui", "enemy-tactics"])
 def test_section_pages_reassemble_exact_authoritative_slice(key):
     data = SOURCE.read_bytes()
     text = data.decode()
@@ -52,7 +52,8 @@ def test_invalid_section_cannot_select_arbitrary_content(document, section):
 
 def test_indexed_read_works_through_authenticated_mcp_and_does_not_write(web):
     before = web.get("/api/campaigns").json()
-    for section, heading in (("story", "Where this place met Earth"), ("utility", "Utility usefulness and creative application")):
+    for section, heading in (("story", "Where this place met Earth"), ("utility", "Utility usefulness and creative application"),
+                             ("enemy-tactics", "Enemy identity, adaptive tactics and visible voice")):
         result = tool(web, "read_rules", {"document": "rulebook", "section": section})
         assert not result.get("isError"), result
         assert heading in result["structuredContent"]["content"]

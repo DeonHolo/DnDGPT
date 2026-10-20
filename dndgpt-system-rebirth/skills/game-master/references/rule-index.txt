@@ -8,7 +8,7 @@ An omitted section still governs play; fetch it when the situation needs it.
 World preview: loading, world-preview, story, 4.
 Class offers: creation-order, generation, utility, class-craft, reach, 5, 6, 7, 8. Read 9/10/11 for their creation stage.
 Utility offers and revisions: utility, generation, class-craft and the applicable acquisition chapter.
-Combat: reach, 12, 13, 14; also 15/16/29/30 when applicable.
+Combat: enemy-tactics, reach, 12, 13, 14; also 15/16/29/30 when applicable. Reuse prepared enemy profiles.
 Advancement: 17, 18 and the applicable track in 19 through 22; interfaces 37/38.
 Routine narrative/presentation: continuity and story-ui. Cache current sections; do not reload every turn.
 Presentation detail/implementation: story, dashboard-writing, 33, 34, 35, 38, 39. Chapter 33 contains the full inline glossary specification.
@@ -26,6 +26,7 @@ world-preview | World introduction: history, place and the player's footing | 30
 reach | Dexterity and player-facing reach | 2918 characters
 dashboard-writing | Player-facing dashboard writing contract | 5862 characters
 story-ui | Compact Intelligent Story UI contract | 4883 characters
+enemy-tactics | Enemy identity, adaptive tactics and visible voice | 3909 characters
 
 ## Full chapters
 1 | THE CORE EXPERIENCE | 1127 characters
@@ -41,7 +42,7 @@ story-ui | Compact Intelligent Story UI contract | 4883 characters
 11 | BACKGROUNDS — IDENTITY, INTEGRATED IMPRINT AND WORLD FOOTPRINT | 18277 characters
 12 | ATTRIBUTES AND RESOURCES | 1486 characters
 13 | DICE AND DIFFICULTY | 1228 characters
-14 | COMBAT | 29379 characters
+14 | COMBAT | 33288 characters
 15 | CONDITIONS AND INJURIES | 1038 characters
 16 | REST AND VITAL SURGE | 3339 characters
 17 | EXPERIENCE AND FAST LEVELING | 1715 characters

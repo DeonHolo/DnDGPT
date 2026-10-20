@@ -15,7 +15,10 @@ AMENDMENTS = {
     "dashboard-writing": "Player-facing dashboard writing contract",
 }
 
-SUBSECTIONS = {"story-ui": "Compact Intelligent Story UI contract"}
+SUBSECTIONS = {
+    "story-ui": "Compact Intelligent Story UI contract",
+    "enemy-tactics": "Enemy identity, adaptive tactics and visible voice",
+}
 
 
 def sections(text):
@@ -53,7 +56,7 @@ def index_text(text):
              "World preview: loading, world-preview, story, 4.",
              "Class offers: creation-order, generation, utility, class-craft, reach, 5, 6, 7, 8. Read 9/10/11 for their creation stage.",
              "Utility offers and revisions: utility, generation, class-craft and the applicable acquisition chapter.",
-             "Combat: reach, 12, 13, 14; also 15/16/29/30 when applicable.",
+             "Combat: enemy-tactics, reach, 12, 13, 14; also 15/16/29/30 when applicable. Reuse prepared enemy profiles.",
              "Advancement: 17, 18 and the applicable track in 19 through 22; interfaces 37/38.",
              "Routine narrative/presentation: continuity and story-ui. Cache current sections; do not reload every turn.",
              "Presentation detail/implementation: story, dashboard-writing, 33, 34, 35, 38, 39. Chapter 33 contains the full inline glossary specification.",

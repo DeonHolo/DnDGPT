@@ -46,3 +46,11 @@ Application 1.0.30 is published from `64ac23ed3153b03797815299afb28435cea8ffb2`.
 ## Outstanding limits
 
 ChatGPT model/render time and the host's tool selection are outside backend timing measurements. Actual generation quality must remain distinguished from schema/fixture tests.
+
+## Enemy behavior follow-up — 2026-10-21
+
+Chapter 14 now has an indexed `enemy-tactics` contract: a mechanical novelty gate for significant new enemy types/groups, varied answerable pressures, terrain use, knowledge-based controller targeting, morale and brief character dialogue. Existing stat blocks, player agency, actual summon rules and all approval gates remain binding. Profiles are prepared once and reused without extra per-round tools or audits. The compact hardener routes to this section and still fits one page.
+
+Validation: 20 source-integrity, section-pagination and authenticated read-only MCP checks passed. These verify preservation and delivery, not whether a ChatGPT campaign consistently follows the new prose. Publication verification is recorded separately below.
+
+The earlier 91.6% figure measures model-visible JSON size in one mature-history fixture (65,087 to 5,488 bytes). It is not a tool or whole-turn latency percentage, nor proof of preserved story recall. Turn mode retains current mechanics/continuity but omits older logs and detailed world articles. Missing historical dependencies require a full read; facts never recorded cannot be recovered from a save. Long-campaign recall testing remains necessary.
