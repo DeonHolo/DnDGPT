@@ -16,7 +16,7 @@ Equipment: 23 through 28. Story/quests: 31, 32, 32A. Saves/compatibility: 40 thr
 
 ## Current amendments
 loading | Rules loading and checklist precedence | 2498 characters
-continuity | Turn continuity and efficient resolution | 4654 characters
+continuity | Turn continuity and efficient resolution | 5360 characters
 creation-order | V1.0 surgical four-turn creation and in-chat continuation precedence | 1844 characters
 story | Story flavor, character identity and player voice | 6960 characters
 generation | Generation breadth, reaction roles and a playable world | 7333 characters

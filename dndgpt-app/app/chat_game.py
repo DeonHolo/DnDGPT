@@ -133,13 +133,24 @@ def validate_changes(changes):
         fail(422, "invalid_chat_update", "Do not replace and edit the same collection")
 
 
+def merge_world(before, patch):
+    result = copy.deepcopy(before)
+    for key, value in patch.items():
+        result[key] = (merge_world(result.get(key) if type(result.get(key)) is dict else {}, value)
+                       if type(value) is dict else copy.deepcopy(value))
+    return result
+
+
 def apply_changes(state, changes, *, correction=False):
     validate_changes(changes)
     projected = copy.deepcopy(state)
     for key in TEXT_FIELDS | OBJECT_FIELDS | {"fictional_time_seconds", "level_up_freeze"}:
         if key in changes:
-            projected[key] = ({**projected.get(key, {}), **copy.deepcopy(changes[key])}
-                              if key == "continuity" else copy.deepcopy(changes[key]))
+            if key == "world" and not correction:
+                projected[key] = merge_world(projected.get(key, {}), changes[key])
+            else:
+                projected[key] = ({**projected.get(key, {}), **copy.deepcopy(changes[key])}
+                                  if key == "continuity" else copy.deepcopy(changes[key]))
     for key, value in changes.get("character", {}).items():
         if key == "attributes":
             attributes = projected["character"][key]

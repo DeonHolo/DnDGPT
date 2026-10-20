@@ -1,0 +1,19 @@
+{
+  "id": "continuity-context-safety-2026-10-21",
+  "files": {
+    "rulebook-v1.0.txt": [
+      {
+        "new_start": 13246,
+        "before": "Reuse the latest successfully returned campaign version and mechanics when still available. When a fresh read is needed, prefer get_campaign(view=\"turn\"); use view=\"full\" for omitted world/history details relevant to the decision. Keep actual roll procedures, dependencies and hidden-information boundaries. Batch independent authorized rolls, but never pre-roll a contingent action or reroll a fixed result. Commit one coherent authorized update through save_chat_update(result_view=\"turn\") when possible. Its successful result verifies the save and supplies the next version; no routine second verification read or render_dashboard call is required. On uncertainty retry the SAME action_id/arguments; on conflict refresh and review instead of overwriting.\n",
+        "after": "Reuse the latest successfully returned campaign version and mechanics when still available. For a fresh read, use get_campaign(view=\"full\") for story/history decisions unless the relevant established facts are already in context. Use view=\"turn\" only when its current mechanics and available story context suffice. A compact view is not complete history: retrieve full before relying on omitted promises, past events or world details, and report uncertainty when no record exists. Absence from an excerpt is not proof that a fact never happened. Keep actual roll procedures, dependencies and hidden-information boundaries. Batch independent authorized rolls, but never pre-roll a contingent action or reroll a fixed result. Commit one coherent authorized update; use result_view=\"full\" when needed for continuity, or \"turn\" only with sufficient context. The successful save verifies the result and supplies the next version; no routine second verification read or render_dashboard call is required. On uncertainty retry the SAME action_id/arguments; on conflict refresh and review instead of overwriting.\n\nOrdinary world edits merge object fields so omitted keys survive. Lists and scalar values still replace their explicit values; read the complete relevant state before replacing them. Never reconstruct a world, log or other collection from a compact excerpt. Intentional replacement/removal as a correction uses the existing reviewed correct_chat_state path.\n"
+      }
+    ],
+    "rule-hardener.txt": [
+      {
+        "new_start": 4928,
+        "before": "Read `continuity`: connect the selected action, its consequence and the next beat in brief prose. Explain travel/time, preserve unfinished threads and player-authored thoughts, and keep scene identity until it changes. Save a bounded continuity note in the SAME authorized update. Renaming an obstacle never resets its two-decision ceiling. Reuse the latest successful state/version; refresh if missing, uncertain or conflicted. Prefer turn views, cache current rule sections, batch independent legal rolls and one coherent save. A successful save verifies the commit. Resume/history/export/import are on demand; no obligatory extra reads or per-turn evaluation calls.\n",
+        "after": "Read `continuity`: connect the chosen action, consequence and next beat. Explain travel/time; preserve threads, scene identity and player-authored thoughts. Save bounded notes in the SAME authorized update. Renaming an obstacle never resets its two-decision ceiling. Reuse current state/version; refresh uncertainty or conflict. Use full for story/history; compact only with sufficient context. Never replace omitted facts from an excerpt. Cache rules, batch independent legal rolls and one save; its result verifies the commit. Resume/history/export/import are on demand, without per-turn evaluation calls.\n"
+      }
+    ]
+  }
+}

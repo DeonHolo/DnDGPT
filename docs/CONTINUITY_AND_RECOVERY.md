@@ -24,7 +24,9 @@ Restore keeps the character, saved mechanics, fictional time, phase and advancem
 
 The normal turn path has no mandatory history, export, evaluation or resume calls. Reuse current state/rules, batch independent authorized rolls when appropriate, then save the authorized result once. Do not batch rolls whose later choices depend on earlier results, or bypass approval gates to save time. Compact turn responses retain current mechanics while excluding older log bulk. The dashboard reads state and pending approval in one transaction and polls at most every 45 seconds while visible; successful tool results update it directly.
 
-Storage timings and model-visible campaign JSON sizes can be measured. Compact responses still send the full dashboard snapshot in metadata hidden from the model; the size comparison is not a reduction in total network traffic. Timings do not include ChatGPT reasoning, UI generation, host scheduling or the player's network. These changes reduce avoidable work; they are not a guaranteed maximum time per turn.
+Use a full save for story/history decisions unless the relevant established facts are already in context. Compact reads are optional for turns whose current mechanics and available story context suffice. Fetch full before relying on omitted past events, promises or world details. Missing information is not proof that an event never happened. Ordinary world updates now merge object fields recursively, retaining omitted keys. Lists/scalars still replace their explicit values; never reconstruct them from an excerpt. Approved corrections can intentionally replace the world object.
+
+Storage timings and model-visible campaign JSON sizes can be measured. Compact responses still send the full dashboard snapshot in metadata hidden from the model; the size comparison is not a reduction in total network traffic. Timings do not include ChatGPT reasoning, UI generation, host scheduling or the player's network. These changes reduce avoidable work; they are not a guaranteed maximum time per turn. See [the continuity tests and their limits](CONTINUITY_TESTS.md).
 
 ## Repeatable checks
 

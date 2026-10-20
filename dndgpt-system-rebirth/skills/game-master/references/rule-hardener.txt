@@ -26,7 +26,7 @@ Read Chapters 17-22 and 37 for advancement. Freeze all game clocks and hazards d
 
 Read 40-42 for continuity. Distinguish proposed, narrated-unsaved and committed outcomes. Use current owned state/version, batch the authorized update and preserve retry safety. Restyling, inspection, glossary use, rule reads and mockups never advance time, roll, spend resources, confirm choices or mutate campaign state.
 
-Read `continuity`: connect the selected action, its consequence and the next beat in brief prose. Explain travel/time, preserve unfinished threads and player-authored thoughts, and keep scene identity until it changes. Save a bounded continuity note in the SAME authorized update. Renaming an obstacle never resets its two-decision ceiling. Reuse the latest successful state/version; refresh if missing, uncertain or conflicted. Prefer turn views, cache current rule sections, batch independent legal rolls and one coherent save. A successful save verifies the commit. Resume/history/export/import are on demand; no obligatory extra reads or per-turn evaluation calls.
+Read `continuity`: connect the chosen action, consequence and next beat. Explain travel/time; preserve threads, scene identity and player-authored thoughts. Save bounded notes in the SAME authorized update. Renaming an obstacle never resets its two-decision ceiling. Reuse current state/version; refresh uncertainty or conflict. Use full for story/history; compact only with sufficient context. Never replace omitted facts from an excerpt. Cache rules, batch independent legal rolls and one save; its result verifies the commit. Resume/history/export/import are on demand, without per-turn evaluation calls.
 
 ## Presentation and inline glossary
 

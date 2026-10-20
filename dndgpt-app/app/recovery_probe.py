@@ -51,6 +51,16 @@ def check_recovery(engine, owner, state, run):
         assert sizes["resume"] < sizes["turn"] < sizes["full"]
         assert model_view(updated, "turn")["abilities"] == updated["abilities"]
         checks.append("compact_response_preserves_mechanics")
+        updated = measure("world_excerpt_save", lambda: game.update(owner, updated["id"],
+            "world-merge-" + run, updated["version"], "Preserve omitted world detail",
+            {"world": model_view(updated, "turn")["world"]}))["campaign"]
+        assert updated["world"]["article"] == changes["world"]["article"]
+        checks.append("compact_world_update_preserves_details")
+        full = measure("full_history_read", lambda: engine.get_campaign(owner, updated["id"]))
+        assert full == updated and len(full["world_log"]) == 60
+        assert full["world_log"][0]["id"] == "probe-log-0"
+        assert len(model_view(full, "turn")["world_log"]) == 3
+        checks.append("full_read_recovers_omitted_history")
         history = SaveHistory(engine)
         page = measure("history_page", lambda: history.list(owner, updated["id"], limit=1))
         assert page["next_before"] and page["versions"][0]["version"] == updated["version"]

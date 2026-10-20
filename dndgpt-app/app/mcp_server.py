@@ -152,14 +152,17 @@ def build_mcp(engine, config, verifier, creation_repository=None):
                          summary: str, changes: dict, result_view: Literal["full", "turn"] = "full") -> CallToolResult:
         """Save ONE batched GM update to a fresh chat-led game; ChatGPT adjudicates the rules.
         Use the latest successfully returned version already in context; read again if missing,
-        uncertain or conflicted. Prefer result_view=turn to omit old logs from model context.
+        uncertain or conflicted. Use full for story/history; turn only when the needed context is present.
         The successful save already verifies the commit; do not read again just to verify it.
         changes supports partial character (attributes merge), equipment
         {slot:inventory_id|null}, name/current_location/opening_preview/notes, fictional_time_seconds,
-        level_up_freeze, world/creation/advancement/funds objects (each replaces that object), and collection
+        level_up_freeze, world (recursive object-field merge), creation/advancement/funds (replace), and collection
         upsert/remove/replace dictionaries. Collections: abilities, conditions, summons, enemies,
         inventory, supplies, quest_log, world_log, generation_ledger. Each record has stable id;
         upsert merges fields by id; remove lists ids; replace explicitly replaces a whole collection.
+        World lists/scalars still replace their values; read full before replacing omitted material.
+        An approved correct_chat_state can explicitly replace/delete world details. Never reconstruct
+        a world or replace a log from a compact excerpt; preserve facts absent from that view.
         Example: {"character":{"hp":18},"upsert":{"world_log":[{"id":"arrival","text":"Reached the gate"}]}}.
         continuity merges short scene/last_player_intent/last_action/outcome/pending_decision/transition
         text (600 characters each) and unresolved_threads/npc_commitments (at most 8 strings of 240).
@@ -240,7 +243,10 @@ def build_mcp(engine, config, verifier, creation_repository=None):
     @server.tool(annotations=read, meta=metadata())
     def get_campaign(campaign_id: str, view: Literal["full", "turn", "resume"] = "full") -> CallToolResult:
         """Read committed state without mutation, time advancement or raw rarity rolls.
-        Prefer view=turn for normal play: it retains current mechanics and omits old logs/world articles.
+        Use full for story/history decisions unless the relevant saved context is already present.
+        turn retains current mechanics but omits old logs/world articles; it is not complete memory.
+        Before relying on an omitted promise, past event or world detail, retrieve full. If no record
+        exists, report uncertainty; never treat omission as proof that something never happened.
         view=resume supplies a compact continuity brief for a fresh chat; inspect full details only as needed.
         A brief read never authorizes continuing, rolling or resuming. Missing continuity is marked, not invented.
         Reuse the latest successful read/save in the current context; no obligatory read before every save.
