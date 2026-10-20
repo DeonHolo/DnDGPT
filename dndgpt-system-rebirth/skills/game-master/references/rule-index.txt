@@ -23,8 +23,8 @@ generation | Generation breadth, reaction roles and a playable world | 7333 char
 utility | Utility usefulness and creative application | 4658 characters
 class-craft | Class concept diversity and writing craft | 5673 characters
 world-preview | World introduction: history, place and the player's footing | 3089 characters
-reach | Dexterity and player-facing reach | 2918 characters
-dashboard-writing | Player-facing dashboard writing contract | 5862 characters
+reach | Dexterity and player-facing reach | 2903 characters
+dashboard-writing | Player-facing dashboard writing contract | 6124 characters
 story-ui | Compact Intelligent Story UI contract | 4883 characters
 enemy-tactics | Enemy identity, adaptive tactics and visible voice | 3909 characters
 
@@ -39,7 +39,7 @@ enemy-tactics | Enemy identity, adaptive tactics and visible voice | 3909 charac
 8 | CLASSES AND HEROIC POWER | 25015 characters
 9 | SIGNATURE SKILLS | 11950 characters
 10 | STARTING TITLES | 951 characters
-11 | BACKGROUNDS — IDENTITY, INTEGRATED IMPRINT AND WORLD FOOTPRINT | 18277 characters
+11 | BACKGROUNDS — IDENTITY, INTEGRATED IMPRINT AND WORLD FOOTPRINT | 18356 characters
 12 | ATTRIBUTES AND RESOURCES | 1486 characters
 13 | DICE AND DIFFICULTY | 1228 characters
 14 | COMBAT | 33288 characters

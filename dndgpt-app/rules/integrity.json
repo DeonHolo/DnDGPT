@@ -1,9 +1,9 @@
 {
   "rulebook-v1.0.txt": {
     "original_sha256": "fc1cd1ed39a9fc35961d0d1e9a5feb3035015339d435c6a3af80a3515960597b",
-    "sha256": "de22eff2140f683cda190f2227885b0be1c5cf9960fd0c5db8e7f0d5c478d3e8",
+    "sha256": "761098a20d98f823f0021534a0057401cbf7df8baf2ec941327f6e057441c884",
     "original_bytes": 324754,
-    "bytes": 410222,
+    "bytes": 410548,
     "replacements": [
       [
         "V4.2",
@@ -156,14 +156,20 @@
         "source": "continuity-context-safety-2026-10-21.json",
         "before_sha256": "15ac277c963e021a598e650f18803cc85679a8b884985e46c8283567dc9cdda4",
         "after_sha256": "de22eff2140f683cda190f2227885b0be1c5cf9960fd0c5db8e7f0d5c478d3e8"
+      },
+      {
+        "id": "positive-ability-descriptions-2026-10-21",
+        "source": "positive-ability-descriptions-2026-10-21.json",
+        "before_sha256": "de22eff2140f683cda190f2227885b0be1c5cf9960fd0c5db8e7f0d5c478d3e8",
+        "after_sha256": "761098a20d98f823f0021534a0057401cbf7df8baf2ec941327f6e057441c884"
       }
     ]
   },
   "rule-hardener.txt": {
     "original_sha256": "bc21947f299ae37dc306581aa7110231809140c332ed4e8b1ceccbb86cbce8da",
-    "sha256": "253b32c9bd127a88f52350b084c205903c6a1ceeddf857609d30fd3accd04820",
+    "sha256": "32ec509cdcdf633b6db03f5ac5e9011e9a2baaf6d1283eaa2b12ae443e245867",
     "original_bytes": 10370,
-    "bytes": 7933,
+    "bytes": 7982,
     "replacements": [
       [
         "V4.2-R1",
@@ -294,6 +300,12 @@
         "source": "continuity-context-safety-2026-10-21.json",
         "before_sha256": "2a60337b20d08bbddf4a4c5fcacf9a96b60062d55ac31d85d099b2f404c25456",
         "after_sha256": "253b32c9bd127a88f52350b084c205903c6a1ceeddf857609d30fd3accd04820"
+      },
+      {
+        "id": "positive-ability-descriptions-2026-10-21",
+        "source": "positive-ability-descriptions-2026-10-21.json",
+        "before_sha256": "253b32c9bd127a88f52350b084c205903c6a1ceeddf857609d30fd3accd04820",
+        "after_sha256": "32ec509cdcdf633b6db03f5ac5e9011e9a2baaf6d1283eaa2b12ae443e245867"
       }
     ]
   }

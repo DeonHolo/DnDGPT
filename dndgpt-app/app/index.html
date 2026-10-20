@@ -582,19 +582,41 @@ function readingLayout(parent){
   const layout=element("div",undefined,"reading-layout"),index=element("div",undefined,"reading-index"),article=element("article",undefined,"reading-article");
   layout.append(index,article);parent.append(layout);return {index,article};
 }
+function abilityCopy(value,depth=0){
+  if(depth>12)return;
+  if(Array.isArray(value))return value.map(entry=>abilityCopy(entry,depth+1)).filter(entry=>entry!==undefined);
+  if(value&&typeof value==="object")return Object.fromEntries(Object.entries(value)
+    .filter(([key])=>!/^(?:caveats?|limitations?|limits|counterplay|restrictions?|constraints?|disclaimers?|warnings?|non_effects|unchanged(?:_stats)?)$/i.test(key))
+    .map(([key,entry])=>[key,abilityCopy(entry,depth+1)]));
+  if(typeof value!=="string")return value;
+  const visible=[];let disclaimer=false;
+  for(const line of value.split(/\n/)){
+    const heading=line.trim().replace(/^#{1,6}\s*/,"").replace(/\*\*/g,"");
+    if(/^(?:caveats?|limitations?|limits?(?:\s*(?:&|and)\s*counterplay)?|counterplay|restrictions?|disclaimers?|warnings?)(?:\s*[:—-].*)?\s*$/i.test(heading)){disclaimer=true;continue;}
+    if(disclaimer&&(/^(?:#{1,6}\s+\S|\*\*[^*]+\*\*:?[\s]*$)/.test(line.trim())||/^(?:full rules|class interaction|effects?|triggers?|cost|damage|healing|targets?|duration|cooldown|activation|requirements?|stacking|manifestation)\s*(?::|$)/i.test(heading)))disclaimer=false;
+    if(!disclaimer)visible.push(line);
+  }
+  return visible.join("\n").trim();
+}
+function upgradeLine(line){
+  const text=line.replace(/^[\s*•-]+/,"").trim();
+  if(/\b(?:unchanged|unaffected|remains? (?:the )?same|does not change|do not change)[.!]?$/i.test(text)&&!/(?:→|->|\b(?:increas|decreas|gain|add|reduc|rais|replac|becom|now)\w*)/i.test(text))return "";
+  if(/^(?:applies|affects) only (?:to )?(?:future|new|subsequent)(?:\s+[\w'-]+){0,4}\s+(?:casts?|uses?|summons?|activations?)[.!]?$/i.test(text))return "";
+  return displayLine(line);
+}
 function upgradeContent(upgrade,parent){
-  const sentences=value=>String(value).split(/\n+|(?<=[.!?])\s+(?=[A-Z])/).map(line=>line.trim()).filter(Boolean);
+  const sentences=value=>String(value).split(/\n+|;\s+|(?<=[.!?])\s+(?=[A-Z])/).map(line=>line.trim()).filter(Boolean);
   const normalize=text=>text.toLowerCase().replace(/[^a-z0-9]+/g," ").trim();
   const parentCopies=[parent.mechanics_display,parent.mechanics,parent.effect,parent.effects,parent.rules].filter(Boolean);
   const inherited=new Set(parentCopies.flatMap(value=>(Array.isArray(value)?value:[value]).filter(v=>typeof v==="string").flatMap(sentences)).map(normalize));
   for(const key of ["change_display","changes","change_summary","delta","effect","effects","mechanics_display","mechanics","description","summary","simple"]){
-    const value=upgrade[key];if(!meaningful(value))continue;
+    const value=abilityCopy(upgrade[key]);if(!meaningful(value))continue;
     if(typeof value==="object"&&!Array.isArray(value)){
       if(key==="changes"||key==="delta")return Object.fromEntries(Object.entries(value).map(([field,change])=>[field,change&&typeof change==="object"&&!Array.isArray(change)&&"after" in change?change.after:change]));
       return value;
     }
     const explicit=["change_display","changes","change_summary","delta"].includes(key);
-    const lines=(Array.isArray(value)?value:[value]).flatMap(entry=>typeof entry==="string"?sentences(entry):[entry]).filter(line=>typeof line!=="string"||displayLine(line)&&(explicit||!inherited.has(normalize(line))));
+    const lines=(Array.isArray(value)?value:[value]).flatMap(entry=>typeof entry==="string"?sentences(entry):[entry]).map(line=>typeof line==="string"?upgradeLine(line):line).filter(line=>typeof line!=="string"||line&&(explicit||!inherited.has(normalize(line))));
     if(lines.length)return lines;
   }
 }
@@ -623,18 +645,18 @@ function renderAbilityInspector(article,ability){
     tabs.append(button);
   }
   article.append(tabs,...Object.values(panels));
-  const mechanics=ability.mechanics_display??ability.mechanics??ability.effect??ability.effects??ability.rules,overview=ability.simple||ability.description;
+  const mechanics=abilityCopy(ability.mechanics_display??ability.mechanics??ability.effect??ability.effects??ability.rules),overview=abilityCopy(ability.simple||ability.description);
   if(overview)renderValue(panels.overview,overview);
   else if(typeof mechanics==="string"){
     const first=mechanics.split(/(?<=[.!?])\s+(?=[A-Z])/)[0];paragraph(panels.overview,briefText(first,420));
-    if(first!==mechanics||first.length>420)paragraph(panels.overview,"Excerpt · Full rules includes every condition and limit.","muted");
+    if(first!==mechanics||first.length>420)paragraph(panels.overview,"Excerpt · See Full rules.","muted");
   }else if(mechanics)renderValue(panels.overview,mechanics);else paragraph(panels.overview,"Full mechanics have not been recorded.","muted");
   if(skillGroup(ability)===3)paragraph(panels.overview,"Outside combat · "+activationLabel(ability),"chapter-note");
   if(ability.ready===false&&meaningful(ability.status_reason))paragraph(panels.rules,ability.status_reason,"muted");
   if(mechanics)renderValue(panels.rules,mechanics);else paragraph(panels.rules,"Full mechanics have not been recorded.","muted");
   const passiveRequirement=activationLabel(ability)==="Passive"&&typeof ability.cost==="string"?ability.cost.split(";").slice(1).join(";").trim():undefined;
-  renderFacts(panels.rules,[["Requirements",ability.prerequisites||passiveRequirement],["Stacking",ability.stacking],["Limits",ability.limitations??ability.limits],
-    ["Counterplay",ability.counterplay],["Manifestation",ability.manifestation??ability.visual]]);
+  renderFacts(panels.rules,[["Requirements",ability.prerequisites||passiveRequirement],["Stacking",ability.stacking],
+    ["Manifestation",ability.manifestation??ability.visual]]);
   if(upgrades.length){
     paragraph(panels.upgrades,"What changed. Full rules includes the combined ability.","chapter-note");
     const list=element("div",undefined,"upgrade-list");
@@ -645,8 +667,8 @@ function renderAbilityInspector(article,ability){
         if(typeof value.flavor_text==="string"&&value.flavor_text.trim())section.append(element("p",value.flavor_text,"ability-flavor"));
         const change=upgradeContent(value,ability);
         if(change)renderValue(section,change);else if(!value.name)paragraph(section,"Ask your GM to record what this upgrade changes.","muted");
-        renderFacts(section,[["Damage",value.damage],["Duration",value.duration],["Limits",value.limitations??value.limits],["Counterplay",value.counterplay]]);
-      }else renderValue(section,value);
+        renderFacts(section,[["Damage",value.damage===ability.damage?undefined:value.damage],["Duration",value.duration===ability.duration?undefined:value.duration]]);
+      }else renderValue(section,abilityCopy(value));
       list.append(section);
     }
     panels.upgrades.append(list);

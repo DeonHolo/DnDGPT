@@ -40,4 +40,4 @@ Keep **Your story** collapsed by default behind a labeled expand/collapse contro
 
 ## Final response check
 
-Check player intent, current rules/state, legal timing/targets/costs, fixed rolls/offers, known information, consequences and save status. Keep typed actions, complete ability rules, meaningful costs/cooldowns and zero depleted resources; upgrades stay under their parent. Flavor/POV/tooltips add no mechanics. Repair prose/UI without replaying actions, rerolling or inventing saves. A checklist is guidance, not evidence that gameplay or rendering passed testing.
+Check player intent, current rules/state, legal timing/targets/costs, fixed rolls/offers, known information, consequences and save status. Keep typed actions, costs/cooldowns and depleted resources. State ability effects; omit caveats and unchanged stats. GM adjudicates unintended uses. Upgrades stay under their parent. Flavor/POV/tooltips add no mechanics. Repair prose/UI without replaying actions, rerolling or inventing saves. A checklist is guidance, not evidence that gameplay or rendering passed testing.

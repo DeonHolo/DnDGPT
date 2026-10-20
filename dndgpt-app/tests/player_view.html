@@ -54,6 +54,30 @@ document.getElementById('run').onclick=async()=>{
   w.renderAbilityInspector(article,{...fixture.abilities[0],cost:2});assert(article.querySelector('.ability-facts').textContent.includes('2 MP'),'A real passive resource cost was hidden');
   assert(!w.meaningful('-1 MP','Cost')&&!w.meaningful('-1 rounds','Cooldown'),'Negative metadata placeholder was shown');
  });
+ await test('Ability tabs omit disclaimer blocks and unchanged upgrade notes in every layout',async()=>{
+  const article=d.querySelector('#skill-page-passives .reading-article');
+  const power={...fixture.abilities[1],id:'positive-copy',name:'Call the Redglass Verge',rarity:'UNIQUE',simple:'Raise a living colony.',prerequisites:'Requires an earned component',
+   mechanics_display:'Raise a colony with a 40 HP heart. Commands require consciousness.\n\n**Limits & counterplay:**\nPRIVATE_LIMIT_BLOCK\n\nDuration:\n2 rounds.',
+   limitations:'PRIVATE_LIMIT_FIELD',counterplay:'PRIVATE_COUNTERPLAY_FIELD',upgrades:[{name:'Carapace Nursery',duration:'2 rounds',damage:'1d8+2',
+    change_display:['Original Verge Heart HP 32 → 40; initial The Unspent Heart bud HP 10 → 12.','Later Hostile Ground buds 10 HP and succession Heart 18 HP unchanged.','Existing 10 MP Action and one autonomous colony Action unchanged.','Applies only to future Verge casts.'],limitations:'PRIVATE_UPGRADE_LIMIT',counterplay:'PRIVATE_UPGRADE_COUNTERPLAY'}]};
+  const saved=JSON.stringify(power);
+  try{for(const width of [375,1100]){frame.style.width=width+'px';await wait(30);for(const layout of ['original','reclaimed','orrery','ember']){
+   w.selectLayout(layout,false);w.renderAbilityInspector(article,power);
+   for(const tab of article.querySelectorAll('[role="tab"]')){tab.click();assert(article.querySelectorAll('[role="tabpanel"]:not([hidden])').length===1,'Ability tab failed');}
+   const rules=article.querySelector('[id^="ability-copy-rules-"]').textContent,changes=article.querySelector('[id^="ability-copy-upgrades-"]').textContent;
+   for(const token of ['40 HP heart','Commands require consciousness','2 rounds','Requires an earned component'])assert(rules.includes(token),'Lost actual mechanic: '+token);
+   assert(changes.includes('32 → 40')&&changes.includes('10 → 12'),'Upgrade benefit missing');
+   for(const token of ['PRIVATE_','Limits','Counterplay','unchanged','future Verge casts'])assert(!(rules+' '+changes).includes(token),'Clutter shown: '+token);
+   assert(!changes.includes('2 rounds')&&!changes.includes('1d8+2'),'Unchanged upgrade stat shown');
+   assert(d.documentElement.scrollWidth<=d.documentElement.clientWidth+1,'Ability overflow: '+layout+'/'+width);
+  }}}finally{frame.style.width='1100px';w.selectLayout('original',false);w.renderAbilityInspector(article,fixture.abilities[0]);}
+  assert(JSON.stringify(power)===saved,'Presentation changed the saved power');
+ });
+ await test('Structured ability prose keeps effects while omitting disclaimer fields',()=>{
+  const article=d.createElement('article'),power={...fixture.abilities[1],mechanics_display:{effect:'Deal 1d8+2 damage.',duration:'2 rounds',limitations:'PRIVATE_STRUCTURED_LIMIT',details:{trigger:'Touch the marked object.',caveats:'PRIVATE_NESTED_CAVEAT'}}};
+  const saved=JSON.stringify(power);w.renderAbilityInspector(article,power);const rules=article.querySelector('[id^="ability-copy-rules-"]').textContent;
+  assert(rules.includes('1d8+2')&&rules.includes('2 rounds')&&rules.includes('marked object'),'Lost a structured effect');assert(!rules.includes('PRIVATE_'),'Structured disclaimer shown');assert(JSON.stringify(power)===saved,'Structured source mutated');
+ });
  await test('Structured mechanics select one readable copy and keep gameplay restrictions',()=>{
   const node=d.createElement('div');w.renderValue(node,{mechanics:'Repeated rules.',mechanics_display:'Readable rules.',rules:'Repeated rules.',constraints:'Cannot cross a sealed barrier.',hp:0,def:12,kind:'optional_background_lead'});const text=node.textContent;
   assert(text.includes('Readable rules.')&&!text.includes('Repeated rules.'),'Mechanics aliases duplicated');assert(text.includes('sealed barrier')&&text.includes('12'),'Useful restriction or DEF was lost');assert(!text.includes('optional_background_lead'),'Engine enum leaked');
