@@ -109,6 +109,16 @@ def build_mcp(engine, config, verifier, creation_repository=None):
     chat_game = ChatGame(engine)
     from .campaign_lifecycle import CampaignLifecycle
     campaign_lifecycle = CampaignLifecycle(engine)
+    from .campaign_archive import CampaignArchive
+    from .save_history import SaveHistory
+    from .continuity import model_view
+    archive_service, history = CampaignArchive(engine), SaveHistory(engine)
+
+    def campaign_view(result, view):
+        if view != "full":
+            result = {**result, "campaign": model_view(result["campaign"], view),
+                      "_meta": {**result.get("_meta", {}), "campaign_snapshot": result["campaign"]}}
+        return result
 
     @server.tool(annotations=read, meta=metadata())
     def read_rules(document: Literal["rulebook", "hardener", "index"] = "rulebook",
@@ -139,22 +149,28 @@ def build_mcp(engine, config, verifier, creation_repository=None):
 
     @server.tool(annotations=write, meta=metadata(WRITE_SCOPE))
     def save_chat_update(campaign_id: str, action_id: str, expected_version: int,
-                         summary: str, changes: dict) -> CallToolResult:
+                         summary: str, changes: dict, result_view: Literal["full", "turn"] = "full") -> CallToolResult:
         """Save ONE batched GM update to a fresh chat-led game; ChatGPT adjudicates the rules.
-        Read current version first. changes supports partial character (attributes merge), equipment
+        Use the latest successfully returned version already in context; read again if missing,
+        uncertain or conflicted. Prefer result_view=turn to omit old logs from model context.
+        The successful save already verifies the commit; do not read again just to verify it.
+        changes supports partial character (attributes merge), equipment
         {slot:inventory_id|null}, name/current_location/opening_preview/notes, fictional_time_seconds,
         level_up_freeze, world/creation/advancement/funds objects (each replaces that object), and collection
         upsert/remove/replace dictionaries. Collections: abilities, conditions, summons, enemies,
         inventory, supplies, quest_log, world_log, generation_ledger. Each record has stable id;
         upsert merges fields by id; remove lists ids; replace explicitly replaces a whole collection.
         Example: {"character":{"hp":18},"upsert":{"world_log":[{"id":"arrival","text":"Reached the gate"}]}}.
+        continuity merges short scene/last_player_intent/last_action/outcome/pending_decision/transition
+        text (600 characters each) and unresolved_threads/npc_commitments (at most 8 strings of 240).
+        Update it in this SAME save after a meaningful change; never invent a thought or future outcome.
         Never set mode/phase/paused/version/authorization. Draft preparation is allowed before play;
         confirm_chat_character and start_chat_adventure are separate propose_action/app approvals.
         Paused games require explicit resume or approved correct_chat_state. Reuse EXACT arguments
         and action_id after timeout; never double-apply a reward. A 409 needs a fresh read and review.
         """
-        return invoke(lambda owner: chat_game.update(owner, campaign_id, action_id,
-                      expected_version, summary, changes), True)
+        return invoke(lambda owner: campaign_view(chat_game.update(owner, campaign_id, action_id,
+                      expected_version, summary, changes), result_view), True)
 
     @server.tool(annotations=read, meta=metadata())
     def get_chat_version(campaign_id: str, version: int) -> CallToolResult:
@@ -222,10 +238,41 @@ def build_mcp(engine, config, verifier, creation_repository=None):
             owner, campaign_id, expected_version, confirmation_token, confirm_permanent), True)
 
     @server.tool(annotations=read, meta=metadata())
-    def get_campaign(campaign_id: str) -> CallToolResult:
-        """Read authoritative current state without raw rarity rolls, time advancement, or mutation."""
-        return invoke(lambda owner: {"campaign": engine.get_campaign(owner, campaign_id),
-                                      "_meta": engine.pending_approval(owner, campaign_id)})
+    def get_campaign(campaign_id: str, view: Literal["full", "turn", "resume"] = "full") -> CallToolResult:
+        """Read committed state without mutation, time advancement or raw rarity rolls.
+        Prefer view=turn for normal play: it retains current mechanics and omits old logs/world articles.
+        view=resume supplies a compact continuity brief for a fresh chat; inspect full details only as needed.
+        A brief read never authorizes continuing, rolling or resuming. Missing continuity is marked, not invented.
+        Reuse the latest successful read/save in the current context; no obligatory read before every save.
+        """
+        return invoke(lambda owner: campaign_view(engine.campaign_context(owner, campaign_id), view))
+
+    @server.tool(annotations=read, meta=metadata())
+    def list_chat_versions(campaign_id: str, before: int | None = None, limit: int = 20) -> CallToolResult:
+        """Read a bounded page of owned save summaries only on a history/recovery request, never every turn."""
+        return invoke(lambda owner: history.list(owner, campaign_id, before, limit))
+
+    @server.tool(annotations=read, meta=metadata(app_only=True))
+    def compare_chat_version(campaign_id: str, version: int) -> CallToolResult:
+        """APP ONLY. Show public changes from the preceding saved version without loading it as current state."""
+        return invoke(lambda owner: history.compare(owner, campaign_id, version))
+
+    @server.tool(annotations=read, meta=metadata(app_only=True))
+    def export_campaign(campaign_id: str) -> CallToolResult:
+        """APP ONLY. Download this owned campaign's private portable current snapshot, without changing it."""
+        return invoke(lambda owner: archive_service.export(owner, campaign_id))
+
+    @server.tool(annotations=read, meta=metadata(app_only=True))
+    def preview_campaign_import(archive: dict) -> CallToolResult:
+        """APP ONLY. Validate a player-selected portable export and show its restore scope; creates nothing."""
+        return invoke(lambda owner: archive_service.preview(archive))
+
+    @server.tool(annotations=write, meta=metadata(WRITE_SCOPE, app_only=True))
+    def import_campaign(archive: dict, action_id: str, confirm_restore: bool) -> CallToolResult:
+        """APP ONLY. After the player reviews and confirms, restore a separate PAUSED campaign.
+        Never overwrite an existing campaign or start/resume play. Retry EXACT arguments/action_id.
+        """
+        return invoke(lambda owner: archive_service.restore(owner, archive, action_id, confirm_restore), True)
 
     @server.tool(annotations=write, meta=metadata(WRITE_SCOPE))
     def create_sandbox(name: str, action_id: str) -> CallToolResult:

@@ -49,7 +49,7 @@ def test_release_contains_canonical_source_and_complete_rules_without_runtime_da
             assert archive.read("skills/game-master/references/" + name) == authoritative
             assert archive.read("assets/prototype/rules/" + name) == authoritative
         for source in (APP / "app").iterdir():
-            if source.is_file() and source.suffix in {".py", ".html"}:
+            if source.is_file() and source.suffix in {".py", ".html", ".css", ".js"}:
                 assert archive.read("assets/prototype/app/" + source.name) == source.read_bytes()
         for source in (APP / "app/assets").glob("*.webp"):
             assert archive.read("assets/prototype/app/assets/" + source.name) == source.read_bytes()

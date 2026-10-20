@@ -6,7 +6,7 @@ import pytest
 
 from app.engine import EngineError
 from app.mcp_server import rules_page
-from app.rule_sections import sections, AMENDMENTS
+from app.rule_sections import sections, AMENDMENTS, SUBSECTIONS
 from .test_server import rpc, tool
 
 
@@ -16,7 +16,7 @@ SOURCE = Path(__file__).resolve().parents[1] / "rules/rulebook-v1.0.txt"
 def test_index_covers_every_chapter_and_required_current_amendment():
     text = SOURCE.read_bytes().decode()
     entries = sections(text)
-    assert set(map(str, range(1, 47))) | {"32A"} | set(AMENDMENTS) == set(entries)
+    assert set(map(str, range(1, 47))) | {"32A"} | set(AMENDMENTS) | set(SUBSECTIONS) == set(entries)
     assert all(item["start"] < item["end"] for item in entries.values())
     index = rules_page("index", 0)
     assert index["next_offset"] is None
@@ -24,7 +24,7 @@ def test_index_covers_every_chapter_and_required_current_amendment():
     assert "loading |" in index["content"] and "33 |" in index["content"]
 
 
-@pytest.mark.parametrize("key", ["4", "8", "33", "38", "loading", "story", "creation-order", "utility"])
+@pytest.mark.parametrize("key", ["4", "8", "33", "38", "loading", "story", "creation-order", "utility", "continuity", "story-ui"])
 def test_section_pages_reassemble_exact_authoritative_slice(key):
     data = SOURCE.read_bytes()
     text = data.decode()

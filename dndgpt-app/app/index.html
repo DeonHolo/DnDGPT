@@ -151,6 +151,7 @@ dialog{color:var(--ink);background:var(--paper);border:1px solid var(--line);bor
 @media(max-width:480px){#choices{gap:8px}#choices button{flex:1 1 100%}#resources{gap:10px}.resource-label{font-size:.7rem;flex-wrap:wrap}#customForm{flex-wrap:wrap}#custom{flex-basis:100%}.toolbar button{flex:1}#status{padding:14px}.stat-grid{gap:6px}.record-grid{gap:8px}}
 @media(prefers-reduced-motion:reduce){button{transition:none}}
 /* dashboard layouts */
+/* campaign tools styles */
 </style>
 </head>
 <body>
@@ -167,6 +168,14 @@ dialog{color:var(--ink);background:var(--paper);border:1px solid var(--line);bor
 <div class="appearance-controls"><div class="scene-controls"><label for="sceneSelect">Reading atmosphere</label><span class="select-field"><select id="sceneSelect" aria-describedby="artCredit"><option value="classic">Classic</option></select></span></div><div class="scene-controls"><label for="layoutSelect">Dashboard layout</label><span class="select-field"><select id="layoutSelect"><option value="original">Original</option><option value="reclaimed">Reclaimed Codex</option><option value="orrery">The Orrery</option><option value="ember">Ember Ledger</option></select></span></div></div>
 <label class="motion-control"><input id="ambientMotion" type="checkbox" checked> Ambient motion</label>
 <p class="muted" id="artCredit">Classic dark green, without background artwork.</p>
+<details id="saveTools" class="save-tools"><summary>Campaign brief, history &amp; portable saves</summary><div class="tools-body">
+<details id="resumeDisclosure"><summary>Resume brief</summary><div id="resumeBrief" class="resume-facts"></div></details>
+<details id="historyDisclosure"><summary>Save history</summary><p class="muted" id="historyStatus">History loads only when requested.</p><button id="loadHistory" type="button" disabled>Load saved versions</button><ul id="historyList" class="history-list"></ul><button id="historyMore" type="button" hidden>Older versions</button><div id="historyChanges" aria-live="polite"></div></details>
+<details id="correctionDisclosure"><summary>Correct a saved detail</summary><p class="muted">Preview a specific correction, then approve it separately. Your previous saves remain in history.</p><label for="correctionField">Detail to correct</label><span class="select-field"><select id="correctionField"></select></span><label for="correctionValue">Correct value</label><textarea id="correctionValue" maxlength="20000"></textarea><label for="correctionReason">Reason for this correction</label><input id="correctionReason" maxlength="2000"><button id="correctionPreview" type="button" disabled>Review correction</button></details>
+<div class="row"><button id="downloadCampaign" type="button" disabled>Download campaign</button></div><p id="exportDownload" hidden></p>
+<label for="campaignFile">Restore a campaign export</label><input id="campaignFile" type="file" accept=".json,application/json"><p class="muted">Choose a private DnDGPT export. Restore creates a separate paused copy and keeps existing campaigns.</p>
+<div id="importReview" hidden><h3>Review campaign restore</h3><p id="importDescription"></p><p id="importNotice" class="muted"></p><div class="row"><button id="confirmImport" type="button">Restore paused copy</button><button id="cancelImport" type="button">Cancel restore</button></div></div>
+</div></details>
 <details id="diagnostics" class="settings-disclosure"><summary>Connection details</summary><div class="disclosure-body"><p id="connection" class="muted">Connecting…</p><p id="uiBuild" class="muted"></p><div class="connection-meta"><span id="mode" class="badge">Inline</span><span id="stateVersion" class="muted">No saved state selected</span></div><pre id="lastEvent"></pre></div></details>
 <details id="developmentTools" class="development-tools settings-disclosure"><summary>Development tools</summary><div class="disclosure-body"><p class="muted">Test sandbox controls. These inspect test data; they are not adventure choices.</p><nav id="choices" class="row" aria-label="Development shortcuts"></nav><button id="newSandbox" type="button">New test sandbox</button></div></details>
 </div>
@@ -182,6 +191,7 @@ dialog{color:var(--ink);background:var(--paper);border:1px solid var(--line);bor
 <textarea id="fallback" aria-label="Prompt to copy into chat" rows="3" readonly hidden></textarea>
 <section id="approval" aria-label="Review proposed action" hidden>
 <h2>Review proposed action</h2><p id="approvalLabel"></p><pre id="approvalSummary"></pre>
+<div id="approvalChanges" hidden></div>
 <p id="approvalExpiry" class="muted" role="status" hidden></p>
 <div class="row"><button id="confirm" type="button">Approve this action</button><button id="decline" type="button">Dismiss preview</button></div>
 <p class="muted">Only approval commits the displayed command. Browsing chapters never uses an action.</p>
@@ -290,6 +300,7 @@ function updateSyncStatus(){
   $("cancelDelete").disabled=deleting;
   $("cancelDelete").textContent=deletionStarted?"Close":"Keep campaign";
   $("deleteName").disabled=deletionStarted;
+  updateSaveTools();
 }
 function element(tag,text,className){
   const node=document.createElement(tag);if(text!==undefined)node.textContent=String(text);
@@ -425,14 +436,14 @@ function restorePreferences(){
   setTimeout(()=>{restoring=false},0);
 }
 async function callTool(name,args={}){
-  const checksState=["get_campaign","render_dashboard","execute_confirmed_action"].includes(name);
+  const checksState=["get_campaign","render_dashboard","execute_confirmed_action","import_campaign","save_chat_update"].includes(name);
   let result;
   try{
   if(standard&&hostCapabilities.serverTools)result=await rpc("tools/call",{name,arguments:args});
   else if(window.openai?.callTool)result=await window.openai.callTool(name,args);
   else throw new Error("Connected MCP tools are unavailable");
   if(result?.isError)throw Object.assign(new Error(result.structuredContent?.message||result.content?.find(c=>c.type==="text")?.text||"Tool failed"),{code:result.structuredContent?.error});
-  receive(result);
+  receive(result,checksState);
   if(checksState&&(result.structuredContent?.campaign||Array.isArray(result.structuredContent?.campaigns))){
     if(syncIssue)notice("Connection restored. Saved state refreshed.");
     lastVerifiedAt=new Date();syncIssue=false;updateSyncStatus();
@@ -998,9 +1009,9 @@ function renderCampaign(next){
   renderGear(next,gear);
   renderRecords($("quests"),next.quest_log,"No quests recorded.");
   renderWorld(next);
-  renderChoices();restorePreferences();
+  renderChoices();restorePreferences();updateSaveTools();
 }
-function receive(result){
+function receive(result,verified=false){
   const data=result?.structuredContent||{};
   if(data.historical)return;
   if(data.view_preferences&&!preferencesLoaded){
@@ -1012,8 +1023,13 @@ function receive(result){
     for(const c of campaigns){const option=element("option",c.name);option.value=c.id;$("session").append(option)}
     if(state)$("session").value=state.id;
   }
-  if(data.campaign&&!deletedCampaigns.has(data.campaign.id))renderCampaign(data.campaign);
   const meta=result?._meta||{};
+  const snapshot=meta.campaign_snapshot||data.campaign;
+  if(snapshot&&!deletedCampaigns.has(snapshot.id)){
+    renderCampaign(snapshot);
+    if(verified){lastVerifiedAt=new Date();syncIssue=false}
+    updateSaveTools();
+  }
   if(meta.approval!==undefined)showApproval(meta.approval);
   else if(data.proposal&&!data.committed&&meta.approval_token)showApproval({proposal:data.proposal,approval_token:meta.approval_token,expires_at:meta.approval_expires_at});
   updateSyncStatus();
@@ -1028,6 +1044,12 @@ function showApproval(approval){
   updateSyncStatus();
   if(!approval)return;
   const p=approval.proposal;
+  $("approvalChanges").hidden=p.kind!=="correct_chat_state";
+  $("approvalSummary").hidden=p.kind==="correct_chat_state";
+  if(p.kind==="correct_chat_state"){
+    showSaveChanges($("approvalChanges"),p.field_changes);
+    $("approvalChanges").prepend(element("p",p.payload.reason));
+  }
   $("approvalLabel").textContent=p.kind.replaceAll("_"," ")+" · version "+p.expected_version;
   const deltas={};
   for(const key of Object.keys(p.character_before||{}))if(JSON.stringify(p.character_before[key])!==JSON.stringify(p.character_after?.[key]))deltas[key]={before:p.character_before[key],after:p.character_after?.[key]};
@@ -1118,7 +1140,7 @@ window.addEventListener("message",event=>{
     if(message.error)item.reject(new Error(message.error.message||"Host rejected the request"));
     else item.resolve(message.result);return;
   }
-  if(message.method==="ui/notifications/tool-result")receive(message.params);
+  if(message.method==="ui/notifications/tool-result")receive(message.params,true);
   if(message.method==="ui/notifications/host-context-changed")applyHostContext(message.params);
   if(message.method==="ui/notifications/tool-cancelled"){showApproval(null);notice("The host cancelled the action.")}
   if(message.method==="ui/resource-teardown"&&message.id!==undefined){
@@ -1155,6 +1177,7 @@ $("confirm").onclick=async()=>{
     }
     await callTool("execute_confirmed_action",{proposal_id:approval.proposal.id,approval_token:approval.approval_token});
     showApproval(null);notice("Action committed.");
+    if(approval.proposal.kind==="correct_chat_state")return;
     const followup=state?.disposable?"Disposable development acceptance only. Read this test record and report its current phase, paused state and version. No further writes, story generation or rolls.":approval.proposal.kind==="confirm_chat_character"?"My character is confirmed. Read saved state. If an opening_preview is already saved, present it; otherwise prepare and save it. Do not start the adventure; wait for my separate authorization.":approval.proposal.kind==="start_chat_adventure"?"I approved starting this adventure. Read saved state and begin the opening scene. Save any changes once through save_chat_update.":"Describe the already committed result of proposal "+approval.proposal.id+". Read current state; do not execute or reroll it again.";
     await sendPrompt(followup);
   }catch(error){
@@ -1167,6 +1190,7 @@ document.addEventListener("visibilitychange",()=>{if(document.visibilityState===
 document.addEventListener("companion:page",persistPreferences);
 document.addEventListener("toggle",event=>{if(event.target.matches?.("[data-detail]"))persistPreferences()},true);
 new ResizeObserver(()=>{if(standard)notify("ui/notifications/size-changed",{height:document.body.scrollHeight})}).observe(document.body);
+/* campaign tools script */
 (async()=>{
   renderChoices();restorePreferences();
   if(window.parent!==window){
@@ -1183,7 +1207,7 @@ new ResizeObserver(()=>{if(standard)notify("ui/notifications/size-changed",{heig
   if(window.openai?.toolOutput)receive({structuredContent:window.openai.toolOutput,_meta:toolMetadata(window.openai.toolResponseMetadata)});
   if(standard||window.openai?.callTool){
     try{await refresh()}catch(error){notice(error.message)}
-    pollingTimer=setInterval(()=>refresh().catch(error=>notice(error.message)),8000);
+    pollingTimer=setInterval(()=>{if(!lastVerifiedAt||Date.now()-lastVerifiedAt.getTime()>=45000)refresh().catch(error=>notice(error.message))},45000);
   }
   if(!standard&&!window.openai?.callTool){$("syncStatus").dataset.state="preview";$("syncStatus").textContent="Preview · no saved state connection."}
   applyHostContext(hostContext);

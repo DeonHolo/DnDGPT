@@ -10,11 +10,13 @@ Class offers: creation-order, generation, utility, class-craft, reach, 5, 6, 7, 
 Utility offers and revisions: utility, generation, class-craft and the applicable acquisition chapter.
 Combat: reach, 12, 13, 14; also 15/16/29/30 when applicable.
 Advancement: 17, 18 and the applicable track in 19 through 22; interfaces 37/38.
-Presentation: story, dashboard-writing, 33, 34, 35, 38, 39. Chapter 33 contains the full inline glossary specification.
+Routine narrative/presentation: continuity and story-ui. Cache current sections; do not reload every turn.
+Presentation detail/implementation: story, dashboard-writing, 33, 34, 35, 38, 39. Chapter 33 contains the full inline glossary specification.
 Equipment: 23 through 28. Story/quests: 31, 32, 32A. Saves/compatibility: 40 through 42.
 
 ## Current amendments
 loading | Rules loading and checklist precedence | 2498 characters
+continuity | Turn continuity and efficient resolution | 4654 characters
 creation-order | V1.0 surgical four-turn creation and in-chat continuation precedence | 1844 characters
 story | Story flavor, character identity and player voice | 6960 characters
 generation | Generation breadth, reaction roles and a playable world | 7333 characters
@@ -23,6 +25,7 @@ class-craft | Class concept diversity and writing craft | 5673 characters
 world-preview | World introduction: history, place and the player's footing | 3089 characters
 reach | Dexterity and player-facing reach | 2918 characters
 dashboard-writing | Player-facing dashboard writing contract | 5862 characters
+story-ui | Compact Intelligent Story UI contract | 4883 characters
 
 ## Full chapters
 1 | THE CORE EXPERIENCE | 1127 characters
@@ -58,7 +61,7 @@ dashboard-writing | Player-facing dashboard writing contract | 5862 characters
 31 | CHARACTER-AWARE GAMEPLAY OPTIONS | 867 characters
 32 | QUESTS, NPCS AND STORY CLARITY | 19774 characters
 32A | LIVING-WORLD RANDOM EVENT ENGINE — V1.0 CODE-ROLLED, CONTEXTUAL, AUDITABLE | 9598 characters
-33 | INTELLIGENT INTERACTIVE UI | 25667 characters
+33 | INTELLIGENT INTERACTIVE UI | 30550 characters
 34 | SIMPLIFIED ABILITY DISPLAY | 4283 characters
 35 | RARITY COLORS AND VISUAL PRIORITY | 2594 characters
 36 | CHARACTER CREATION INTERFACE | 1655 characters

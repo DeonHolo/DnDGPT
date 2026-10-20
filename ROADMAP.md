@@ -1,8 +1,15 @@
 # DnDGPT request tracker
 
-Updated: 18 October 2026. Checkboxes mean implemented and checked in the working files; release status is recorded separately.
+Updated: 21 October 2026. Checkboxes mean implemented and checked in the working files; release status is recorded separately.
 
 ## ASAP — current approved work
+
+- [x] Add causal transitions and bounded saved continuity without adding a separate per-turn tool call; preserve the two-decision obstacle ceiling.
+- [x] Keep a compact Intelligent Story UI contract and hardener checklist with the full glossary specification available for details.
+- [x] Add read-only resume briefs, paged save history, readable correction approvals and portable JSON restoration as a separate paused copy.
+- [x] Add repeatable four-layout narrow/wide browser checks for approval controls, story spacing, ability tabs and recovery.
+- [x] Review 15 actual saved abilities and 12 Utility scenarios with source evidence; record defects and limits in [generation review](docs/GENERATION_REVIEW.md).
+- [x] Combine state/approval reads, use optional compact model views, reduce polling and retain exact retries and approval gates.
 
 - [x] Give the player-facing FAQ its own README section and top navigation link.
 - [x] Apply descriptive reach to the first power reveal, summon stats, commands, Full rules and upgrades; counted paces/steps are measurements too. Preserve exact source mechanics privately.
@@ -57,9 +64,9 @@ Updated: 18 October 2026. Checkboxes mean implemented and checked in the working
 - [ ] Playtest fully band-based distances if desired; cinematic proximity with precise private adjudication is already implemented.
 - [ ] Add further executable adjudication of rest and context-dependent failed-check consequences; the GM currently follows the complete written rules.
 - [ ] Improve descriptive choice cards.
-- [ ] Reduce dashboard polling cost with lightweight change checks and adaptive refresh.
-- [ ] Validate class-kit mechanical distinctness and power quality beyond recorded role counts.
-- [ ] Consolidate duplicated GM/Rule Hardener guidance after checking rule coverage.
+- [ ] Add lightweight change detection beyond the current 45-second visible-page polling and tool-result refresh.
+- [ ] Extend the initial qualitative class-kit review with new offers, independent reviewers and observed usefulness in play.
+- [x] Consolidate duplicated GM/Rule Hardener guidance after checking rule coverage; retain the complete canonical manual.
 - [ ] Improve onboarding toward public-directory distribution when account/platform requirements permit.
 - [ ] Consider group GM tools or a private rulebook library if players want them.
 - [ ] Revisit paid features only if desired; current preference is voluntary GitHub support.

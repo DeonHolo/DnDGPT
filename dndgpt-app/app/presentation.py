@@ -32,5 +32,7 @@ def dashboard_html():
             .replace("__DNDGPT_UI_VERSION__", APP_VERSION)
             .replace("/* scene assets */", "\n".join(styles))
             .replace("/* dashboard layouts */", layouts)
+            .replace("/* campaign tools styles */", (HERE / "campaign_tools.css").read_text(encoding="utf-8"))
+            .replace("/* campaign tools script */", (HERE / "campaign_tools.js").read_text(encoding="utf-8"))
             .replace('<script id="sceneCatalog" type="application/json">[]</script>',
                      '<script id="sceneCatalog" type="application/json">' + catalog.replace("<", "\\u003c") + '</script>'))

@@ -2,7 +2,7 @@
 
 DnDGPT keeps one complete rulebook and a compact execution checklist called the Rule Hardener. The hardener points to the full rules and lists recurring mistakes to check before answering. It is prompting guidance, not a second model or an automatic rules validator.
 
-The previous hardener had grown to 67,534 bytes, with large passages repeated from the manual. The revised checklist is 7,847 bytes and fits in one rules-tool page. The full manual remains intact. Every revision is recorded in the integrity manifest and can be reversed to verify preservation of the original source.
+The previous hardener had grown to 67,534 bytes, with large passages repeated from the manual. The current checklist stays within one 8,000-character rules-tool page. The full manual remains intact. Every revision is recorded in the integrity manifest and can be reversed to verify preservation of the original source.
 
 ## Connected play
 
@@ -15,7 +15,9 @@ For example, a world preview requires the world chapter plus the current world-p
 
 Finishing a section does not mean the entire manual was read. Missing required material must be fetched before deciding. Full-document reads remain available for audits. Bundled copies include the same complete manual, checklist and index for supported offline readers. A player's explicitly selected custom rulebook still governs that campaign.
 
-The permanent Interactive Glossary & Tooltip System remains in full in Chapter 33. The hardener carries its rendering audit and requires the full chapter when presenting that interface. It preserves the honest fallback for hosts that cannot render real inline tooltips.
+The full Interactive Glossary & Tooltip System remains in Chapter 33. Routine story turns use the compact `story-ui` contract and `continuity` amendment, reusing current copies already in context. Fetch Chapter 33 for implementation details, audits or questions the compact contract does not settle. The hardener carries a short rendering checklist and preserves an honest fallback when the host cannot render real interactions.
+
+An ordinary turn reuses the latest successful state/save response and its version, fetches only missing applicable rules, performs genuine necessary rolls and commits one authorized batched update. A successful save response is the commit verification; do not follow it with a routine get/refresh chain. Use `get_campaign(view="turn")` and `save_chat_update(result_view="turn")` when full older logs are unnecessary. Compact views keep current mechanical records and explicitly identify omitted history; `view="full"` remains available when those details matter. Resume and history tools are on demand, not extra steps in every turn.
 
 ## Why reduce duplication?
 

@@ -15,6 +15,16 @@ from app.chat_game import ChatGame
 from app.engine import Engine, EngineError
 from app.game_random import GameRandom
 from app.campaign_lifecycle import CampaignLifecycle
+from app.recovery_probe import check_recovery
+
+
+def test_portable_recovery_and_overhead_against_hosted_store_contract(hosted):
+    _, _, engine, game = hosted
+    state = game.create('owner-recovery-fixture', 'Recovery fixture', 'create-recovery-probe', True)
+    result = check_recovery(engine, 'owner-recovery-fixture', state, 'test-recovery-probe')
+    assert len(result['checks']) == 9
+    timings = result['timings']
+    assert timings['combined_state_and_approval_read']['storage_api_calls'] < timings['separate_state_and_approval_reads']['storage_api_calls']
 
 
 

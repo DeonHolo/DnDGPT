@@ -4,6 +4,7 @@ import re
 
 AMENDMENTS = {
     "loading": "Rules loading and checklist precedence",
+    "continuity": "Turn continuity and efficient resolution",
     "creation-order": "V1.0 surgical four-turn creation and in-chat continuation precedence",
     "story": "Story flavor, character identity and player voice",
     "generation": "Generation breadth, reaction roles and a playable world",
@@ -13,6 +14,8 @@ AMENDMENTS = {
     "reach": "Dexterity and player-facing reach",
     "dashboard-writing": "Player-facing dashboard writing contract",
 }
+
+SUBSECTIONS = {"story-ui": "Compact Intelligent Story UI contract"}
 
 
 def sections(text):
@@ -30,6 +33,13 @@ def sections(text):
         index, match = matches[0]
         end = headings[index + 1].start() if index + 1 < len(headings) else preface_end
         result[key] = {"title": title, "start": match.start(), "end": end}
+    for key, title in SUBSECTIONS.items():
+        match = re.search(r"^## " + re.escape(title) + r"$", text, re.M)
+        if match is None:
+            raise ValueError(f"Missing canonical subsection: {title}")
+        following = re.search(r"^#{1,2} ", text[match.end():], re.M)
+        end = match.end() + following.start() if following else len(text)
+        result[key] = {"title": title, "start": match.start(), "end": end}
     return result
 
 
@@ -45,14 +55,15 @@ def index_text(text):
              "Utility offers and revisions: utility, generation, class-craft and the applicable acquisition chapter.",
              "Combat: reach, 12, 13, 14; also 15/16/29/30 when applicable.",
              "Advancement: 17, 18 and the applicable track in 19 through 22; interfaces 37/38.",
-             "Presentation: story, dashboard-writing, 33, 34, 35, 38, 39. Chapter 33 contains the full inline glossary specification.",
+             "Routine narrative/presentation: continuity and story-ui. Cache current sections; do not reload every turn.",
+             "Presentation detail/implementation: story, dashboard-writing, 33, 34, 35, 38, 39. Chapter 33 contains the full inline glossary specification.",
              "Equipment: 23 through 28. Story/quests: 31, 32, 32A. Saves/compatibility: 40 through 42.", "",
              "## Current amendments"]
-    for key in AMENDMENTS:
+    for key in {**AMENDMENTS, **SUBSECTIONS}:
         item = entries[key]
         lines.append(f"{key} | {item['title']} | {item['end'] - item['start']} characters")
     lines += ["", "## Full chapters"]
     for key, item in entries.items():
-        if key not in AMENDMENTS:
+        if key not in AMENDMENTS and key not in SUBSECTIONS:
             lines.append(f"{key} | {item['title']} | {item['end'] - item['start']} characters")
     return "\n".join(lines) + "\n"

@@ -1,0 +1,16 @@
+.save-tools{margin-top:16px;border:1px solid var(--line);border-radius:8px;padding:14px;background:var(--paper)}
+.save-tools>summary{font-weight:650}.save-tools .tools-body{padding-top:16px;min-width:0}
+.save-tools details{margin:14px 0;padding:12px;border:1px solid var(--line);border-radius:6px}
+.save-tools p{margin:10px 0}.save-tools .row{gap:10px;flex-wrap:wrap}
+.save-tools label{display:block;margin:12px 0 5px;font:600 .8rem var(--font-sans,system-ui,sans-serif)}
+.save-tools input,.save-tools textarea,.save-tools select{width:100%;max-width:100%;box-sizing:border-box}
+.save-tools textarea{min-height:85px;resize:vertical}.save-tools button{max-width:100%;white-space:normal}
+.save-tools .history-list{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;padding:0;list-style:none}
+.save-tools .history-list button[aria-pressed="true"]{border-color:var(--gold);color:var(--gold)}
+.save-change{margin:12px 0;padding:12px;border:1px solid var(--line);border-radius:6px;overflow-wrap:anywhere}
+.save-change h4{margin:0 0 8px;font:650 .85rem var(--font-sans,system-ui,sans-serif)}
+.save-change dl{margin:0;display:grid;grid-template-columns:64px minmax(0,1fr);gap:6px 12px}
+.save-change dt{font-weight:650}.save-change dd{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+#approvalChanges{max-height:420px;overflow:auto}#importReview{padding:14px;border:1px solid var(--gold);border-radius:6px;margin-top:14px}
+.save-tools .muted{font-size:.82rem}.resume-facts{display:grid;gap:12px}.resume-facts p{margin:0}
+@media(max-width:520px){.save-tools{padding:12px}.save-change{padding:10px}.save-change dl{grid-template-columns:1fr;gap:4px}.save-change dd+dt{margin-top:8px}}

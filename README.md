@@ -16,7 +16,7 @@
   <a href="PROJECT_PROFILE.md">Portfolio & resume</a>
 </p>
 
-DnDGPT is an **MCP app for ChatGPT**: a hosted MCP server connects your conversation to a saved campaign dashboard. The installable plugin adds the GM instructions and bundled rules.
+DnDGPT is an **MCP app for ChatGPT**: a hosted MCP server connects your conversation to a saved campaign dashboard and supplies the GM rules. The optional installable bundle also includes offline rule copies.
 
 I built it as a **5e Hack and homebrew fantasy RPG**, around what I enjoy in fantasy games. Its standalone, D&D-inspired d20 rules replace major parts of standard 5e: five attributes including Luck, HP/MP resources, rarity-based original class kits and a custom progression system. Existing 5e characters, spells and monsters need conversion. See [the rules comparison](docs/SYSTEM_IDENTITY.md).
 
@@ -80,11 +80,13 @@ Click **Try in chat** and use regular **Chat** mode. DnDGPT provides the complet
 
 Send this to begin:
 
-> Be my DnDGPT GM. Read the complete standard rulebook and Rule Hardener from the plugin or connected tools, then begin character creation and open my campaign dashboard. Save our progress as we play. Ask for character confirmation and starting the adventure separately.
+> Be my DnDGPT GM. Read the complete Rule Hardener and rule index, then load the relevant rulebook sections for each stage. Reuse current rules already in context. Begin character creation and open my campaign dashboard. Save our progress as we play. Ask for character confirmation and starting the adventure separately.
 
 After a saved choice, you can say **“Open my campaign dashboard.”** Updates appear when ChatGPT saves the result; narration alone does not update it.
 
-**Managing saves:** Use the **Saved game** selector at the top of the dashboard. To remove one, select it and click **Delete campaign…**. Review the named campaign and what will be removed or retained, type its name, then choose **Delete permanently**. This cannot be undone. If a large history needs several cleanup batches, use **Continue cleanup** to finish the same deletion.
+**Managing saves:** Use the **Saved game** selector at the top of the dashboard. Under **View options → Campaign brief, history & portable saves**, read the resume brief, compare earlier versions, preview a correction or download a campaign file. Restoring a file creates a separate paused copy. Reading history never replaces your current save. See [continuity and recovery](docs/CONTINUITY_AND_RECOVERY.md).
+
+To remove a campaign, select it and click **Delete Campaign**. Review what will be removed or retained, type its name, then choose **Delete permanently**. This cannot be undone. If a large history needs several cleanup batches, use **Continue cleanup** to finish the same deletion.
 
 > **Thinking tip:** For character creation, level-ups and complex build decisions, try **High on Plus** or **Extra High on Pro**. **Pro effort** is another option for deeper text planning on a Pro account, but OpenAI currently lists Intelligent UI as unavailable at Pro effort; switch back to a UI-capable level for interactive choices. For regular play, try **Instant or Medium** for faster turns. These are suggestions, not requirements, and available settings depend on your account. [Model and UI availability](https://help.openai.com/en/articles/20001354-gpt-6-and-other-models-in-chatgpt).
 
@@ -114,6 +116,7 @@ For other approaches to AI campaigns and MCP games, see [related projects](docs/
 - **Inspect earned upgrades.** Select an ability, then open **Upgrades** for what its saved Evolutions, Background Imprints and other upgrades add or change. **Overview** gives the short description; **Full rules** holds the combined ability. Upgrades appear after the GM records them on that ability.
 - **Delete campaigns from the dashboard.** Select a saved game and use **Delete campaign…** to review and permanently remove it, with a separate confirmation.
 - **Durable campaign records.** Account ownership, partial updates, version checks and event history.
+- **Continuity and recovery.** A compact saved brief keeps recent intent, outcomes, pending decisions and NPC commitments available. Readable history and approved corrections help review mistakes; portable snapshots restore as separate paused campaigns. These records still depend on what the GM actually saves.
 - **Cinematic positioning.** New standard characters use DEX. Skills show descriptive reach and readable mechanics, while the GM keeps precise movement and targeting checks behind the scenes. Moving, taking cover and spending your Action to Dash still matter.
 - **Real rolls, stable receipts.** Reusable Python dice, checks and rarity tools; retrying the same action returns the saved result.
 - **The rules are included.** The complete custom rulebook and originality hardener ship with the GM skill and are readable through the hosted connection. ChatGPT handles narration and most adjudication.

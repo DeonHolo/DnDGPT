@@ -47,6 +47,16 @@ class Confirmation(BaseModel):
     approval_token: str = Field(min_length=1, max_length=256)
 
 
+class ImportPreview(BaseModel):
+    model_config = ConfigDict(extra="forbid", strict=True)
+    archive: dict
+
+
+class ImportCampaign(ImportPreview):
+    action_id: str = Field(min_length=8, max_length=128)
+    confirm_restore: bool
+
+
 class CreationStart(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True)
     world_preview: str = Field(min_length=1, max_length=20000)
@@ -65,6 +75,10 @@ def create_app(db_path=None, auth_config=None, token_verifier=None, *, enable_cr
     engine = Engine(store, enable_combat=enable_combat)
     from .chat_game import ChatGame
     chat_game = ChatGame(engine)
+    from .campaign_archive import CampaignArchive
+    from .save_history import SaveHistory
+    from .continuity import model_view
+    archive_service, history = CampaignArchive(engine), SaveHistory(engine)
     verifier = token_verifier or JwtVerifier(config)
     creation_repository = None
     if enable_creation_drafts:
@@ -168,6 +182,30 @@ def create_app(db_path=None, auth_config=None, token_verifier=None, *, enable_cr
     @app.get("/api/campaigns/{campaign_id}/versions/{version}")
     def chat_version(campaign_id: str, version: int, token=Depends(authenticated)):
         return chat_game.version(owner_id(token), campaign_id, version)
+
+    @app.get("/api/campaigns/{campaign_id}/versions")
+    def chat_history(campaign_id: str, before: int | None = None, limit: int = 20, token=Depends(authenticated)):
+        return history.list(owner_id(token), campaign_id, before, limit)
+
+    @app.get("/api/campaigns/{campaign_id}/versions/{version}/changes")
+    def version_changes(campaign_id: str, version: int, token=Depends(authenticated)):
+        return history.compare(owner_id(token), campaign_id, version)
+
+    @app.get("/api/campaigns/{campaign_id}/resume")
+    def resume_brief(campaign_id: str, token=Depends(authenticated)):
+        return model_view(engine.get_campaign(owner_id(token), campaign_id), "resume")
+
+    @app.get("/api/campaigns/{campaign_id}/export")
+    def export_campaign(campaign_id: str, token=Depends(authenticated)):
+        return archive_service.export(owner_id(token), campaign_id)
+
+    @app.post("/api/imports/preview")
+    def preview_import(spec: ImportPreview, token=Depends(authenticated)):
+        return archive_service.preview(spec.archive)
+
+    @app.post("/api/imports")
+    def import_campaign(spec: ImportCampaign, token=Depends(writable)):
+        return archive_service.restore(owner_id(token), **spec.model_dump())
 
     @app.get("/api/campaigns/{campaign_id}/events")
     def events(campaign_id: str, show_rolls: bool = False, token=Depends(authenticated)):

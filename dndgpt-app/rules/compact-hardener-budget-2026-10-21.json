@@ -1,0 +1,17 @@
+{
+  "id": "compact-hardener-budget-2026-10-21",
+  "files": {
+    "rule-hardener.txt": [
+      {
+        "new_start": 69,
+        "before": "This is an execution checklist. The complete rulebook governs play. Read this checklist fully, then read_rules(document=\"index\"). Fetch applicable rulebook sections and amendments BEFORE using them; start at offset=0 and follow next_offset with the SAME section until null. The end of a section is not a complete manual read. Cache by source_sha256 only while the source and required context remain available. Refresh after changed hashes, missing context or an explicit update. Use a player's explicitly chosen custom fork for that campaign. If required rules are inaccessible, say so and pause the dependent decision. Never invent a successful read. The `loading` amendment supersedes older blanket duplicate-reading instructions. Full-document reads remain available for audits and supported offline fallback.\n",
+        "after": "This is an execution checklist; the complete rulebook governs play. Initially read this checklist fully and read_rules(document=\"index\"). Fetch applicable sections BEFORE deciding; start at offset=0 and follow next_offset with the SAME section until null. A completed section is not a complete manual read. Reuse source_sha256-matched rules while available in context; refresh after changed hashes, missing context or an explicit update. The `loading` amendment supersedes blanket duplicate reads. Full reads remain available for audits/offline fallback. Honor the player's chosen custom fork. If required rules are inaccessible, say so and pause the dependent decision; never invent a successful read.\n"
+      },
+      {
+        "new_start": 7461,
+        "before": "Check player intent, current source/state, legal timing/targets/costs, original fixed rolls/offers, hidden knowledge, consequences and save status. Keep the player's ability to type another action. In ability details, show one complete readable rules copy, meaningful nonzero costs/cooldowns and depleted HP/charges at zero; upgrades show their actual changes under their parent. Tooltips, flavor and POV do not add mechanics. Preserve user-authored text and avoid repetitive administrative prose. Repair wording or presentation before sending; do not repair it by changing a roll, replaying an action or inventing a save. This checklist is prompting guidance; backend validation and gameplay evaluations establish separate, limited evidence.\n",
+        "after": "Check player intent, current rules/state, legal timing/targets/costs, fixed rolls/offers, known information, consequences and save status. Keep typed actions, complete ability rules, meaningful costs/cooldowns and zero depleted resources; upgrades stay under their parent. Flavor/POV/tooltips add no mechanics. Repair prose/UI without replaying actions, rerolling or inventing saves. A checklist is guidance, not evidence that gameplay or rendering passed testing.\n"
+      }
+    ]
+  }
+}

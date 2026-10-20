@@ -11,11 +11,13 @@ if __package__:
     from .app.chat_game import ChatGame
     from .app.engine import Engine, EngineError
     from .app.game_random import GameRandom
+    from .app.recovery_probe import check_recovery
 else:
     from app.appwrite_store import AppwriteAPI, AppwriteStore
     from app.chat_game import ChatGame
     from app.engine import Engine, EngineError
     from app.game_random import GameRandom
+    from app.recovery_probe import check_recovery
 
 
 def main(context):
@@ -74,7 +76,9 @@ def main(context):
             audit = engine.audit(owner, state['id'])
             assert audit['integrity_valid'] and audit['event_count'] == 4
             checks.append('event_integrity')
+            recovery = check_recovery(engine, owner, result['campaign'], run)
             return context.res.json({'status': 'passed', 'checks': checks,
+                                     'recovery': recovery,
                                      'elapsed_seconds': round(time.monotonic() - started, 2),
                                      'real_campaign_accessed': False, 'model_api_calls': False})
         except (EngineError, AssertionError, ValueError) as error:

@@ -113,6 +113,49 @@ def test_approvals():
     return FileResponse(HERE / "approvals.html")
 
 
+@app.get("/test-continuity")
+def test_continuity():
+    return FileResponse(HERE / "continuity.html")
+
+
+@app.post("/test-continuity-fixture")
+def test_continuity_fixture():
+    global CAMPAIGN_ID
+    from app.chat_game import ChatGame
+    run = str(time.time_ns())
+    engine = INNER.state.engine
+    game = ChatGame(engine)
+    engine.set_view_preferences(OWNER, {"panels": ["character"], "details": [], "hud_hidden": False, "world_tab": "log"})
+    state = game.create(OWNER, "Disposable continuity fixture", "create-" + run, True)
+    CAMPAIGN_ID = state["id"]
+    state = game.update(OWNER, state["id"], "draft-" + run, 1, "Prepared browser fixture", {
+        "character": {"name": "Continuity Test Scribe", "class_name": "Test Scribe",
+                      "story_summary": "A disposable test character keeps the unfinished repair in view. " * 25},
+        "continuity": {"scene": "The test gate", "last_player_intent": "Inspect the gate",
+                       "pending_decision": "Speak to the keeper or inspect the hinge?",
+                       "unresolved_threads": ["The hinge still needs repair"],
+                       "npc_commitments": ["The keeper will return at noon"]},
+        "upsert": {"abilities": [{"id": "browser-fixture-ability", "name": "Fixture Survey",
+            "activation": "Action", "group": "utility", "rarity": "COMMON", "mp_cost": 3,
+            "simple": "Inspect a fixture.", "mechanics": "Display fixture only; not an acquired player power.",
+            "upgrades": [{"id": "browser-fixture-upgrade", "name": "Recorded fixture upgrade",
+                          "mechanics": "An integrated display fixture; no additional activation."}]}]}})["campaign"]
+    state = game.update(OWNER, state["id"], "note-" + run, state["version"], "Recorded test outcome", {
+        "continuity": {"last_action": "Inspected the hinge", "outcome": "The pin is bent"}})["campaign"]
+    engine.propose_action(OWNER, state["id"], "confirm-" + run, state["version"], "confirm_chat_character", {})
+    return {"campaign": state}
+
+
+@app.post("/test-continuity-record")
+async def test_continuity_record(request: Request):
+    result = await request.json()
+    result["environment"] = "Local Chromium, simulated MCP Apps host, real authenticated transport, disposable SQLite campaigns; not ChatGPT"
+    output = HERE.parent / "test-results/continuity-browser.json"
+    output.parent.mkdir(exist_ok=True)
+    output.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+    return {"saved": True}
+
+
 @app.post("/test-expire-approval")
 async def test_expire_approval(request: Request):
     from app import records

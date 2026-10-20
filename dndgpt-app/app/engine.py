@@ -77,6 +77,8 @@ def public_state(state):
         for key, roll in result["rarity_candidates"].items()}
     if result["last_event"]:
         result["last_event"] = safe_event(result["last_event"])
+    from .continuity import resume_brief
+    result["resume_brief"] = resume_brief(state)
     return json.loads(canonical(result))
 
 
@@ -187,6 +189,12 @@ class Engine:
     def get_campaign(self, owner, campaign_id):
         with self.store.transaction() as db:
             return public_state(self._get(db, owner, campaign_id))
+
+    def campaign_context(self, owner, campaign_id):
+        with self.store.transaction() as db:
+            state = self._get(db, owner, campaign_id)
+            return {"campaign": public_state(state),
+                    "_meta": self.pending_approval(owner, campaign_id, db=db, state=state)}
 
     def _command(self, kind, payload):
         if (kind not in OPERATIONS or type(payload) is not dict or
@@ -437,6 +445,9 @@ class Engine:
                        "requires_confirmation": True}
             if kind in DEVELOPMENT_OPERATIONS:
                 preview["combat_preview"] = effect_preview
+            if kind == "correct_chat_state":
+                from .save_history import changes_between
+                preview["field_changes"] = changes_between(state, projected, limit=None, text_limit=None)
             token = secrets.token_urlsafe(32)
             created_at = time.time()
             records.insert(db, "proposals_v1", {"id": proposal_id, "campaign_id": campaign_id,
@@ -493,11 +504,12 @@ class Engine:
                     "raw_rolls_included": show_rolls}
 
     def dashboard(self, owner, campaign_id=None):
+        context = self.campaign_context(owner, campaign_id) if campaign_id else {"campaign": None, "_meta": {}}
         return {"app_version": APP_VERSION, "rules_version": RULES_VERSION,
                 "campaigns": self.list_campaigns(owner),
-                "campaign": self.get_campaign(owner, campaign_id) if campaign_id else None,
+                "campaign": context["campaign"],
                 "view_preferences": self.get_view_preferences(owner),
-                "_meta": self.pending_approval(owner, campaign_id) if campaign_id else {},
+                "_meta": context["_meta"],
                 "capabilities": {"operations": [kind for kind in OPERATIONS
                                                 if self.enable_combat or kind not in DEVELOPMENT_OPERATIONS],
                                  "sandbox_combat": self.enable_combat, "full_rules_engine": False,
@@ -506,20 +518,23 @@ class Engine:
                                  "character_creation": False, "advancement_offers": False,
                                  "model_api_calls": False}}
 
-    def pending_approval(self, owner, campaign_id):
-        with self.store.transaction() as db:
+    def pending_approval(self, owner, campaign_id, *, db=None, state=None):
+        if db is None:
+            with self.store.transaction() as session:
+                return self.pending_approval(owner, campaign_id, db=session)
+        if state is None:
             state = self._get(db, owner, campaign_id)
-            rows = records.find(db, "proposals_v1", {"campaign_id": campaign_id, "owner": owner, "result": None},
+        rows = records.find(db, "proposals_v1", {"campaign_id": campaign_id, "owner": owner, "result": None},
                                 order="created_at", descending=True, limit=10)
-            for row in rows:
-                preview = json.loads(row["preview"])
-                if preview["expected_version"] == state["version"]:
-                    expires_at = row["created_at"] + 900
-                    approval = {"proposal": preview, "expires_at": expires_at, "expired": time.time() > expires_at}
-                    if not approval["expired"]:
-                        approval["approval_token"] = row["approval_token"]
-                    return {"approval": approval}
-            return {"approval": None}
+        for row in rows:
+            preview = json.loads(row["preview"])
+            if preview["expected_version"] == state["version"]:
+                expires_at = row["created_at"] + 900
+                approval = {"proposal": preview, "expires_at": expires_at, "expired": time.time() > expires_at}
+                if not approval["expired"]:
+                    approval["approval_token"] = row["approval_token"]
+                return {"approval": approval}
+        return {"approval": None}
 
     def get_view_preferences(self, owner):
         with self.store.transaction() as db:

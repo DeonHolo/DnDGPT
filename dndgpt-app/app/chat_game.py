@@ -16,7 +16,7 @@ from . import records
 COLLECTIONS = {"abilities", "conditions", "summons", "enemies", "inventory", "supplies",
                "quest_log", "world_log", "generation_ledger"}
 TEXT_FIELDS = {"name", "current_location", "opening_preview", "notes"}
-OBJECT_FIELDS = {"world", "creation", "advancement", "funds"}
+OBJECT_FIELDS = {"world", "creation", "advancement", "funds", "continuity"}
 CHARACTER_TEXT = {"name", "class_name", "rarity", "title", "background", "biography", "appearance", "story_summary"}
 CHARACTER_NUMBERS = {"level", "xp", "xp_total", "xp_next", "scene_counter", "attribute_points",
                      "skill_points", "talent_points", "hp", "hp_max", "mp", "mp_max", "sta",
@@ -76,6 +76,9 @@ def validate_changes(changes):
     for key in OBJECT_FIELDS & changes.keys():
         if type(changes[key]) is not dict:
             fail(422, "invalid_chat_update", f"{key} must be an object")
+    if "continuity" in changes:
+        from .continuity import validate_continuity
+        validate_continuity(changes["continuity"])
     if "fictional_time_seconds" in changes:
         number(changes["fictional_time_seconds"], "fictional_time_seconds", high=10**12)
     if "level_up_freeze" in changes and type(changes["level_up_freeze"]) is not bool:
@@ -135,7 +138,8 @@ def apply_changes(state, changes, *, correction=False):
     projected = copy.deepcopy(state)
     for key in TEXT_FIELDS | OBJECT_FIELDS | {"fictional_time_seconds", "level_up_freeze"}:
         if key in changes:
-            projected[key] = copy.deepcopy(changes[key])
+            projected[key] = ({**projected.get(key, {}), **copy.deepcopy(changes[key])}
+                              if key == "continuity" else copy.deepcopy(changes[key]))
     for key, value in changes.get("character", {}).items():
         if key == "attributes":
             attributes = projected["character"][key]
@@ -174,6 +178,8 @@ def apply_changes(state, changes, *, correction=False):
     if any(item is not None and item not in inventory for item in projected["equipment"].values()):
         fail(422, "invalid_chat_update", "Equipped items must exist in inventory")
     if not correction:
+        if state["level_up_freeze"] and projected["fictional_time_seconds"] != state["fictional_time_seconds"]:
+            fail(423, "advancement_frozen", "Fictional time is frozen during advancement")
         if projected["fictional_time_seconds"] < state["fictional_time_seconds"]:
             fail(422, "time_reversal", "Use an approved correction to move fictional time backwards")
         if state["phase"] != "adventure" and projected["fictional_time_seconds"] != 0:
@@ -204,6 +210,8 @@ def apply_lifecycle(state, kind, payload):
     elif kind == "start_chat_adventure":
         if state["phase"] != "ready" or not state["opening_preview"].strip():
             fail(409, "opening_required", "Confirm the character and prepare an opening preview first")
+        if state["level_up_freeze"]:
+            fail(423, "advancement_frozen", "Resolve advancement before starting the adventure")
         state["phase"], state["paused"] = "adventure", False
     elif kind == "correct_chat_state":
         text(payload.get("reason"), "reason", 2000)
@@ -217,6 +225,8 @@ def apply_lifecycle(state, kind, payload):
     elif kind == "resume":
         if state["phase"] != "adventure":
             fail(423, "adventure_not_authorized", "Use the separate start adventure confirmation")
+        if state["level_up_freeze"]:
+            fail(423, "advancement_frozen", "Advancement must be resolved before a separate resume")
         state["paused"] = False
     else:
         fail(422, "chat_gm_adjudicates", "Use saved random tools and save_chat_update for chat-led mechanics")

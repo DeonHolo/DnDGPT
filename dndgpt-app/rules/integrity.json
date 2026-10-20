@@ -1,9 +1,9 @@
 {
   "rulebook-v1.0.txt": {
     "original_sha256": "fc1cd1ed39a9fc35961d0d1e9a5feb3035015339d435c6a3af80a3515960597b",
-    "sha256": "c7357fc35747823f77a3b3aaffa5f9f13811fc3b3ce2e80c2afbf6bf8ad4d3c0",
+    "sha256": "77d7bd5b2a59f1f81c2a97384c691d77c1e2620c1f497b30397799d4582223a0",
     "original_bytes": 324754,
-    "bytes": 396070,
+    "bytes": 405607,
     "replacements": [
       [
         "V4.2",
@@ -138,14 +138,20 @@
         "source": "utility-usefulness-2026-10-20.json",
         "before_sha256": "dc11c162ae84112ad28b62bb19bfc93fcb23249f8bad50399cccca92f8bb82c8",
         "after_sha256": "c7357fc35747823f77a3b3aaffa5f9f13811fc3b3ce2e80c2afbf6bf8ad4d3c0"
+      },
+      {
+        "id": "continuity-story-ui-and-recovery-2026-10-21",
+        "source": "continuity-story-ui-and-recovery-2026-10-21.json",
+        "before_sha256": "c7357fc35747823f77a3b3aaffa5f9f13811fc3b3ce2e80c2afbf6bf8ad4d3c0",
+        "after_sha256": "77d7bd5b2a59f1f81c2a97384c691d77c1e2620c1f497b30397799d4582223a0"
       }
     ]
   },
   "rule-hardener.txt": {
     "original_sha256": "bc21947f299ae37dc306581aa7110231809140c332ed4e8b1ceccbb86cbce8da",
-    "sha256": "6c14f21f2b6980e0eae98c008311b5013a70d261a4d9d6d476c9516ec013090a",
+    "sha256": "dba32db6dfe233e4c7481be03c21a36d041fafa6cdff022e85a47f53e6ff9817",
     "original_bytes": 10370,
-    "bytes": 7993,
+    "bytes": 7926,
     "replacements": [
       [
         "V4.2-R1",
@@ -252,6 +258,18 @@
         "source": "utility-usefulness-2026-10-20.json",
         "before_sha256": "d528d19b702c4681241b3b7b6bbb710a18525b879446e6cb898597d559a09643",
         "after_sha256": "6c14f21f2b6980e0eae98c008311b5013a70d261a4d9d6d476c9516ec013090a"
+      },
+      {
+        "id": "continuity-story-ui-and-recovery-2026-10-21",
+        "source": "continuity-story-ui-and-recovery-2026-10-21.json",
+        "before_sha256": "6c14f21f2b6980e0eae98c008311b5013a70d261a4d9d6d476c9516ec013090a",
+        "after_sha256": "800ef57d742924fe9a235462ff312b888365c9fcd2303a9591c0598f2cb28819"
+      },
+      {
+        "id": "compact-hardener-budget-2026-10-21",
+        "source": "compact-hardener-budget-2026-10-21.json",
+        "before_sha256": "800ef57d742924fe9a235462ff312b888365c9fcd2303a9591c0598f2cb28819",
+        "after_sha256": "dba32db6dfe233e4c7481be03c21a36d041fafa6cdff022e85a47f53e6ff9817"
       }
     ]
   }
