@@ -41,6 +41,16 @@ Two fresh temporary chats in the in-app browser received an invented save after 
 
 The full input was automatically displayed as a pasted document; the shorter input stayed inline. These were one run per view with a fixed fixture, not a randomized performance study. Full information was supplied manually, so this does **not** establish automatic MCP retrieval, long multi-turn RPG consistency or a model-latency improvement. Local response transcripts, input prompts, observations and screenshots are under ignored `dndgpt-app/test-results/continuity-*`.
 
+## Published verification — application 1.0.32
+
+Implementation commit `e0da11d4f409d798d10f812d7b6e242fb5c89087` passed 476 automated CI checks and packaging. Local affected suites passed 89 checks, 20 hosted-store contract checks and two final nested-world/transport checks. The live health endpoint returned 1.0.32. Production deployment `6ad7ef8525bd8c5b084d` and private probe deployment `6ad7ef83c70a3ff5a039` were ready from that commit.
+
+Private hosted execution `6ad7f0c17c541bf5bbc5` passed all 14 existing hosting checks and 11 recovery/context checks, including omitted world-key preservation and full-history recovery. It used probe-owned disposable records, accessed no player campaign and made no model calls. The full run took 19.63 seconds; this is not one gameplay turn. One full-state read took 0.3432 seconds and one batched save took 1.1855 seconds. These isolated storage timings cannot predict ChatGPT response time.
+
+An earlier synchronous probe hit Appwrite's 30-second synchronous limit. An asynchronous retry completed HTTP 200 but did not retain its response body; a subsequent synchronous run supplied the complete passing report. Record both the failure and successful verification rather than treating the timeout as a continuity failure or discarding it.
+
+The connected app returned hardener hash `253b32c9bd127a88f52350b084c205903c6a1ceeddf857609d30fd3accd04820` (7,930 characters, one page) and rulebook hash `de22eff2140f683cda190f2227885b0be1c5cf9960fd0c5db8e7f0d5c478d3e8`. The rulebook response was a partial first page with a full-source hash, not a claim that the complete manual was read. Browser access was disabled in Work settings during final verification, so the cached ChatGPT tool catalog was not refreshed. Current hosted rules contain the safer guidance; tool parameters still default to full reads.
+
 ## Next model evaluation
 
 Before broadly preferring compact views again, run repeated matched full/compact trials through the actual native MCP app with disposable campaigns. Vary early promises, amended facts, long absences, location history, sixth/eighth commitments, ability conditions, player intent and facts never recorded. Include ordinary actions that require no historical retrieval.
