@@ -20,9 +20,7 @@ from app.server import create_app
 from app.storage import canonical
 
 HERE = Path(__file__).resolve().parent
-TEST_ROOT = HERE.parent / ".browser-tmp"
-TEST_ROOT.mkdir(exist_ok=True)
-TEMP = tempfile.TemporaryDirectory(prefix="fixture-", dir=TEST_ROOT)
+TEMP = tempfile.TemporaryDirectory(prefix="dndgpt-fixture-")
 CONFIG = AuthConfig("https://fixture-idp.example.test", "https://fixture-idp.example.test/jwks",
                     "http://127.0.0.1:8766/mcp")
 KEY = rsa.generate_private_key(public_exponent=65537, key_size=2048)

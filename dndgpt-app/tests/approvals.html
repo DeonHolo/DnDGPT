@@ -3,20 +3,20 @@
 <h1>Approval recovery · disposable test campaigns</h1><p>Simulated MCP Apps host, real local tool transport. This is not ChatGPT.</p>
 <button id="run">Run approval tests</button><p id="summary" role="status">Ready</p><pre id="results"></pre><iframe id="widget" title="Disposable approval test dashboard" src="/test-widget"></iframe>
 <script>
-const frame=document.getElementById("widget"),results=[],calls=[],messages=[];
-let nextId=3000,initialized=0,active=null,completedReads=0;
+let frame=document.getElementById("widget");const results=[],calls=[],messages=[];
+const runId=crypto.randomUUID();let nextId=3000,initialized=0,active=null,completedReads=0;
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-async function until(fn){for(let i=0;i<150;i++){if(await fn())return;await sleep(80)}throw Error("Timed out waiting for UI")}
+async function until(fn,label='UI'){for(let i=0;i<150;i++){if(await fn())return;await sleep(80)}throw Error('Timed out waiting for '+label)}
 function assert(value,message){if(!value)throw Error(message)}
 async function rpc(method,params){const response=await fetch('/test-rpc',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',id:nextId++,method,params})});const body=await response.json();if(body.error)throw Error(body.error.message);return body.result}
-async function tool(name,args={}){return rpc('tools/call',{name,arguments:args})}
+async function tool(name,args={}){return rpc('tools/call',{name,arguments:args.action_id?{...args,action_id:runId+'-'+args.action_id}:args})}
 async function state(){return(await tool('get_campaign',{campaign_id:active.id})).structuredContent.campaign}
 async function audit(){return(await tool('audit',{campaign_id:active.id})).structuredContent}
 async function view(){return tool('render_dashboard',{campaign_id:active.id})}
 async function expire(proposal){await fetch('/test-expire-approval',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({proposal_id:proposal.structuredContent.proposal.id})})}
 function deliver(result){frame.contentWindow.postMessage({jsonrpc:'2.0',method:'ui/notifications/tool-result',params:result},location.origin)}
 async function refresh(doc){const count=completedReads;doc.getElementById('refresh').click();await until(()=>completedReads>count&&doc.getElementById('syncStatus').dataset.state==='saved');await sleep(30)}
-async function test(name,run){try{await run();results.push({name,passed:true})}catch(error){results.push({name,passed:false,error:error.message})}document.getElementById('results').textContent=results.map(r=>(r.passed?'PASS ':'FAIL ')+r.name+(r.error?': '+r.error:'')).join('\n')}
+async function test(name,run){try{await run();results.push({name,passed:true})}catch(error){const doc=frame.contentDocument;results.push({name,passed:false,error:error.message,diagnostics:{button:doc?.getElementById('confirm')?.outerHTML,status:doc?.getElementById('syncStatus')?.textContent,connection:doc?.getElementById('connection')?.textContent,notice:doc?.getElementById('notice')?.textContent}})}document.getElementById('results').textContent=results.map(r=>(r.passed?'PASS ':'FAIL ')+r.name+(r.error?': '+r.error:'')).join('\n')}
 window.addEventListener('message',async event=>{
  if(event.source!==frame.contentWindow||event.data?.jsonrpc!=='2.0')return;
  const m=event.data;if(m.method==='ui/notifications/initialized'){initialized++;return}if(m.id===undefined)return;
@@ -50,11 +50,11 @@ document.getElementById('run').onclick=async()=>{
   }
   assert(JSON.stringify(await state())===JSON.stringify(before)&&JSON.stringify(await audit())===JSON.stringify(beforeAudit),'Layout/navigation changed campaign');
  });
- await test('Reload recovers expired proposal; reviewing again does not confirm or send chat',async()=>{
-  const count=initialized;frame.src='/test-widget?approval-reload';await until(()=>initialized>count);doc=frame.contentDocument;
-  await until(()=>doc.getElementById('confirm').textContent==='Review again'&&!doc.getElementById('confirm').disabled);
+ await test('Reopening recovers expired proposal; reviewing again does not confirm or send chat',async()=>{
+  const count=initialized,old=frame;frame=old.cloneNode(false);frame.src='/test-widget?approval-reload';old.replaceWith(frame);await until(()=>initialized>count,'reopened initialization');doc=frame.contentDocument;
+  await until(()=>doc.getElementById('confirm').textContent==='Review again'&&!doc.getElementById('confirm').disabled,'reloaded expired review');
   const sent=messages.length,executions=calls.filter(c=>c==='execute_confirmed_action').length;doc.getElementById('confirm').click();
-  await until(()=>doc.getElementById('confirm').textContent==='Confirm character'&&!doc.getElementById('confirm').disabled);
+  await until(()=>doc.getElementById('confirm').textContent==='Confirm character'&&!doc.getElementById('confirm').disabled,'fresh confirmation');
   refreshed=(await view())._meta.approval;
   assert(!refreshed.expired&&refreshed.proposal.id!==proposed.structuredContent.proposal.id,'Fresh proposal missing');
   assert(messages.length===sent&&calls.filter(c=>c==='execute_confirmed_action').length===executions,'Review executed or sent chat');
