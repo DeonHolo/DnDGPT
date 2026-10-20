@@ -26,7 +26,11 @@ You can write your own class or ability, ask ChatGPT to revise an offer, or chan
 
 ### Why I made this
 
-I thought ChatGPT's Intelligent UI was cool, and it gave me an idea: I could use the conversation for a fantasy RPG and keep the character sheet beside it. I wanted to try unusual classes and abilities without digging through chat every time I forgot what one did. That's where DnDGPT started. ChatGPT handles the GM side, and the dashboard gives me somewhere to check my character and pick the campaign up later.
+OpenAI announced [Plugin Extensions at DevDay on September 29, 2026](https://openai.com/index/devday-2026-recap/), with sidebar entries and interactive panels beside the conversation. Then [Intelligent UI arrived on October 7, 2026](https://openai.com/index/gpt-6-for-everyone/), bringing interactive responses into the chat.
+
+I thought Intelligent UI was cool, and combining it with a saved campaign dashboard felt like one of those "it came to me in a dream" ideas. I could use the conversation for a fantasy RPG, with interactive story choices in the chat and my character sheet beside it.
+
+I wanted to try unusual classes and abilities without digging through chat every time I forgot what one did. That's where DnDGPT started. ChatGPT handles the GM side, and the dashboard gives me somewhere to check my character and pick the campaign up later.
 
 ## Start playing
 
