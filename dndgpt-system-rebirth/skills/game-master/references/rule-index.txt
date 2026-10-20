@@ -6,7 +6,8 @@ Offsets are relative to the requested selection. Finishing a section is not a co
 An omitted section still governs play; fetch it when the situation needs it.
 
 World preview: loading, world-preview, story, 4.
-Class offers: creation-order, generation, class-craft, reach, 5, 6, 7, 8. Read 9/10/11 for their creation stage.
+Class offers: creation-order, generation, utility, class-craft, reach, 5, 6, 7, 8. Read 9/10/11 for their creation stage.
+Utility offers and revisions: utility, generation, class-craft and the applicable acquisition chapter.
 Combat: reach, 12, 13, 14; also 15/16/29/30 when applicable.
 Advancement: 17, 18 and the applicable track in 19 through 22; interfaces 37/38.
 Presentation: story, dashboard-writing, 33, 34, 35, 38, 39. Chapter 33 contains the full inline glossary specification.
@@ -16,7 +17,8 @@ Equipment: 23 through 28. Story/quests: 31, 32, 32A. Saves/compatibility: 40 thr
 loading | Rules loading and checklist precedence | 2498 characters
 creation-order | V1.0 surgical four-turn creation and in-chat continuation precedence | 1844 characters
 story | Story flavor, character identity and player voice | 6960 characters
-generation | Generation breadth, reaction roles and a playable world | 7219 characters
+generation | Generation breadth, reaction roles and a playable world | 7333 characters
+utility | Utility usefulness and creative application | 4658 characters
 class-craft | Class concept diversity and writing craft | 5673 characters
 world-preview | World introduction: history, place and the player's footing | 3089 characters
 reach | Dexterity and player-facing reach | 2918 characters
