@@ -160,6 +160,10 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         upsert/remove/replace dictionaries. Collections: abilities, conditions, summons, enemies,
         inventory, supplies, quest_log, world_log, generation_ledger. Each record has stable id;
         upsert merges fields by id; remove lists ids; replace explicitly replaces a whole collection.
+        Integrated passive Evolutions/Imprints belong inside their existing parent ability, not as
+        top-level Passive abilities. Upsert that parent's id with combined mechanics and its complete
+        updated evolutions/upgrades/imprints array; preserve prior children because arrays replace.
+        Standalone owned passives remain base abilities eligible for Skill Evolution.
         World lists/scalars still replace their values; read full before replacing omitted material.
         An approved correct_chat_state can explicitly replace/delete world details. Never reconstruct
         a world or replace a log from a compact excerpt; preserve facts absent from that view.

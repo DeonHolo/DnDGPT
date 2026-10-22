@@ -1764,6 +1764,10 @@ For an evolved existing passive, the upgrade is always-on or triggers conditiona
 
 ## Eligible ability sources
 
+**Standalone passive versus dependent upgrade:** An owned base passive is a full skill with its own effect and identity. It is eligible for Skill Evolution just like an owned active or Reaction. Its effect may be conditional or synergize with another skill; that alone does not make it an integrated upgrade. A dependent passive Evolution, Imprint or other integrated rider modifies its recorded parent and is not an additional owned base skill. Determine ownership from the actual acquisition and parent relationship, never from the word 'Passive' alone.
+
+Include eligible standalone passives when designing the five evolution options; an active-only source filter is incorrect. This does not require a passive option on every board or add offers. A later evolution may improve a parent's already integrated effects, but names that owned base skill as its source and follows its existing Stage/branch rules. An upgrade entry has no separate Skill Stage, acquisition slot or evolution board.
+
 - Inherent class powers.
 - Class active abilities.
 - Class passive abilities.
@@ -1870,6 +1874,10 @@ Suppose a character owns a flame attack **Cinder Bolt**, an armor passive **Embe
 An independent **Firestep teleport** or **Ash Commander guardian summoning** could be a new Talent Web power, or—only when expanded into a genuinely class-defining, source-rarity-calibrated mechanism—a Grand Signature milestone candidate. Merely repeating a modest Talent-quality teleport or guardian spell does not meet the Hybrid Breakthrough milestone standard. These examples are not fixed character options.
 
 ## Skill Evolution UI and confirmation
+
+**After acquisition:** Keep the base skill in its appropriate ability group. A standalone combat passive stays in Passives; an out-of-combat Utility stays in Utility even if its timing is Passive. Put every acquired dependent passive upgrade only in that exact base skill's **Upgrades** tab, including upgrades to a standalone passive. Full rules shows the combined current skill; Upgrades shows each acquired change and its rarity. Do not duplicate an upgrade as a row in Passives or another ability group.
+
+**Connected save format:** Upsert the existing parent by its unchanged ability ID, update its combined readable mechanics, and retain acquired evolution records inside that parent's `evolutions` array (or its already-used nested `upgrades` array). Imprints stay in the parent's existing imprint array. These nested records populate the Upgrades tab; a separate top-level ability marked Passive, Evolution or parent-linked is not equivalent. Preserve all previously acquired children: nested arrays replace their explicit values, so send the complete updated array from current state. Save the parent, point spending and other authorized level-up changes in the same batched update. Keep this storage detail out of player prose. Do not relocate historical records or change mechanics without the existing reviewed correction process.
 
 Normal cards show **source → evolution name → final rarity → one-sentence integrated effect → eligibility**. Expanding shows the source's current cost/cooldown, precisely changed mechanics, Stage and branch compatibility, original rarity and new rarity, and a before/after preview. Never label one evolution as a second READY spell with its own action button. Allow single-view menu expansion, genuine functional controls where supported, archive browsing, banking, and explicit permanent confirmation. A confirmation previews all chosen independent level tracks and does NOT resume fictional time.
 
@@ -3546,10 +3554,10 @@ Do not mark a skill READY when it needs a summon that is absent.
 
 1. **COMBAT ACTIONS & COMMANDS** — ordinary attacks, class action spells, active signatures, summon activation and command actions, active offensive Grand Signatures and active Talents.
 2. **DEFENSIVE & OFF-TURN REACTIONS** — defensive reactions, retaliations, intercepts, limited-use escape reactions, protection triggers and off-turn abilities.
-3. **STANDALONE PASSIVE SKILLS** — passive talents and authentic inherent passives **that are independent learned powers**, including their own original active conditions and once-scene triggers where applicable. Do NOT duplicate an integrated Skill Evolution here.
+3. **STANDALONE PASSIVE SKILLS** — genuinely owned base passives, including inherent class passives and independently acquired passive talents/skills with their own conditional triggers. These base skills are eligible for Skill Evolution. Dependent passive Evolutions and Imprints appear only in their exact parent's Upgrades tab, even when the parent is itself Passive; they never become extra rows here. Passive timing alone does not determine ownership or placement. Out-of-combat Utilities retain their Utility group.
 4. **EXPLORATION & UTILITY** — exploration features, titles, practical tools/powers, senses and noncombat mechanics; class-themed abilities may appear here when that is genuinely their ordinary role.
 
-**Parent-owned upgrade details:** Select a parent Class, Signature, Talent or Title ability, then open its Upgrades tab to inspect each purchased evolution and Background Imprint with its rarity, precise changes and source/stage relationship. The parent remains the only activation surface. In a chat-only fallback, keep upgrades inside the parent's single supported detail view.
+**Parent-owned upgrade details:** Select any eligible owned base skill, including a standalone passive, then open its Upgrades tab to inspect acquired evolutions and Background Imprints with their names, rarities and actual changes. Full rules contains the combined skill. Integrated riders stay under this parent rather than becoming independent passive entries or new activations. Use Chapter 19's nested save format; a parent ID on a separate top-level Passive record does not put it in this tab. In a chat-only fallback, keep upgrades within the parent's supported detail answer.
 
 Parent concise row: skill name/stage; current **READY / ACTIVE / COOLDOWN N / UNAVAILABLE: reason / SPENT x/y** state; one-line current action/reaction/passive, MP, hit/damage/range or effect; detail chevron. Expanded body: source and original rarity, complete actual activation and target rules, action economy, resource cost, damage/save, duration, cooldown, limited charges, prerequisites, exceptions and currently integrated effects. Status must not mislabel an unavailable command as READY merely because its free charge exists. Always show the current actual source statistics after integrated upgrades; do not retroactively buff old live summons.
 

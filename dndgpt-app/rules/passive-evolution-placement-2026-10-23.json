@@ -1,0 +1,39 @@
+{
+  "id": "passive-evolution-placement-2026-10-23",
+  "files": {
+    "rulebook-v1.0.txt": [
+      {
+        "new_start": 217143,
+        "before": "",
+        "after": "**Standalone passive versus dependent upgrade:** An owned base passive is a full skill with its own effect and identity. It is eligible for Skill Evolution just like an owned active or Reaction. Its effect may be conditional or synergize with another skill; that alone does not make it an integrated upgrade. A dependent passive Evolution, Imprint or other integrated rider modifies its recorded parent and is not an additional owned base skill. Determine ownership from the actual acquisition and parent relationship, never from the word 'Passive' alone.\n\nInclude eligible standalone passives when designing the five evolution options; an active-only source filter is incorrect. This does not require a passive option on every board or add offers. A later evolution may improve a parent's already integrated effects, but names that owned base skill as its source and follows its existing Stage/branch rules. An upgrade entry has no separate Skill Stage, acquisition slot or evolution board.\n\n"
+      },
+      {
+        "new_start": 234186,
+        "before": "",
+        "after": "\n**After acquisition:** Keep the base skill in its appropriate ability group. A standalone combat passive stays in Passives; an out-of-combat Utility stays in Utility even if its timing is Passive. Put every acquired dependent passive upgrade only in that exact base skill's **Upgrades** tab, including upgrades to a standalone passive. Full rules shows the combined current skill; Upgrades shows each acquired change and its rarity. Do not duplicate an upgrade as a row in Passives or another ability group.\n\n**Connected save format:** Upsert the existing parent by its unchanged ability ID, update its combined readable mechanics, and retain acquired evolution records inside that parent's `evolutions` array (or its already-used nested `upgrades` array). Imprints stay in the parent's existing imprint array. These nested records populate the Upgrades tab; a separate top-level ability marked Passive, Evolution or parent-linked is not equivalent. Preserve all previously acquired children: nested arrays replace their explicit values, so send the complete updated array from current state. Save the parent, point spending and other authorized level-up changes in the same batched update. Keep this storage detail out of player prose. Do not relocate historical records or change mechanics without the existing reviewed correction process.\n"
+      },
+      {
+        "new_start": 363948,
+        "before": "3. **STANDALONE PASSIVE SKILLS** — passive talents and authentic inherent passives **that are independent learned powers**, including their own original active conditions and once-scene triggers where applicable. Do NOT duplicate an integrated Skill Evolution here.\n",
+        "after": "3. **STANDALONE PASSIVE SKILLS** — genuinely owned base passives, including inherent class passives and independently acquired passive talents/skills with their own conditional triggers. These base skills are eligible for Skill Evolution. Dependent passive Evolutions and Imprints appear only in their exact parent's Upgrades tab, even when the parent is itself Passive; they never become extra rows here. Passive timing alone does not determine ownership or placement. Out-of-combat Utilities retain their Utility group.\n"
+      },
+      {
+        "new_start": 364675,
+        "before": "**Parent-owned upgrade details:** Select a parent Class, Signature, Talent or Title ability, then open its Upgrades tab to inspect each purchased evolution and Background Imprint with its rarity, precise changes and source/stage relationship. The parent remains the only activation surface. In a chat-only fallback, keep upgrades inside the parent's single supported detail view.\n",
+        "after": "**Parent-owned upgrade details:** Select any eligible owned base skill, including a standalone passive, then open its Upgrades tab to inspect acquired evolutions and Background Imprints with their names, rarities and actual changes. Full rules contains the combined skill. Integrated riders stay under this parent rather than becoming independent passive entries or new activations. Use Chapter 19's nested save format; a parent ID on a separate top-level Passive record does not put it in this tab. In a chat-only fallback, keep upgrades within the parent's supported detail answer.\n"
+      }
+    ],
+    "rule-hardener.txt": [
+      {
+        "new_start": 3967,
+        "before": "Read Chapters 17-22 and 37 for advancement. Freeze all game clocks and hazards during choices; preserve independent tracks, fixed counts, genuine rolls, banking and separate authorization to resume. Read 23-28 for equipment, carry weight, loot, crafting and durability; 31, 32 and 32A for character-aware options, causal quests and contextual events. Keep the two-decision obstacle limit and compress routine preparation when the player seeks action. Never fabricate an attack to enforce pacing.\n",
+        "after": "Read 17-22/37 for advancement: freeze clocks/hazards; preserve separate tracks, offer counts, genuine rolls, banking and explicit resume. Chapter 19: standalone owned passives are eligible evolution sources; dependent riders are not separate skills. Save upgrades nested inside the existing base ability, preserving prior children and combined Full rules. Never add an integrated rider to Passives; further evolutions target its base skill. Read 23-28 for gear/weight/loot/crafting/durability, 31/32/32A for options/quests/events. Preserve the two-decision ceiling; compress routine preparation for action-seeking players without inventing attacks.\n"
+      },
+      {
+        "new_start": 7555,
+        "before": "Check player intent, current rules/state, legal timing/targets/costs, fixed rolls/offers, known information, consequences and save status. Keep typed actions, costs/cooldowns and depleted resources. State ability effects; omit caveats and unchanged stats. GM adjudicates unintended uses. Upgrades stay under their parent. Flavor/POV/tooltips add no mechanics. Repair prose/UI without replaying actions, rerolling or inventing saves. A checklist is guidance, not evidence that gameplay or rendering passed testing.\n",
+        "after": "Check intent, rules/state, legal timing/targets/costs, fixed rolls/offers, known facts, consequences and save status. Keep typed actions and accurate depleted resources/cooldowns. Show effects, omit caveats/unchanged stats; GM adjudicates misuse. Flavor/POV/tooltips add no mechanics. Fix prose/UI without replay, rerolls or invented saves. A checklist proves no gameplay/rendering tests.\n"
+      }
+    ]
+  }
+}

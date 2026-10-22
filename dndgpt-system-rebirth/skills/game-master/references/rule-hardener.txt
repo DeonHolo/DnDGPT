@@ -22,7 +22,7 @@ Read relevant Chapters 12-16 and 29-30 for resources, checks, combat, conditions
 
 Read `enemy-tactics`: commit distinct kits/roles; use terrain, observed-threat targeting and brief character dialogue. Prioritize a recognized reachable controller when sensible; dismissal follows actual summon rules. Reuse profiles without extra per-round audits or retroactive upgrades.
 
-Read Chapters 17-22 and 37 for advancement. Freeze all game clocks and hazards during choices; preserve independent tracks, fixed counts, genuine rolls, banking and separate authorization to resume. Read 23-28 for equipment, carry weight, loot, crafting and durability; 31, 32 and 32A for character-aware options, causal quests and contextual events. Keep the two-decision obstacle limit and compress routine preparation when the player seeks action. Never fabricate an attack to enforce pacing.
+Read 17-22/37 for advancement: freeze clocks/hazards; preserve separate tracks, offer counts, genuine rolls, banking and explicit resume. Chapter 19: standalone owned passives are eligible evolution sources; dependent riders are not separate skills. Save upgrades nested inside the existing base ability, preserving prior children and combined Full rules. Never add an integrated rider to Passives; further evolutions target its base skill. Read 23-28 for gear/weight/loot/crafting/durability, 31/32/32A for options/quests/events. Preserve the two-decision ceiling; compress routine preparation for action-seeking players without inventing attacks.
 
 Read 40-42 for continuity. Distinguish proposed, narrated-unsaved and committed outcomes. Use current owned state/version, batch the authorized update and preserve retry safety. Restyling, inspection, glossary use, rule reads and mockups never advance time, roll, spend resources, confirm choices or mutate campaign state.
 
@@ -40,4 +40,4 @@ Keep **Your story** collapsed by default behind a labeled expand/collapse contro
 
 ## Final response check
 
-Check player intent, current rules/state, legal timing/targets/costs, fixed rolls/offers, known information, consequences and save status. Keep typed actions, costs/cooldowns and depleted resources. State ability effects; omit caveats and unchanged stats. GM adjudicates unintended uses. Upgrades stay under their parent. Flavor/POV/tooltips add no mechanics. Repair prose/UI without replaying actions, rerolling or inventing saves. A checklist is guidance, not evidence that gameplay or rendering passed testing.
+Check intent, rules/state, legal timing/targets/costs, fixed rolls/offers, known facts, consequences and save status. Keep typed actions and accurate depleted resources/cooldowns. Show effects, omit caveats/unchanged stats; GM adjudicates misuse. Flavor/POV/tooltips add no mechanics. Fix prose/UI without replay, rerolls or invented saves. A checklist proves no gameplay/rendering tests.

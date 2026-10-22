@@ -1,9 +1,9 @@
 {
   "rulebook-v1.0.txt": {
     "original_sha256": "fc1cd1ed39a9fc35961d0d1e9a5feb3035015339d435c6a3af80a3515960597b",
-    "sha256": "e722dff4898d0287d72e64c32406cd28c24ad893f65ffecf9ed870778eacc4a8",
+    "sha256": "d92b46f923615561a8506ba44f9c556f8ea798f61823882f7175879407ba83a8",
     "original_bytes": 324754,
-    "bytes": 415368,
+    "bytes": 418164,
     "replacements": [
       [
         "V4.2",
@@ -168,14 +168,20 @@
         "source": "story-ui-dashboard-scope-2026-10-23.json",
         "before_sha256": "761098a20d98f823f0021534a0057401cbf7df8baf2ec941327f6e057441c884",
         "after_sha256": "e722dff4898d0287d72e64c32406cd28c24ad893f65ffecf9ed870778eacc4a8"
+      },
+      {
+        "id": "passive-evolution-placement-2026-10-23",
+        "source": "passive-evolution-placement-2026-10-23.json",
+        "before_sha256": "e722dff4898d0287d72e64c32406cd28c24ad893f65ffecf9ed870778eacc4a8",
+        "after_sha256": "d92b46f923615561a8506ba44f9c556f8ea798f61823882f7175879407ba83a8"
       }
     ]
   },
   "rule-hardener.txt": {
     "original_sha256": "bc21947f299ae37dc306581aa7110231809140c332ed4e8b1ceccbb86cbce8da",
-    "sha256": "2da33b828c98b2a44fe6f1e51752058519ac223f0a099df6703dd1ed09133098",
+    "sha256": "4d68f898f5adc0a1bf00654b5127be04449eb7a24541126aa69408780e262b0d",
     "original_bytes": 10370,
-    "bytes": 7916,
+    "bytes": 7944,
     "replacements": [
       [
         "V4.2-R1",
@@ -318,6 +324,12 @@
         "source": "story-ui-dashboard-scope-2026-10-23.json",
         "before_sha256": "32ec509cdcdf633b6db03f5ac5e9011e9a2baaf6d1283eaa2b12ae443e245867",
         "after_sha256": "2da33b828c98b2a44fe6f1e51752058519ac223f0a099df6703dd1ed09133098"
+      },
+      {
+        "id": "passive-evolution-placement-2026-10-23",
+        "source": "passive-evolution-placement-2026-10-23.json",
+        "before_sha256": "2da33b828c98b2a44fe6f1e51752058519ac223f0a099df6703dd1ed09133098",
+        "after_sha256": "4d68f898f5adc0a1bf00654b5127be04449eb7a24541126aa69408780e262b0d"
       }
     ]
   }

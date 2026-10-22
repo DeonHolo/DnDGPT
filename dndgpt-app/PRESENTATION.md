@@ -56,6 +56,8 @@ Core facts, ownership and at-most-once commits belong in the authenticated engin
 
 ## Saved detail formats
 
+Classify base skills and acquired upgrades separately from activation timing. Independently owned passives remain base skills and are eligible for Skill Evolution; out-of-combat passive Utilities retain their Utility group. A dependent passive Evolution or Imprint belongs only in its exact parent's Upgrades tab, including when the parent is Passive. Store Evolutions inside the existing parent's `evolutions` array or already-used nested `upgrades` array, preserving prior children and the combined Full rules copy. A separate top-level Passive record with a parent ID does not populate this tab. Further evolutions name the owned base skill, not an upgrade entry, as their source.
+
 Keep generated headings and journal summaries short: a useful title or one sentence, with full outcomes and mechanics in the entry's detail fields. Never repeat the entire campaign checkpoint as a heading or current-scene summary. Retain complete acquired mechanics; compact presentation is not permission to omit restrictions or invent missing costs.
 
 The companion separates Allies / Combat, Equipment / Inventory and World / Campaign Log into local subtabs. A summon starts with identity, HP, defense and movement; Combat & instincts, Nature & interior, Evolution and Recovery & permanence expand independently. Evolution ranks expand separately. World facts, nested preparation records and log entries use labeled details rather than flattened object dumps. Log headings are capped at100 characters while full saved text stays available. Character background/class/talent/biography, conditions, items, supplies and quests follow the same structured detail convention.
