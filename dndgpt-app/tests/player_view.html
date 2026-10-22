@@ -233,6 +233,50 @@ document.getElementById('run').onclick=async()=>{
   frame.style.width='1100px';w.selectLayout('original',false);
  });
 
+ await test('Long ability lists keep names, metadata and selection inside each clickable row',async()=>{
+  const record=structuredClone(fixture);record.version+=10000;
+  const nextFrame=()=>new Promise(resolve=>w.requestAnimationFrame(()=>w.requestAnimationFrame(resolve)));
+  try{for(const count of [7,28]){
+   record.version+=1;record.abilities=Array.from({length:count},(_,i)=>({
+    id:'long-list-'+i,name:(i%3===1?'A deliberately long and wrapping ability name for the compact dashboard ':'Fixture ability ')+(i+1),
+    rarity:i%2?'UNIQUE':'UNCOMMON',activation:i%3?'Action':'Free action',
+    simple:'Readable list sizing fixture.',mechanics_display:'Display fixture only.',ready:true}));
+   for(const width of [375,700,1100,1440]){
+    frame.style.width=width+'px';await nextFrame();
+    assert(w.innerWidth===width,'Fixture did not reach requested viewport: '+width);
+    for(const layout of ['original','reclaimed','orrery','ember']){
+     w.renderCampaign(structuredClone(record));w.selectLayout(layout,false);
+     d.getElementById('nav-skills').click();d.getElementById('skill-tab-combat').click();await nextFrame();
+     const page=d.getElementById('skill-page-combat'),list=page.querySelector('.reading-index'),rows=[...list.querySelectorAll('.index-entry')];
+     const label=layout+'/'+width+'/'+count;assert(rows.length===count,'Missing abilities: '+label);
+     for(const row of rows){
+      const box=row.getBoundingClientRect();
+      for(const child of row.querySelectorAll('.entry-name,.entry-meta')){
+       const content=child.getBoundingClientRect();
+       assert(content.top>=box.top-1&&content.bottom<=box.bottom+1,'Text escapes highlight/hit box: '+label);
+      }
+      assert(row.scrollHeight<=row.clientHeight+1,'Compressed ability row: '+label);
+     }
+     for(let i=1;i<rows.length;i++)assert(rows[i-1].getBoundingClientRect().bottom<=rows[i].getBoundingClientRect().top+1,'Overlapping ability rows: '+label);
+     if(count===28)assert(list.scrollHeight>list.clientHeight,'Long list should scroll: '+label);
+     for(const i of [0,Math.floor(count/2),count-1]){
+      const row=rows[i];row.scrollIntoView({block:'center'});await nextFrame();
+      const box=row.getBoundingClientRect(),bounds=list.getBoundingClientRect();
+      const x=Math.max(box.left,bounds.left)+12,y=(Math.max(box.top,bounds.top)+Math.min(box.bottom,bounds.bottom))/2;
+      const hit=d.elementFromPoint(x,y)?.closest('.index-entry');
+      assert(hit===row,'Pointer reaches wrong ability: '+label+'/'+i);hit.click();
+      assert(list.querySelectorAll('[aria-pressed="true"]').length===1&&row.getAttribute('aria-pressed')==='true','Wrong selected highlight: '+label);
+      assert(page.querySelector('.reading-article h3').textContent===record.abilities[i].name,'Selected detail does not match clicked ability: '+label);
+     }
+     assert(d.documentElement.scrollWidth<=d.documentElement.clientWidth+1,'Page overflow: '+label);
+    }
+   }
+  }}finally{
+   if(new URLSearchParams(location.search).has('list-preview')){frame.style.width='700px';w.selectLayout('original',false);}
+   else{frame.style.width='1100px';const restored=structuredClone(fixture);restored.version=record.version+1;w.renderCampaign(restored);w.selectLayout('original',false);}
+  }
+ });
+
  await test('Layout inspection never writes campaign state or gameplay history',async()=>{
   const after=await(await fetch('/test-state')).json();
   assert(JSON.stringify(after.campaign)===JSON.stringify(before.campaign),'Authoritative campaign changed');
@@ -240,7 +284,7 @@ document.getElementById('run').onclick=async()=>{
  });
  document.getElementById('result').textContent=results.filter(r=>r.passed).length+'/'+results.length+' passed';
  await fetch('/test-player-record',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({results,passed:results.every(r=>r.passed)})});
- d.getElementById('nav-skills').click();d.getElementById('skill-tab-passives').click();d.querySelector('[data-ability-id="sig-1"]').click();d.querySelector('#skill-page-passives [id^="ability-view-upgrades-"]').click();
+ if(!new URLSearchParams(location.search).has('list-preview')){d.getElementById('nav-skills').click();d.getElementById('skill-tab-passives').click();d.querySelector('[data-ability-id="sig-1"]').click();d.querySelector('#skill-page-passives [id^="ability-view-upgrades-"]').click();}
 };
 if(new URLSearchParams(location.search).has('autorun'))window.addEventListener('load',()=>document.getElementById('run').click());
 </script></html>
