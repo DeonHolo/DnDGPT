@@ -1,9 +1,9 @@
 {
   "rulebook-v1.0.txt": {
     "original_sha256": "fc1cd1ed39a9fc35961d0d1e9a5feb3035015339d435c6a3af80a3515960597b",
-    "sha256": "761098a20d98f823f0021534a0057401cbf7df8baf2ec941327f6e057441c884",
+    "sha256": "e722dff4898d0287d72e64c32406cd28c24ad893f65ffecf9ed870778eacc4a8",
     "original_bytes": 324754,
-    "bytes": 410548,
+    "bytes": 415368,
     "replacements": [
       [
         "V4.2",
@@ -162,14 +162,20 @@
         "source": "positive-ability-descriptions-2026-10-21.json",
         "before_sha256": "de22eff2140f683cda190f2227885b0be1c5cf9960fd0c5db8e7f0d5c478d3e8",
         "after_sha256": "761098a20d98f823f0021534a0057401cbf7df8baf2ec941327f6e057441c884"
+      },
+      {
+        "id": "story-ui-dashboard-scope-2026-10-23",
+        "source": "story-ui-dashboard-scope-2026-10-23.json",
+        "before_sha256": "761098a20d98f823f0021534a0057401cbf7df8baf2ec941327f6e057441c884",
+        "after_sha256": "e722dff4898d0287d72e64c32406cd28c24ad893f65ffecf9ed870778eacc4a8"
       }
     ]
   },
   "rule-hardener.txt": {
     "original_sha256": "bc21947f299ae37dc306581aa7110231809140c332ed4e8b1ceccbb86cbce8da",
-    "sha256": "32ec509cdcdf633b6db03f5ac5e9011e9a2baaf6d1283eaa2b12ae443e245867",
+    "sha256": "2da33b828c98b2a44fe6f1e51752058519ac223f0a099df6703dd1ed09133098",
     "original_bytes": 10370,
-    "bytes": 7982,
+    "bytes": 7916,
     "replacements": [
       [
         "V4.2-R1",
@@ -306,6 +312,12 @@
         "source": "positive-ability-descriptions-2026-10-21.json",
         "before_sha256": "253b32c9bd127a88f52350b084c205903c6a1ceeddf857609d30fd3accd04820",
         "after_sha256": "32ec509cdcdf633b6db03f5ac5e9011e9a2baaf6d1283eaa2b12ae443e245867"
+      },
+      {
+        "id": "story-ui-dashboard-scope-2026-10-23",
+        "source": "story-ui-dashboard-scope-2026-10-23.json",
+        "before_sha256": "32ec509cdcdf633b6db03f5ac5e9011e9a2baaf6d1283eaa2b12ae443e245867",
+        "after_sha256": "2da33b828c98b2a44fe6f1e51752058519ac223f0a099df6703dd1ed09133098"
       }
     ]
   }

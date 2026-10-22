@@ -58,8 +58,8 @@ def index_text(text):
              "Utility offers and revisions: utility, generation, class-craft and the applicable acquisition chapter.",
              "Combat: enemy-tactics, reach, 12, 13, 14; also 15/16/29/30 when applicable. Reuse prepared enemy profiles.",
              "Advancement: 17, 18 and the applicable track in 19 through 22; interfaces 37/38.",
-             "Routine narrative/presentation: continuity and story-ui. Cache current sections; do not reload every turn.",
-             "Presentation detail/implementation: story, dashboard-writing, 33, 34, 35, 38, 39. Chapter 33 contains the full inline glossary specification.",
+             "Routine narrative/presentation: continuity and story-ui. Intelligent UI means story, inline glossary, colors and choices in chat; never a seven-chapter dump. Cache current sections; do not reload every turn.",
+             "Story styling/tooltips: story-ui; 33 has the full glossary, 35 colors, 39 choices. Story flavor: story. Ability copy/details: dashboard-writing, 34. Dashboard architecture only: 38; full in-chat sheet only on explicit request.",
              "Equipment: 23 through 28. Story/quests: 31, 32, 32A. Saves/compatibility: 40 through 42.", "",
              "## Current amendments"]
     for key in {**AMENDMENTS, **SUBSECTIONS}:

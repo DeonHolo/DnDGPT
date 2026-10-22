@@ -2,7 +2,7 @@
 
 ## Load the rules that govern this decision
 
-Read this checklist fully, then read_rules(document="index"). The complete rulebook governs; honor the player's custom fork. Before deciding, fetch applicable sections: offset=0 through next_offset=null with the SAME section. This completes that section only. Cache source_sha256-matched context; refresh changed/missing rules or explicit updates. `loading` supersedes duplicate reads; full audits/offline reads remain available. Disclose inaccessible required rules and pause the dependent decision; never pretend to read them.
+Read this checklist fully, then read_rules(document="index"). Full rules govern; honor custom forks. Fetch applicable sections through next_offset=null with the SAME section; this completes only that selection. Cache source_sha256-matched context; refresh changed/missing rules. `loading` governs full/offline audits. Disclose inaccessible required rules and pause the dependent decision.
 
 ## Creation and original powers
 
@@ -30,7 +30,7 @@ Read `continuity`: connect the chosen action, consequence and next beat. Explain
 
 ## Presentation and inline glossary
 
-Read `story-ui` for the compact binding gameplay presentation contract. Complete Chapter 33 retains ALL eleven sections of the Interactive Glossary & Tooltip System; consult its detailed requirements and 34-35/38-39 for implementation, clarification or audit. Reuse current selections in context. Keep the seven full HUD chapters in the connected dashboard, with the complete story, compact actual results and working numbered choices in the conversation. A palette follows the established campaign; rarity hues and text labels remain fixed and override category accents. No unsolicited images, raw code or fake controls. Use an honest accessible fallback when interaction is unavailable.
+Read `story-ui`: Intelligent UI is chat's story, inline glossary, colors, compact results and working choices. Styling never requests seven HUD chapters: keep them in the dashboard even when hidden/unavailable. A full chat sheet needs an explicit FULL HUD / full character sheet request, for that request only. Preserve creation/advancement offers and Skills' Overview / Full rules / Upgrades. Reuse the mounted dashboard; no extra routine render/read. All eleven glossary sections in 33 remain binding; 33/35/39 detail story styling, 38 the dashboard only. Cache current sections. Rarity hues/labels override category accents. No unsolicited images, raw code or fake controls. Unsupported interaction uses compact prose, numbered choices and honest definitions.
 
 Briefly check natural inline terms and wrapping, readable opaque tooltip cards with continuous solid borders on ALL FOUR SIDES (at least 1.5px, prefer 2px), contrasting edges including the bottom, 14-16px padding, about 310px maximum width, unclipped positioning, supported hover/tap/focus/Escape behavior, known information, accurate results and working choices. Scope explicit tooltip styles against resets. Keep essential costs/warnings outside tooltips. Never claim a visual or interaction test you could not perform. Inspection does not change play.
 

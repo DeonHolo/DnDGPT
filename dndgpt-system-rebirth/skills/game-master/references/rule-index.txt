@@ -10,14 +10,14 @@ Class offers: creation-order, generation, utility, class-craft, reach, 5, 6, 7, 
 Utility offers and revisions: utility, generation, class-craft and the applicable acquisition chapter.
 Combat: enemy-tactics, reach, 12, 13, 14; also 15/16/29/30 when applicable. Reuse prepared enemy profiles.
 Advancement: 17, 18 and the applicable track in 19 through 22; interfaces 37/38.
-Routine narrative/presentation: continuity and story-ui. Cache current sections; do not reload every turn.
-Presentation detail/implementation: story, dashboard-writing, 33, 34, 35, 38, 39. Chapter 33 contains the full inline glossary specification.
+Routine narrative/presentation: continuity and story-ui. Intelligent UI means story, inline glossary, colors and choices in chat; never a seven-chapter dump. Cache current sections; do not reload every turn.
+Story styling/tooltips: story-ui; 33 has the full glossary, 35 colors, 39 choices. Story flavor: story. Ability copy/details: dashboard-writing, 34. Dashboard architecture only: 38; full in-chat sheet only on explicit request.
 Equipment: 23 through 28. Story/quests: 31, 32, 32A. Saves/compatibility: 40 through 42.
 
 ## Current amendments
 loading | Rules loading and checklist precedence | 2498 characters
 continuity | Turn continuity and efficient resolution | 5360 characters
-creation-order | V1.0 surgical four-turn creation and in-chat continuation precedence | 1844 characters
+creation-order | V1.0 surgical four-turn creation and in-chat continuation precedence | 2061 characters
 story | Story flavor, character identity and player voice | 6960 characters
 generation | Generation breadth, reaction roles and a playable world | 7333 characters
 utility | Utility usefulness and creative application | 4658 characters
@@ -25,7 +25,7 @@ class-craft | Class concept diversity and writing craft | 5673 characters
 world-preview | World introduction: history, place and the player's footing | 3089 characters
 reach | Dexterity and player-facing reach | 2903 characters
 dashboard-writing | Player-facing dashboard writing contract | 6124 characters
-story-ui | Compact Intelligent Story UI contract | 4883 characters
+story-ui | Compact Intelligent Story UI contract | 6040 characters
 enemy-tactics | Enemy identity, adaptive tactics and visible voice | 3909 characters
 
 ## Full chapters
@@ -35,8 +35,8 @@ enemy-tactics | Enemy identity, adaptive tactics and visible voice | 3909 charac
 4 | THE WORLD — THE AGE OF CONVERGENCE (V4.0 WORLD BIBLE) | 15719 characters
 5 | SIX-TIER RARITY SYSTEM | 18635 characters
 6 | LUCK ENHANCEMENT | 1650 characters
-7 | CHARACTER CREATION — V4.0 HYBRID GENERATION (FIVE PHASES) | 14097 characters
-8 | CLASSES AND HEROIC POWER | 25015 characters
+7 | CHARACTER CREATION — FOUR CHOICE TURNS, FIVE PREPARATION PHASES | 14461 characters
+8 | CLASSES AND HEROIC POWER | 25093 characters
 9 | SIGNATURE SKILLS | 11950 characters
 10 | STARTING TITLES | 951 characters
 11 | BACKGROUNDS — IDENTITY, INTEGRATED IMPRINT AND WORLD FOOTPRINT | 18356 characters
@@ -49,7 +49,7 @@ enemy-tactics | Enemy identity, adaptive tactics and visible voice | 3909 charac
 18 | LEVEL-UP AND TIME FREEZE | 1888 characters
 19 | SKILL EVOLUTION SYSTEM — V4.0 INTEGRATED PASSIVE EVOLUTIONS | 19314 characters
 20 | HYBRID BREAKTHROUGHS — CLASS BREAKTHROUGHS & GRAND SIGNATURES (V4.1) | 12977 characters
-21 | TALENT WEB — V4.0 HYBRID WEB | 13295 characters
+21 | TALENT WEB — V4.0 HYBRID WEB | 13305 characters
 22 | CLASS EVOLUTION AND RARITY ASCENSION | 1150 characters
 23 | EQUIPMENT — SIXTEEN SLOTS | 954 characters
 24 | INVENTORY AND CARRY WEIGHT | 6095 characters
@@ -62,17 +62,17 @@ enemy-tactics | Enemy identity, adaptive tactics and visible voice | 3909 charac
 31 | CHARACTER-AWARE GAMEPLAY OPTIONS | 867 characters
 32 | QUESTS, NPCS AND STORY CLARITY | 19774 characters
 32A | LIVING-WORLD RANDOM EVENT ENGINE — V1.0 CODE-ROLLED, CONTEXTUAL, AUDITABLE | 9598 characters
-33 | INTELLIGENT INTERACTIVE UI | 30550 characters
-34 | SIMPLIFIED ABILITY DISPLAY | 4283 characters
+33 | INTELLIGENT INTERACTIVE UI | 31910 characters
+34 | SIMPLIFIED ABILITY DISPLAY | 4795 characters
 35 | RARITY COLORS AND VISUAL PRIORITY | 2594 characters
-36 | CHARACTER CREATION INTERFACE | 1655 characters
+36 | CHARACTER CREATION INTERFACE | 1784 characters
 37 | V4.1 LEVEL-UP INTERFACE | 4447 characters
-38 | MANDATORY SEVEN-SECTION HUD — V4.1 FUNCTIONAL, GROUPED & NESTED | 12048 characters
+38 | CAMPAIGN DASHBOARD — SEVEN CHAPTERS AND ABILITY DETAILS | 12525 characters
 39 | GAMEPLAY OPTION UI | 553 characters
-40 | PERSISTENCE AND INTERNAL AUDITS | 6487 characters
-41 | IN-CHAT CONTINUITY; OPTIONAL MANUAL EXPORT ONLY | 7568 characters
+40 | PERSISTENCE AND INTERNAL AUDITS | 6656 characters
+41 | CAMPAIGN CONTINUITY; AUTOMATIC SAVES AND OPTIONAL MANUAL EXPORT | 7938 characters
 42 | VERSION COMPATIBILITY | 3135 characters
-43 | COMPLETE V1.0 NEW GAME PROCEDURE | 7191 characters
-44 | ABSOLUTE GAME MASTER RESTRICTIONS | 7991 characters
-45 | PRIMARY DIRECTIVE — VERSION 1.0 | 7039 characters
-46 | INITIAL RESPONSE INSTRUCTION | 3311 characters
+43 | COMPLETE V1.0 NEW GAME PROCEDURE | 7224 characters
+44 | ABSOLUTE GAME MASTER RESTRICTIONS | 8228 characters
+45 | PRIMARY DIRECTIVE — VERSION 1.0 | 7183 characters
+46 | INITIAL RESPONSE INSTRUCTION | 3413 characters

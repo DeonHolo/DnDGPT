@@ -72,3 +72,9 @@ def test_full_glossary_survives_and_hardener_is_one_compact_page():
     glossary = chapter[excerpt["start"]:excerpt["end"]]
     for heading in ("1. Core Feature", "2. CRITICAL", "11. Persistence", "Standing inline-term"):
         assert heading in glossary
+
+
+def test_routine_story_contract_fits_one_tool_response():
+    page = rules_page("rulebook", 0, "story-ui")
+    assert page["next_offset"] is None
+    assert len(page["content"]) <= 8000
