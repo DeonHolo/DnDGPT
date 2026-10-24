@@ -30,6 +30,11 @@ jobs:
       - run: python -m pip install -r requirements.txt
       - name: Check bundled documents match the hosted source
         run: python -m scripts.sync_plugin_rules --check
+      - name: Check the isolated hosted runtime
+        run: |
+          python -m venv .test-tmp/hosted-runtime
+          .test-tmp/hosted-runtime/bin/python -m pip install -r requirements-hosted.txt
+          .test-tmp/hosted-runtime/bin/python -c "from app.server import create_app; from app.presentation import dashboard_html; from PIL import features; assert features.check('webp'); assert 'galleryGrid' in dashboard_html()"
       - name: Check rules, packaging, ownership and game behavior
         run: |
           python -c "from pathlib import Path; Path('.test-tmp').mkdir(exist_ok=True)"
