@@ -15,7 +15,7 @@ LICENSE_FILES = ("LICENSE", "LICENSE-CONTENT.md", "LICENSING.md", "LICENSES/CC-B
 TOP_FILES = ("README.md", "CODEX_HANDOFF.md", "CLIENT_ACCEPTANCE.md", "RULES_COVERAGE.md",
              "PRESENTATION.md", "DESIGN_SYSTEM.md", "INTELLIGENT_UI_RESEARCH.md", "AUTH0_SETUP.md",
              "LAUNCH_PLAN.md", "CREATION_WORKFLOW.md", "POWER_RUNTIME.md", "STARTING_BUILDS.md", "ITEM_RUNTIME.md", "OFFER_VALIDATION.md", "SUMMON_RUNTIME.md",
-             "CLASS_PREPARATION.md", "CHAT_LED_PLAY.md", "FIRST_PLAY.md", "SKILL_HARDENING.md", "requirements.txt", "pytest.ini", "conftest.py", "Dockerfile", ".dockerignore", ".env.example")
+             "CLASS_PREPARATION.md", "CHAT_LED_PLAY.md", "FIRST_PLAY.md", "SKILL_HARDENING.md", "requirements.txt", "requirements-hosted.txt", "pytest.ini", "conftest.py", "Dockerfile", ".dockerignore", ".env.example")
 
 
 def build(plugin, output=None):

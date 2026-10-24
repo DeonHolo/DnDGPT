@@ -1,5 +1,7 @@
 # Quests, Gallery and character identity
 
+Deployment note: Appwrite installs `dndgpt-app/requirements-hosted.txt`, while local tests install `dndgpt-app/requirements.txt`. Adding Pillow to only the local list caused the first hosted 1.0.40 build to fail at `app/gallery.py` with `ModuleNotFoundError: No module named 'PIL'`, despite 538 behavioral tests passing. The working deployment was restored before correcting the hosted list. The workflow now imports the actual service and checks WebP support in a fresh environment containing only hosted dependencies. This finding applies while those separate dependency lists remain in use; a unified build would replace this check.
+
 Release 1.0.40 adds these features to the existing hosted DnDGPT connection. It does not migrate a player's campaign or require another plugin ZIP upload.
 
 ## Quest Journal
