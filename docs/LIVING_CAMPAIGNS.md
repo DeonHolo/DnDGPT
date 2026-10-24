@@ -13,7 +13,7 @@ Approved 24 October 2026 for Age of Convergence and Sovereign System.
 - [x] Investigate mobile opening metadata, bridge initialization and constrained display modes.
 - [x] Exercise sustained campaigns for both games; distinguish deterministic transport checks from actual model play.
 - [x] Measure complete test turns and tool overhead without claiming model latency from storage timing.
-- [ ] Run the four-layout browser checks, package, publish and verify the deployed revision.
+- [x] Run the four-layout browser checks, package, publish and verify the deployed revision.
 
 Existing player campaigns remain untouched during testing. Use disposable data. Keep the original unrelated edits in CONTINUITY_TESTS.md. Game switching must never convert, advance or expose another game's saves. New records are optional for older saves and become active when saved; historical chat cannot be reconstructed automatically.
 
@@ -27,7 +27,7 @@ Journey/expedition pacing records a concrete objective and a horizon of at most 
 
 The GM's turn-planning contract now uses actual equipped effects, integrated upgrades, passive triggers, charges, cooldowns, MP, reach and action economy. Existing derived bonuses count once. Autonomous actions stay within the player's objective, risk/resource limits and authorized rounds. Next choices should reflect the actual kit and situation. No new planning tool, repeated inventory read or development review is added to normal play.
 
-Final local release checks passed 611 tests with two existing dependency warnings. The final source and packaging run is linked through the repository's Check and package workflow. Authenticated disposable transport ran 60 consecutive read/save turns per game, two calls per turn and zero model calls. Age median/p95 was 33.28/38.97 ms; Sovereign median/p95 28.38/32.71 ms. These are local transport measurements, not hosted latency, AI thinking time or a whole-turn speedup.
+Release checks passed 611 tests with two existing dependency warnings. The final source and packaging run is linked through the repository's Check and package workflow. Authenticated disposable transport ran 60 consecutive read/save turns per game, two calls per turn and zero model calls. Age median/p95 was 33.28/38.97 ms; Sovereign median/p95 28.38/32.71 ms. These are local transport measurements, not hosted latency, AI thinking time or a whole-turn speedup.
 
 Final local browser matrix: 10/10 living-campaign checks, 7/7 Sovereign checks, 24/24 existing player-view checks and 8/8 quest/Gallery checks passed. Four layouts at 390/1100 px, real clicks, parent-owned detail tabs, borders/padding, game isolation, late bridge initialization and unchanged gameplay were checked using simulated hosts. An intermediate run found test assumptions about transformed heading text and the number of disposable saves; the final harness checks semantic text and actual game isolation.
 
@@ -53,4 +53,10 @@ Two earlier hosted attempts on cb8c8a7 failed at the probe's obsolete expectatio
 
 ## Release
 
-The final UI follow-up is version 1.0.43. Source, rule references and portable packaging use the same version. The existing DnDGPT connection was refreshed; no plugin ZIP was uploaded. Final publication verification is recorded after the hosted build.
+The final UI follow-up is version 1.0.43. Source, rule references and portable packaging use the same version. The existing DnDGPT connection was refreshed; no plugin ZIP was uploaded. Publication and hosted verification are complete.
+
+Verified release code: 874708a33451671e58d3ea36566ab9ff90a98200. [Release workflow](https://github.com/DeonHolo/DnDGPT/actions/runs/40116289153) passed 611 tests and packaged 1.0.43. Public deployment 6adceb41cf0e3b8398a9 served health 200 with version 1.0.43 (execution 6adcebad10e4a17165e4); the private probe deployment was 6adceb40525b88693ab3. The existing native DnDGPT connection completed its tool refresh after this build, with the same account and permissions.
+
+Final hosted execution 6adcebca5c8de2525e07 passed all 28 checks in 22.61 seconds. Its batched save took 1.1602 seconds; combined state/approval read took 0.5160 seconds and six storage calls. Source saves were preserved and the separate restored copy reopened paused with its living memories. No player campaign was accessed and no model API was called. The preceding release candidate had one stale test regex after simplifying the internal upgrade error wording; updating that assertion preserved the rejection behavior, and the full final workflow passed.
+
+These release notes are documentation of the verified code revision above. Actual native phone acceptance and a real long player campaign remain separate follow-up evidence.
