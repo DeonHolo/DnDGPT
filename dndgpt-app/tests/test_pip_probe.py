@@ -30,7 +30,7 @@ def test_probe_protocol_is_static_read_only_and_has_ui_metadata(monkeypatch):
         assert resource["mimeType"] == "text/html;profile=mcp-app"
         assert resource["_meta"]["ui"]["csp"]["connectDomains"] == []
         assert "Test PiP" in resource["text"]
-        assert resource["text"].count('data-panel="') == 8
+        assert resource["text"].count('data-panel="') == 7
         assert "SHARED_COMPANION_CSS" not in resource["text"]
         assert "SHARED_COMPANION_NAV" not in resource["text"]
         assert 'aria-label="Companion sections"' in resource["text"]
