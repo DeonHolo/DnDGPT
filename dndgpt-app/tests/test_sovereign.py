@@ -310,3 +310,18 @@ def test_class_force_capacity_and_power_ownership_are_enforced(engine):
         apply_changes(state, {"sovereignty": {"formations": too_many}})
     with pytest.raises(EngineError, match="Entity-owned"):
         apply_changes(state, {"upsert": {"abilities": [{"id": "general-power", "scope": "commander"}]}})
+
+
+@pytest.mark.parametrize("field", ["strength", "side", "status", "target"])
+def test_malformed_strategy_values_are_validation_errors(engine, field):
+    state = fixture_state(engine)
+    if field == "target":
+        request = orders(); request["orders"][0]["target_id"] = ["raiders"]
+        changes = {"fictional_time_seconds": 60, "sovereign_battle": request}
+    else:
+        forces = copy.deepcopy(state["sovereignty"]["formations"])
+        forces[0][field] = ["wrong type"]
+        changes = {"sovereignty": {"formations": forces}}
+    with pytest.raises(EngineError) as error:
+        apply_changes(state, changes, dice=Dice())
+    assert error.value.status == 422

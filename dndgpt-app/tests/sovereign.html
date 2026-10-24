@@ -19,6 +19,9 @@ document.getElementById('run').onclick=async()=>{
   d.getElementById('session').value=fixture.id;d.getElementById('session').dispatchEvent(new Event('change'));
   await until(()=>d.getElementById('hero').textContent.includes('Wandering Fortress'));
   assert(!d.getElementById('nav-sovereignty').hidden,'Sovereignty chapter missing');
+  assert(w.openai.widgetState.modelContent.game_id==='sovereign-system'&&w.openai.widgetState.modelContent.campaign_id===fixture.id,'Selected game was not shared with model context');
+  assert(!w.lastFixturePrompt,'Switching games sent an unsolicited chat message');
+  assert(d.getElementById('summonsPreview').textContent.includes('1 ally'),'Commander missing from Allies');
  });
  await test('Domain shows finite objectives and actual development choices',async()=>{
   d.getElementById('nav-sovereignty').click();const panel=d.getElementById('sovereignty');

@@ -4,7 +4,7 @@ const gameNames={"age-of-convergence":"Age of Convergence","sovereign-system":"S
 const gameSelections={};
 function sovereignCombatView(next){
   const allies=new Map((next.summons||[]).map(c=>[c.id,c]));
-  if(next.game_id==="sovereign-system")for(const c of next.sovereignty?.commanders||[])if(c.side!=="enemy")allies.set(c.id,{...c,rarity:c.rarity||next.character.rarity});
+  if(next.game_id==="sovereign-system")for(const c of next.sovereignty?.commanders||[])if(c.side!=="enemy")allies.set(c.id,c);
   return {...next,summons:[...allies.values()]};
 }
 let lastGameContext="";
@@ -62,7 +62,8 @@ function renderSovereignty(next){
   const root=$("sovereignty");root.replaceChildren();
   if((next.game_id||"age-of-convergence")!=="sovereign-system")return;
   const s=next.sovereignty;if(!s){paragraph(root,"Your domain has not been established yet.","muted");return}
-  $("sovereigntyPreview").textContent="Domain "+s.domain.level+" · "+s.commanders.length+" commanders · "+s.formations.filter(f=>f.side==="player").length+" formations";
+  const ownCommanders=s.commanders.filter(c=>c.side!=="enemy").length,ownFormations=s.formations.filter(f=>f.side==="player").length;
+  $("sovereigntyPreview").textContent="Domain "+s.domain.level+" · "+ownCommanders+(ownCommanders===1?" commander":" commanders")+" · "+ownFormations+(ownFormations===1?" formation":" formations");
   const tabs=element("div",undefined,"sovereign-tabs");tabs.setAttribute("role","tablist");tabs.setAttribute("aria-label","Sovereignty records");root.append(tabs);
   const panels={};
   for(const [id,label]of [["domain","Domain"],["commanders","Commanders"],["forces","Forces"],["operations","Operations & fronts"]]){
@@ -85,10 +86,10 @@ function renderSovereignty(next){
     for(const choice of milestone.choices){const button=element("button");button.type="button";button.disabled=done!==milestone.objectives.length;button.append(element("strong",choice.name),element("span",choice.description));button.onclick=()=>sendPrompt("Choose domain development "+choice.id+" ("+choice.name+") for milestone "+milestone.id+". Apply the published development and save it; no further approval.");options.append(button)}section.append(options);
   }
   if(s.developments.length){const history=recordDetail(panels.domain,"Completed developments","sovereign-developments");for(const d of s.developments)paragraph(history,"Level "+d.level+" · "+d.choice.name)}
-  for(const c of s.commanders){const card=sovereigntyCard(panels.commanders,c.name,"Level "+c.level+" · XP "+(c.xp||0)+" / "+(100+50*(c.level-1))+" · "+(c.status||"active"),c.description);if(c.nature)paragraph(card,c.nature);entityPowers(card,c);if(c.equipment?.length){const gear=recordDetail(card,"Equipment","commander-gear-"+c.id);for(const item of c.equipment)renderValue(gear,item)}}
+  for(const c of s.commanders.filter(c=>c.side!=="enemy"||c.known===true)){const card=sovereigntyCard(panels.commanders,c.name,"Level "+c.level+" · XP "+(c.xp||0)+" / "+(100+50*(c.level-1))+" · "+(c.status||"active"),c.description);if(c.nature)paragraph(card,c.nature);entityPowers(card,c);if(c.equipment?.length){const gear=recordDetail(card,"Equipment","commander-gear-"+c.id);for(const item of c.equipment)renderValue(gear,item)}}
   if(!s.commanders.length)paragraph(panels.commanders,"Your first commander will appear here during creation.","muted");
   for(const f of s.formations.filter(f=>f.side==="player"||f.known===true)){const card=sovereigntyCard(panels.forces,f.name,(f.side==="player"?"Your forces":"Known opposing force")+" · "+f.strength+" / "+f.maximum_strength+" · "+(f.status||"active"),f.description);paragraph(card,"Veterancy "+(f.veterancy||0)+" / 5 · XP "+(f.xp_total||0)+" · Cohesion "+f.morale,"sovereign-meta");const commander=s.commanders.find(c=>c.id===f.commander_id);if(commander)paragraph(card,"Commander · "+commander.name);const stats=recordDetail(card,"Formation rules","formation-"+f.id);renderFacts(stats,[["Attack",f.attack],["Defense",f.defense],["Power",f.power],["Armor",f.armor]]);entityPowers(card,f)}
-  for(const op of s.operations){const card=sovereigntyCard(panels.operations,op.name,op.status+" · "+(next.fictional_time_seconds>=op.due_at?"Report due":"Orders underway"),op.objective);paragraph(card,op.mandate);if(op.outcome)paragraph(card,op.outcome)}
+  for(const op of s.operations.filter(op=>s.commanders.find(c=>c.id===op.commander_id)?.side!=="enemy"||op.known===true)){const card=sovereigntyCard(panels.operations,op.name,op.status+" · "+(next.fictional_time_seconds>=op.due_at?"Report due":"Orders underway"),op.objective);paragraph(card,op.mandate);if(op.outcome)paragraph(card,op.outcome)}
   for(const front of s.fronts.filter(f=>f.known!==false)){const card=sovereigntyCard(panels.operations,front.name,front.status||"active",front.objective);card.classList.add("sovereign-front");paragraph(card,"Your objective "+(front.player_progress||0)+" / "+front.target_progress);}
   if(s.battle_reports.length){const reports=recordDetail(panels.operations,"Battle reports","sovereign-battles");for(const r of s.battle_reports.slice(-10).reverse()){const front=s.fronts.find(f=>f.id===r.front_id);paragraph(reports,(front?.name||"Battle")+" · "+r.phases.length+" phases · "+r.outcome.replaceAll("_"," "));}}
   if(!s.operations.length&&!s.fronts.length)paragraph(panels.operations,"Standing orders and battle fronts appear here when established.","muted");
