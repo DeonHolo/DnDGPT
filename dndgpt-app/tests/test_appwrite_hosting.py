@@ -154,13 +154,13 @@ def test_roundtrip_restart_owner_and_exact_retry(hosted):
     assert before == api.rows
 
 
-def test_confirmation_and_adventure_stay_separate(hosted):
+def test_legacy_lifecycle_receipts_remain_idempotent_without_a_creation_gate(hosted):
     api, store, engine, game = hosted
     state = game.create('owner-a', 'Hosted fixture', 'create-hosted-02', True)
     state = game.update('owner-a', state['id'], 'update-hosted-02', 1, 'Prepared',
                         {'character': {'class_name': 'Fixture'}, 'opening_preview': 'An empty test room'})['campaign']
     proposal = engine.propose_action('owner-a', state['id'], 'confirm-hosted-02', 2, 'confirm_chat_character', {})
-    assert engine.pending_approval('owner-a', state['id'])['approval']
+    assert engine.pending_approval('owner-a', state['id'])['approval'] is None
     approved = engine.execute_confirmed_action('owner-a', proposal['proposal']['id'], proposal['_meta']['approval_token'])
     assert approved['campaign']['phase'] == 'ready'
     assert approved['campaign']['paused']
@@ -177,7 +177,7 @@ def test_hosted_expired_proposal_remains_reviewable_after_restart(hosted):
     state = game.create('owner-a', 'Hosted expiry fixture', 'hosted-expiry-create', True)
     state = game.update('owner-a', state['id'], 'hosted-expiry-prepare', 1, 'Prepared',
                         {'character': {'class_name': 'Fixture'}})['campaign']
-    proposal = engine.propose_action('owner-a', state['id'], 'hosted-expiry-review', 2, 'confirm_chat_character', {})
+    proposal = engine.propose_action('owner-a', state['id'], 'hosted-expiry-review', 2, 'pause', {})
     with store.transaction() as db:
         records.update(db, 'proposals_v1', {'id': proposal['proposal']['id']}, {'created_at': time.time() - 901})
     reopened = Engine(AppwriteStore(api))
@@ -189,6 +189,30 @@ def test_hosted_expired_proposal_remains_reviewable_after_restart(hosted):
     with pytest.raises(EngineError) as error:
         reopened.execute_confirmed_action('owner-a', proposal['proposal']['id'], proposal['_meta']['approval_token'])
     assert error.value.code == 'proposal_expired'
+
+
+def test_direct_creation_and_outfit_roundtrip_on_hosted_store(hosted):
+    from app.game_random import GameRandom
+    api, store, engine, game = hosted
+    state = game.create('owner-a', 'Disposable outfitting fixture', 'direct-hosted-create', True)
+    state = game.update('owner-a', state['id'], 'direct-hosted-class', 1, 'Actual class choice',
+                        {'character': {'class_name': 'Fixture Warden'}})['campaign']
+    receipt = GameRandom(store, engine=engine).roll('owner-a', 'starting-outfit-' + state['id'],
+        [{'label': 'Outfit', 'kind': 'outfitting', 'class_rarity': 'COMMON'}], state['id'])
+    plan = receipt['results'][0]['result']
+    items = [{'id': f'gear-{i}', 'name': row['role'], 'rarity': row['rarity'], 'effects': ['Fixture effect']}
+             for i, row in enumerate(plan['items'])]
+    changes = {'character': {'background': 'Fixture keeper', 'story_summary': 'The keeper watches the crossing.'},
+               'opening_preview': 'A messenger arrives.', 'upsert': {'inventory': items},
+               'equipment': dict(zip(('Main Hand', 'Chest', 'Feet', 'Neck'), [r['id'] for r in items])),
+               'creation': {'outfitting': {'item_ids': [r['id'] for r in items]}}}
+    result = game.update('owner-a', state['id'], 'direct-hosted-finish', state['version'],
+                         'Complete choices directly', changes, begin_adventure=True)
+    assert result['campaign']['phase'] == 'adventure' and not result['campaign']['paused']
+    reopened = ChatGame(Engine(AppwriteStore(api)))
+    assert reopened.update('owner-a', state['id'], 'direct-hosted-finish', state['version'],
+                            'Complete choices directly', changes, begin_adventure=True) == result
+    assert engine.audit('owner-a', state['id'])['event_count'] == 3
 
 
 def test_failed_commit_does_not_leave_partial_state(hosted):

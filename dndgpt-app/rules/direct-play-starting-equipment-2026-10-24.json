@@ -1,0 +1,299 @@
+{
+  "id": "direct-play-starting-equipment-2026-10-24",
+  "files": {
+    "rulebook-v1.0.txt": [
+      {
+        "new_start": 6040,
+        "before": "**Player-facing creation turns are separate hard gates:** (1) world preview AND a request for pre-awakening Luck allocation; (2) the five Classes, generated only after Luck is decided or explicitly defaulted; (3) five Signatures and five Titles, with two Signatures and one Title or NONE selected and locked; (4) five Backgrounds tailored only to ACTUALLY owned sources, alongside allocation of the remaining creation Attribute Points. Do not combine consecutive turns, generate or rarity-roll later boards before their dependencies are selected, or silently preselect a source. Character preview, explicit confirmation, private world commitment and distinct adventure authorization remain mandatory afterward.\n",
+        "after": "**Player-facing creation turns are separate choice gates:** (1) world preview AND pre-awakening Luck; (2) five Classes after Luck is chosen/defaulted; (3) five Signatures and five Titles, choosing two Signatures and one Title or NONE; (4) five Backgrounds based on ACTUALLY owned sources alongside remaining Attributes. Preserve those dependencies and player selections. After the last required choice and supplied name, complete the build, write Your story, equip the starting outfit and open the first scene in the same response. No additional character/start confirmation or dashboard click follows. Respect an explicit draft/pause request.\n"
+      },
+      {
+        "new_start": 7960,
+        "before": "",
+        "after": "\n## Direct creation and advancement choices\n\nThe player's selection commits that choice. Keep the four creation boards, their dependencies and genuine rolls. After final Background/Attribute choices, use the supplied name or existing character label, calculate the completed build, write character.story_summary and prepare the opening. Save these together through save_chat_update(begin_adventure=true); this atomically completes creation and opens the adventure, without a lifecycle proposal, approval token, confirmation or start button. Initial NEW CAMPAIGN authorization remains required. Reading rules or opening a dashboard never starts a game.\n\nDuring advancement, freeze the world while actual selections remain unresolved. A deliberate selection or banking instruction applies immediately; show the resulting changes and save them without another confirmation. Collect independent tracks together when practical. Once every currently pending track is selected, banked or explicitly deferred, clear level_up_freeze and automatically continue an already ordered sequence from its exact stopping point. If no action is queued, present the next meaningful story choices. Never invent selections or continue past a new consequential decision. A manual player pause stays paused. This supersedes older separate advancement confirmation/resume requirements in Chapters 18, 19, 21 and 37.\n\nApply this interaction flow when the player next finishes creation or advancement, including a previously prepared draft. Preserve existing choices, issued boards, rolls and outcomes. Deploying an update never starts, resumes or rewrites a campaign. Corrections to committed history, permanent deletion and export restoration retain their separate review controls.\n\n## Starting equipment by class rarity\n\nStarting equipment is a functional part of the completed Age of Convergence build. Derive appearance, materials and provenance from the actual Class, selected Signatures, Title, Background and established region. Establish whether awakening formed it, existing possessions changed, or a plausible local source provided it. Preserve player-authored history. High-rarity classes receive equipped items with effects at their OWN recorded tiers; renamed plain travel clothes do not satisfy this rule.\n\nUse one campaign-bound roll_game_random request with kind=outfitting, recorded class_rarity, and action_id=starting-outfit-<campaign_id>. It may share the existing creation roll batch. Recover its immutable receipt on retry; never redraw under another ID. Its private outfitting-point allowance is:\n\n| Class rarity | Budget | Centerpiece base | Supporting floor |\n|---|---:|---|---|\n| COMMON | 12 | COMMON | COMMON |\n| UNCOMMON | 24 | UNCOMMON | UNCOMMON |\n| RARE | 48 | RARE | UNCOMMON |\n| EPIC | 96 | EPIC | RARE |\n| LEGENDARY | 192 | LEGENDARY | EPIC |\n| UNIQUE | 320 | LEGENDARY | EPIC |\n\nItem costs: COMMON 1, UNCOMMON 3, RARE 8, EPIC 20, LEGENDARY 50, UNIQUE 120. Reserve 6 points for suitable ordinary weatherwear, storage, tools and finite supplies. Four main equipment roles are class focus/weapon, protection, movement/fieldcraft, and accessory/command implement. Adapt roles to the build; a weapon is optional. Each piece uses legal slots and real weight, has immediately useful effects, and complements the actual class. Avoid four copies of one benefit or another class's entire toolkit.\n\nFor each role in order, reserve remaining roles' floor costs BEFORE rolling. A fresh d100 of 1–20 promotes the role one tier above its base/floor if affordable after reserves; otherwise declare its promotion chance 0 before the draw. For a UNIQUE centerpiece, 1–75 gives UNIQUE and 76–100 LEGENDARY. Record every draw and allocation without rerolls. A UNIQUE class therefore receives a Legendary-or-Unique centerpiece and three Epic-or-better supporting pieces. Unused allowance expires; it is not money, a sale price, starting wealth or a future entitlement.\n\nThis is a narrow once-per-creation equipment table. Ordinary loot's independent d10,000 rarity/Luck procedure, crafting and shop rules remain unchanged. Do not retroactively replace active-save equipment or erase its provenance.\n\nFor EACH item, write name, actual rarity, equipped slot/hand requirements, weight, concrete appearance/origin, simple summary and full applicable mechanics: bonuses, triggers, targets, action/resource costs, durations and recharge. Show useful effects with short italic flavor; keep allocation arithmetic private unless requested. COMMON is competent; UNCOMMON adds focused capability; RARE supplies distinctive interactions; EPIC changes tactics; LEGENDARY grants exceptional bounded effects; UNIQUE can have singular rule-changing capability consistent with the object's function. A prestigious name or cosmetic aura alone never pays for a tier.\n\nSave the four main inventory records with their actual effects and equipped IDs. Save creation.outfitting with the receipt action_id, budget/allocation and item_ids in drawn role order. Keep all sixteen slots, appropriate essentials and readable Gear-First Inventory. Outfitting adds no player-choice turn or approval.\n"
+      },
+      {
+        "new_start": 104693,
+        "before": "**WORLD PREVIEW → INDEPENDENT CHARACTER ROLLS AND SELECTION → CHARACTER CONFIRMATION → PRIVATE CAMPAIGN WORLD COMMITMENT → ADVENTURE AUTHORIZATION.** Do not invert this sequence to favor a preplanned plot. Generating a broad world first is not permission to secretly choose class rarities. Tailoring the concrete opening after the character is confirmed is not permission to reshape the world's established public facts or create hidden counter-build enemies.\n",
+        "after": "**WORLD PREVIEW → INDEPENDENT CHARACTER ROLLS AND SELECTION → COMPLETED BUILD AND YOUR STORY → PRIVATE CAMPAIGN WORLD COMMITMENT → FIRST ACTIVE SCENE.** Do not invert this sequence to favor a preplanned plot. Generating a broad world first is not permission to secretly choose class rarities. Tailoring the concrete opening after the player's build choices are complete is not permission to reshape the world's established public facts or create hidden counter-build enemies.\n"
+      },
+      {
+        "new_start": 105178,
+        "before": "Phases A-E organize preparation, not five player-choice turns. Phase A contains choice Turn 1; Phase B contains Turns 2-4; Phases C-E cover character confirmation, private preparation and separate adventure authorization. Clarifications never force the player to finish within four messages. Original character numbers, rarity generation, stat rules and equipment constraints remain unchanged except for the stated order and connected-world preparation.\n",
+        "after": "Phases A-E organize preparation. Phase A contains choice Turn 1; Phase B contains Turns 2-4; Phases C-E complete the build, prepare the region and open the first scene in the response to the final required creation choices. No extra confirmation/start turn is added. Clarifications remain available. Preserve character numbers, ordinary rarity generation, stat rules and all unrelated mechanics.\n"
+      },
+      {
+        "new_start": 106414,
+        "before": "A region may be an Earth city, merged frontier, island chain, remote wilderness, gateway trade center, fully foreign capital, rival-state border, or other coherent geography. The campaign's precise starting conflict is constructed later, after character confirmation. Establish a broad world reality and adventure possibilities rather than retrofitting every world law to the selected class.\n",
+        "after": "A region may be an Earth city, merged frontier, island chain, remote wilderness, gateway trade center, fully foreign capital, rival-state border, or other coherent geography. The campaign's precise starting conflict is constructed later, after completion of the player's creation choices. Establish a broad world reality and adventure possibilities rather than retrofitting every world law to the selected class.\n"
+      },
+      {
+        "new_start": 109134,
+        "before": "**Turn 3 — Signature + Title board:** After the Class is selected, develop and independently rarity/Luck-roll exactly FIVE Signature candidates and FIVE Title candidates. The player selects exactly TWO Signatures and ONE Title or NONE; lock those sources before proceeding. **Turn 4 — Background + attributes:** Only after both Signatures and Title are locked, privately design five compatible Background concepts, then independently rarity/Luck-roll exactly FIVE Background offers, each with Identity + one integrated Imprint targeting an ACTUALLY OWNED starting Class ability, one of the selected Signature powers (Action/Free Action/Reaction/Passive), or a chosen Title effect (never Title NONE), plus World Footprint. Show all five Backgrounds alongside allocation of the remaining six minus precommitted Luck creation Attribute Points. Do not permit an Imprint to depend on an unchosen Signature, unavailable Title, hypothetical future advancement, or incompatible action economy. Let the player choose exactly ONE Background and allocate the remaining points in the same Turn 4 response, before character confirmation.\n",
+        "after": "**Turn 3 — Signature + Title board:** After the Class is selected, develop and independently rarity/Luck-roll exactly FIVE Signature candidates and FIVE Title candidates. The player selects exactly TWO Signatures and ONE Title or NONE; lock those sources before proceeding. **Turn 4 — Background + attributes:** Only after both Signatures and Title are locked, privately design five compatible Background concepts, then independently rarity/Luck-roll exactly FIVE Background offers, each with Identity + one integrated Imprint targeting an ACTUALLY OWNED starting Class ability, one of the selected Signature powers (Action/Free Action/Reaction/Passive), or a chosen Title effect (never Title NONE), plus World Footprint. Show all five Backgrounds alongside allocation of the remaining six minus precommitted Luck creation Attribute Points. Do not permit an Imprint to depend on an unchosen Signature, unavailable Title, hypothetical future advancement, or incompatible action economy. Let the player choose exactly ONE Background and allocate the remaining points in the same Turn 4 response, before completion of the player's creation choices.\n"
+      },
+      {
+        "new_start": 110821,
+        "before": "## Phase C — Character preview and explicit confirmation following Turn 4\n",
+        "after": "## Phase C — Complete the selected character following Turn 4\n"
+      },
+      {
+        "new_start": 110886,
+        "before": "After Turn 4 has collected the Background choice and remaining Attribute Point allocation (starting score cap 9), accept an optional character name; calculate derived statistics and ability DCs. Establish realistic equipment and all sixteen primary equipment slots under Section 23 with V1.0 Gear-First Inventory under Sections 24–26. Show a complete character preview including original Class rarity and mechanics, both chosen Signatures, Title or NONE, Background Identity and the ONE Imprint NESTED under its actual Class, selected Signature or Title parent effect, World Footprint, starting resources, equipment, and legal options. Optional pockets and quick references remain available for opted-in detail and compatible older editions. Do not generate a downloadable save file or advance fictional time.\n",
+        "after": "After Background and remaining Attribute choices (starting score cap 9), use the supplied character name or existing label and calculate derived statistics/DCs. Populate character.story_summary immediately with a concise portrait connecting the actual Class, selected Signatures, Title/NONE, Background and public world. Explain capabilities, place and current stakes; preserve player-authored identity without inventing private beliefs or prior deeds.\n"
+      },
+      {
+        "new_start": 111340,
+        "before": "**Do not finalize until the player explicitly confirms.** No gameplay action, world movement, combat, time progression, or permanent decision occurs before confirmation. Independently recorded rarity rolls remain fixed rather than rerolled upon inspection. The confirmation freezes the actual character as authoritative. No side effect silently changes their chosen skills, item ownership, background, or class power afterward.\n",
+        "after": "Create the class-budgeted starting outfit from starting-gear, equip its four functional pieces and suitable essentials, and preserve the Background Imprint beneath its actual parent. Keep the complete build and effects in the dashboard, with Your story collapsed by default. The selections are sufficient to save the character; request no further confirmation.\n"
+      },
+      {
+        "new_start": 111702,
+        "before": "## Phase D — Private regional and opening commitment after character confirmation\n",
+        "after": "## Phase D — Private regional and opening commitment from the completed choices\n"
+      },
+      {
+        "new_start": 113718,
+        "before": "## Phase E — Adventure preview and separate gameplay authorization\n",
+        "after": "## Phase E — Open the first active scene\n"
+      },
+      {
+        "new_start": 113762,
+        "before": "Show the local situation, concise world context, current location and time, real opportunities, relevant known dangers, and three to five meaningfully different choices. The player may request clarification or changes BEFORE authorizing gameplay. Keep the complete character record in the campaign dashboard. Present this opening through the in-chat Story UI; include a full in-chat sheet only on explicit request. **Only after explicit gameplay authorization does any action or fictional time advance.** Do not treat name confirmation, scrolling a class card, reviewing the World Bible, or selecting a generated premise as gameplay authorization.\n",
+        "after": "Present local situation, concise world context, location/time, tangible opportunities, relevant known dangers and three to five meaningfully different actions. Complete creation and save this first scene in the SAME response to the final required creation choices, using begin_adventure=true in connected play. No separate start approval follows. The scene is active; do not choose or resolve an opening action for the player. Preserve an explicit draft/pause request. Keep the full sheet in the dashboard and story in chat.\n"
+      },
+      {
+        "new_start": 117923,
+        "before": "Maintain completed preview facts, generated Class/Signature/Title/Background offers, natural rolls, Luck checks, exact selections, remaining Attribute Points and confirmations within the authoritative same-chat campaign state, together with final character, geography, faction commitments, hidden cause, prepared quests and outstanding Phase E authorization. Do not require or offer a downloadable save in normal play. A future unrelated chat may require the player to explicitly supply a checkpoint if prior context is unavailable; never fabricate inaccessible prior state.\n",
+        "after": "Maintain completed preview facts, generated Class/Signature/Title/Background offers, natural rolls, Luck checks, exact selections, remaining Attribute Points and actual selections within the authoritative same-chat campaign state, together with final character, geography, faction commitments, hidden cause, prepared quests and the prepared first scene. Do not require or offer a downloadable save in normal play. A future unrelated chat may require the player to explicitly supply a checkpoint if prior context is unavailable; never fabricate inaccessible prior state.\n"
+      },
+      {
+        "new_start": 124953,
+        "before": "Gameplay choices have a concise action title and a brief secondary description, usually one sentence of 15–35 words. Include the intended approach, relevant known risk or cost, and the meaningful distinction from nearby choices. Use a second sentence only when necessary for a consequential tradeoff. Keep full tactical accounting in mechanics/details and avoid redundant paragraphs or promised hidden rewards. Use real single-selection controls where supported, with a clearly labeled confirmation action. The host renders chat controls; provide a clean numbered-text fallback when unavailable.\n",
+        "after": "Gameplay choices have a concise action title and a brief secondary description, usually one sentence of 15–35 words. Include the intended approach, relevant known risk or cost, and the meaningful distinction from nearby choices. Use a second sentence only when necessary for a consequential tradeoff. Keep full tactical accounting in mechanics/details and avoid redundant paragraphs or promised hidden rewards. Use real single-selection controls where supported, with a clearly labeled Select action. The host renders chat controls; provide a clean numbered-text fallback when unavailable.\n"
+      },
+      {
+        "new_start": 218150,
+        "before": "10. Keep the world frozen until the player explicitly resumes.\n",
+        "after": "10. Keep the world frozen while actual advancement choices remain pending; commit selections/banking directly, then automatically continue already queued actions.\n"
+      },
+      {
+        "new_start": 218773,
+        "before": "## Confirmation\n",
+        "after": "## Direct selection and banking\n"
+      },
+      {
+        "new_start": 218806,
+        "before": "The player must explicitly confirm spending permanent points.\n",
+        "after": "Show offer effects and prices before selection. The player's selection or banking instruction commits it directly. Show and save the result together without another confirmation menu or approval button.\n"
+      },
+      {
+        "new_start": 219010,
+        "before": "Show exact results before confirmation.\n\nA player may spend any combination of points or bank them all.\n\nConfirmation and permission to resume are separate decisions.\n",
+        "after": "Spend any combination of points or bank them all. Keep unresolved tracks pending without choosing for the player. Once all current tracks are resolved, end the freeze and continue any already ordered actions automatically, respecting an explicit manual pause.\n"
+      },
+      {
+        "new_start": 219345,
+        "before": "Apply Section 9's V1.0 Skill & Ability Originality Firewall to each new evolution board. Screen brief concepts before the five independent eligible rolls; compare the actual parent before/after, current build, sibling directions and available real prior offers. Preserve every integrated-passive, Stage, archive, point-cost and confirmation rule below.\n",
+        "after": "Apply Section 9's V1.0 Skill & Ability Originality Firewall to each new evolution board. Screen brief concepts before the five independent eligible rolls; compare the actual parent before/after, current build, sibling directions and available real prior offers. Preserve every integrated-passive, Stage, archive, point-cost and selection rule below.\n"
+      },
+      {
+        "new_start": 232291,
+        "before": "Some evolutionary paths are mutually exclusive when they represent incompatible directions of the same source. State conflicts before confirmation. Other integrated effects can coexist only when the detailed stacking rules explicitly permit it. Never silently erase prior purchases. An archived option becoming incompatible remains visible with original rarity and mechanics, marked **INCOMPATIBLE** rather than deleted or rerolled. Banked Skill Points and unchosen eligible offers remain available under their original prerequisites.\n",
+        "after": "Some evolutionary paths are mutually exclusive when they represent incompatible directions of the same source. State conflicts before selection. Other integrated effects can coexist only when the detailed stacking rules explicitly permit it. Never silently erase prior purchases. An archived option becoming incompatible remains visible with original rarity and mechanics, marked **INCOMPATIBLE** rather than deleted or rerolled. Banked Skill Points and unchosen eligible offers remain available under their original prerequisites.\n"
+      },
+      {
+        "new_start": 233354,
+        "before": "A Skill Point **modifies** an owned power through an integrated evolution with its own independent rarity and Luck rolls. A Talent Point **buys** a new talent or advances a talent stage, sometimes after prerequisites; fresh offered talents retain independent rarity and Luck rolls. A free Level 4, 8, 12, 16, 20, etc. milestone **chooses ONE of exactly FIVE fixed class-rarity-calibrated Hybrid Breakthrough offers: three Class Breakthroughs (exactly one with optional selected-Background synergy) and two class-focused Grand Signature Skills**. The Hybrid Breakthrough milestone is NOT a fourth random-rarity Talent board and uses no independent milestone rarity or Luck roll. Story rewards may separately grant abilities when genuinely earned. Each track has its own eligibility, expenditure, archive and confirmation record; one acquisition does not consume or simulate another.\n",
+        "after": "A Skill Point **modifies** an owned power through an integrated evolution with its own independent rarity and Luck rolls. A Talent Point **buys** a new talent or advances a talent stage, sometimes after prerequisites; fresh offered talents retain independent rarity and Luck rolls. A free Level 4, 8, 12, 16, 20, etc. milestone **chooses ONE of exactly FIVE fixed class-rarity-calibrated Hybrid Breakthrough offers: three Class Breakthroughs (exactly one with optional selected-Background synergy) and two class-focused Grand Signature Skills**. The Hybrid Breakthrough milestone is NOT a fourth random-rarity Talent board and uses no independent milestone rarity or Luck roll. Story rewards may separately grant abilities when genuinely earned. Each track has its own eligibility, expenditure, archive and selection record; one acquisition does not consume or simulate another.\n"
+      },
+      {
+        "new_start": 238983,
+        "before": "## Skill Evolution UI and confirmation\n",
+        "after": "## Skill Evolution UI and direct selection\n"
+      },
+      {
+        "new_start": 240370,
+        "before": "Normal cards show **source → evolution name → final rarity → one-sentence integrated effect → eligibility**. Expanding shows the source's current cost/cooldown, precisely changed mechanics, Stage and branch compatibility, original rarity and new rarity, and a before/after preview. Never label one evolution as a second READY spell with its own action button. Allow single-view menu expansion, genuine functional controls where supported, archive browsing, banking, and explicit permanent confirmation. A confirmation previews all chosen independent level tracks and does NOT resume fictional time.\n",
+        "after": "Normal cards show **source → evolution name → final rarity → one-sentence integrated effect → eligibility**. Expanding shows the source's current cost/cooldown, precisely changed mechanics, Stage and branch compatibility, original rarity and new rarity, and a before/after preview. Never label one evolution as a second READY spell with its own action button. Allow single-view menu expansion, genuine functional controls where supported, archive browsing, banking, and direct commitment of the player's selection. Selections apply chosen tracks directly; resolve all current tracks before automatic continuation.\n"
+      },
+      {
+        "new_start": 257113,
+        "before": "**Mandatory pre-roll five-option synergy audit:** Design concepts FIRST, keyed to the actual owned class core, signature skills, active organs/forms/summons if present, existing Talent Web powers, reaction competition, Free Action budget, level and available resource pool. Require five mechanically distinct immediately useful options with meaningful opportunities to reinforce or expand existing play rather than five random unrelated skills. Free-action options are valid and should be considered particularly when they fill a real small tactical gap without adding unnecessary bookkeeping. THEN independently roll each talent's natural rarity and eligible Luck, and certify mechanics against its resulting tier; no favorable curation of roll outcomes, forced high rarity or secret replacement after revelation. No talent is learned until expressly selected and confirmed.\n",
+        "after": "**Mandatory pre-roll five-option synergy audit:** Design concepts FIRST, keyed to the actual owned class core, signature skills, active organs/forms/summons if present, existing Talent Web powers, reaction competition, Free Action budget, level and available resource pool. Require five mechanically distinct immediately useful options with meaningful opportunities to reinforce or expand existing play rather than five random unrelated skills. Free-action options are valid and should be considered particularly when they fill a real small tactical gap without adding unnecessary bookkeeping. THEN independently roll each talent's natural rarity and eligible Luck, and certify mechanics against its resulting tier; no favorable curation of roll outcomes, forced high rarity or secret replacement after revelation. A Talent is learned when expressly selected; apply its defined point cost directly.\n"
+      },
+      {
+        "new_start": 266183,
+        "before": "Provide four real functional views: **New Offers** (five fresh eligible candidates); **Web and Synergies** (owned talents, relations and acquired keystones); **Archive** (retained unchosen candidates); and **Advancement Preview** (chosen point expenditures, prior effects, new actions, ability costs and final resource changes). Details expand inline or through functional click/tap/keyboard access, not overlapping hover-only popups. Player inspection never advances time, spends a point or triggers a roll. Spending and banking each point requires explicit confirmation; the world remains frozen after confirmation until separately authorized to resume.\n",
+        "after": "Provide four real functional views: **New Offers** (five fresh eligible candidates); **Web and Synergies** (owned talents, relations and acquired keystones); **Archive** (retained unchosen candidates); and **Advancement Preview** (chosen point expenditures, prior effects, new actions, ability costs and final resource changes). Details expand inline or through functional click/tap/keyboard access, not overlapping hover-only popups. Player inspection never advances time, spends a point or triggers a roll. Spending or banking follows the player's selection directly. Once all pending tracks are resolved, resume automatically unless the player expressly remains paused.\n"
+      },
+      {
+        "new_start": 320744,
+        "before": "This is the operating presentation contract for gameplay, consolidating the complete glossary requirements below. It supersedes conflicting presentation wording throughout this book, including older 'every response' HUD instructions. Reuse the mounted dashboard and current saved state; ordinary presentation needs no extra dashboard render, verification read or save. A closed, hidden or unavailable dashboard does not request an in-chat copy. Only an explicit FULL HUD / full character sheet request opens that separate view for that request; do not repeat it in subsequent turns unless asked. Creation and advancement still show their required offers and approvals.\n",
+        "after": "This is the operating presentation contract for gameplay, consolidating the complete glossary requirements below. It supersedes conflicting presentation wording throughout this book, including older 'every response' HUD instructions. Reuse the mounted dashboard and current saved state; ordinary presentation needs no extra dashboard render, verification read or save. A closed, hidden or unavailable dashboard does not request an in-chat copy. Only an explicit FULL HUD / full character sheet request opens that separate view for that request; do not repeat it in subsequent turns unless asked. Creation and advancement show required offers and actual selection controls.\n"
+      },
+      {
+        "new_start": 329154,
+        "before": "Only confirmed gameplay actions change the game.\n",
+        "after": "Only actual player choices and already authorized gameplay change the game; inspection is free.\n"
+      },
+      {
+        "new_start": 332595,
+        "before": "**Use genuine supported interaction on the appropriate surface:** clickable story choices and inline floating glossary cards in chat; seven chapter navigation and ability/upgrade inspectors in the dashboard; required selection and confirmation controls during creation or advancement. Glossary cards float without reflowing prose and must not obscure essential choices. Panel details may use expanders. Do not replace supported controls with fake HTML, decorative Markdown arrows or raw code. If interaction is unavailable, state that once and provide compact accessible text/definitions; a full seven-section text sheet is on request only.\n",
+        "after": "**Use genuine supported interaction on the appropriate surface:** clickable story choices and inline floating glossary cards in chat; seven chapter navigation and ability/upgrade inspectors in the dashboard; required selection controls during creation or advancement. Glossary cards float without reflowing prose and must not obscure essential choices. Panel details may use expanders. Do not replace supported controls with fake HTML, decorative Markdown arrows or raw code. If interaction is unavailable, state that once and provide compact accessible text/definitions; a full seven-section text sheet is on request only.\n"
+      },
+      {
+        "new_start": 333264,
+        "before": "When native Intelligent UI is available, present meaningful decisions as polished, genuinely clickable event/action cards with custom iconography, crisp typography and purposeful color accents. Take the readable hierarchy and distinct approaches of a Slay the Spire event screen as design inspiration; compose an original DnDGPT presentation appropriate to the current scene. This is a standing presentation preference for creation boards, exploration events, dialogue decisions, combat choices and progression offers, within their existing counts and confirmation gates.\n",
+        "after": "When native Intelligent UI is available, present meaningful decisions as polished, genuinely clickable event/action cards with custom iconography, crisp typography and purposeful color accents. Take the readable hierarchy and distinct approaches of a Slay the Spire event screen as design inspiration; compose an original DnDGPT presentation appropriate to the current scene. This is a standing presentation preference for creation boards, exploration events, dialogue decisions, combat choices and progression offers, within their existing counts and choice dependencies.\n"
+      },
+      {
+        "new_start": 337310,
+        "before": "- **Truthful state and presentation-only revisions:** Build status and legal choices from the latest authoritative saved state when connected. Clearly distinguish proposed effects, narrated-but-unsaved events and committed outcomes; a polished card never proves a save. Requests to restyle, recolor, add icons, reorganize or redisplay are view operations: do not roll, advance a round, spend resources, replay an attack or manufacture a new result. Selecting an action submits the player's intent; resolve and save only through the existing authorized gameplay and confirmation flow.\n",
+        "after": "- **Truthful state and presentation-only revisions:** Build status and legal choices from the latest authoritative saved state when connected. Clearly distinguish proposed effects, narrated-but-unsaved events and committed outcomes; a polished card never proves a save. Requests to restyle, recolor, add icons, reorganize or redisplay are view operations: do not roll, advance a round, spend resources, replay an attack or manufacture a new result. Selecting an action submits the player's intent; resolve and save only through the authorized gameplay flow; actual creation/advancement selections commit directly.\n"
+      },
+      {
+        "new_start": 350909,
+        "before": "**Level-up interface:** Immediately open the four independent tracks in Section 37 on earning a level; freeze every game clock, summon timer and hazard. Offer five independently rolled integrated evolutions; five **immediately eligible** independently rolled new Talent Web offers with separate optional keystone preview/archive; exactly five fixed class-grade Hybrid Breakthrough offers (three Class Breakthroughs, exactly ONE of those with selected Background synergy, plus two purely class-focused Grand Signatures) only at actual four-level milestones; and the +2-score attribute choice. Display independent banking and final confirmation, followed by a **separate** explicit authorization to resume queued actions. Preserve original rolls where actually applicable, candidacies, acquired abilities, HP/MP Vital Surge timing, and previous actions exactly.\n",
+        "after": "**Level-up interface:** Immediately open the four independent tracks in Section 37 on earning a level; freeze every game clock, summon timer and hazard. Offer five independently rolled integrated evolutions; five **immediately eligible** independently rolled new Talent Web offers with separate optional keystone preview/archive; exactly five fixed class-grade Hybrid Breakthrough offers (three Class Breakthroughs, exactly ONE of those with selected Background synergy, plus two purely class-focused Grand Signatures) only at actual four-level milestones; and the +2-score attribute choice. Display independent banking, commit actual selections directly and automatically continue queued actions when pending tracks are resolved. Preserve original rolls where actually applicable, candidacies, acquired abilities, HP/MP Vital Surge timing, and previous actions exactly.\n"
+      },
+      {
+        "new_start": 359497,
+        "before": "The creation UI is SEQUENTIAL, not a single premature mega-board. Do not show an ungenerated later board as though it has already rolled. Display only what is legally eligible for the current turn, with accessible genuine expanders and clear available selections. For each step, finish all dependencies and wait for the explicit player choice before proceeding. Turn 4 combines Background offers and final Attribute allocation; preview and confirmation remain separate.\n",
+        "after": "The creation UI is SEQUENTIAL, not a single premature mega-board. Do not show an ungenerated later board as though it has already rolled. Display only what is legally eligible for the current turn, with accessible genuine expanders and clear available selections. For each step, finish all dependencies and wait for the explicit player choice before proceeding. Turn 4 combines Background offers and final Attribute allocation; the completed build and first scene follow the final required choice directly.\n"
+      },
+      {
+        "new_start": 361175,
+        "before": "Require explicit confirmation before proceeding.\n",
+        "after": "Require the actual player selections before completing creation.\n"
+      },
+      {
+        "new_start": 364831,
+        "before": "## Combined preview\n",
+        "after": "## Combined result\n"
+      },
+      {
+        "new_start": 364851,
+        "before": "Before confirmation, show:\n",
+        "after": "Show offer effects and prices before selection. After the player selects or banks, apply those choices directly and show a compact result covering actual Attribute, Skill Evolution, Talent and milestone selections, points spent/banked, and changed attributes/resources/effects.\n"
+      },
+      {
+        "new_start": 365130,
+        "before": "- Selected Attribute Point change.\n- Selected Skill Evolution.\n- Selected Talent.\n- Selected free Hybrid Breakthrough (Class Breakthrough or Grand Signature), if applicable, identifying the ONE CB background-synergy slot.\n- Points spent and banked.\n- Final attributes and resources.\n- New abilities.\n- Changes to attacks, DCs and action economy.\n- Preserved cooldowns and charges.\n\n## Confirmation\n\nNo permanent choice applies until the player confirms.\n\nAfter confirmation:\n\n1. Apply selected purchases.\n2. Deduct the correct points.\n3. Preserve banked points.\n4. Preserve original rarity rolls and unchosen offers.\n5. Update abilities and derived values.\n6. Keep the exact frozen timestamp.\n7. Keep the world frozen until explicitly resumed.\n\nA player may confirm all choices, some choices, or only banking.\n\nConfirmation alone does not advance fictional time.\n",
+        "after": "Save resolved tracks together, preserving source rarities, original rolls and archives. Unresolved tracks remain pending. Once all current decisions are resolved, clear the freeze and continue the interrupted action sequence automatically. Respect an explicit player pause and stop at the next new consequential decision. No extra confirmation, approval button or resume prompt follows.\n"
+      },
+      {
+        "new_start": 384077,
+        "before": "**PROGRESSION:** Exactly five fresh independently rarity-rolled integrated Skill Evolution offers per level; five fresh independently rarity-rolled immediately eligible Talent Web offers plus optional keystones; every fourth level, five FIXED CLASS-GRADE Hybrid Breakthrough offers (3 Class Breakthroughs, exactly 1 of those 3 class/background, plus 2 pure-class Grand Signatures), with no independent milestone rarity roll. Preserve original source rarities, stage gates, transparent banking, archived offers, advancement freeze and separate authorization to resume.\n",
+        "after": "**PROGRESSION:** Exactly five fresh independently rarity-rolled integrated Skill Evolution offers per level; five fresh independently rarity-rolled immediately eligible Talent Web offers plus optional keystones; every fourth level, five FIXED CLASS-GRADE Hybrid Breakthrough offers (3 Class Breakthroughs, exactly 1 of those 3 class/background, plus 2 pure-class Grand Signatures), with no independent milestone rarity roll. Preserve original source rarities, stage gates, transparent banking, archived offers, advancement freeze and automatic continuation after pending advancement choices are resolved.\n"
+      },
+      {
+        "new_start": 401296,
+        "before": "**Step 13 — Validate the Turn 4 attribute allocation.** Total six starting Attribute Points, +1 score each, maximum score 9; prior pre-awakening LCK commitments count. Reject illegal over-allocation or retroactive Luck changes. After allocation, prepare a character preview, not an early Background board or gameplay action.\n",
+        "after": "**Step 13 — Validate the Turn 4 attribute allocation.** Total six starting Attribute Points, +1 score each, maximum score 9; prior pre-awakening LCK commitments count. Preserve actual choices and fixed Luck, then complete the build in the same response.\n"
+      },
+      {
+        "new_start": 401553,
+        "before": "**Step 14 — Accept optional character name and all equipment decisions.** Honor sixteen equipment slots and Version 1.0 Gear-First Inventory with GM-managed finite routine supplies and meaningful encumbrance; use detailed backpack pockets and quick references only for opt-in or legacy campaigns.\n",
+        "after": "**Step 14 — Use the supplied character name or existing label and generate the class-budgeted starting outfit under starting-gear.** Save four equipped items with useful tier-appropriate effects, essentials and one immutable receipt. Preserve sixteen slots and Gear-First Inventory.\n"
+      },
+      {
+        "new_start": 402059,
+        "before": "**Step 16 — Show complete final character preview. Wait for explicit confirmation.** No world time, attacks, purchases or adventuring actions occur during character creation.\n",
+        "after": "**Step 16 — Write and save Your story immediately from the actual chosen sources and public world.** Show the completed build in the dashboard without another confirmation request.\n"
+      },
+      {
+        "new_start": 402243,
+        "before": "**Step 17 — Conduct private Phase D campaign construction only after confirmation.** Establish background-relevant connection/advantage/opportunity, regional factions with independent goals, geography, meaningful quests, actual hostile stats and loot sources, personal ambitions, and campaign-local hidden Convergence/System truth. Respect previously previewed Layered Canon.\n",
+        "after": "**Step 17 — Conduct private Phase D campaign construction from the completed build in this same response.** Establish background connections, independent factions, geography, meaningful quests, precommitted hostiles/rewards and private Convergence truths, preserving public canon.\n"
+      },
+      {
+        "new_start": 403081,
+        "before": "**Step 20 — Wait for separate explicit ADVENTURE AUTHORIZATION.** The chosen opening becomes active only after authorization; no automatic beginning due to earlier character confirmation.\n",
+        "after": "**Step 20 — Save the completed character and opening together with begin_adventure=true.** Complete creation and open the first scene without character/start approval. Honor an explicit draft/pause request; wait only for the next genuine gameplay action.\n"
+      },
+      {
+        "new_start": 403606,
+        "before": "The original V3.5 class offer counts, resource formulas, rarity rolls and Luck for ordinarily eligible acquisitions, starting inventory, and non-auto-start guarantees remain preserved. The fixed-grade Hybrid Breakthrough exception is governed solely by Section 20. The changes are the mandatory world preview, independent class rolls, coherent character-connected campaign commitment, and separate gameplay authorization.\n",
+        "after": "Class offer counts, resource formulas and ordinary eligible rarity/Luck rolls remain preserved. Starting equipment uses the explicit starting-gear table. Final creation selections complete the build and open the scene directly, without follow-up confirmation gates.\n"
+      },
+      {
+        "new_start": 411885,
+        "before": "- Ask for explicit advancement confirmation.\n",
+        "after": "- Apply the player's advancement selections directly.\n"
+      },
+      {
+        "new_start": 414519,
+        "before": "27. No permanent choice is made without confirmation.\n",
+        "after": "27. Permanent build choices follow actual player selection without another confirmation.\n"
+      },
+      {
+        "new_start": 414887,
+        "before": "32. Hybrid Campaign Generation establishes the broad world before independent character rolls and fixes the background-connected opening only after character confirmation.\n",
+        "after": "32. Hybrid Campaign Generation establishes the broad world before independent character rolls and fixes the background-connected opening only after completion of the player's creation choices.\n"
+      },
+      {
+        "new_start": 419830,
+        "before": "Generate a coherent broad world preview and ask for pre-awakening Luck allocation IN CREATION TURN 1. After the player responds, generate five independently rarity-rolled Classes for selection in TURN 2. After the Class choice, display five Signatures and five Titles in TURN 3 and wait for two Signatures + Title/NONE. Only then offer five legal Backgrounds alongside remaining Attribute Points in TURN 4. Continue to character confirmation and a SEPARATE adventure authorization; do not start gameplay early, and never generate a routine downloadable save file.\n",
+        "after": "Generate a coherent broad world preview and ask for pre-awakening Luck allocation IN CREATION TURN 1. After the player responds, generate five independently rarity-rolled Classes for selection in TURN 2. After the Class choice, display five Signatures and five Titles in TURN 3 and wait for two Signatures + Title/NONE. Only then offer five legal Backgrounds alongside remaining Attribute Points in TURN 4. Complete the chosen build, Your story, starting outfit and first scene directly after final creation choices; respect an explicit draft/pause request, and never generate a routine downloadable save file.\n"
+      },
+      {
+        "new_start": 422848,
+        "before": "",
+        "after": "\n"
+      }
+    ],
+    "rule-hardener.txt": [
+      {
+        "new_start": 69,
+        "before": "Read this checklist fully, then read_rules(document=\"index\"). Full rules govern; honor custom forks. Fetch applicable sections through next_offset=null with the SAME section; this completes only that selection. Cache source_sha256-matched context; refresh changed/missing rules. `loading` governs full/offline audits. Disclose inaccessible required rules and pause the dependent decision.\n",
+        "after": "Read this checklist fully, then read_rules(document=\"index\"). Full rules govern; honor custom forks. Fetch needed sections through next_offset=null with the SAME section; only that selection is complete. Cache by source_sha256; refresh changed/missing rules. `loading` governs full/offline audits. Disclose inaccessible required rules and pause the dependent decision.\n"
+      },
+      {
+        "new_start": 472,
+        "before": "Read `creation-order`, `generation`, `utility`, `class-craft`, `reach`, Chapters 5-8 and the current creation stage's chapter (9 Signature, 10 Title, 11 Background). Preserve exactly four creation turns and all choice/confirmation gates; older five-phase wording does not add a turn. World Preview comes before Turn 1 Luck. Read `world-preview`, `story` and Chapter 4: introduce the actual region and its everyday life, environment and pressures, plus HOW and WHERE it connected to Earth. Keep public facts in World; preserve established geography and propose missing history for existing campaigns.\n",
+        "after": "Read `creation-order`, `generation`, `utility`, `class-craft`, `reach`, Chapters 5-8 and the current creation stage's chapter (9 Signature, 10 Title, 11 Background). Keep four creation-choice turns. Read direct-play: final choices commit the build, Your story and opening in one save with begin_adventure=true; no extra character/start approval. Honor an explicit draft/pause request. World Preview comes before Turn 1 Luck. Read `world-preview`, `story` and Chapter 4: introduce the actual region and its everyday life, environment and pressures, plus HOW and WHERE it connected to Earth. Keep public facts in World; preserve established geography and propose missing history for existing campaigns.\n"
+      },
+      {
+        "new_start": 1174,
+        "before": "Roll genuine independent rarity/Luck results through the authorized tools. Never fabricate, reroll or bias a result to satisfy a design preference. Keep published offers and selected powers. Check originality by trigger, operation, payoff and limits, not renamed elements. Rebuild repetitive mark-between-points and echo-repeat engines before publishing, at the SAME fixed rarity. Preserve solo usefulness, concrete class identity, tier power and acquisition counts. Keep the internal summoner-inclusion requirement private; never advertise or hint it in player-facing offers or generation commentary.\n",
+        "after": "Use genuine independent rarity/Luck rolls. Never fabricate, reroll or bias results. Preserve published offers/powers. Judge originality by trigger, operation, payoff and limits. Rebuild repetitive mark-between-points and echo-repeat engines before publishing, at the SAME fixed rarity. Preserve solo usefulness, concrete class identity, tier power and acquisition counts. Keep summoner-inclusion private, including generation commentary.\n"
+      },
+      {
+        "new_start": 1613,
+        "before": "Standard characters use STR, DEX, INT, CHA, LCK, HP and MP. Starting HP = 45 + 3 × STR; MP = 75 + 5 × INT before earned changes. Epic/Legendary class kits require Active, Passive, Reaction, Free Action and one class Utility; UNIQUE requires two distinct class Utilities. Class powers inherit class rarity. Independent Utilities use normal rarity/Luck and acquisition slots. Utility describes noncombat purpose and can be Active OR Passive. Reactions describe timing and can attack, disrupt or protect; preserve clear triggers, counterplay and the normal budget. Background modifies ONE actually selected eligible parent after its sources are locked; an Imprint or Evolution never becomes a second activation.\n",
+        "after": "Standard: STR, DEX, INT, CHA, LCK, HP, MP. Starting HP = 45 + 3 × STR; MP = 75 + 5 × INT before earned changes. Epic/Legendary class kits require Active, Passive, Reaction, Free Action and one class Utility; UNIQUE requires two distinct class Utilities. Class powers inherit class rarity. Independent Utilities use normal rarity/Luck and acquisition slots. Utility describes noncombat purpose and can be Active OR Passive. Reactions describe timing and can attack, disrupt or protect; preserve clear triggers, counterplay and the normal budget. Background modifies ONE actually owned parent; an Imprint/Evolution adds no separate activation.\n"
+      },
+      {
+        "new_start": 2258,
+        "before": "Read `story` and `dashboard-writing`: give powers a separate short italic flavor_text, never an extra effect. Maintain editable character.story_summary in Character & Progression from actual choices and public world facts. Preserve player-authored identity. Optional log reflections use pov and pov_source; mark unapproved GM thoughts **POV · draft**. Never dictate beliefs, memories or commitments. Apply the embedded no-ai-slop craft: specific imagery and actions, the player's voice, minimal editing, varied natural prose, no stock hype or repeated rhetorical formulas.\n",
+        "after": "Read `story` and `dashboard-writing`: give powers a separate short italic flavor_text, never an extra effect. Write editable character.story_summary immediately after final creation choices, from owned sources and public world facts. Preserve player-authored identity. Optional log reflections use pov and pov_source; mark unapproved GM thoughts **POV · draft**. Never dictate beliefs, memories or commitments. Use embedded no-ai-slop craft: concrete imagery/actions, player voice, minimal edits, varied prose, no stock hype/rhetorical formulas.\n"
+      },
+      {
+        "new_start": 2983,
+        "before": "Read relevant Chapters 12-16 and 29-30 for resources, checks, combat, conditions, rests, companions and fortune. Apply real action budgets, source ranges, movement, cover, durations, triggers, cooldowns and autonomous turns. Use descriptive reach in player text from the first power reveal; disclose measured source only on a direct request/audit. A reach label cannot extend a power or grant movement. A Reaction does not grant a free extra Action. Do not hide a knowably illegal target until after spending costs.\n",
+        "after": "Read 12-16/29-30 for resources/checks/combat/conditions/rests/companions/fortune. Apply real action budgets, source ranges, movement, cover, durations, triggers, cooldowns and autonomous turns. Use descriptive reach in player text from the first power reveal; disclose measured source only on a direct request/audit. A reach label cannot extend a power or grant movement. A Reaction does not grant a free extra Action. Do not hide a knowably illegal target until after spending costs.\n"
+      },
+      {
+        "new_start": 3759,
+        "before": "Read 17-22/37 for advancement: freeze clocks/hazards; preserve separate tracks, offer counts, genuine rolls, banking and explicit resume. Chapter 19: standalone owned passives are eligible evolution sources; dependent riders are not separate skills. Save upgrades nested inside the existing base ability, preserving prior children and combined Full rules. Never add an integrated rider to Passives; further evolutions target its base skill. Read 23-28 for gear/weight/loot/crafting/durability, 31/32/32A for options/quests/events. Preserve the two-decision ceiling; compress routine preparation for action-seeking players without inventing attacks.\n",
+        "after": "Read 17-22/37 for advancement: freeze clocks/hazards while choices are pending; preserve tracks, offer counts, rolls and banking. Selections commit directly; when resolved, clear the freeze and continue queued actions automatically, honoring a manual pause. Chapter 19: standalone owned passives are eligible evolution sources; dependent riders are not separate skills. Save upgrades nested inside the existing base ability, preserving prior children and combined Full rules. Never add an integrated rider to Passives; further evolutions target its base skill. Read starting-gear for the once-only class-budgeted outfitting draw: four equipped, functional tier-appropriate pieces plus essentials; record receipt and item_ids. Read 23-28 for gear/weight/loot/crafting/durability, 31/32/32A for options/quests/events. Preserve the two-decision ceiling; compress routine preparation for action-seeking players without inventing attacks.\n"
+      },
+      {
+        "new_start": 4694,
+        "before": "Read 40-42 for continuity. Distinguish proposed, narrated-unsaved and committed outcomes. Use current owned state/version, batch the authorized update and preserve retry safety. Restyling, inspection, glossary use, rule reads and mockups never advance time, roll, spend resources, confirm choices or mutate campaign state.\n",
+        "after": "Read 40-42 for continuity. Distinguish proposed, narrated-unsaved and committed outcomes. Use current owned state/version, batch the authorized update and preserve retry safety. Restyling/inspection/glossary/rule reads/mockups never advance time, roll, spend or mutate saves.\n"
+      },
+      {
+        "new_start": 5617,
+        "before": "Read `story-ui`: Intelligent UI is chat's story, inline glossary, colors, compact results and working choices. Styling never requests seven HUD chapters: keep them in the dashboard even when hidden/unavailable. A full chat sheet needs an explicit FULL HUD / full character sheet request, for that request only. Preserve creation/advancement offers and Skills' Overview / Full rules / Upgrades. Reuse the mounted dashboard; no extra routine render/read. All eleven glossary sections in 33 remain binding; 33/35/39 detail story styling, 38 the dashboard only. Cache current sections. Rarity hues/labels override category accents. No unsolicited images, raw code or fake controls. Unsupported interaction uses compact prose, numbered choices and honest definitions.\n",
+        "after": "Read `story-ui`: Intelligent UI is chat's story, inline glossary, colors, compact results and working choices. Styling never requests seven HUD chapters: keep them in the dashboard even when hidden/unavailable. Full chat sheets need explicit FULL HUD / full sheet requests, for that request only. Preserve creation/advancement offers and Skills' Overview / Full rules / Upgrades. Reuse the mounted dashboard; no extra routine render/read. All eleven glossary sections in 33 remain binding; 33/35/39 detail story styling, 38 the dashboard only. Cache current sections. Rarity hues/labels override category accents. No unsolicited images, raw code or fake controls. Unsupported interaction uses compact prose, numbered choices and honest definitions.\n"
+      },
+      {
+        "new_start": 7960,
+        "before": "",
+        "after": "\n"
+      }
+    ]
+  }
+}

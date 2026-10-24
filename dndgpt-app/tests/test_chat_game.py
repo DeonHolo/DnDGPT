@@ -249,7 +249,7 @@ def test_http_save_routes_scopes_and_recovery(web, tokens):
     assert web.post(path + "/chat-updates", json={**body, "expected_version": True}).status_code == 422
 
 
-def test_mcp_chat_tools_real_transport_scope_and_hidden_gate_token(web, tokens):
+def test_mcp_chat_tools_real_transport_scope_and_hidden_manual_pause_token(web, tokens):
     definitions = {item["name"]: item for item in rpc(web, "tools/list")["tools"]}
     assert {"create_chat_game", "save_chat_update", "get_chat_version", "roll_game_random", "get_game_roll"} <= definitions.keys()
     created = tool(web, "create_chat_game", {"name": "MCP disposable test", "action_id": "mcp-chat-create", "disposable": True})
@@ -265,8 +265,8 @@ def test_mcp_chat_tools_real_transport_scope_and_hidden_gate_token(web, tokens):
     forbidden = rpc(web, "tools/call", {"name": "get_chat_version", "arguments": {"campaign_id": state["id"], "version": 1}},
                     headers={"Authorization": "Bearer " + tokens("user-b")})
     assert forbidden["isError"] and forbidden["structuredContent"]["status"] == 404
-    proposed = tool(web, "propose_action", {"campaign_id": state["id"], "action_id": "mcp-confirm-chat", "expected_version": 2,
-                    "kind": "confirm_chat_character", "payload": {}})
+    proposed = tool(web, "propose_action", {"campaign_id": state["id"], "action_id": "mcp-manual-pause", "expected_version": 2,
+                    "kind": "pause", "payload": {}})
     token = proposed["_meta"]["approval_token"]
     assert token not in str(proposed["structuredContent"]) and token not in str(proposed["content"])
     dashboard = tool(web, "render_dashboard", {"campaign_id": state["id"]})

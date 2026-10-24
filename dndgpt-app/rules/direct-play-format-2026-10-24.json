@@ -1,0 +1,19 @@
+{
+  "id": "direct-play-format-2026-10-24",
+  "files": {
+    "rulebook-v1.0.txt": [
+      {
+        "new_start": 422848,
+        "before": "\n",
+        "after": ""
+      }
+    ],
+    "rule-hardener.txt": [
+      {
+        "new_start": 7960,
+        "before": "\n",
+        "after": ""
+      }
+    ]
+  }
+}

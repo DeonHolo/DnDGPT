@@ -110,7 +110,16 @@ def test_mcp_initialization_tools_and_ui_resource(web):
     assert resource["mimeType"] == "text/html;profile=mcp-app"
     assert resource["_meta"]["ui"]["csp"] == {"connectDomains": [], "resourceDomains": []}
     assert resource["_meta"]["openai/ui"] == {
-        "availableDisplayModes": ["inline", "fullscreen"], "preferredDisplayMode": "fullscreen"}
+        "availableDisplayModes": ["inline", "fullscreen"], "preferredDisplayMode": "inline"}
+    compatibility = rpc(web, "resources/read", {"uri": render["_meta"]["openai/outputTemplate"]})["contents"][0]
+    assert compatibility["mimeType"] == "text/html+skybridge"
+    assert compatibility["text"] == resource["text"]
+    assert compatibility["_meta"] == resource["_meta"]
+    for prefix, expected in [("v1.0", resource), ("compat", compatibility)]:
+        cached_uri = f"ui://dndgpt/dashboard-{prefix}-0123456789ab.html"
+        cached = rpc(web, "resources/read", {"uri": cached_uri})["contents"][0]
+        assert cached["uri"] == cached_uri and cached["mimeType"] == expected["mimeType"]
+        assert cached["text"] == expected["text"] and cached["_meta"] == expected["_meta"]
     assert resource["text"].count('data-panel="') == 7
     assert "ui/message" in resource["text"]
 

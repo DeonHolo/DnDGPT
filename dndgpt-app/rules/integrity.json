@@ -1,9 +1,9 @@
 {
   "rulebook-v1.0.txt": {
     "original_sha256": "fc1cd1ed39a9fc35961d0d1e9a5feb3035015339d435c6a3af80a3515960597b",
-    "sha256": "d92b46f923615561a8506ba44f9c556f8ea798f61823882f7175879407ba83a8",
+    "sha256": "9fae3b9973e6a5d4a00ef2e46b2dba39f390792655a57dbe9e69e0ac424e30a8",
     "original_bytes": 324754,
-    "bytes": 418164,
+    "bytes": 422968,
     "replacements": [
       [
         "V4.2",
@@ -174,14 +174,32 @@
         "source": "passive-evolution-placement-2026-10-23.json",
         "before_sha256": "e722dff4898d0287d72e64c32406cd28c24ad893f65ffecf9ed870778eacc4a8",
         "after_sha256": "d92b46f923615561a8506ba44f9c556f8ea798f61823882f7175879407ba83a8"
+      },
+      {
+        "id": "direct-play-starting-equipment-2026-10-24",
+        "source": "direct-play-starting-equipment-2026-10-24.json",
+        "before_sha256": "d92b46f923615561a8506ba44f9c556f8ea798f61823882f7175879407ba83a8",
+        "after_sha256": "e9a57c458f46197d962fb45df13de6a54e803a9f62ec6a021ce52febeec5f27d"
+      },
+      {
+        "id": "direct-play-format-2026-10-24",
+        "source": "direct-play-format-2026-10-24.json",
+        "before_sha256": "e9a57c458f46197d962fb45df13de6a54e803a9f62ec6a021ce52febeec5f27d",
+        "after_sha256": "af3fe51aa657b85e3926765b50e04be0d8d059a8027f15a8279fa2e54683e84b"
+      },
+      {
+        "id": "direct-play-consistency-2026-10-24",
+        "source": "direct-play-consistency-2026-10-24.json",
+        "before_sha256": "af3fe51aa657b85e3926765b50e04be0d8d059a8027f15a8279fa2e54683e84b",
+        "after_sha256": "9fae3b9973e6a5d4a00ef2e46b2dba39f390792655a57dbe9e69e0ac424e30a8"
       }
     ]
   },
   "rule-hardener.txt": {
     "original_sha256": "bc21947f299ae37dc306581aa7110231809140c332ed4e8b1ceccbb86cbce8da",
-    "sha256": "4d68f898f5adc0a1bf00654b5127be04449eb7a24541126aa69408780e262b0d",
+    "sha256": "6c8d954a0ea8aed2bc825d2efa227d5a52a9e8cd4cbfb029f771db87323e4d82",
     "original_bytes": 10370,
-    "bytes": 7944,
+    "bytes": 7960,
     "replacements": [
       [
         "V4.2-R1",
@@ -330,6 +348,18 @@
         "source": "passive-evolution-placement-2026-10-23.json",
         "before_sha256": "2da33b828c98b2a44fe6f1e51752058519ac223f0a099df6703dd1ed09133098",
         "after_sha256": "4d68f898f5adc0a1bf00654b5127be04449eb7a24541126aa69408780e262b0d"
+      },
+      {
+        "id": "direct-play-starting-equipment-2026-10-24",
+        "source": "direct-play-starting-equipment-2026-10-24.json",
+        "before_sha256": "4d68f898f5adc0a1bf00654b5127be04449eb7a24541126aa69408780e262b0d",
+        "after_sha256": "7f3cebd92ada3b2306448a940ddbe4ba11a3c651a2fbbc35dac88c7468c28ca5"
+      },
+      {
+        "id": "direct-play-format-2026-10-24",
+        "source": "direct-play-format-2026-10-24.json",
+        "before_sha256": "7f3cebd92ada3b2306448a940ddbe4ba11a3c651a2fbbc35dac88c7468c28ca5",
+        "after_sha256": "6c8d954a0ea8aed2bc825d2efa227d5a52a9e8cd4cbfb029f771db87323e4d82"
       }
     ]
   }

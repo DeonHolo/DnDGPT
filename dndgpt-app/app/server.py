@@ -40,6 +40,7 @@ class ChatUpdate(BaseModel):
     expected_version: StrictInt = Field(ge=1)
     summary: str = Field(min_length=1, max_length=2000)
     changes: dict
+    begin_adventure: bool = False
 
 
 class Confirmation(BaseModel):

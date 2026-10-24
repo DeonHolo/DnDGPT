@@ -141,7 +141,7 @@ def merge_world(before, patch):
     return result
 
 
-def apply_changes(state, changes, *, correction=False):
+def apply_changes(state, changes, *, correction=False, completing=False):
     validate_changes(changes)
     projected = copy.deepcopy(state)
     for key in TEXT_FIELDS | OBJECT_FIELDS | {"fictional_time_seconds", "level_up_freeze"}:
@@ -189,19 +189,58 @@ def apply_changes(state, changes, *, correction=False):
     if any(item is not None and item not in inventory for item in projected["equipment"].values()):
         fail(422, "invalid_chat_update", "Equipped items must exist in inventory")
     if not correction:
-        if state["level_up_freeze"] and projected["fictional_time_seconds"] != state["fictional_time_seconds"]:
+        if state["level_up_freeze"] and projected["level_up_freeze"] and projected["fictional_time_seconds"] != state["fictional_time_seconds"]:
             fail(423, "advancement_frozen", "Fictional time is frozen during advancement")
         if projected["fictional_time_seconds"] < state["fictional_time_seconds"]:
             fail(422, "time_reversal", "Use an approved correction to move fictional time backwards")
         if state["phase"] != "adventure" and projected["fictional_time_seconds"] != 0:
             fail(423, "adventure_not_authorized", "No fictional time before adventure authorization")
-        if state["phase"] == "ready" and changes.keys() - {"opening_preview", "world", "notes", "current_location"}:
+        if state["phase"] == "ready" and not completing and changes.keys() - {"opening_preview", "world", "notes", "current_location"}:
             fail(423, "character_confirmed", "Review a correction to change a confirmed character before play")
         if state["phase"] == "adventure" and state["paused"]:
             fail(423, "paused", "Resume explicitly or review a correction while paused")
     if len(canonical(projected).encode()) > 2000000:
         fail(422, "invalid_chat_update", "Saved record exceeds 2000000 bytes")
     return projected
+
+
+def complete_creation(state, outfit_receipt=None):
+    """The player's completed creation choices commit directly, without another approval."""
+    if state["phase"] not in {"character_draft", "ready"}:
+        fail(409, "wrong_phase", "Creation is already complete")
+    ch = state["character"]
+    if not ch["name"].strip() or not ch["class_name"].strip() or ch["class_name"] == "Unassigned":
+        fail(422, "incomplete_character", "Save the chosen name and class")
+    if not str(ch.get("background") or "").strip():
+        fail(422, "incomplete_character", "Save the chosen background")
+    if not ch.get("story_summary", "").strip():
+        fail(422, "incomplete_story", "Write Your story from the selected build and public world facts in this save")
+    if not state["opening_preview"].strip():
+        fail(422, "opening_required", "Prepare the first scene in this save")
+    if uses_standard_rules(state):
+        missing = class_kit_check(state)["missing"]
+        if missing:
+            fail(422, "incomplete_class_kit", "Complete the class kit: " + ", ".join(missing))
+        allocation = state.get("creation", {}).get("outfitting", {})
+        if type(allocation) is not dict:
+            fail(422, "starting_equipment_required", "Save the outfitting allocation as an object")
+        plans = [r["result"] for r in (outfit_receipt or {}).get("results", []) if r["kind"] == "outfitting"]
+        if not plans or plans[0]["class_rarity"] != ch["rarity"]:
+            fail(422, "starting_equipment_required", "Draw the class-budgeted starting outfit once before completing creation")
+        ids = allocation.get("item_ids", [])
+        items = {item["id"]: item for item in state["inventory"]}
+        if (type(ids) is not list or len(ids) != 4 or any(type(key) is not str for key in ids)
+                or len(set(ids)) != 4):
+            fail(422, "starting_equipment_required", "Save four distinct starting equipment IDs under creation.outfitting.item_ids")
+        for key, planned in zip(ids, plans[0]["items"]):
+            item = items.get(key, {})
+            if (item.get("rarity") != planned["rarity"] or not str(item.get("name", "")).strip()
+                    or key not in state["equipment"].values()
+                    or not any(item.get(field) for field in ("effects", "stats", "mechanics", "mechanics_display"))):
+                fail(422, "starting_equipment_required", "Equip each planned item at its recorded tier with its actual effects")
+    if state["level_up_freeze"]:
+        fail(423, "advancement_frozen", "Resolve pending advancement choices")
+    state["phase"], state["paused"] = "adventure", False
 
 
 def apply_lifecycle(state, kind, payload):
@@ -295,14 +334,19 @@ class ChatGame:
                                                "request": request, "result": canonical(result)})
             return result
 
-    def update(self, owner, campaign_id, action_id, expected_version, summary, changes):
+    def update(self, owner, campaign_id, action_id, expected_version, summary, changes, begin_adventure=False):
         identifier(action_id, "action_id")
         number(expected_version, "expected_version", 1)
         text(summary, "summary", 2000)
         if not summary.strip():
             fail(422, "invalid_chat_update", "A save needs a summary")
         validate_changes(changes)
+        if type(begin_adventure) is not bool:
+            fail(422, "invalid_chat_update", "begin_adventure must be boolean")
         request = canonical({"expected_version": expected_version, "summary": summary, "changes": changes})
+        if begin_adventure:
+            request = canonical({"expected_version": expected_version, "summary": summary,
+                                 "changes": changes, "begin_adventure": True})
         with self.store.transaction() as db:
             state = self.engine._get(db, owner, campaign_id)
             if state.get("mode") != "chat":
@@ -314,7 +358,13 @@ class ChatGame:
                 return json.loads(prior["result"])
             if state["version"] != expected_version:
                 fail(409, "version_conflict", f"Current version is {state['version']}; read before saving again")
-            state = apply_changes(state, changes)
+            if begin_adventure and state["phase"] not in {"character_draft", "ready"}:
+                fail(409, "wrong_phase", "Creation is already complete")
+            state = apply_changes(state, changes, completing=begin_adventure)
+            if begin_adventure:
+                receipt = records.get(db, "game_rolls_v1", {"owner": owner,
+                                      "action_id": "starting-outfit-" + campaign_id})
+                complete_creation(state, json.loads(receipt["result"]) if receipt else None)
             state["version"] += 1
             event = self.engine._append(db, state, {"kind": "chat_update", "action_id": action_id, "summary": summary})
             records.update(db, "campaigns_v1", {"id": campaign_id, "owner": owner},

@@ -1,5 +1,7 @@
 # Development handoff
 
+Current flow: final creation choices commit the build, Your story, class-budgeted starting outfit and opening in one save_chat_update(begin_adventure=true), without character/start approval. Advancement selections/banking apply directly; resolve all pending tracks, clear the freeze and continue queued actions automatically. Manual pauses, corrections, deletion and restoration retain their controls. The standard MCP Apps resource and ChatGPT compatibility resource share one dashboard; inline is the safe launch default. Native phone acceptance must be reported separately from local mobile bridge checks. Sovereign System work is deferred until explicitly resumed.
+
 Source checkpoint: application version 1.0.22, rules edition 1.0; plugin package 1.0.27. Hosted deployment and installed-package acceptance are recorded separately in ROADMAP.md.
 
 The `polished-intelligent-ui-2026-10-19.json` revision adds the native event/action card contract to both complete books: genuine clickable choices, original non-emoji icons, crisp hierarchy, meaningful accessible accents and concise consequential metadata. Presentation-only requests never replay actions or change saved outcomes. Native styling remains host-controlled; preserve functional fallbacks and all offer counts, confirmation gates and mechanics.

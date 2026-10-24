@@ -80,7 +80,7 @@ Click **Try in chat** and use regular **Chat** mode. DnDGPT provides the complet
 
 Send this to begin:
 
-> Be my DnDGPT GM. Read the complete Rule Hardener and rule index, then load the relevant rulebook sections for each stage. Reuse current rules already in context. Begin character creation and open my campaign dashboard. Save our progress as we play. Ask for character confirmation and starting the adventure separately.
+> Be my DnDGPT GM. Read the complete Rule Hardener and rule index, then load the relevant rulebook sections for each stage. Reuse current rules already in context. Begin character creation and open my campaign dashboard. Save our progress as we play. After my final creation choices, write Your story, equip the class-budgeted starting outfit and open the first scene. Apply my level-up choices directly and continue when they are resolved.
 
 After a saved choice, you can say **“Open my campaign dashboard.”** Updates appear when ChatGPT saves the result; narration alone does not update it.
 

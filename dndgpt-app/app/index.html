@@ -998,7 +998,7 @@ function renderCampaign(next){
   const storyCopy=element("div",undefined,"story-copy");story.append(storyCopy);
   if(typeof c.story_summary==="string"&&c.story_summary.trim()){
     for(const text of c.story_summary.split(/\n\s*\n/).filter(text=>text.trim()))storyCopy.append(element("p",text));
-  }else storyCopy.append(element("p","Ask your GM to draft your story from your chosen class and the world around you. You can write or revise it in chat.","muted"));
+  }else storyCopy.append(element("p",next.phase==="character_draft"?"Your story takes shape from your chosen class, title, background and world as creation finishes.":"Your story has not been recorded yet. You can write or revise it in chat.","muted"));
   if(c.title)paragraph($("character"),"Title · "+c.title);
   if(c.background){
     if(typeof c.background==="string"&&c.background.length<160)paragraph($("character"),"Background · "+c.background);
@@ -1021,8 +1021,8 @@ function renderCampaign(next){
   $("character").append(progression);
   const unspent=[["Attribute",c.attribute_points],["Skill",c.skill_points],["Talent",c.talent_points]].filter(([,value])=>value>0);
   if(unspent.length)paragraph($("character"),"Unspent points · "+unspent.map(([label,value])=>label+" "+value).join(" · "));
-  if(next.phase==="character_draft")paragraph($("character"),"Character draft · review your choices in chat, then confirm here. The adventure stays paused.","pending");
-  if(next.phase==="ready")paragraph($("character"),"Character confirmed · review the opening in chat. Starting the adventure needs your separate approval.","pending");
+  if(next.phase==="character_draft")paragraph($("character"),"Character draft · finish your choices in chat. Your GM saves your story, equipment and first scene together.","pending");
+  if(next.phase==="ready")paragraph($("character"),"Character prepared · your GM can save the completed build and first scene directly from chat.","pending");
   if(next.level_up_freeze)paragraph($("character"),next.mode==="chat"?"Advancement choices are pending. Resolve them with your Game Master in chat before continuing.":"Advancement is frozen. Full offer generation and spending across all tracks remain pending implementation. Attribute previews do not resume play.","pending");
   renderSkills(next.abilities||[]);
   paragraph($("health"),"DEF "+c.def+" · "+(c.movement_mm===0?"Movement currently unavailable.":"One normal move per round; Dash uses your Action. Your GM checks the legal route."));
@@ -1059,6 +1059,7 @@ function receive(result,verified=false){
 function approvalExpired(approval){return Boolean(approval&&(approval.expired||(approval.expires_at&&Date.now()>approval.expires_at*1000)))}
 function toolMetadata(metadata){return metadata?.mcp_tool_result?._meta||metadata||{}}
 function showApproval(approval){
+  if(state?.mode==="chat"&&["confirm_chat_character","start_chat_adventure"].includes(approval?.proposal.kind))approval=null;
   if(approval&&(approval.proposal.campaign_id!==state?.id||approval.proposal.expected_version!==state?.version))return;
   if(approval?.proposal.id===dismissedProposal)return;
   pending=approval;
@@ -1200,7 +1201,7 @@ $("confirm").onclick=async()=>{
     await callTool("execute_confirmed_action",{proposal_id:approval.proposal.id,approval_token:approval.approval_token});
     showApproval(null);notice("Action committed.");
     if(approval.proposal.kind==="correct_chat_state")return;
-    const followup=state?.disposable?"Disposable development acceptance only. Read this test record and report its current phase, paused state and version. No further writes, story generation or rolls.":approval.proposal.kind==="confirm_chat_character"?"My character is confirmed. Read saved state. If an opening_preview is already saved, present it; otherwise prepare and save it. Do not start the adventure; wait for my separate authorization.":approval.proposal.kind==="start_chat_adventure"?"I approved starting this adventure. Read saved state and begin the opening scene. Save any changes once through save_chat_update.":"Describe the already committed result of proposal "+approval.proposal.id+". Read current state; do not execute or reroll it again.";
+    const followup=state?.disposable?"Disposable development acceptance only. Read this test record and report its current phase, paused state and version. No further writes, story generation or rolls.":"Describe the already committed result of proposal "+approval.proposal.id+". Read current state; do not execute or reroll it again.";
     await sendPrompt(followup);
   }catch(error){
     if(error.code==="proposal_expired"){showApproval({...approval,expired:true});await refresh().catch(()=>{});notice("This review expired. Review again before confirming.")}
@@ -1215,7 +1216,9 @@ new ResizeObserver(()=>{if(standard)notify("ui/notifications/size-changed",{heig
 /* campaign tools script */
 (async()=>{
   renderChoices();restorePreferences();
-  if(window.parent!==window){
+  if(window.openai?.callTool){
+    $("connection").textContent="ChatGPT compatibility bridge connected.";
+  }else if(window.parent!==window){
     try{
       const init=await rpc("ui/initialize",{protocolVersion:"2026-01-26",appInfo:{name:"DnDGPT",version:uiVersion},appCapabilities:{availableDisplayModes:["inline","pip","fullscreen"]}});
       if(init.protocolVersion!=="2026-01-26")throw new Error("Unsupported MCP Apps protocol version");

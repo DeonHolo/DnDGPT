@@ -1,0 +1,32 @@
+{
+  "id": "direct-play-consistency-2026-10-24",
+  "files": {
+    "rulebook-v1.0.txt": [
+      {
+        "new_start": 57774,
+        "before": "**This edition was produced by editing the supplied complete V4.0 source, not by drafting a replacement from memory.** Sections not explicitly amended retain their original mechanics and force. The expanded sections below strengthen what was missing; they do not revoke established rights, earned powers, independently rolled rarity, equipment slots, summon diversity, two-decision obstacle ceiling, Living-World Hybrid quest commitments, solo viability, Cinematic Hybrid position tracking, or the separate gameplay authorization requirement.\n",
+        "after": "**This edition was produced by editing the supplied complete V4.0 source, not by drafting a replacement from memory.** Sections not explicitly amended retain their original mechanics and force. The expanded sections below strengthen what was missing; they do not revoke established rights, earned powers, independently rolled rarity, equipment slots, summon diversity, two-decision obstacle ceiling, Living-World Hybrid quest commitments, solo viability, Cinematic Hybrid position tracking, or actual player creation selections and explicit manual pauses.\n"
+      },
+      {
+        "new_start": 81847,
+        "before": "Before Phase D authorization, verify:\n",
+        "after": "Before the Phase D campaign construction is complete, verify:\n"
+      },
+      {
+        "new_start": 311293,
+        "before": "Run the event trigger check when the player **actually crosses a consequential travel/exploration boundary** or undertakes a substantial time-consuming activity where an unexpected event is physically plausible. Examples: beginning a meaningful wilderness travel leg; entering a threatened frontier sector; making camp in unstable territory; a substantial interval exploring an active ruin; or crossing a politically contested route. Do NOT roll once per message, menu choice, ordinary purchase, every combat round, duplicate look at a clue, HUD inspection, level-up freeze, advance-confirmation click, or scene narration that consumes no game time. Precommit and record a unique transition ID; it gets at most one event trigger check. After an event activates, resolve or close that event before another check can interrupt it. Do not farm retries by splitting one trip into repeated tiny chat turns.\n",
+        "after": "Run the event trigger check when the player **actually crosses a consequential travel/exploration boundary** or undertakes a substantial time-consuming activity where an unexpected event is physically plausible. Examples: beginning a meaningful wilderness travel leg; entering a threatened frontier sector; making camp in unstable territory; a substantial interval exploring an active ruin; or crossing a politically contested route. Do NOT roll once per message, menu choice, ordinary purchase, every combat round, duplicate look at a clue, HUD inspection, level-up freeze, advancement selection, or scene narration that consumes no game time. Precommit and record a unique transition ID; it gets at most one event trigger check. After an event activates, resolve or close that event before another check can interrupt it. Do not farm retries by splitting one trip into repeated tiny chat turns.\n"
+      },
+      {
+        "new_start": 361273,
+        "before": "Do not move into adventure gameplay automatically.\n",
+        "after": "After the player's final creation selections, save the completed build and opening directly; honor an explicit draft/pause request.\n"
+      },
+      {
+        "new_start": 390301,
+        "before": "In addition to every existing mandatory field above, include: originating edition; chosen world-preview era and region; shared Layered Canon obligations; campaign-local maps, routes and world-history commitment; regional factions with assets, knowledge, supply limits, private plans and clocks; privately committed true origin of Convergence/System and discoverable evidence; player-visible canon versus GM-secret canon; relevant dungeon/ecological sites; quest payoff audits and chapter ending conditions; available adventure opportunities and player-defined ambitions; actual prepared enemy/boss statistics, phase and resistance pools; recoverable physical loot, eligible random rolls, treasure and fixed rewards; current combat exact positions, named zone connections, line of sight, cover and area effects; active proximity information; unresolved spatial audit issues; active independent talent powers and their cooldowns; integrated Skill Evolution effects within owned source abilities; Hybrid Talent Web eligible keystones and synergy prerequisites; and whether adventure authorization or advancement/resumption authorization is still pending.\n",
+        "after": "In addition to every existing mandatory field above, include: originating edition; chosen world-preview era and region; shared Layered Canon obligations; campaign-local maps, routes and world-history commitment; regional factions with assets, knowledge, supply limits, private plans and clocks; privately committed true origin of Convergence/System and discoverable evidence; player-visible canon versus GM-secret canon; relevant dungeon/ecological sites; quest payoff audits and chapter ending conditions; available adventure opportunities and player-defined ambitions; actual prepared enemy/boss statistics, phase and resistance pools; recoverable physical loot, eligible random rolls, treasure and fixed rewards; current combat exact positions, named zone connections, line of sight, cover and area effects; active proximity information; unresolved spatial audit issues; active independent talent powers and their cooldowns; integrated Skill Evolution effects within owned source abilities; Hybrid Talent Web eligible keystones and synergy prerequisites; and whether actual creation/advancement choices remain pending or the player explicitly paused play.\n"
+      }
+    ]
+  }
+}

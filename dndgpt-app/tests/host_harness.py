@@ -108,6 +108,26 @@ def test_player_view():
     return FileResponse(HERE / "player_view.html")
 
 
+@app.get("/test-legacy-widget")
+def test_legacy_widget():
+    """Phone-style bridge only: no standard ui/initialize response is available."""
+    from app.presentation import dashboard_html
+    shim = """<script>
+    window.legacyCalls=[];
+    window.openai={displayMode:'inline',widgetState:{},
+      callTool:async(name,args)=>{
+        window.legacyCalls.push(name);
+        const response=await fetch('/test-rpc',{method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({jsonrpc:'2.0',id:Date.now(),method:'tools/call',params:{name,arguments:args}})});
+        const data=await response.json();if(data.error)throw Error(data.error.message);return data.result;
+      },setWidgetState:value=>{window.openai.widgetState=value},
+      sendFollowUpMessage:async({prompt})=>{window.lastFixturePrompt=prompt;return {}},
+      requestDisplayMode:async({mode})=>{window.openai.displayMode=mode;return {mode}}
+    };
+    </script>"""
+    return HTMLResponse(dashboard_html().replace("<head>", "<head>" + shim, 1))
+
+
 @app.get("/test-approvals")
 def test_approvals():
     return FileResponse(HERE / "approvals.html")

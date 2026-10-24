@@ -528,6 +528,8 @@ class Engine:
                                 order="created_at", descending=True, limit=10)
         for row in rows:
             preview = json.loads(row["preview"])
+            if state.get("mode") == "chat" and preview["kind"] in {"confirm_chat_character", "start_chat_adventure"}:
+                continue
             if preview["expected_version"] == state["version"]:
                 expires_at = row["created_at"] + 900
                 approval = {"proposal": preview, "expires_at": expires_at, "expired": time.time() > expires_at}

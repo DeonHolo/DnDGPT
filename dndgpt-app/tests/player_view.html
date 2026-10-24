@@ -126,7 +126,7 @@ document.getElementById('run').onclick=async()=>{
   revised.version+=1;revised.world_log[0].pov_source='player';w.renderCampaign(structuredClone(revised));
   assert(d.querySelector('.pov-label').textContent==='POV','Player reflection mislabeled');
   revised.version+=1;revised.character.story_summary='';w.renderCampaign(structuredClone(revised));
-  assert(d.querySelector('.character-story').textContent.includes('Ask your GM'),'Missing portrait was invented');
+  assert(d.querySelector('.character-story p.muted')&&!d.querySelector('.character-story').textContent.includes('My own story.'),'Missing portrait was invented');
  });
  await test('Layouts hot-swap the same controls and preserve the current view and draft',()=>{
   d.getElementById('nav-skills').click();d.getElementById('skill-tab-passives').click();

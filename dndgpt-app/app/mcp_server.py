@@ -1,6 +1,7 @@
 """Official MCP SDK transport and MCP Apps resource registration."""
 import hashlib
 import json
+import re
 from pathlib import Path
 from typing import Literal
 from urllib.parse import urlsplit
@@ -21,6 +22,7 @@ from .rule_sections import sections as rule_sections, index_text as rule_index
 
 HTML_PATH = Path(__file__).with_name("index.html")
 MIME_TYPE = "text/html;profile=mcp-app"
+LEGACY_MIME_TYPE = "text/html+skybridge"
 RULE_FILES = {"rulebook": "rulebook-v1.0.txt", "hardener": "rule-hardener.txt"}
 
 
@@ -56,6 +58,7 @@ def build_mcp(engine, config, verifier, creation_repository=None):
     html = load_dashboard_html()
     digest = hashlib.sha256(html.encode()).hexdigest()[:12]
     resource_uri = f"ui://dndgpt/dashboard-v1.0-{digest}.html"
+    legacy_uri = f"ui://dndgpt/dashboard-compat-{digest}.html"
     creation_html = creation_uri = None
     if creation_repository is not None:
         from .creation_view import html as creation_view
@@ -149,7 +152,8 @@ def build_mcp(engine, config, verifier, creation_repository=None):
 
     @server.tool(annotations=write, meta=metadata(WRITE_SCOPE))
     def save_chat_update(campaign_id: str, action_id: str, expected_version: int,
-                         summary: str, changes: dict, result_view: Literal["full", "turn"] = "full") -> CallToolResult:
+                         summary: str, changes: dict, result_view: Literal["full", "turn"] = "full",
+                         begin_adventure: bool = False) -> CallToolResult:
         """Save ONE batched GM update to a fresh chat-led game; ChatGPT adjudicates the rules.
         Use the latest successfully returned version already in context; read again if missing,
         uncertain or conflicted. Use full for story/history; turn only when the needed context is present.
@@ -172,12 +176,19 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         text (600 characters each) and unresolved_threads/npc_commitments (at most 8 strings of 240).
         Update it in this SAME save after a meaningful change; never invent a thought or future outcome.
         Never set mode/phase/paused/version/authorization. Draft preparation is allowed before play;
-        confirm_chat_character and start_chat_adventure are separate propose_action/app approvals.
+        After the player's final Background/attribute/name choices, write character.story_summary,
+        starting equipment and opening_preview in this SAME save with begin_adventure=true. This
+        completes creation and opens the first scene directly, with no extra confirmation or button.
+        Save creation.outfitting.item_ids as the four equipped inventory IDs in drawn role order;
+        their rarities and actual effects must match the recorded starting-outfit receipt.
+        Preserve a player-requested draft/pause. Never infer unchosen build options or opening actions.
+        Advancement selections/banking apply immediately; clear level_up_freeze once all pending
+        tracks are resolved, then continue already ordered actions without confirmation/resume prompts.
         Paused games require explicit resume or approved correct_chat_state. Reuse EXACT arguments
         and action_id after timeout; never double-apply a reward. A 409 needs a fresh read and review.
         """
         return invoke(lambda owner: campaign_view(chat_game.update(owner, campaign_id, action_id,
-                      expected_version, summary, changes), result_view), True)
+                                    expected_version, summary, changes, begin_adventure), result_view), True)
 
     @server.tool(annotations=read, meta=metadata())
     def get_chat_version(campaign_id: str, version: int) -> CallToolResult:
@@ -200,6 +211,10 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         Include campaign_id when this roll belongs to a saved campaign so its receipt is removed
         with that campaign; omit it only for standalone rolls.
         Raw rarity rolls stay hidden by default. No per-roll dashboard confirmation is required.
+        For NEW starting equipment, use kind=outfitting with class_rarity equal to the saved class,
+        campaign_id set and action_id='starting-outfit-'+campaign_id. One immutable four-item
+        budgeted draw per campaign; recover it with get_game_roll rather than drawing again.
+        Design full item effects at the returned tiers and save receipt under creation.outfitting.
         """
         return invoke(lambda owner: game_random.roll(owner, action_id, rolls, campaign_id), True)
 
@@ -292,14 +307,18 @@ def build_mcp(engine, config, verifier, creation_repository=None):
     @server.tool(annotations=write, meta=metadata(WRITE_SCOPE))
     def propose_action(campaign_id: str, action_id: str, expected_version: int,
                        kind: str, payload: dict) -> CallToolResult:
-        """Preview an app-confirmed action without committing. Chat-led games support
-        confirm_chat_character{}, start_chat_adventure{} (after an opening_preview), pause{}, resume{},
-        and correct_chat_state{changes,reason}. Confirming a character never starts an adventure.
+        """Preview a manual pause{}, resume{} or correct_chat_state{changes,reason} for app approval.
+        Creation completes through save_chat_update(begin_adventure=true), without an approval.
+        Advancement choices apply through save_chat_update and resume automatically when resolved.
         Routine chat-led turns use save_chat_update without per-turn approval. Legacy engine commands
         remain sandbox-only. Present the exact proposal for user approval in render_dashboard.
         """
-        return invoke(lambda owner: engine.propose_action(owner, campaign_id, action_id,
-                                                          expected_version, kind, payload), True)
+        def propose(owner):
+            if kind in {"confirm_chat_character", "start_chat_adventure"}:
+                raise EngineError(422, "creation_approval_retired",
+                                  "Save the completed character, Your story and opening with begin_adventure=true; no approval")
+            return engine.propose_action(owner, campaign_id, action_id, expected_version, kind, payload)
+        return invoke(propose, True)
 
     @server.tool(annotations=write, meta=metadata(WRITE_SCOPE))
     def roll_dice(campaign_id: str, action_id: str, expected_version: int,
@@ -328,7 +347,7 @@ def build_mcp(engine, config, verifier, creation_repository=None):
 
     render_meta = metadata()
     render_meta["ui"]["resourceUri"] = resource_uri
-    render_meta["openai/outputTemplate"] = resource_uri
+    render_meta["openai/outputTemplate"] = legacy_uri
     render_meta["openai/ui"] = {"entrypoints": [{"type": "thread"}]}
 
     @server.tool(title="Campaign dashboard", annotations=read, meta=render_meta)
@@ -340,7 +359,7 @@ def build_mcp(engine, config, verifier, creation_repository=None):
 
     ui_meta = {"ui": {"prefersBorder": True, "csp": {"connectDomains": [], "resourceDomains": []}},
                "openai/ui": {"availableDisplayModes": ["inline", "fullscreen"],
-                             "preferredDisplayMode": "fullscreen"},
+                             "preferredDisplayMode": "inline"},
                "openai/widgetDescription": "Seven RPG chapters with navigation summaries; action choices send chat follow-ups.",
                "openai/widgetPrefersBorder": True,
                "openai/widgetCSP": {"connect_domains": [], "resource_domains": []}}
@@ -349,11 +368,16 @@ def build_mcp(engine, config, verifier, creation_repository=None):
     def dashboard_html() -> str:
         return html
 
-    resources = {resource_uri: (html, ui_meta)}
+    @server.resource(legacy_uri, mime_type=LEGACY_MIME_TYPE, meta=ui_meta)
+    def dashboard_compatibility_html() -> str:
+        return html
+
+    resources = {resource_uri: (html, ui_meta, MIME_TYPE),
+                 legacy_uri: (html, ui_meta, LEGACY_MIME_TYPE)}
     if creation_uri is not None:
         creation_meta = {**ui_meta, "openai/widgetDescription":
                          "Saved character choices, full source details and separate character/adventure approvals. Development preview."}
-        resources[creation_uri] = (creation_html, creation_meta)
+        resources[creation_uri] = (creation_html, creation_meta, MIME_TYPE)
 
         @server.resource(creation_uri, mime_type=MIME_TYPE, meta=creation_meta)
         def creation_resource() -> str:
@@ -363,11 +387,16 @@ def build_mcp(engine, config, verifier, creation_repository=None):
     # the SDK's ReadResourceResult directly so hosts receive the actual CSP.
     async def read_resource(request):
         uri = str(request.params.uri)
-        if uri not in resources:
+        if uri in resources:
+            content, content_meta, mime_type = resources[uri]
+        elif re.fullmatch(r"ui://dndgpt/dashboard-(?:v1\.0|compat)-[0-9a-f]{12}\.html", uri):
+            # A cached tool catalog may still reference a previous deployment's hash.
+            content, content_meta = html, ui_meta
+            mime_type = LEGACY_MIME_TYPE if "/dashboard-compat-" in uri else MIME_TYPE
+        else:
             raise ValueError("Unknown UI resource")
-        content, content_meta = resources[uri]
         return ServerResult(ReadResourceResult(contents=[TextResourceContents(
-            uri=uri, mimeType=MIME_TYPE, text=content, _meta=content_meta)]))
+            uri=uri, mimeType=mime_type, text=content, _meta=content_meta)]))
 
     server._mcp_server.request_handlers[ReadResourceRequest] = read_resource
 

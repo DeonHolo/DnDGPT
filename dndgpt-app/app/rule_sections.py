@@ -6,6 +6,8 @@ AMENDMENTS = {
     "loading": "Rules loading and checklist precedence",
     "continuity": "Turn continuity and efficient resolution",
     "creation-order": "V1.0 surgical four-turn creation and in-chat continuation precedence",
+    "direct-play": "Direct creation and advancement choices",
+    "starting-gear": "Starting equipment by class rarity",
     "story": "Story flavor, character identity and player voice",
     "generation": "Generation breadth, reaction roles and a playable world",
     "utility": "Utility usefulness and creative application",
@@ -60,7 +62,8 @@ def index_text(text):
              "Advancement: 17, 18 and the applicable track in 19 through 22; interfaces 37/38. Chapter 19 includes standalone-passive eligibility and nested upgrade saves; 38 distinguishes base skills from dependent riders.",
              "Routine narrative/presentation: continuity and story-ui. Intelligent UI means story, inline glossary, colors and choices in chat; never a seven-chapter dump. Cache current sections; do not reload every turn.",
              "Story styling/tooltips: story-ui; 33 has the full glossary, 35 colors, 39 choices. Story flavor: story. Ability copy/details: dashboard-writing, 34. Dashboard architecture only: 38; full in-chat sheet only on explicit request.",
-             "Equipment: 23 through 28. Story/quests: 31, 32, 32A. Saves/compatibility: 40 through 42.", "",
+             "Creation completion/advancement: direct-play. Final creation saves Your story, outfit and opening together with begin_adventure=true; selections need no follow-up approval. Advancement continues automatically when all pending tracks are resolved.",
+             "Starting outfit: starting-gear, 23, 27. Equipment: 23 through 28. Story/quests: 31, 32, 32A. Saves/compatibility: 40 through 42.", "",
              "## Current amendments"]
     for key in {**AMENDMENTS, **SUBSECTIONS}:
         item = entries[key]

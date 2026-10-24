@@ -13,7 +13,7 @@ def prepared_chat(web):
     return saved["structuredContent"]["campaign"]
 
 
-def propose(web, state, action="recovery-review", kind="confirm_chat_character"):
+def propose(web, state, action="recovery-review", kind="pause"):
     return tool(web, "propose_action", {"campaign_id": state["id"], "action_id": action,
                 "expected_version": state["version"], "kind": kind, "payload": {}})
 
@@ -46,10 +46,10 @@ def test_expired_confirmation_stays_reviewable_without_mutating_campaign(web, to
     assert not pending["expired"] and pending["proposal"]["id"] == refreshed["structuredContent"]["proposal"]["id"]
     assert pending["expires_at"] == refreshed["_meta"]["approval_expires_at"]
     confirmed = tool(web, "execute_confirmed_action", {"proposal_id": pending["proposal"]["id"], "approval_token": pending["approval_token"]})["structuredContent"]["campaign"]
-    assert confirmed["phase"] == "ready" and confirmed["paused"] and confirmed["fictional_time_seconds"] == 0
+    assert confirmed["phase"] == "character_draft" and confirmed["paused"] and confirmed["fictional_time_seconds"] == 0
     assert confirmed["character"] == state["character"] and confirmed["version"] == state["version"] + 1
     assert tool(web, "get_campaign", {"campaign_id": state["id"]})["_meta"]["approval"] is None
-    start = propose(web, confirmed, "recovery-start", "start_chat_adventure")
+    start = propose(web, confirmed, "recovery-second-pause", "pause")
     expire(web, start)
     assert tool(web, "get_campaign", {"campaign_id": state["id"]})["_meta"]["approval"]["expired"]
     assert tool(web, "get_campaign", {"campaign_id": state["id"]})["structuredContent"]["campaign"] == confirmed
