@@ -37,11 +37,25 @@ def check_recovery(engine, owner, state, run):
             "npc_commitments": ["Fixture keeper returns at noon"]},
             "world": {"summary": "Disposable overhead fixture", "article": "Recorded setting detail. " * 400},
             "upsert": {"world_log": [{"id": "probe-log-" + str(i), "text": "Recorded past event. " * 40} for i in range(60)]}}
+        changes["upsert"]["world_log"][0].update(
+            text="The fixture keeper promises to return at noon and sees the repaired landing reopen.", witnesses=["fixture-keeper"])
+        changes["life_updates"] = {
+            "actors": [{"id": "fixture-keeper", "name": "Fixture keeper", "kind": "npc", "description": "Disposable test character."}],
+            "places": [{"id": "fixture-landing", "name": "Fixture landing", "kind": "location", "description": "A disposable crossing."}],
+            "events": [{"id": "fixture-promise", "kind": "commitment", "subject_id": "fixture-keeper",
+                        "source_id": "probe-log-0", "commitment_id": "return-noon", "status": "open",
+                        "summary": "The fixture keeper returns at noon."},
+                       {"id": "fixture-reopening", "kind": "place_change", "subject_id": "fixture-landing",
+                        "source_id": "probe-log-0", "summary": "The repaired landing reopens.",
+                        "feature": {"id": "passage", "name": "Working crossing", "description": "Passage is available."}}]}
         updated = measure("batched_save", lambda: game.update(owner, state["id"], "continuity-" + run,
             state["version"], "Disposable continuity and size fixture", changes))["campaign"]
         assert updated["fictional_time_seconds"] == state["fictional_time_seconds"]
         assert updated["character"] == state["character"] and updated["paused"] == state["paused"]
         checks.append("continuity_in_existing_save")
+        assert updated["campaign_life"]["actors"][0]["commitments"][0]["text"] == "The fixture keeper returns at noon."
+        assert updated["campaign_life"]["places"][0]["features"][0]["id"] == "passage"
+        checks.append("living_memory_in_existing_save")
         measure("separate_state_and_approval_reads", lambda: (
             engine.get_campaign(owner, updated["id"]), engine.pending_approval(owner, updated["id"])))
         context = measure("combined_state_and_approval_read", lambda: engine.campaign_context(owner, updated["id"]))
@@ -82,6 +96,8 @@ def check_recovery(engine, owner, state, run):
         restored = restored_result["campaign"]
         assert restored["id"] != updated["id"] and restored["paused"]
         assert restored["character"] == updated["character"] and restored["continuity"] == updated["continuity"]
+        assert restored["campaign_life"] == updated["campaign_life"]
+        checks.append("living_memory_restored")
         assert restored["phase"] == updated["phase"] and restored["fictional_time_seconds"] == updated["fictional_time_seconds"]
         assert archive.restore(owner, exported, "restore-" + run, True) == restored_result
         assert engine.get_campaign(owner, updated["id"]) == updated
