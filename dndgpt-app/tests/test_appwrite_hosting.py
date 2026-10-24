@@ -39,7 +39,7 @@ def test_private_probe_uses_direct_creation_and_retains_correction_approval(host
     errors = []
     context = SimpleNamespace(req=SimpleNamespace(headers={'x-appwrite-key': 'fixture-key'}),
                               res=SimpleNamespace(json=lambda value, status=200: {'http_status': status, **value}),
-                              error=errors.append)
+                              error=errors.append, log=lambda value: None)
     result = appwrite_probe.main(context)
     assert result['status'] == 'passed', errors
     assert {'direct_creation', 'no_creation_approval', 'correction_approval', 'correction_retry'} <= set(result['checks'])

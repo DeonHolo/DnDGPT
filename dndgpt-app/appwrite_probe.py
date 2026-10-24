@@ -1,5 +1,6 @@
 """Private Appwrite execution probe. Never use as the public entrypoint."""
 import hashlib
+import json
 import os
 import time
 import traceback
@@ -97,10 +98,11 @@ def main(context):
             assert audit['integrity_valid'] and audit['event_count'] == 4
             checks.append('event_integrity')
             recovery = check_recovery(engine, owner, result['campaign'], run)
-            return context.res.json({'status': 'passed', 'checks': checks,
-                                     'recovery': recovery,
-                                     'elapsed_seconds': round(time.monotonic() - started, 2),
-                                     'real_campaign_accessed': False, 'model_api_calls': False})
+            report = {'status': 'passed', 'checks': checks, 'recovery': recovery,
+                      'elapsed_seconds': round(time.monotonic() - started, 2),
+                      'real_campaign_accessed': False, 'model_api_calls': False}
+            context.log(json.dumps(report))
+            return context.res.json(report)
         except (EngineError, AssertionError, ValueError) as error:
             context.error('Completed checks: ' + repr(checks if 'checks' in locals() else []) + '\n' + traceback.format_exc(limit=4))
             return context.res.json({'status': 'failed', 'code': getattr(error, 'code', type(error).__name__),
