@@ -152,6 +152,7 @@ dialog{color:var(--ink);background:var(--paper);border:1px solid var(--line);bor
 @media(prefers-reduced-motion:reduce){button{transition:none}}
 /* dashboard layouts */
 /* campaign tools styles */
+/* journal media styles */
 </style>
 </head>
 <body>
@@ -212,6 +213,7 @@ dialog{color:var(--ink);background:var(--paper);border:1px solid var(--line);bor
 <button id="nav-equipment" class="section-link" data-target="equipment" type="button" aria-controls="page-equipment"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8h12l2 13H4L6 8ZM9 8V6a3 3 0 0 1 6 0v2M8 12h8M9 16h6"/></svg><span class="nav-copy"><span class="nav-title">Equipment &amp; Inventory</span><span id="equipmentPreview" class="panel-preview">No state selected</span></span><span class="nav-index" aria-hidden="true">05</span></button>
 <button id="nav-quests" class="section-link" data-target="quests" type="button" aria-controls="page-quests"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 4h12v16H6V4ZM9 2v4M15 2v4M9 10h6M9 14h6M9 18h3"/></svg><span class="nav-copy"><span class="nav-title">Quest Journal</span><span id="questsPreview" class="panel-preview">No state selected</span></span><span class="nav-index" aria-hidden="true">06</span></button>
 <button id="nav-world" class="section-link" data-target="world" type="button" aria-controls="page-world"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5l6-2 6 2 6-2v16l-6 2-6-2-6 2V5ZM9 3v16M15 5v16"/></svg><span class="nav-copy"><span class="nav-title">World &amp; Campaign Log</span><span id="worldPreview" class="panel-preview">No state selected</span></span><span class="nav-index" aria-hidden="true">07</span></button>
+<button id="nav-gallery" class="section-link" data-target="gallery" type="button" aria-controls="page-gallery"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8" cy="8" r="2"/><path d="m3 17 5-5 4 4 3-3 6 6"/></svg><span class="nav-copy"><span class="nav-title">Gallery</span><span id="galleryPreview" class="panel-preview">Saved campaign images</span></span><span class="nav-index" aria-hidden="true">08</span></button>
 </nav>
 <main id="companionContent" tabindex="-1"><section class="companion-page" id="page-character" data-panel="character" aria-labelledby="title-character"><header class="page-heading"><p class="eyebrow">Chapter 01</p><h2 id="title-character">Character &amp; Progression</h2><p class="page-description">Your character, and the road ahead.</p></header><div id="character" class="page-content"><p class="empty muted">Choose a stored sandbox to view this chapter.</p></div></section>
 <section class="companion-page" id="page-skills" data-panel="skills" aria-labelledby="title-skills" hidden><header class="page-heading"><p class="eyebrow">Chapter 02</p><h2 id="title-skills">Skills &amp; Class Abilities</h2><p class="page-description">The arts and powers at your command.</p></header><div id="skills" class="page-content"><p class="empty muted">Choose a stored sandbox to view this chapter.</p></div></section>
@@ -219,7 +221,9 @@ dialog{color:var(--ink);background:var(--paper);border:1px solid var(--line);bor
 <section class="companion-page" id="page-summons" data-panel="summons" aria-labelledby="title-summons" hidden><header class="page-heading"><p class="eyebrow">Chapter 04</p><h2 id="title-summons">Allies &amp; Combat</h2><p class="page-description">Allies in the field. Threats on the horizon.</p></header><div id="summons" class="page-content"><p class="empty muted">Choose a stored sandbox to view this chapter.</p></div></section>
 <section class="companion-page" id="page-equipment" data-panel="equipment" aria-labelledby="title-equipment" hidden><header class="page-heading"><p class="eyebrow">Chapter 05</p><h2 id="title-equipment">Equipment &amp; Inventory</h2><p class="page-description">Everything carried into the unknown.</p></header><div id="equipment" class="page-content"><p class="empty muted">Choose a stored sandbox to view this chapter.</p></div></section>
 <section class="companion-page" id="page-quests" data-panel="quests" aria-labelledby="title-quests" hidden><header class="page-heading"><p class="eyebrow">Chapter 06</p><h2 id="title-quests">Quest Journal</h2><p class="page-description">Promises made. Paths still unwritten.</p></header><div id="quests" class="page-content"><p class="empty muted">Choose a stored sandbox to view this chapter.</p></div></section>
-<section class="companion-page" id="page-world" data-panel="world" aria-labelledby="title-world" hidden><header class="page-heading"><p class="eyebrow">Chapter 07</p><h2 id="title-world">World &amp; Campaign Log</h2><p class="page-description">Places discovered, and the story so far.</p></header><div id="world" class="page-content"><p class="empty muted">Choose a stored sandbox to view this chapter.</p></div></section></main>
+<section class="companion-page" id="page-world" data-panel="world" aria-labelledby="title-world" hidden><header class="page-heading"><p class="eyebrow">Chapter 07</p><h2 id="title-world">World &amp; Campaign Log</h2><p class="page-description">Places discovered, and the story so far.</p></header><div id="world" class="page-content"><p class="empty muted">Choose a stored sandbox to view this chapter.</p></div></section>
+<!-- gallery panel -->
+</main>
 </div>
 </div></div>
 <script id="companionNavigation">
@@ -972,6 +976,7 @@ function renderCampaign(next){
   const changed=!state||state.id!==next.id||state.version!==next.version;
   if(changed)lastVerifiedAt=null;
   state=next;lastSelected=next.id;
+  if(changed)document.dispatchEvent(new CustomEvent("companion:campaign",{detail:{id:next.id}}));
   if(pending&&(pending.proposal.campaign_id!==next.id||pending.proposal.expected_version!==next.version))showApproval(null);
   $("session").value=next.id;
   if(!changed)return;
@@ -985,7 +990,7 @@ function renderCampaign(next){
   $("healthPreview").textContent=next.conditions.length+" recorded conditions · DEF "+c.def;
   $("summonsPreview").textContent=next.summons.length+(next.summons.length===1?" ally · ":" allies · ")+next.enemies.length+" known enemies";
   $("equipmentPreview").textContent=gear.equipped.length+" equipped · "+gear.stored.length+" stored items";
-  $("questsPreview").textContent=next.quest_log.length+" journal entries";
+  $("questsPreview").textContent=next.quest_log.filter(q=>!["completed","failed","abandoned"].includes(questStatus(q))).length+" active · "+next.quest_log.filter(q=>questStatus(q)==="completed").length+" completed";
   $("worldPreview").textContent=next.current_location;
   $("progress").textContent="XP "+c.xp+"/"+c.xp_next+" · Scenes "+c.scene_counter+" · "+(next.level_up_freeze?"ADVANCEMENT FROZEN":next.paused?"PAUSED":"RUNNING");
   $("xpMeter").max=Math.max(1,c.xp_next);$("xpMeter").value=c.xp;
@@ -994,6 +999,8 @@ function renderCampaign(next){
   for(const id of ["character","health","summons","equipment","quests","world"])$(id).replaceChildren();
   paragraph($("character"),c.name,"page-lead");
   paragraph($("character"),c.class_name+" · "+c.rarity,"muted");
+  if(c.ancestry)paragraph($("character"),"Race · "+c.ancestry,"muted");
+  if(c.ancestry_description)paragraph(recordDetail($("character"),"About your race","character-ancestry"),c.ancestry_description);
   const story=recordDetail($("character"),"Your story","character-story");story.className="character-story";
   const storyCopy=element("div",undefined,"story-copy");story.append(storyCopy);
   if(typeof c.story_summary==="string"&&c.story_summary.trim()){
@@ -1019,6 +1026,8 @@ function renderCampaign(next){
     const record=element("div",undefined,"record");record.append(element("span",label,"eyebrow"),element("strong",value));progression.append(record);
   }
   $("character").append(progression);
+  const freeEvolutions=Math.max(0,(next.reward_credits?.earned||0)-(next.reward_credits?.spent?.length||0));
+  if(freeEvolutions)paragraph($("character"),"Banked Skill Evolution credits · "+freeEvolutions+" · ask your GM to use one when ready.","pending");
   const unspent=[["Attribute",c.attribute_points],["Skill",c.skill_points],["Talent",c.talent_points]].filter(([,value])=>value>0);
   if(unspent.length)paragraph($("character"),"Unspent points · "+unspent.map(([label,value])=>label+" "+value).join(" · "));
   if(next.phase==="character_draft")paragraph($("character"),"Character draft · finish your choices in chat. Your GM saves your story, equipment and first scene together.","pending");
@@ -1029,12 +1038,13 @@ function renderCampaign(next){
   renderRecords($("health"),next.conditions,"No recorded conditions.");
   renderCombat(next);
   renderGear(next,gear);
-  renderRecords($("quests"),next.quest_log,"No quests recorded.");
-  renderWorld(next);
+  renderQuests($("quests"),next.quest_log);
+  renderWorld(next);renderEventChecks(next);
   renderChoices();restorePreferences();updateSaveTools();
 }
 function receive(result,verified=false){
   const data=result?.structuredContent||{};
+  receiveGallery(data);
   if(data.historical)return;
   if(data.view_preferences&&!preferencesLoaded){
     preferences={...preferences,...data.view_preferences};preferencesLoaded=true;restorePreferences();
@@ -1079,6 +1089,7 @@ function showApproval(approval){
   $("approvalSummary").textContent=p.kind==="confirm_chat_character"?"Confirm the character currently shown in your codex. This does not start the adventure.":p.kind==="start_chat_adventure"?state.opening_preview:format({command:p.kind,payload:p.payload,effects:deltas,random_result:p.random_result});
 }
 function clearDeletedCampaign(id){
+  if(state?.id===id)galleryReset(null);
   deletedCampaigns.add(id);
   campaigns=campaigns.filter(c=>c.id!==id);
   for(const option of $("session").options)if(option.value===id)option.remove();
@@ -1214,6 +1225,7 @@ document.addEventListener("companion:page",persistPreferences);
 document.addEventListener("toggle",event=>{if(event.target.matches?.("[data-detail]"))persistPreferences()},true);
 new ResizeObserver(()=>{if(standard)notify("ui/notifications/size-changed",{height:document.body.scrollHeight})}).observe(document.body);
 /* campaign tools script */
+/* journal media script */
 (async()=>{
   renderChoices();restorePreferences();
   if(window.openai?.callTool){

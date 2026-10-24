@@ -19,6 +19,7 @@ from .version import APP_VERSION
 from .standard_rules import rules_guidance
 from .presentation import dashboard_html as load_dashboard_html
 from .rule_sections import sections as rule_sections, index_text as rule_index
+from .gallery import Gallery, GalleryFile
 
 HTML_PATH = Path(__file__).with_name("index.html")
 MIME_TYPE = "text/html;profile=mcp-app"
@@ -110,6 +111,7 @@ def build_mcp(engine, config, verifier, creation_repository=None):
     game_random = GameRandom(engine.store, engine.dice, engine)
     from .chat_game import ChatGame
     chat_game = ChatGame(engine)
+    gallery = Gallery(engine)
     from .campaign_lifecycle import CampaignLifecycle
     campaign_lifecycle = CampaignLifecycle(engine)
     from .campaign_archive import CampaignArchive
@@ -158,11 +160,18 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         Use the latest successfully returned version already in context; read again if missing,
         uncertain or conflicted. Use full for story/history; turn only when the needed context is present.
         The successful save already verifies the commit; do not read again just to verify it.
+        Character ancestry/ancestry_description retain the chosen race; missing race never means human.
         changes supports partial character (attributes merge), equipment
         {slot:inventory_id|null}, name/current_location/opening_preview/notes, fictional_time_seconds,
         level_up_freeze, world (recursive object-field merge), creation/advancement/funds (replace), and collection
-        upsert/remove/replace dictionaries. Collections: abilities, conditions, summons, enemies,
-        inventory, supplies, quest_log, world_log, generation_ledger. Each record has stable id;
+        upsert/remove/replace dictionaries.
+        Structured quests use quest_schema=1; read rulebook section=quest-journal before creating one.
+        Completion/counter progress auto-settles system_reward once; do not also add its XP/funds/items.
+        spend_evolution_credit={ability_id,evolution_id} consumes a banked reward with its nested upgrade.
+        event_transition={id,eligible:true,context,roll_action_id} records a genuine event receipt;
+        use eligible:false with reason for excluded transitions. These belong in the SAME turn save.
+        Collections: abilities, conditions, summons, enemies, inventory, supplies, quest_log, world_log,
+        generation_ledger. Each record has stable id;
         upsert merges fields by id; remove lists ids; replace explicitly replaces a whole collection.
         Integrated passive Evolutions/Imprints belong inside their existing parent ability, not as
         top-level Passive abilities. Upsert that parent's id with combined mechanics and its complete
@@ -204,6 +213,10 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         """Reusable Python rolls for an explicitly authorized chat-led game or generation request.
         Batch1..20 requests with unique label and kind: dice{sides,count=1,modifier=0},
         check{dc,modifier=0,advantage=false,disadvantage=false}, or rarity{luck:1..20 current score}.
+        world_event{context:safe|travel|frontier|unstable,transition_id,pool OR pool_action_id}
+        conditionally rolls trigger/category/severity/selection in one request (read rules 32A first).
+        Use action_id=event-<campaign_id>-<transition_id>. Precommit the regional pool once;
+        reuse its original pool_action_id later. Unchosen candidates stay server-side.
         Reuse EXACT action_id and arguments after a timeout; a retry returns the saved result,
         never rerolls. Do not retry under a new ID to change an outcome. Interpret the results
         in Chat using the complete rulebook. This tool records rolls, not character/game changes.
@@ -227,6 +240,56 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         explicit SHOW ROLLS / RARITY AUDIT request; raw rarity details are otherwise hidden.
         """
         return invoke(lambda owner: game_random.get(owner, action_id, show_rolls))
+
+    @server.tool(annotations=read, meta=metadata())
+    def list_gallery_images(campaign_id: str, include_removed: bool = False) -> CallToolResult:
+        """List saved image titles, captions and credits. Images stay outside gameplay saves.
+        Use only for Gallery/image requests; never add a gallery read to routine RPG turns.
+        """
+        return invoke(lambda owner: gallery.list(owner, campaign_id, include_removed))
+
+    @server.tool(annotations=write, meta={**metadata(WRITE_SCOPE), "openai/fileParams": ["image"]})
+    def save_gallery_image(campaign_id: str, action_id: str, title: str, image: GalleryFile,
+                           caption: str = "", source_kind: Literal["generated", "upload"] = "generated",
+                           source_url: str = "", credit: str = "", scene_ref: str = "") -> CallToolResult:
+        """Save a generated or uploaded ChatGPT image file to the campaign Gallery with a label.
+        Pass the actual available file through image; generate art only when the player requests it.
+        Reuse action_id on retry. Retains a private image copy; never changes gameplay or time.
+        If the host cannot expose a generated image as a file, offer Gallery's Upload/Choose files.
+        """
+        return invoke(lambda owner: gallery.save(owner, campaign_id, action_id, title, caption,
+                      source_kind, source_url, credit, scene_ref, file=image), True)
+
+    @server.tool(annotations=write, meta=metadata(WRITE_SCOPE))
+    def save_gallery_url(campaign_id: str, action_id: str, title: str, image_url: str,
+                         caption: str = "", source_url: str = "", credit: str = "",
+                         scene_ref: str = "", auto_curated: bool = False) -> CallToolResult:
+        """Save a public image URL to the private campaign Gallery, with title/caption/source credit.
+        When web images were already SHOWN for a scene/world overview, retain 1..3 representative
+        images with auto_curated=true and the same established scene_ref. Deduplicates image copies.
+        Save selected images, not every search result. Never claim inaccessible images were saved.
+        Use source_url for the credit page. Image-only action: no mechanics, rolls or fictional time.
+        """
+        return invoke(lambda owner: gallery.save(owner, campaign_id, action_id, title, caption,
+                      "web", source_url, credit, scene_ref, auto_curated, image_url=image_url), True)
+
+    @server.tool(annotations=read, meta=metadata(app_only=True))
+    def get_gallery_image(campaign_id: str, image_id: str,
+                          size: Literal["thumbnail", "full"] = "thumbnail") -> CallToolResult:
+        """Load an owned gallery image into the widget. Image bytes are widget-only metadata."""
+        return invoke(lambda owner: gallery.image(owner, campaign_id, image_id, size))
+
+    @server.tool(annotations=write, meta=metadata(WRITE_SCOPE, app_only=True))
+    def upload_gallery_image(campaign_id: str, action_id: str, title: str, image_data: str,
+                             caption: str = "") -> CallToolResult:
+        """Widget upload fallback. Store a selected image without changing gameplay."""
+        return invoke(lambda owner: gallery.save(owner, campaign_id, action_id, title, caption,
+                      "upload", image_data=image_data), True)
+
+    @server.tool(annotations=write, meta=metadata(WRITE_SCOPE, app_only=True))
+    def set_gallery_image_removed(campaign_id: str, image_id: str, removed: bool) -> CallToolResult:
+        """Reversibly hide or restore a Gallery entry; no gameplay change."""
+        return invoke(lambda owner: gallery.visibility(owner, campaign_id, image_id, removed), True)
 
     if creation_repository is not None:
         from .creation_tools import register_creation_tools
@@ -355,7 +418,7 @@ def build_mcp(engine, config, verifier, creation_repository=None):
 
     @server.tool(title="Campaign dashboard", annotations=read, meta=render_meta)
     def render_dashboard(campaign_id: str | None = None) -> CallToolResult:
-        """Render the seven-panel HUD from stored state. Does not create, roll, or resume anything.
+        """Render the seven core gameplay chapters and Gallery. Does not create, roll, or resume anything.
         Use data tools for mutations; keep this view mounted and refresh it through get_campaign.
         """
         return invoke(lambda owner: engine.dashboard(owner, campaign_id))
@@ -363,7 +426,7 @@ def build_mcp(engine, config, verifier, creation_repository=None):
     ui_meta = {"ui": {"prefersBorder": True, "csp": {"connectDomains": [], "resourceDomains": []}},
                "openai/ui": {"availableDisplayModes": ["inline", "fullscreen"],
                              "preferredDisplayMode": "inline"},
-               "openai/widgetDescription": "Seven RPG chapters with navigation summaries; action choices send chat follow-ups.",
+               "openai/widgetDescription": "Seven core RPG chapters plus a saved-image Gallery; action choices send chat follow-ups.",
                "openai/widgetPrefersBorder": True,
                "openai/widgetCSP": {"connect_domains": [], "resource_domains": []}}
 

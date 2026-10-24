@@ -13,7 +13,8 @@ class CampaignLifecycle:
     PREVIEW_TTL_SECONDS = 900
     BATCH_SIZE = 20
     CHILD_TABLES = ("proposals_v1", "events_v1", "chat_updates_v1",
-                    "chat_versions_v1", "game_rolls_v1")
+                    "chat_versions_v1", "game_rolls_v1", "gallery_entries_v1",
+                    "gallery_assets_v1", "gallery_actions_v1")
 
     def __init__(self, engine):
         self.engine = engine
@@ -79,7 +80,8 @@ class CampaignLifecycle:
             return {**self._public(data), "confirmation_token": token,
                     "expires_in_seconds": self.PREVIEW_TTL_SECONDS,
                     "will_remove": ["this campaign", "its proposals, event history, saved versions, and chat updates",
-                                    "detailed data from roll receipts explicitly linked to this campaign"],
+                                    "detailed data from roll receipts explicitly linked to this campaign",
+                                    "its Gallery images, captions, credits and media receipts"],
                     "will_retain": ["other campaigns", "account preferences", "unlinked historical roll receipts",
                                     "a small deletion marker and compact idempotency receipts so stale retries cannot restore saves or reroll dice"]}
 
@@ -127,7 +129,7 @@ class CampaignLifecycle:
             while budget > 0 and index < len(self.CHILD_TABLES):
                 table = self.CHILD_TABLES[index]
                 where = {"campaign_id": campaign_id}
-                if table == "proposals_v1":
+                if table == "proposals_v1" or table.startswith("gallery_"):
                     where["owner"] = owner
                 rows = records.find(db, table, where, limit=budget)
                 if rows:

@@ -34,5 +34,8 @@ def dashboard_html():
             .replace("/* dashboard layouts */", layouts)
             .replace("/* campaign tools styles */", (HERE / "campaign_tools.css").read_text(encoding="utf-8"))
             .replace("/* campaign tools script */", (HERE / "campaign_tools.js").read_text(encoding="utf-8"))
+            .replace("/* journal media styles */", (HERE / "journal_media.css").read_text(encoding="utf-8"))
+            .replace("/* journal media script */", (HERE / "journal_media.js").read_text(encoding="utf-8"))
+            .replace("<!-- gallery panel -->", (HERE / "gallery.html").read_text(encoding="utf-8"))
             .replace('<script id="sceneCatalog" type="application/json">[]</script>',
                      '<script id="sceneCatalog" type="application/json">' + catalog.replace("<", "\\u003c") + '</script>'))

@@ -120,7 +120,7 @@ def test_mcp_initialization_tools_and_ui_resource(web):
         cached = rpc(web, "resources/read", {"uri": cached_uri})["contents"][0]
         assert cached["uri"] == cached_uri and cached["mimeType"] == expected["mimeType"]
         assert cached["text"] == expected["text"] and cached["_meta"] == expected["_meta"]
-    assert resource["text"].count('data-panel="') == 7
+    assert resource["text"].count('data-panel="') == 8
     assert "ui/message" in resource["text"]
 
 def test_mcp_campaign_delete_requires_preview_and_explicit_confirmation(web):

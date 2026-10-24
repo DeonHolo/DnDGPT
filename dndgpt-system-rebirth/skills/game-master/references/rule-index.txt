@@ -5,7 +5,8 @@ Use read_rules(document='rulebook', section=KEY, offset=0); follow next_offset w
 Offsets are relative to the requested selection. Finishing a section is not a complete manual read.
 An omitted section still governs play; fetch it when the situation needs it.
 
-World preview: loading, world-preview, story, 4.
+World preview: loading, world-preview, story, ancestry, clear-story, 4.
+Quests/rewards: quest-journal, 17, 24, 32. Random events: 32A. Saved illustrations: gallery.
 Class offers: creation-order, generation, utility, class-craft, reach, 5, 6, 7, 8. Read 9/10/11 for their creation stage.
 Utility offers and revisions: utility, generation, class-craft and the applicable acquisition chapter.
 Combat: enemy-tactics, reach, 12, 13, 14; also 15/16/29/30 when applicable. Reuse prepared enemy profiles.
@@ -21,13 +22,17 @@ continuity | Turn continuity and efficient resolution | 5360 characters
 creation-order | V1.0 surgical four-turn creation and in-chat continuation precedence | 1994 characters
 direct-play | Direct creation and advancement choices | 1757 characters
 starting-gear | Starting equipment by class rarity | 4973 characters
+quest-journal | Finite quests, System rewards and completion | 4370 characters
+gallery | Campaign Gallery and selected scene images | 1815 characters
 story | Story flavor, character identity and player voice | 6960 characters
 generation | Generation breadth, reaction roles and a playable world | 7333 characters
 utility | Utility usefulness and creative application | 4658 characters
 class-craft | Class concept diversity and writing craft | 5673 characters
-world-preview | World introduction: history, place and the player's footing | 3089 characters
+world-preview | World introduction: history, place and the player's footing | 3102 characters
 reach | Dexterity and player-facing reach | 2903 characters
-dashboard-writing | Player-facing dashboard writing contract | 6124 characters
+clear-story | Clear story language and names | 1859 characters
+ancestry | Player ancestry and nonhuman identity | 2109 characters
+dashboard-writing | Player-facing dashboard writing contract | 6144 characters
 story-ui | Compact Intelligent Story UI contract | 6044 characters
 enemy-tactics | Enemy identity, adaptive tactics and visible voice | 3909 characters
 
@@ -63,14 +68,14 @@ enemy-tactics | Enemy identity, adaptive tactics and visible voice | 3909 charac
 29 | SUMMONS AND COMPANIONS | 2654 characters
 30 | FORTUNE CHECKS | 700 characters
 31 | CHARACTER-AWARE GAMEPLAY OPTIONS | 867 characters
-32 | QUESTS, NPCS AND STORY CLARITY | 19774 characters
-32A | LIVING-WORLD RANDOM EVENT ENGINE — V1.0 CODE-ROLLED, CONTEXTUAL, AUDITABLE | 9593 characters
+32 | QUESTS, NPCS AND STORY CLARITY | 19982 characters
+32A | LIVING-WORLD RANDOM EVENT ENGINE — V1.0 CODE-ROLLED, CONTEXTUAL, AUDITABLE | 11635 characters
 33 | INTELLIGENT INTERACTIVE UI | 31986 characters
 34 | SIMPLIFIED ABILITY DISPLAY | 4795 characters
 35 | RARITY COLORS AND VISUAL PRIORITY | 2594 characters
 36 | CHARACTER CREATION INTERFACE | 1918 characters
 37 | V4.1 LEVEL-UP INTERFACE | 4221 characters
-38 | CAMPAIGN DASHBOARD — SEVEN CHAPTERS AND ABILITY DETAILS | 12985 characters
+38 | CAMPAIGN DASHBOARD — SEVEN CORE CHAPTERS, GALLERY AND ABILITY DETAILS | 13060 characters
 39 | GAMEPLAY OPTION UI | 553 characters
 40 | PERSISTENCE AND INTERNAL AUDITS | 6693 characters
 41 | CAMPAIGN CONTINUITY; AUTOMATIC SAVES AND OPTIONAL MANUAL EXPORT | 7945 characters

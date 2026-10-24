@@ -54,6 +54,16 @@ class Store:
                     request TEXT NOT NULL, result TEXT NOT NULL,
                     PRIMARY KEY(campaign_id, action_id),
                     FOREIGN KEY(campaign_id) REFERENCES campaigns_v1(id));
+                CREATE TABLE IF NOT EXISTS gallery_entries_v1 (
+                    owner TEXT NOT NULL, id TEXT NOT NULL, campaign_id TEXT NOT NULL,
+                    created_at REAL NOT NULL, data TEXT NOT NULL, PRIMARY KEY(owner,id));
+                CREATE INDEX IF NOT EXISTS gallery_campaign ON gallery_entries_v1(owner,campaign_id);
+                CREATE TABLE IF NOT EXISTS gallery_assets_v1 (
+                    owner TEXT NOT NULL, id TEXT NOT NULL, campaign_id TEXT NOT NULL,
+                    data TEXT NOT NULL, PRIMARY KEY(owner,id));
+                CREATE TABLE IF NOT EXISTS gallery_actions_v1 (
+                    owner TEXT NOT NULL, action_id TEXT NOT NULL, campaign_id TEXT NOT NULL,
+                    request TEXT NOT NULL, result TEXT NOT NULL, PRIMARY KEY(owner,action_id));
                 CREATE TABLE IF NOT EXISTS chat_versions_v1 (
                     campaign_id TEXT NOT NULL, version INTEGER NOT NULL, data TEXT NOT NULL,
                     PRIMARY KEY(campaign_id, version),

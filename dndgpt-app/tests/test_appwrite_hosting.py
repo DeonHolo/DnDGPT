@@ -422,4 +422,4 @@ def test_signed_http_and_mcp_use_hosted_owner_records(hosted, config, verifier, 
                                 json={'jsonrpc': '2.0', 'id': 2, 'method': 'resources/read',
                                       'params': {'uri': application.state.resource_uri}})
         assert response.status_code == 200
-        assert response.json()['result']['contents'][0]['text'].count('data-panel="') == 7
+        assert response.json()['result']['contents'][0]['text'].count('data-panel="') == 8

@@ -1,6 +1,12 @@
 # Presentation layer — DnDGPT
 
+Use everyday words and normally one new important name per story reply. Explain the name with a role or familiar description in the sentence itself; hover definitions add detail. Keep established names stable and preserve required offer counts. Generate an editable humanlike bipedal nonhuman ancestry during existing new-character creation when the player has supplied none. Save ancestry/ancestry_description and display Race in Character & Progression. Existing identity and mechanics stay intact until an authorized change.
+
 This guide controls presentation only. The complete edition-1.0 rulebook and hardener retain mechanical authority. It does not create powers, change rules, authorize gameplay or guarantee a particular native ChatGPT layout.
+
+The dashboard keeps its seven core chapters and adds **Gallery**. Quest Journal uses finite required/optional checklists, quantity progress, a finish condition, separate System/contract rewards and collapsed completed history. Objective marks display saved progress; they are not manual completion switches. A quest evolution reward shows five offers in its completion reply, with optional banking. A simultaneous level allows an SP purchase and a free-credit purchase; preserve normal offer/combination rules.
+
+Gallery retains real image copies with titles, captions and credits. Save one to three web images already shown for the same scene/overview; generate art only on request. Use the actual native file handoff when available, otherwise the Gallery file upload/chooser. Success requires a saved-image receipt. Load media only on opening Gallery/images; keep bytes outside model-visible gameplay snapshots. Gallery controls do not advance play. Individual images can be downloaded; gameplay JSON exports do not include Gallery media.
 
 Power descriptions use complete readable mechanics from the first creation offer. Show descriptive reach and concrete movement/targeting choices in chat kits, summon stat blocks, Full rules and upgrades. Counted meters, feet, paces, steps or other distance units belong only in private source mechanics or an explicitly requested spatial audit. Preserve all other stats, costs, dice, durations and action limits; changing the presentation never changes legal range or movement.
 

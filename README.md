@@ -137,7 +137,7 @@ Your conversation and campaign, side by side. Choose from **33 reading atmospher
 ChatGPT creates the in-chat **Intelligent UI**: the choice cards, icons, colors and arrangement. DnDGPT's rules guide its presentation, so campaigns may share a style, but the generated interface will not look identical every time. Ask ChatGPT to change the layout, make the choices easier to read or adjust its use of color. The saved campaign dashboard shown beside the conversation is DnDGPT's separate interface.
 
 <details>
-<summary><strong>Inside the seven chapters</strong></summary>
+<summary><strong>Inside the seven core chapters and Gallery</strong></summary>
 
 | Chapter | Contents |
 | --- | --- |
@@ -146,7 +146,8 @@ ChatGPT creates the in-chat **Intelligent UI**: the choice cards, icons, colors 
 | Health & Conditions | HP, MP, defenses and status effects |
 | Allies & Combat | Companions, summons, enemies and encounter records |
 | Equipment & Inventory | Equipped gear, stored items and supplies |
-| Quest Journal | Objectives, discoveries and rewards |
+| Quest Journal | Required and optional objectives, quantity progress, an explicit finish and separate System/contract rewards |
+| Gallery | Saved scene images, portraits and world overviews with captions and source credits |
 | World & Campaign Log | World reference and the story so far |
 
 </details>

@@ -1,0 +1,17 @@
+<section class="companion-page" id="page-gallery" data-panel="gallery" aria-labelledby="title-gallery" hidden>
+<header class="page-heading"><p class="eyebrow">Gallery</p><h2 id="title-gallery">Campaign Gallery</h2><p class="page-description">Places, faces and moments worth keeping.</p></header>
+<div class="page-content" id="gallery">
+<div class="gallery-toolbar"><button id="galleryRefresh" type="button">Refresh images</button><label><input id="galleryRemoved" type="checkbox"> Show removed images</label></div>
+<details class="record-detail"><summary>Add an image</summary><div class="record-body">
+<form id="galleryForm" class="gallery-form">
+<label>Title<input id="galleryTitle" maxlength="160" required placeholder="The old watchtower"></label>
+<label>Caption<textarea id="galleryCaption" maxlength="1200" rows="2"></textarea></label>
+<label>Image file<input id="galleryFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/avif"></label>
+<label>Or direct image URL<input id="galleryUrl" type="url" placeholder="https://…"></label>
+<label>Source page<input id="gallerySource" type="url" placeholder="https://…"></label>
+<label>Artist / credit<input id="galleryCredit" maxlength="400"></label>
+<div><button id="gallerySave" type="submit">Save image</button> <button id="galleryChooseFiles" type="button" hidden>Choose from files</button></div>
+</form></div></details>
+<div id="galleryGrid" class="gallery-grid"><p class="muted">Open Gallery to load saved images.</p></div>
+</div></section>
+<dialog id="galleryDialog" class="gallery-dialog" aria-labelledby="galleryDialogTitle"><div class="gallery-dialog-heading"><h2 id="galleryDialogTitle"></h2><button id="galleryDialogClose" type="button" aria-label="Close image">Close</button></div><img id="galleryFullImage" alt=""><p id="galleryDialogCaption"></p><a id="galleryDownload" hidden>Download image</a></dialog>

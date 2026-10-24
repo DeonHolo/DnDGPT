@@ -47,6 +47,11 @@ def resume_brief(state):
             "additional_commitments": max(0, len(note.get("npc_commitments", [])) - 4),
             "excerpted_fields": [key for key in TEXT_LIMITS if len(note.get(key, "")) > 240],
             "active_quests": [short(row.get("name") or row.get("title"), 120) for row in quests[:3]],
+            "quest_progress": [{"id": row["id"], "done": sum(o.get("status") == "done" for o in row["objectives"] if not o.get("optional")),
+                                "required": sum(not o.get("optional") for o in row["objectives"]),
+                                "finish": short(row.get("finish_condition"), 160)}
+                               for row in quests[:3] if row.get("quest_schema") == 1],
+            "event_check_due": bool(state.get("event_tracking", {}).get("check_due")),
             "resources": {key: character[key] for key in ("hp", "hp_max", "mp", "mp_max") if key in character},
             "read_only": True, "continuation_requires_player_action": True,
             "missing_continuity": not bool(note)}

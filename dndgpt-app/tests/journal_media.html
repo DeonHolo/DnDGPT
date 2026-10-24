@@ -1,0 +1,73 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quest and Gallery checks</title><style>body{background:#141813;color:#eee7d5;font:15px/1.6 system-ui;margin:20px}iframe{width:1100px;max-width:none;height:900px;border:1px solid #b3a16e}.pass{color:#b8d79c}.fail{color:#ffaaa2}button{padding:12px}</style>
+<h1>Quest and Gallery checks</h1><p>Disposable authenticated fixture. Gallery actions do not modify gameplay.</p>
+<button id="run">Run checks</button><p id="result" role="status">Ready</p><ol id="results"></ol>
+<iframe id="widget" src="/test-legacy-widget" title="Campaign fixture"></iframe>
+<script>
+const frame=document.getElementById('widget'),results=[],wait=ms=>new Promise(r=>setTimeout(r,ms));
+const assert=(condition,message)=>{if(!condition)throw Error(message)};
+async function until(fn){for(let i=0;i<80;i++){if(fn())return;await wait(100)}throw Error('Timed out waiting for UI')}
+async function test(name,fn){try{await fn();results.push({name,passed:true})}catch(e){results.push({name,passed:false,error:e.message})}const li=document.createElement('li');li.className=results.at(-1).passed?'pass':'fail';li.textContent=JSON.stringify(results.at(-1));document.getElementById('results').append(li)}
+document.getElementById('run').onclick=async()=>{
+ document.getElementById('run').disabled=true;const w=frame.contentWindow,d=frame.contentDocument;
+ await until(()=>d.getElementById('questsPreview')?.textContent.includes('1 active'));
+ const before=await(await fetch('/test-state')).json();
+ await test('Gallery has no image requests before opening',async()=>{assert(!w.legacyCalls.includes('get_gallery_image'),'Loaded media during an ordinary dashboard render')});
+ await test('Race is visible and its description is separately expandable',async()=>{
+  d.getElementById('nav-character').click();assert(d.getElementById('character').innerText.includes('Race · Stoneborn'),'Chosen race missing');
+  const detail=d.querySelector('[data-detail="character-ancestry"]');assert(detail&&!detail.open,'Race details are not collapsed');
+  detail.querySelector('summary').click();assert(detail.innerText.includes('ridged ears'),'Race description missing');detail.querySelector('summary').click();
+ });
+ await test('Quest checklist, rewards and collapsed completed archive',async()=>{
+  d.getElementById('nav-quests').click();const card=d.querySelector('[data-quest-id="fixture-crossing"]');
+  assert(card.innerText.includes('1 / 2 required objectives complete'),'Incorrect objective progress');
+  assert(card.innerText.includes('System reward')&&card.innerText.includes('Contract payment'),'Reward sources merged');
+  assert(card.innerText.includes('80 crowns')&&card.innerText.includes('20 crowns'),'Reward amounts missing');
+  assert(card.querySelectorAll('.quest-objectives>li').length===3,'Objective list missing');
+  assert(!card.querySelector('input'),'Quest objectives became manual switches');
+  const archive=d.querySelector('.quest-archive');assert(archive&&!archive.open,'Completed quests did not collapse');
+  archive.querySelector('summary').click();assert(archive.open&&archive.innerText.includes('Light the watchtower'),'Completed history inaccessible');
+  archive.querySelector('summary').click();
+ });
+ await test('Quest borders, padding and wrapping across four layouts at narrow/wide widths',async()=>{
+  for(const width of [390,1100]){frame.style.width=width+'px';for(const layout of ['original','reclaimed','orrery','ember']){
+   w.selectLayout(layout,false);await wait(50);d.getElementById('nav-quests').click();
+   const node=d.querySelector('[data-quest-id="fixture-crossing"]'),style=w.getComputedStyle(node),box=node.getBoundingClientRect();
+   for(const edge of ['Top','Right','Bottom','Left'])assert(parseFloat(style['border'+edge+'Width'])>=1,'Missing quest border '+layout+'/'+width);
+   assert(parseFloat(style.paddingLeft)>=14&&node.scrollWidth<=node.clientWidth+1,'Quest text padding/overflow '+layout+'/'+width);
+   assert(box.right<=d.documentElement.clientWidth+1,'Quest panel overflows '+layout+'/'+width);
+  }}
+ });
+ await test('Gallery loads owned thumbnail and full image through app-only metadata',async()=>{
+  d.getElementById('nav-gallery').click();d.getElementById('galleryGrid').scrollIntoView({block:'center'});await until(()=>d.querySelector('.gallery-open img')?.naturalWidth>0);
+  const image=d.querySelector('.gallery-open img');assert(image.src.startsWith('data:image/webp;base64,'),'Gallery uses an expiring remote link');
+  assert(d.getElementById('galleryGrid').innerText.includes('At the woodland crossing'),'Saved title missing');
+  image.closest('button').click();await until(()=>d.getElementById('galleryFullImage').naturalWidth>0&&d.getElementById('galleryDialog').open);
+  assert(!d.getElementById('galleryDownload').hidden&&d.getElementById('galleryDownload').hasAttribute('download'),'Download unavailable');
+  d.getElementById('galleryDialogClose').click();assert(!d.getElementById('galleryDialog').open,'Close button broken');
+ });
+ await test('Gallery card and image viewer fit every layout',async()=>{
+  for(const width of [390,1100]){frame.style.width=width+'px';for(const layout of ['original','reclaimed','orrery','ember']){
+   w.selectLayout(layout,false);await wait(50);const card=d.querySelector('.gallery-card'),style=w.getComputedStyle(card);
+   for(const edge of ['Top','Right','Bottom','Left'])assert(parseFloat(style['border'+edge+'Width'])>=1,'Missing image border '+layout+'/'+width);
+   assert(card.scrollWidth<=card.clientWidth+1&&card.getBoundingClientRect().right<=d.documentElement.clientWidth+1,'Gallery overflow '+layout+'/'+width);
+   card.querySelector('.gallery-open').click();await until(()=>d.getElementById('galleryDialog').open);
+   const modal=d.getElementById('galleryDialog');assert(modal.scrollWidth<=modal.clientWidth+1&&modal.getBoundingClientRect().right<=d.documentElement.clientWidth+1,'Viewer overflow '+layout+'/'+width);
+   d.getElementById('galleryDialogClose').click();
+  }}
+ });
+ await test('Image removal and restore are reversible',async()=>{
+  d.querySelector('.gallery-remove').click();await until(()=>!d.querySelector('.gallery-card'));
+  d.getElementById('galleryRemoved').click();await until(()=>d.querySelector('.gallery-card')?.innerText.includes('Restore image'));
+  d.querySelector('.gallery-remove').click();await until(()=>d.querySelector('.gallery-card')?.innerText.includes('Remove from Gallery'));
+  d.getElementById('galleryRemoved').click();
+ });
+ await test('Gallery does not change campaign version, event history or time',async()=>{
+  const after=await(await fetch('/test-state')).json();assert(JSON.stringify(before.campaign)===JSON.stringify(after.campaign),'Gallery changed gameplay');assert(before.audit.event_count===after.audit.event_count,'Gallery created a gameplay event');
+ });
+ frame.style.width='1100px';w.selectLayout('reclaimed',false);d.getElementById('nav-gallery').click();
+ document.getElementById('result').textContent=results.filter(r=>r.passed).length+'/'+results.length+' passed';
+ await fetch('/test-journal-record',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({results,passed:results.every(r=>r.passed)})});
+};
+if(new URLSearchParams(location.search).has('autorun'))window.addEventListener('load',()=>document.getElementById('run').click());
+</script></html>

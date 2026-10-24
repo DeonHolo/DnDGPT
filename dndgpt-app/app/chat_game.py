@@ -17,7 +17,8 @@ COLLECTIONS = {"abilities", "conditions", "summons", "enemies", "inventory", "su
                "quest_log", "world_log", "generation_ledger"}
 TEXT_FIELDS = {"name", "current_location", "opening_preview", "notes"}
 OBJECT_FIELDS = {"world", "creation", "advancement", "funds", "continuity"}
-CHARACTER_TEXT = {"name", "class_name", "rarity", "title", "background", "biography", "appearance", "story_summary"}
+CHARACTER_TEXT = {"name", "class_name", "rarity", "title", "background", "biography", "appearance", "story_summary",
+                  "ancestry", "ancestry_description"}
 CHARACTER_NUMBERS = {"level", "xp", "xp_total", "xp_next", "scene_counter", "attribute_points",
                      "skill_points", "talent_points", "hp", "hp_max", "mp", "mp_max", "sta",
                      "sta_max", "defense", "physical_defense", "magical_defense", "initiative",
@@ -68,7 +69,8 @@ def validate_changes(changes):
     if len(canonical(changes).encode()) > 250000:
         fail(422, "invalid_chat_update", "A change batch exceeds 250000 bytes")
     allowed = TEXT_FIELDS | OBJECT_FIELDS | {"character", "equipment", "fictional_time_seconds",
-                                           "level_up_freeze", "upsert", "remove", "replace"}
+                                           "level_up_freeze", "upsert", "remove", "replace",
+                                           "spend_evolution_credit", "event_transition"}
     if set(changes) - allowed:
         fail(422, "protected_field", "Unknown or server-controlled state field")
     for key in TEXT_FIELDS & changes.keys():
@@ -141,7 +143,7 @@ def merge_world(before, patch):
     return result
 
 
-def apply_changes(state, changes, *, correction=False, completing=False):
+def apply_changes(state, changes, *, correction=False, completing=False, event_receipt=None):
     validate_changes(changes)
     projected = copy.deepcopy(state)
     for key in TEXT_FIELDS | OBJECT_FIELDS | {"fictional_time_seconds", "level_up_freeze"}:
@@ -173,6 +175,11 @@ def apply_changes(state, changes, *, correction=False, completing=False):
         projected[group] = list(records.values())
     for group, ids in changes.get("remove", {}).items():
         projected[group] = [row for row in projected[group] if row["id"] not in ids]
+    from .quests import apply_quests
+    from .world_events import apply_tracking
+    apply_quests(state, projected, changes, correction)
+    if not correction:
+        apply_tracking(state, projected, changes, event_receipt)
     ch = projected["character"]
     if uses_standard_rules(projected) and state["phase"] == "character_draft" and "attributes" in changes.get("character", {}):
         for maximum, value in starting_resources(ch["attributes"]).items():
@@ -189,7 +196,7 @@ def apply_changes(state, changes, *, correction=False, completing=False):
     if any(item is not None and item not in inventory for item in projected["equipment"].values()):
         fail(422, "invalid_chat_update", "Equipped items must exist in inventory")
     if not correction:
-        if state["level_up_freeze"] and projected["level_up_freeze"] and projected["fictional_time_seconds"] != state["fictional_time_seconds"]:
+        if state["level_up_freeze"] and projected["level_up_freeze"] and changes.get("level_up_freeze", True) and projected["fictional_time_seconds"] != state["fictional_time_seconds"]:
             fail(423, "advancement_frozen", "Fictional time is frozen during advancement")
         if projected["fictional_time_seconds"] < state["fictional_time_seconds"]:
             fail(422, "time_reversal", "Use an approved correction to move fictional time backwards")
@@ -361,7 +368,12 @@ class ChatGame:
                 fail(409, "version_conflict", f"Current version is {state['version']}; read before saving again")
             if begin_adventure and state["phase"] not in {"character_draft", "ready"}:
                 fail(409, "wrong_phase", "Creation is already complete")
-            state = apply_changes(state, changes, completing=begin_adventure)
+            event_action = changes.get("event_transition", {}).get("roll_action_id") if type(changes.get("event_transition")) is dict else None
+            event_row = records.get(db, "game_rolls_v1", {"owner": owner, "action_id": event_action}) if event_action else None
+            if event_row and event_row.get("campaign_id") != campaign_id:
+                fail(422, "event_receipt_required", "Event receipt belongs to another campaign")
+            state = apply_changes(state, changes, completing=begin_adventure,
+                                  event_receipt=json.loads(event_row["result"]) if event_row else None)
             if begin_adventure:
                 receipt = records.get(db, "game_rolls_v1", {"owner": owner,
                                       "action_id": "starting-outfit-" + campaign_id})

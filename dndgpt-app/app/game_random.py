@@ -7,6 +7,7 @@ from .rules import Dice, integer
 from .storage import canonical
 from . import records
 from .outfitting import BUDGETS, slot_pool, starting_outfit
+from .world_events import CHANCES, valid_id, validate_pool, draw_event
 
 
 class GameRandom:
@@ -19,6 +20,7 @@ class GameRandom:
             raise ValueError('rolls must contain1..20 requests')
         labels = set()
         outfitting_count = 0
+        event_count = 0
         for row in rolls:
             if type(row) is not dict:
                 raise ValueError('Each roll must be an object')
@@ -28,7 +30,8 @@ class GameRandom:
             labels.add(label)
             allowed = {'dice': {'sides', 'count', 'modifier'},
                        'check': {'dc', 'modifier', 'advantage', 'disadvantage'},
-                       'rarity': {'luck'}, 'outfitting': {'class_rarity', 'slot_preferences'}}
+                       'rarity': {'luck'}, 'outfitting': {'class_rarity', 'slot_preferences'},
+                       'world_event': {'context', 'transition_id', 'pool', 'pool_action_id'}}
             if type(kind) is not str or kind not in allowed or set(row) - allowed[kind] - {'label', 'kind'}:
                 raise ValueError('Unknown roll kind or unexpected fields')
             if kind == 'dice':
@@ -43,6 +46,16 @@ class GameRandom:
                         raise ValueError(key + ' must be boolean')
             elif kind == 'rarity':
                 integer(row.get('luck'), 1, 20, 'luck score')
+            elif kind == 'world_event':
+                event_count += 1
+                if (event_count > 1 or row.get('context') not in CHANCES or
+                        not valid_id(row.get('transition_id')) or
+                        ('pool' in row) == ('pool_action_id' in row)):
+                    raise ValueError('One world_event needs context, transition_id and either pool or pool_action_id')
+                if 'pool' in row:
+                    validate_pool(row['pool'])
+                elif type(row['pool_action_id']) is not str or not row['pool_action_id']:
+                    raise ValueError('Reuse the recorded original pool_action_id')
             elif row.get('class_rarity') not in BUDGETS:
                 raise ValueError('outfitting requires a recorded class_rarity')
             else:
@@ -64,6 +77,9 @@ class GameRandom:
                     for item in row['result']['items']:
                         item.pop('roll', None)
                         item.pop('slot_roll', None)
+        for row in result['results']:
+            if row['kind'] == 'world_event':
+                row['result'].pop('_event_pool', None)  # Unchosen future events stay server-side.
         return result
 
     def roll(self, owner, action_id, rolls, campaign_id=None):
@@ -74,6 +90,11 @@ class GameRandom:
                 fail(503, 'campaign_unavailable', 'Campaign-bound rolls require the campaign engine')
         try:
             self.validate(rolls)
+            if len(canonical(rolls).encode()) > 250000:
+                raise ValueError('Roll batch exceeds 250000 bytes; reuse a saved regional event pool')
+            event = next((row for row in rolls if row['kind'] == 'world_event'), None)
+            if event and (not campaign_id or action_id != 'event-' + campaign_id + '-' + event['transition_id']):
+                raise ValueError('Use action_id=event-<campaign_id>-<transition_id> for a world event')
             if any(row['kind'] == 'outfitting' for row in rolls):
                 if campaign_id is None or action_id != 'starting-outfit-' + campaign_id:
                     raise ValueError('Use action_id=starting-outfit-<campaign_id> for the one starting outfit')
@@ -92,6 +113,22 @@ class GameRandom:
                 if prior['request'] != request:
                     fail(409, 'idempotency_conflict', 'action_id already has different roll arguments')
                 return self.public(previous)
+            event_pool = None
+            if event:
+                state = self.engine._get(db, owner, campaign_id)
+                if state.get('phase') != 'adventure' or state.get('paused') or state.get('level_up_freeze'):
+                    fail(423, 'event_clock_frozen', 'Event checks need active adventure time')
+                pool_id = event.get('pool_action_id', action_id)
+                if 'pool' in event:
+                    event_pool = event['pool']
+                else:
+                    saved = records.get(db, 'game_rolls_v1', {'owner': owner, 'action_id': pool_id})
+                    if saved and saved.get('campaign_id') == campaign_id:
+                        stored = json.loads(saved['result'])
+                        event_pool = next((r['result'].get('_event_pool') for r in stored.get('results', [])
+                                           if r['kind'] == 'world_event' and r['result'].get('_event_pool')), None)
+                    if event_pool is None:
+                        fail(422, 'event_pool_required', 'Use the original pool_action_id from this campaign')
             outfit = next((row for row in rolls if row['kind'] == 'outfitting'), None)
             if outfit:
                 state = self.engine._get(db, owner, campaign_id)
@@ -118,8 +155,13 @@ class GameRandom:
                                              row.get('advantage', False), row.get('disadvantage', False))
                 elif kind == 'rarity':
                     result = self.dice.rarity(row['luck'])
-                else:
+                elif kind == 'outfitting':
                     result = starting_outfit(row['class_rarity'], self.dice, row['slot_preferences'])
+                else:
+                    used = state.get('event_tracking', {}).get('used_events', {}).get(pool_id, [])
+                    result = draw_event(row['context'], row['transition_id'], event_pool, pool_id, used, self.dice)
+                    if 'pool' in row:
+                        result['_event_pool'] = event_pool
                 results.append({'label': row['label'], 'kind': kind, 'result': result})
             receipt = {'action_id': action_id, 'results': results, 'rng': self.dice.source,
                        'created_at': datetime.now(timezone.utc).isoformat(), 'campaign_changed': False}

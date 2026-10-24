@@ -12,6 +12,9 @@ KEYS = {
     "campaign_deletions_v1": ("owner", "campaign_id"),
     "chat_updates_v1": ("campaign_id", "action_id"),
     "chat_versions_v1": ("campaign_id", "version"),
+    "gallery_entries_v1": ("owner", "id"),
+    "gallery_assets_v1": ("owner", "id"),
+    "gallery_actions_v1": ("owner", "action_id"),
 }
 
 

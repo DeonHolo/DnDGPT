@@ -80,11 +80,33 @@ async def lifespan(app):
             {"id": "fixture-untrusted", "name": "<img src=x onerror=alert('fixture')>",
              "description": "<script>Untrusted fixture text</script>"}]
         state["supplies"] = [{"name": "Fixture trail rations", "quantity": 3, "uses": 3, "bulk": "Light"}]
+        state["quest_log"] = [
+            {"id": "fixture-crossing", "quest_schema": 1, "name": "Reopen the crossing", "quest_type": "Side quest",
+             "finish_condition": "The crossing is passable and the keeper is safe.", "status": "active",
+             "objectives": [{"id": "beams", "text": "Clear the fallen beams", "current": 1, "target": 2, "status": "in_progress"},
+                            {"id": "keeper", "text": "Bring the keeper to safety", "status": "done"},
+                            {"id": "bell", "text": "Recover the bell", "optional": True}],
+             "system_reward": {"xp": 50, "currency": {"crowns": 80}, "evolution_credits": 1},
+             "contract_payment": {"creditor": "The keeper", "condition": "Return to the lodge", "reward": {"currency": {"crowns": 20}}}},
+            {"id": "fixture-finished", "quest_schema": 1, "name": "Light the watchtower", "status": "completed",
+             "finish_condition": "The signal fire is lit.", "objectives": [{"id": "fire", "text": "Light the signal fire", "status": "done"}],
+             "system_reward": {"xp": 20}, "reward_status": "settled"}]
+        state["reward_credits"] = {"earned": 1, "spent": []}
+        state["character"].update(ancestry="Stoneborn", ancestry_description="An upright humanlike people with ridged ears and gray, flecked skin. This is a disposable identity fixture.")
         with engine.store.transaction() as db:
             state["version"] += 1
             engine._append(db, state, {"kind": "test_fixture_seed", "result": "UI renderer test data only"})
             db.execute("UPDATE campaigns_v1 SET version=?,data=? WHERE id=?",
                        (state["version"], canonical(state), CAMPAIGN_ID))
+        from app.gallery import Gallery
+        from app.scenes import SCENES
+        import base64
+        art = next(scene for scene in SCENES if scene.get("asset"))
+        data = (HERE.parent / "app/assets" / art["asset"]).read_bytes()
+        Gallery(engine).save(OWNER, CAMPAIGN_ID, "fixture-gallery-seed", "At the woodland crossing",
+            caption="Existing dashboard artwork, retained here as a disposable Gallery fixture.", source_kind="upload",
+            credit="DnDGPT dashboard artwork fixture; see the project artwork credits.",
+            image_data=base64.b64encode(data).decode())
         yield
     TEMP.cleanup()
 
@@ -106,6 +128,19 @@ def test_widget():
 @app.get("/test-player-view")
 def test_player_view():
     return FileResponse(HERE / "player_view.html")
+
+
+@app.get("/test-journal-media")
+def test_journal_media():
+    return FileResponse(HERE / "journal_media.html")
+
+
+@app.post("/test-journal-record")
+async def test_journal_record(request: Request):
+    result = await request.json()
+    result["environment"] = "Local Chromium host simulator; disposable campaign; not native ChatGPT"
+    (HERE.parent / "test-results/journal-media-browser.json").write_text(json.dumps(result, indent=2), encoding="utf-8")
+    return {"saved": True}
 
 
 @app.get("/test-legacy-widget")

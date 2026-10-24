@@ -565,7 +565,7 @@ class Engine:
             fail(422, "invalid_preferences", "Unknown dashboard layout")
         if "ambient_motion" in preferences and type(preferences["ambient_motion"]) is not bool:
             fail(422, "invalid_preferences", "ambient_motion must be boolean")
-        for key, maximum in (("panels", 7), ("details", 200)):
+        for key, maximum in (("panels", 8), ("details", 200)):
             values = preferences[key]
             if type(values) is not list or len(values) > maximum or any(
                     not isinstance(value, str) or not 1 <= len(value) <= 128 for value in values):
