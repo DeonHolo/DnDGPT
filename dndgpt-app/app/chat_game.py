@@ -16,7 +16,7 @@ from . import records
 COLLECTIONS = {"abilities", "conditions", "summons", "enemies", "inventory", "supplies",
                "quest_log", "world_log", "generation_ledger"}
 TEXT_FIELDS = {"name", "current_location", "opening_preview", "notes"}
-OBJECT_FIELDS = {"world", "creation", "advancement", "funds", "continuity"}
+OBJECT_FIELDS = {"world", "creation", "advancement", "funds", "continuity", "sovereignty"}
 CHARACTER_TEXT = {"name", "class_name", "rarity", "title", "background", "biography", "appearance", "story_summary",
                   "ancestry", "ancestry_description"}
 CHARACTER_NUMBERS = {"level", "xp", "xp_total", "xp_next", "scene_counter", "attribute_points",
@@ -40,14 +40,14 @@ def text(value, name, maximum=20000, nullable=False):
         fail(422, "invalid_chat_update", f"{name} must be text of at most {maximum} characters")
 
 
-def bounded_json(value, depth=0):
+def bounded_json(value, depth=0, field=""):
     if depth > 12:
         fail(422, "invalid_chat_update", "Record nesting exceeds 12 levels")
     if type(value) is dict:
-        if len(value) > 500 or any(type(k) is not str or len(k) > 128 for k in value):
+        if len(value) > (10000 if field == "award_ledger" else 500) or any(type(k) is not str or len(k) > 128 for k in value):
             fail(422, "invalid_chat_update", "Invalid object keys")
-        for item in value.values():
-            bounded_json(item, depth + 1)
+        for key, item in value.items():
+            bounded_json(item, depth + 1, key)
     elif type(value) is list:
         if len(value) > 1000:
             fail(422, "invalid_chat_update", "A list exceeds 1000 entries")
@@ -70,7 +70,8 @@ def validate_changes(changes):
         fail(422, "invalid_chat_update", "A change batch exceeds 250000 bytes")
     allowed = TEXT_FIELDS | OBJECT_FIELDS | {"character", "equipment", "fictional_time_seconds",
                                            "level_up_freeze", "upsert", "remove", "replace",
-                                           "spend_evolution_credit", "event_transition"}
+                                           "spend_evolution_credit", "event_transition", "sovereign_awards",
+                                           "sovereign_development", "spend_sovereign_evolution", "sovereign_battle"}
     if set(changes) - allowed:
         fail(422, "protected_field", "Unknown or server-controlled state field")
     for key in TEXT_FIELDS & changes.keys():
@@ -143,12 +144,12 @@ def merge_world(before, patch):
     return result
 
 
-def apply_changes(state, changes, *, correction=False, completing=False, event_receipt=None):
+def apply_changes(state, changes, *, correction=False, completing=False, event_receipt=None, dice=None):
     validate_changes(changes)
     projected = copy.deepcopy(state)
     for key in TEXT_FIELDS | OBJECT_FIELDS | {"fictional_time_seconds", "level_up_freeze"}:
         if key in changes:
-            if key == "world" and not correction:
+            if key in {"world", "sovereignty"} and not correction:
                 projected[key] = merge_world(projected.get(key, {}), changes[key])
             else:
                 projected[key] = ({**projected.get(key, {}), **copy.deepcopy(changes[key])}
@@ -178,6 +179,8 @@ def apply_changes(state, changes, *, correction=False, completing=False, event_r
     from .quests import apply_quests
     from .world_events import apply_tracking
     apply_quests(state, projected, changes, correction)
+    from .sovereignty import apply_sovereignty
+    apply_sovereignty(state, projected, changes, correction, dice)
     if not correction:
         apply_tracking(state, projected, changes, event_receipt)
     ch = projected["character"]
@@ -248,6 +251,8 @@ def complete_creation(state, outfit_receipt=None):
                 fail(422, "starting_equipment_required", "Equip each planned item at its recorded tier with its actual effects")
     if state["level_up_freeze"]:
         fail(423, "advancement_frozen", "Resolve pending advancement choices")
+    from .sovereignty import complete_sovereign
+    complete_sovereign(state)
     state["phase"], state["paused"] = "adventure", False
 
 
@@ -300,12 +305,19 @@ class ChatGame:
     def __init__(self, engine):
         self.engine, self.store = engine, engine.store
 
-    def create(self, owner, name, action_id, disposable=False):
+    def create(self, owner, name, action_id, disposable=False, game_id="age-of-convergence"):
+        from .game_profiles import validate_game, SOVEREIGN, VERSION
+        try:
+            validate_game(game_id)
+        except ValueError as error:
+            fail(422, "invalid_game", str(error))
         identifier(action_id, "action_id")
         text(name, "name", 80)
         if not name.strip() or type(disposable) is not bool:
             fail(422, "invalid_chat_update", "A game needs a name and boolean disposable flag")
         request = canonical({"mode": "chat", "name": name, "disposable": disposable})
+        if game_id != "age-of-convergence":
+            request = canonical({"mode": "chat", "name": name, "disposable": disposable, "game_id": game_id})
         with self.store.transaction() as db:
             prior = records.get(db, "creations_v1", {"owner": owner, "action_id": action_id})
             if prior:
@@ -326,12 +338,16 @@ class ChatGame:
                          **{key: stats[key + "_max"] for key in ("hp", "mp")}}
             state = {"id": "chat-" + uuid.uuid4().hex, "name": name.strip(), "version": 1,
                      "mode": "chat", "rules_version": RULES_VERSION, "rules_profile": PROFILE,
+                     "game_id": game_id, "game_rules_version": VERSION,
                      "phase": "character_draft",
                      "paused": True, "disposable": disposable, "character": character,
                      "level_up_freeze": False, "equipment": dict.fromkeys(EQUIPMENT_SLOTS),
                      **{key: [] for key in COLLECTIONS}, "world": {}, "creation": {}, "funds": {},
                      "current_location": "Character creation", "opening_preview": "", "notes": "",
                      "fictional_time_seconds": 0, "advancement": {}, "rarity_candidates": {}, "last_event": None}
+            if game_id == SOVEREIGN:
+                from .sovereignty import initial
+                state["sovereignty"] = initial()
             records.insert(db, "campaigns_v1", {"id": state["id"], "owner": owner, "version": 1, "data": canonical(state)})
             self.engine._append(db, state, {"kind": "create_chat_game", "action_id": action_id})
             records.update(db, "campaigns_v1", {"id": state["id"]}, {"data": canonical(state)})
@@ -373,7 +389,8 @@ class ChatGame:
             if event_row and event_row.get("campaign_id") != campaign_id:
                 fail(422, "event_receipt_required", "Event receipt belongs to another campaign")
             state = apply_changes(state, changes, completing=begin_adventure,
-                                  event_receipt=json.loads(event_row["result"]) if event_row else None)
+                                  event_receipt=json.loads(event_row["result"]) if event_row else None,
+                                  dice=self.engine.dice)
             if begin_adventure:
                 receipt = records.get(db, "game_rolls_v1", {"owner": owner,
                                       "action_id": "starting-outfit-" + campaign_id})

@@ -32,6 +32,7 @@ class Proposal(BaseModel):
 
 class CreateChatGame(CreateSandbox):
     disposable: bool = False
+    game_id: str = "age-of-convergence"
 
 
 class ChatUpdate(BaseModel):
@@ -161,8 +162,8 @@ def create_app(db_path=None, auth_config=None, token_verifier=None, *, enable_cr
                 "bearer_methods_supported": ["header"], "resource_name": "DnDGPT"}
 
     @app.get("/api/campaigns")
-    def list_campaigns(token=Depends(authenticated)):
-        return {"campaigns": engine.list_campaigns(owner_id(token))}
+    def list_campaigns(game_id: str = "age-of-convergence", token=Depends(authenticated)):
+        return {"game_id": game_id, "campaigns": engine.list_campaigns(owner_id(token), game_id)}
 
     @app.post("/api/campaigns")
     def create_campaign(spec: CreateSandbox, token=Depends(writable)):

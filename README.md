@@ -24,6 +24,12 @@ I built it as a **5e Hack and homebrew fantasy RPG**, around what I enjoy in fan
 
 You can write your own class or ability, ask ChatGPT to revise an offer, or change the setting, tone, difficulty and way the GM responds. Tell the GM which standard rules you want to override and agree on the changes before playing. DnDGPT keeps the resulting character, abilities, companions and campaign progress together in a dashboard beside the conversation.
 
+### Two games, one connection
+
+Choose **Age of Convergence** or **Sovereign System** in the dashboard's Game selector. Each game shows its own saved campaigns and serves its own rules through the same DnDGPT connection. Switching the view leaves both campaigns untouched; a campaign keeps the game it was created for.
+
+Sovereign System adds a domain, autonomous commanders, army formations and independent strategic progression alongside personal adventures. Its rulebook is compiled from the shared manual with scoped replacements and added systems. [Game rules, progression and implementation details](docs/SOVEREIGN_SYSTEM.md).
+
 ### Why I made this
 
 OpenAI announced [Plugin Extensions at DevDay on September 29, 2026](https://openai.com/index/devday-2026-recap/), with sidebar entries and interactive panels beside the conversation. Then [Intelligent UI arrived on October 7, 2026](https://openai.com/index/gpt-6-for-everyone/), bringing interactive responses into the chat.

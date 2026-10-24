@@ -20,6 +20,7 @@ from .standard_rules import rules_guidance
 from .presentation import dashboard_html as load_dashboard_html
 from .rule_sections import sections as rule_sections, index_text as rule_index
 from .gallery import Gallery, GalleryFile
+from .game_profiles import AGE, VERSION as GAME_RULES_VERSION, GAMES, game_id as saved_game, rule_source, validate_game
 
 HTML_PATH = Path(__file__).with_name("index.html")
 MIME_TYPE = "text/html;profile=mcp-app"
@@ -27,11 +28,14 @@ LEGACY_MIME_TYPE = "text/html+skybridge"
 RULE_FILES = {"rulebook": "rulebook-v1.0.txt", "hardener": "rule-hardener.txt"}
 
 
-def rules_page(document, offset, section=None):
+def rules_page(document, offset, section=None, game_id=AGE):
     if document not in {*RULE_FILES, "index"}:
         raise EngineError(400, "invalid_rules_document", "Choose rulebook, hardener or index")
-    data = (HTML_PATH.parent.parent / "rules" / RULE_FILES.get(document, RULE_FILES["rulebook"])).read_bytes()
-    text = data.decode("utf-8")
+    try:
+        source = rule_source(game_id, "hardener" if document == "hardener" else "rulebook")
+    except ValueError as error:
+        raise EngineError(422, "invalid_game_rules", str(error))
+    text = source["content"]
     source_length = len(text)
     if section is not None:
         if document != "rulebook" or not isinstance(section, str) or section not in rule_sections(text):
@@ -49,10 +53,13 @@ def rules_page(document, offset, section=None):
             end = boundary + 1
     return {"document": document, "offset": offset,
             "next_offset": end if end < len(text) else None, "total_characters": len(text),
-            "source_sha256": hashlib.sha256(data).hexdigest(), "section": section,
+            "game_id": game_id, "game_rules_version": GAME_RULES_VERSION,
+            "source_sha256": source["source_sha256"], "base_sha256": source["base_sha256"], "section": section,
             "scope": "section" if section is not None else "index" if document == "index" else "document",
             "source_characters": source_length, "content": text[offset:end],
-            "standard_play": rules_guidance() if offset == 0 and document == "hardener" else {}}
+            "standard_play": {**{key: value for key, value in rules_guidance().items() if key in
+                                  {"resources", "attributes", "starting_hp", "starting_mp"}}, "game_id": game_id}
+                             if offset == 0 and document == "hardener" else {}}
 
 
 def build_mcp(engine, config, verifier, creation_repository=None):
@@ -127,7 +134,8 @@ def build_mcp(engine, config, verifier, creation_repository=None):
 
     @server.tool(annotations=read, meta=metadata())
     def read_rules(document: Literal["rulebook", "hardener", "index"] = "rulebook",
-                   offset: int = 0, section: str | None = None) -> CallToolResult:
+                   offset: int = 0, section: str | None = None,
+                   campaign_id: str | None = None, game_id: str | None = None) -> CallToolResult:
         """Read DnDGPT's current execution checklist, rule index or canonical rules.
         First read document=hardener completely, then document=index. Before a decision,
         fetch relevant rulebook chapters/amendments using a section key from the index.
@@ -139,18 +147,28 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         distance units. Exact spatial mechanics stay private unless explicitly requested.
         A player's explicit custom rulebook takes precedence for that campaign.
         Reading rules never creates a campaign, rolls dice, resumes play or changes saves.
+        For an existing campaign pass campaign_id: its saved game selects the book automatically.
+        Before creation choose game_id=age-of-convergence or sovereign-system. Do not fetch both.
+        Keep campaign_id/game_id with every section/page and cache by game plus source_sha256.
         """
-        return invoke(lambda owner: rules_page(document, offset, section))
+        def read_selected(owner):
+            selected = saved_game(engine.get_campaign(owner, campaign_id)) if campaign_id else game_id or AGE
+            if campaign_id and game_id is not None and game_id != selected:
+                raise EngineError(409, "game_mismatch", "Read the rulebook belonging to this campaign's game")
+            return rules_page(document, offset, section, selected)
+        return invoke(read_selected)
 
     @server.tool(annotations=write, meta=metadata(WRITE_SCOPE))
-    def create_chat_game(name: str, action_id: str, disposable: bool = False) -> CallToolResult:
+    def create_chat_game(name: str, action_id: str, disposable: bool = False,
+                         game_id: Literal["age-of-convergence", "sovereign-system"] = AGE) -> CallToolResult:
         """Create a FRESH chat-led character draft only on explicit new-game/test authorization.
         This does not roll, import, confirm a character, or start an adventure. Use disposable=true
         for tests. ChatGPT follows the complete rulebook and saves its choices through save_chat_update.
         Reuse exact action_id and arguments after uncertain delivery.
+        Select the player's requested game; it is fixed for this save. Read that game's rules.
         """
-        return invoke(lambda owner: {"campaign": chat_game.create(owner, name, action_id, disposable),
-                                     "standard_play": rules_guidance()}, True)
+        return invoke(lambda owner: {"campaign": chat_game.create(owner, name, action_id, disposable, game_id),
+                                     "game_id": game_id, "standard_play": {**rules_guidance(), "game_id": game_id}}, True)
 
     @server.tool(annotations=write, meta=metadata(WRITE_SCOPE))
     def save_chat_update(campaign_id: str, action_id: str, expected_version: int,
@@ -162,6 +180,11 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         The successful save already verifies the commit; do not read again just to verify it.
         Character ancestry/ancestry_description retain the chosen race; missing race never means human.
         changes supports partial character (attributes merge), equipment
+        Sovereign saves also merge sovereignty and accept sovereign_awards, sovereign_development,
+        spend_sovereign_evolution={ability_id,evolution_id}, and sovereign_battle={front_id,phase_id,
+        orders:[{id:formation_id,stance:attack|guard|withdraw,target_id?}],phases:1..3}.
+        Read sovereign-progression/sovereign-warfare once before using these. Save handles progression,
+        real formation rolls and their receipts atomically; never roll each unit separately.
         {slot:inventory_id|null}, name/current_location/opening_preview/notes, fictional_time_seconds,
         level_up_freeze, world (recursive object-field merge), creation/advancement/funds (replace), and collection
         upsert/remove/replace dictionaries.
@@ -296,9 +319,9 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         register_creation_tools(server, creation_repository, invoke, metadata, read, write, creation_uri)
 
     @server.tool(annotations=read, meta=metadata())
-    def list_campaigns() -> CallToolResult:
+    def list_campaigns(game_id: Literal["age-of-convergence", "sovereign-system"] = AGE) -> CallToolResult:
         """List this authenticated account's stored sandboxes. Does not start or resume a game."""
-        return invoke(lambda owner: {"campaigns": engine.list_campaigns(owner)})
+        return invoke(lambda owner: {"game_id": game_id, "games": list(GAMES), "campaigns": engine.list_campaigns(owner, game_id)})
 
     preview_write = ToolAnnotations(readOnlyHint=False, destructiveHint=False,
                                     idempotentHint=False, openWorldHint=False)
@@ -417,11 +440,12 @@ def build_mcp(engine, config, verifier, creation_repository=None):
     render_meta["openai/ui"] = {"entrypoints": [{"type": "thread"}]}
 
     @server.tool(title="Campaign dashboard", annotations=read, meta=render_meta)
-    def render_dashboard(campaign_id: str | None = None) -> CallToolResult:
+    def render_dashboard(campaign_id: str | None = None,
+                         game_id: Literal["age-of-convergence", "sovereign-system"] | None = None) -> CallToolResult:
         """Render the seven core gameplay chapters and Gallery. Does not create, roll, or resume anything.
         Use data tools for mutations; keep this view mounted and refresh it through get_campaign.
         """
-        return invoke(lambda owner: engine.dashboard(owner, campaign_id))
+        return invoke(lambda owner: engine.dashboard(owner, campaign_id, game_id))
 
     ui_meta = {"ui": {"prefersBorder": True, "csp": {"connectDomains": [], "resourceDomains": []}},
                "openai/ui": {"availableDisplayModes": ["inline", "fullscreen"],

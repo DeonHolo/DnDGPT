@@ -1,0 +1,91 @@
+# DnDGPT rule index
+
+Selected game: sovereign-system. Keep game_id='sovereign-system' or the campaign_id on EVERY rules request/page. Begin with sovereign-creation; fetch sovereign-progression/warfare/dashboard when relevant.
+Load the compact hardener first. Fetch relevant amendments and chapters before using their rules.
+Use read_rules(document='rulebook', section=KEY, offset=0); follow next_offset with the SAME section.
+Offsets are relative to the requested selection. Finishing a section is not a complete manual read.
+An omitted section still governs play; fetch it when the situation needs it.
+
+World preview: loading, world-preview, story, ancestry, clear-story, 4.
+Quests/rewards: quest-journal, 17, 24, 32. Random events: 32A. Saved illustrations: gallery.
+Class offers: creation-order, generation, utility, class-craft, reach, 5, 6, 7, 8. Read 9/10/11 for their creation stage.
+Utility offers and revisions: utility, generation, class-craft and the applicable acquisition chapter.
+Combat: enemy-tactics, reach, 12, 13, 14; also 15/16/29/30 when applicable. Reuse prepared enemy profiles.
+Advancement: 17, 18 and the applicable track in 19 through 22; interfaces 37/38. Chapter 19 includes standalone-passive eligibility and nested upgrade saves; 38 distinguishes base skills from dependent riders.
+Routine narrative/presentation: continuity and story-ui. Intelligent UI means story, inline glossary, colors and choices in chat; never a seven-chapter dump. Cache current sections; do not reload every turn.
+Story styling/tooltips: story-ui; 33 has the full glossary, 35 colors, 39 choices. Story flavor: story. Ability copy/details: dashboard-writing, 34. Dashboard architecture only: 38; full in-chat sheet only on explicit request.
+Creation completion/advancement: direct-play. Final creation saves Your story, outfit and opening together with begin_adventure=true; selections need no follow-up approval. Advancement continues automatically when all pending tracks are resolved.
+Starting outfit: starting-gear, 23, 27. Equipment: 23 through 28. Story/quests: 31, 32, 32A. Saves/compatibility: 40 through 42.
+
+## Current amendments
+loading | Rules loading and checklist precedence | 2498 characters
+continuity | Turn continuity and efficient resolution | 5360 characters
+creation-order | V1.0 surgical four-turn creation and in-chat continuation precedence | 2012 characters
+direct-play | Direct creation and advancement choices | 1757 characters
+starting-gear | Starting equipment by class rarity | 4973 characters
+quest-journal | Finite quests, System rewards and completion | 4370 characters
+gallery | Campaign Gallery and selected scene images | 1815 characters
+story | Story flavor, character identity and player voice | 6960 characters
+generation | Generation breadth, reaction roles and a playable world | 7333 characters
+utility | Utility usefulness and creative application | 4658 characters
+class-craft | Class concept diversity and writing craft | 5674 characters
+world-preview | World introduction: history, place and the player's footing | 3102 characters
+reach | Dexterity and player-facing reach | 2903 characters
+clear-story | Clear story language and names | 1859 characters
+ancestry | Player ancestry and nonhuman identity | 2109 characters
+dashboard-writing | Player-facing dashboard writing contract | 6144 characters
+story-ui | Compact Intelligent Story UI contract | 6877 characters
+enemy-tactics | Enemy identity, adaptive tactics and visible voice | 3909 characters
+sovereign-creation | Sovereign creation and inherited rules | 3004 characters
+sovereign-progression | Sovereign ownership and progression | 4121 characters
+sovereign-warfare | Sovereign warfare and consequences | 4004 characters
+sovereign-dashboard | Sovereign dashboard and efficient play | 1150 characters
+
+## Full chapters
+1 | THE CORE EXPERIENCE | 1127 characters
+2 | THE TWO-DECISION OBSTACLE RULE | 1183 characters
+3 | CINEMATIC PACING | 4320 characters
+4 | THE WORLD — THE AGE OF CONVERGENCE (V4.0 WORLD BIBLE) | 15743 characters
+5 | SIX-TIER RARITY SYSTEM | 19324 characters
+6 | LUCK ENHANCEMENT | 1650 characters
+7 | CHARACTER CREATION — FOUR CHOICE TURNS, FIVE PREPARATION PHASES | 13944 characters
+8 | CLASSES AND HEROIC POWER | 25098 characters
+9 | SIGNATURE SKILLS | 11950 characters
+10 | STARTING TITLES | 951 characters
+11 | BACKGROUNDS — IDENTITY, INTEGRATED IMPRINT AND WORLD FOOTPRINT | 18356 characters
+12 | ATTRIBUTES AND RESOURCES | 1486 characters
+13 | DICE AND DIFFICULTY | 1228 characters
+14 | COMBAT | 33288 characters
+15 | CONDITIONS AND INJURIES | 1038 characters
+16 | REST AND VITAL SURGE | 3339 characters
+17 | EXPERIENCE AND FAST LEVELING | 1715 characters
+18 | LEVEL-UP AND TIME FREEZE | 2239 characters
+19 | SKILL EVOLUTION SYSTEM — V4.0 INTEGRATED PASSIVE EVOLUTIONS | 21660 characters
+20 | HYBRID BREAKTHROUGHS — CLASS BREAKTHROUGHS & GRAND SIGNATURES (V4.1) | 12978 characters
+21 | TALENT WEB — V4.0 HYBRID WEB | 13345 characters
+22 | CLASS EVOLUTION AND RARITY ASCENSION | 1150 characters
+23 | EQUIPMENT — SIXTEEN SLOTS | 954 characters
+24 | INVENTORY AND CARRY WEIGHT | 6095 characters
+25 | QUICK-USE REFERENCES | 609 characters
+26 | EQUIPMENT ACTION ECONOMY | 1194 characters
+27 | LOOT, EQUIPMENT RARITY AND CRAFTING | 8507 characters
+28 | DURABILITY | 560 characters
+29 | SUMMONS AND COMPANIONS | 2654 characters
+30 | FORTUNE CHECKS | 700 characters
+31 | CHARACTER-AWARE GAMEPLAY OPTIONS | 867 characters
+32 | QUESTS, NPCS AND STORY CLARITY | 19982 characters
+32A | LIVING-WORLD RANDOM EVENT ENGINE — V1.0 CODE-ROLLED, CONTEXTUAL, AUDITABLE | 11635 characters
+33 | INTELLIGENT INTERACTIVE UI | 32819 characters
+34 | SIMPLIFIED ABILITY DISPLAY | 4795 characters
+35 | RARITY COLORS AND VISUAL PRIORITY | 2594 characters
+36 | CHARACTER CREATION INTERFACE | 1918 characters
+37 | V4.1 LEVEL-UP INTERFACE | 4221 characters
+38 | CAMPAIGN DASHBOARD — SEVEN CORE CHAPTERS, GALLERY AND ABILITY DETAILS | 13060 characters
+39 | GAMEPLAY OPTION UI | 553 characters
+40 | PERSISTENCE AND INTERNAL AUDITS | 6693 characters
+41 | CAMPAIGN CONTINUITY; AUTOMATIC SAVES AND OPTIONAL MANUAL EXPORT | 7945 characters
+42 | VERSION COMPATIBILITY | 3135 characters
+43 | COMPLETE V1.0 NEW GAME PROCEDURE | 6962 characters
+44 | ABSOLUTE GAME MASTER RESTRICTIONS | 8237 characters
+45 | PRIMARY DIRECTIVE — VERSION 1.0 | 7239 characters
+46 | INITIAL RESPONSE INSTRUCTION | 3474 characters

@@ -1,0 +1,20 @@
+{
+  "id": "tooltip-content-rows-2026-10-24",
+  "scope": "Approved tooltip internal rows and spacing only",
+  "files": {
+    "rulebook-v1.0.txt": [
+      {
+        "new_start": 339334,
+        "before": "",
+        "after": "Keep the story trigger inline, but explicitly lay out the floating tooltip as a single column. Category, title, description and optional stats must be distinct child elements occupying separate block/grid rows. Give category-to-title 4-6px spacing and title-to-description 8-10px spacing. Set each child's display, margins, font size/weight, line-height, white-space:normal, min-width:0 and overflow-wrap with scoped styles; inherited inline or horizontal flex styling must not collapse these sections into one text run. Use a small uppercase category, bold wrapping title and readable 13-14px description at 1.5-1.65 line-height. Bound width to the viewport and let the card grow with its content, retaining bottom padding and border. Inspect narrow and wide rendered cards when possible; do not claim an unavailable visual check.\n\n"
+      }
+    ],
+    "rule-hardener.txt": [
+      {
+        "new_start": 6806,
+        "before": "explicit tooltip styles against resets",
+        "after": "card AND child styles: category/title/description/stats occupy separate block rows with explicit gaps and normal wrapping"
+      }
+    ]
+  }
+}

@@ -72,6 +72,7 @@ def build(plugin, output=None):
         sources.extend(p for p in (APP / folder).iterdir() if p.is_file() and p.suffix in suffixes)
     sources.extend((APP / "app/assets").glob("*.avif"))
     sources.extend((APP / "app/assets/layouts").glob("*.svg"))
+    sources.extend(p for p in (APP / "rules/sovereign").glob("*") if p.suffix in {".txt", ".json"})
     browser_report = APP / "test-results/browser.json"
     if browser_report.exists():
         sources.append(browser_report)

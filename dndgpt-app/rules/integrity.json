@@ -1,9 +1,9 @@
 {
   "rulebook-v1.0.txt": {
     "original_sha256": "fc1cd1ed39a9fc35961d0d1e9a5feb3035015339d435c6a3af80a3515960597b",
-    "sha256": "f83a95831e75c72241ba3ee276ac1358e0119deb661b3b9e0ee52aca30031d18",
+    "sha256": "460e8f101def38857b6a484b1bd51ceee38f57db53f14b8674c03d01f8180795",
     "original_bytes": 324754,
-    "bytes": 437746,
+    "bytes": 438579,
     "replacements": [
       [
         "V4.2",
@@ -216,14 +216,20 @@
         "source": "clear-story-and-ancestry-2026-10-24.json",
         "before_sha256": "492f236dca84aac2079003e7344a260f0e64c8f28a0a16143e9cc5ae17acdcc4",
         "after_sha256": "f83a95831e75c72241ba3ee276ac1358e0119deb661b3b9e0ee52aca30031d18"
+      },
+      {
+        "id": "tooltip-content-rows-2026-10-24",
+        "source": "tooltip-content-rows-2026-10-24.json",
+        "before_sha256": "f83a95831e75c72241ba3ee276ac1358e0119deb661b3b9e0ee52aca30031d18",
+        "after_sha256": "460e8f101def38857b6a484b1bd51ceee38f57db53f14b8674c03d01f8180795"
       }
     ]
   },
   "rule-hardener.txt": {
     "original_sha256": "bc21947f299ae37dc306581aa7110231809140c332ed4e8b1ceccbb86cbce8da",
-    "sha256": "0e53e9148aafe467b2e79fd0ca2675fe66e7528c3900854ca02c947d775e8d03",
+    "sha256": "31549b7452a4031246b4f1a000f8aeb959805bec361a2e24f8864db277ae8737",
     "original_bytes": 10370,
-    "bytes": 7881,
+    "bytes": 7964,
     "replacements": [
       [
         "V4.2-R1",
@@ -402,6 +408,12 @@
         "source": "clear-story-and-ancestry-2026-10-24.json",
         "before_sha256": "07b06939dc2de3fce91299fc5b6ea77d55b84911d38a87be63a1297a89583874",
         "after_sha256": "0e53e9148aafe467b2e79fd0ca2675fe66e7528c3900854ca02c947d775e8d03"
+      },
+      {
+        "id": "tooltip-content-rows-2026-10-24",
+        "source": "tooltip-content-rows-2026-10-24.json",
+        "before_sha256": "0e53e9148aafe467b2e79fd0ca2675fe66e7528c3900854ca02c947d775e8d03",
+        "after_sha256": "31549b7452a4031246b4f1a000f8aeb959805bec361a2e24f8864db277ae8737"
       }
     ]
   }

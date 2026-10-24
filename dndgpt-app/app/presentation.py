@@ -36,6 +36,8 @@ def dashboard_html():
             .replace("/* campaign tools script */", (HERE / "campaign_tools.js").read_text(encoding="utf-8"))
             .replace("/* journal media styles */", (HERE / "journal_media.css").read_text(encoding="utf-8"))
             .replace("/* journal media script */", (HERE / "journal_media.js").read_text(encoding="utf-8"))
+            .replace("/* sovereign styles */", (HERE / "sovereignty.css").read_text(encoding="utf-8"))
+            .replace("/* sovereign script */", (HERE / "sovereignty.js").read_text(encoding="utf-8"))
             .replace("<!-- gallery panel -->", (HERE / "gallery.html").read_text(encoding="utf-8"))
             .replace('<script id="sceneCatalog" type="application/json">[]</script>',
                      '<script id="sceneCatalog" type="application/json">' + catalog.replace("<", "\\u003c") + '</script>'))

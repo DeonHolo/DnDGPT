@@ -33,7 +33,7 @@ reach | Dexterity and player-facing reach | 2903 characters
 clear-story | Clear story language and names | 1859 characters
 ancestry | Player ancestry and nonhuman identity | 2109 characters
 dashboard-writing | Player-facing dashboard writing contract | 6144 characters
-story-ui | Compact Intelligent Story UI contract | 6044 characters
+story-ui | Compact Intelligent Story UI contract | 6877 characters
 enemy-tactics | Enemy identity, adaptive tactics and visible voice | 3909 characters
 
 ## Full chapters
@@ -70,7 +70,7 @@ enemy-tactics | Enemy identity, adaptive tactics and visible voice | 3909 charac
 31 | CHARACTER-AWARE GAMEPLAY OPTIONS | 867 characters
 32 | QUESTS, NPCS AND STORY CLARITY | 19982 characters
 32A | LIVING-WORLD RANDOM EVENT ENGINE — V1.0 CODE-ROLLED, CONTEXTUAL, AUDITABLE | 11635 characters
-33 | INTELLIGENT INTERACTIVE UI | 31986 characters
+33 | INTELLIGENT INTERACTIVE UI | 32819 characters
 34 | SIMPLIFIED ABILITY DISPLAY | 4795 characters
 35 | RARITY COLORS AND VISUAL PRIORITY | 2594 characters
 36 | CHARACTER CREATION INTERFACE | 1918 characters

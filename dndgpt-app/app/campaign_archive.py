@@ -15,9 +15,11 @@ from .storage import canonical
 FORMAT = "dndgpt.campaign/1"
 MAX_BYTES = 2200000
 STATE_FIELDS = {"id", "name", "version", "mode", "rules_version", "rules_profile", "phase", "paused",
+                "game_id", "game_rules_version",
                 "disposable", "character", "level_up_freeze", "equipment", "current_location", "opening_preview",
                 "notes", "fictional_time_seconds", "world", "creation", "advancement", "funds",
                 "rarity_candidates", "last_event", "continuity", "restored_from"} | COLLECTIONS
+STATE_FIELDS |= {"sovereignty", "quest_settlements", "reward_credits", "event_tracking"}
 
 
 def digest(value):
@@ -38,7 +40,8 @@ def validate_archive(archive):
     if (type(checksum) is not str or len(checksum) != 64 or not checksum.isascii()
             or not secrets.compare_digest(digest(source), checksum)):
         fail(422, "archive_checksum", "Campaign export is damaged or its checksum does not match")
-    required = (STATE_FIELDS - {"continuity", "restored_from", "rules_profile"})
+    required = (STATE_FIELDS - {"continuity", "restored_from", "rules_profile", "game_id", "game_rules_version", "sovereignty",
+                               "quest_settlements", "reward_credits", "event_tracking"})
     if not required <= source.keys() or source["mode"] != "chat":
         fail(422, "invalid_archive", "Only complete chat-led campaign snapshots can be restored")
     if type(source["phase"]) is not str or source["phase"] not in {"character_draft", "ready", "adventure"}:
@@ -52,6 +55,11 @@ def validate_archive(archive):
     text(archive["exported_at"], "exported_at", 80)
     if "rules_profile" in source:
         text(source["rules_profile"], "rules_profile", 128)
+    from .game_profiles import validate_game, game_id
+    try:
+        validate_game(game_id(source), source.get("game_rules_version", "1.0"))
+    except ValueError as error:
+        fail(422, "invalid_archive", str(error))
     if type(source["rarity_candidates"]) is not dict or not (source["last_event"] is None or type(source["last_event"]) is dict):
         fail(422, "invalid_archive", "Invalid saved campaign records")
     for roll in source["rarity_candidates"].values():

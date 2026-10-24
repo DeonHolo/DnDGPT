@@ -69,6 +69,9 @@ def safe_event(event):
 
 def public_state(state):
     result = json.loads(canonical(state))
+    from .game_profiles import game_id, VERSION
+    result["game_id"] = game_id(state)
+    result["game_rules_version"] = state.get("game_rules_version", VERSION)
     if state.get("mode") == "chat":
         from .standard_rules import class_kit_check, uses_standard_rules
         result["rules_check"] = {"current_profile": uses_standard_rules(state), **class_kit_check(state)}
@@ -171,9 +174,14 @@ class Engine:
                                                "request": request, "result": canonical(result)})
             return result
 
-    def list_campaigns(self, owner):
+    def list_campaigns(self, owner, game_id="age-of-convergence"):
+        from .game_profiles import validate_game, game_id as saved_game
+        try:
+            validate_game(game_id)
+        except ValueError as error:
+            fail(422, "invalid_game", str(error))
         with self.store.transaction() as db:
-            rows = records.find(db, "campaigns_v1", {"owner": owner}, order="rowid", descending=True, limit=100)
+            rows = records.find(db, "campaigns_v1", {"owner": owner}, order="rowid", descending=True, limit=1000)
             deleting = set()
             for row in records.find(db, "campaign_deletions_v1", {"owner": owner}, limit=1000):
                 try:
@@ -182,9 +190,14 @@ class Engine:
                     fail(503, "storage_integrity", "Campaign deletion record is invalid")
                 if phase in {"deleting", "complete"}:
                     deleting.add(row["campaign_id"])
-            return [{"id": row["id"], "version": row["version"],
-                     "name": json.loads(row["data"])["name"]} for row in rows
-                    if row["id"] not in deleting]
+            result = []
+            for row in rows:
+                if row["id"] in deleting:
+                    continue
+                state = json.loads(row["data"])
+                if saved_game(state) == game_id:
+                    result.append({"id": row["id"], "version": row["version"], "name": state["name"], "game_id": game_id})
+            return result[:100]
 
     def get_campaign(self, owner, campaign_id):
         with self.store.transaction() as db:
@@ -503,10 +516,19 @@ class Engine:
                     "events": events if show_rolls else [safe_event(e) for e in events],
                     "raw_rolls_included": show_rolls}
 
-    def dashboard(self, owner, campaign_id=None):
+    def dashboard(self, owner, campaign_id=None, game_id=None):
+        from .game_profiles import AGE, GAMES, validate_game, game_id as saved_game
         context = self.campaign_context(owner, campaign_id) if campaign_id else {"campaign": None, "_meta": {}}
+        selected = saved_game(context["campaign"]) if campaign_id else game_id or AGE
+        try:
+            validate_game(selected)
+        except ValueError as error:
+            fail(422, "invalid_game", str(error))
+        if campaign_id and game_id is not None and game_id != selected:
+            fail(409, "game_mismatch", "This campaign belongs to a different game; open it in its own game")
         return {"app_version": APP_VERSION, "rules_version": RULES_VERSION,
-                "campaigns": self.list_campaigns(owner),
+                "game_id": selected, "games": list(GAMES),
+                "campaigns": self.list_campaigns(owner, selected),
                 "campaign": context["campaign"],
                 "view_preferences": self.get_view_preferences(owner),
                 "_meta": context["_meta"],
@@ -565,7 +587,7 @@ class Engine:
             fail(422, "invalid_preferences", "Unknown dashboard layout")
         if "ambient_motion" in preferences and type(preferences["ambient_motion"]) is not bool:
             fail(422, "invalid_preferences", "ambient_motion must be boolean")
-        for key, maximum in (("panels", 8), ("details", 200)):
+        for key, maximum in (("panels", 9), ("details", 200)):
             values = preferences[key]
             if type(values) is not list or len(values) > maximum or any(
                     not isinstance(value, str) or not 1 <= len(value) <= 128 for value in values):

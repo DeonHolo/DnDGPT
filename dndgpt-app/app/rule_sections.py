@@ -26,6 +26,11 @@ SUBSECTIONS = {
     "enemy-tactics": "Enemy identity, adaptive tactics and visible voice",
 }
 
+GAME_SECTIONS = {"sovereign-creation": "Sovereign creation and inherited rules",
+                 "sovereign-progression": "Sovereign ownership and progression",
+                 "sovereign-warfare": "Sovereign warfare and consequences",
+                 "sovereign-dashboard": "Sovereign dashboard and efficient play"}
+
 
 def sections(text):
     chapters = list(re.finditer(r"^# (\d+[A-Z]?)\. (.+)$", text, re.M))
@@ -35,7 +40,8 @@ def sections(text):
         result[match[1]] = {"title": match[2], "start": match.start(), "end": end}
     preface_end = chapters[0].start() if chapters else len(text)
     headings = list(re.finditer(r"^## (.+)$", text[:preface_end], re.M))
-    for key, title in AMENDMENTS.items():
+    optional = {key: title for key, title in GAME_SECTIONS.items() if any(m[1] == title for m in headings)}
+    for key, title in {**AMENDMENTS, **optional}.items():
         matches = [(index, match) for index, match in enumerate(headings) if match[1] == title]
         if len(matches) != 1:
             raise ValueError(f"Missing or ambiguous canonical rule heading: {title}")
@@ -70,11 +76,17 @@ def index_text(text):
              "Creation completion/advancement: direct-play. Final creation saves Your story, outfit and opening together with begin_adventure=true; selections need no follow-up approval. Advancement continues automatically when all pending tracks are resolved.",
              "Starting outfit: starting-gear, 23, 27. Equipment: 23 through 28. Story/quests: 31, 32, 32A. Saves/compatibility: 40 through 42.", "",
              "## Current amendments"]
+    if "sovereign-creation" in entries:
+        lines.insert(2, "Selected game: sovereign-system. Keep game_id='sovereign-system' or the campaign_id on EVERY rules request/page. Begin with sovereign-creation; fetch sovereign-progression/warfare/dashboard when relevant.")
     for key in {**AMENDMENTS, **SUBSECTIONS}:
         item = entries[key]
         lines.append(f"{key} | {item['title']} | {item['end'] - item['start']} characters")
+    for key in GAME_SECTIONS:
+        if key in entries:
+            item = entries[key]
+            lines.append(f"{key} | {item['title']} | {item['end'] - item['start']} characters")
     lines += ["", "## Full chapters"]
     for key, item in entries.items():
-        if key not in AMENDMENTS and key not in SUBSECTIONS:
+        if key not in AMENDMENTS and key not in SUBSECTIONS and key not in GAME_SECTIONS:
             lines.append(f"{key} | {item['title']} | {item['end'] - item['start']} characters")
     return "\n".join(lines) + "\n"

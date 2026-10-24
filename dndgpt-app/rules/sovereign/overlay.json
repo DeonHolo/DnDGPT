@@ -1,0 +1,86 @@
+{
+  "rulebook": [
+    {
+      "id": "edition",
+      "old": "### AGE OF CONVERGENCE \u00b7 LAYERED CANON \u00b7 HEROIC TACTICAL HYBRID EDITION",
+      "new": "### SOVEREIGN SYSTEM | AGE OF CONVERGENCE FOUNDATION | CHARACTER AND STRATEGY EDITION",
+      "count": 2
+    },
+    {
+      "id": "creation-board",
+      "old": "(2) five Classes after Luck is chosen/defaulted",
+      "new": "(2) eight UNIQUE sovereign Classes after Luck is chosen/defaulted"
+    },
+    {
+      "id": "class-count",
+      "old": "2. Generate **exactly five genuinely distinct classes**, including at least one mechanically genuine and inventive summoner candidate; do not guarantee that summoner high rarity.",
+      "new": "2. Generate **exactly eight genuinely distinct UNIQUE sovereign classes**, each with an autonomous commander, a functioning domain and useful starting forces. Apply sovereign-creation for their fixed creation rarity and genuine private natural rolls."
+    },
+    {
+      "id": "class-preview",
+      "old": "4. Define full starting powers, combat viability, unique interactions, costs, restrictions, and class identity before display. Preview all five with clear simple descriptions and genuinely expandable detailed mechanics.",
+      "new": "4. Define full starting powers, combat viability, unique interactions, costs, restrictions, and class identity before display. Preview all eight with clear simple descriptions and genuinely expandable detailed mechanics."
+    },
+    {
+      "id": "eight-class-private-shortlist",
+      "old": "1. **Generate a broader PRIVATE sketch pool, then select exactly five:** Privately brainstorm roughly 12\u201315 concise, mechanically disparate class seeds. These sketches are NOT publicly offered candidates and receive NO rarity, Luck, or other candidate rolls. Discard derivatives and select exactly five genuine candidate engines, including at least one actual inventive summoner. Only those five selected engines receive the five normal independent class rarity rolls and full rarity-dependent mechanics. This is concept filtering, never rarity cherry-picking or an excuse to reroll a poor tier.\n2. **Invent the gameplay law before the name or aesthetic:** For each seed, first state in plain terms what new legal operation the character can perform, what objects or states it can act on, what prevents abuse, and what decision it changes in a fight. Then design its normal-turn loop, costs, risks, defense and noncombat application. Assign the class name, motifs, element, occupation connection and visual style LAST. A poetic name without a distinct operational law fails.\n3. **Write a mechanical fingerprint:** Record privately (a) defining rule/permission, (b) repeated Action + Free Action + Reaction combat loop, (c) resource generation and expenditure, (d) spatial/terrain/target interaction, (e) independent exploration or social utility, (f) meaningful weakness/counterplay, and (g) naming/theme family. Compare gameplay structure, not just shared vocabulary or elemental skin.\n4. **Reject structural reskins and excessive reuse:** Do not merely rebrand a commander-with-creatures as another Menagerie; an injury/scar/debt tally and payout as a renamed Wound Broker; lightning/wind/weather zones as yet another storm sovereign; or a gap-cutting, line-carving, anchor-teleporting duelist as a new space cutter. These are examples of repeatedly encountered TEMPLATE RISKS, not permanent bans on summoning, injury mechanics, storms, mobility or space. A familiar theme can pass only if its core playable law, recurring decisions and resource logic are substantially different. Changing damage type, number of summons, titles, stat scaling, charge names or particles alone does not pass.\n5. **Compare against real accessible history:** Test the five fingerprints against each other AND previous campaign class boards/archetype records that are actually accessible. Reject a substantial mechanical near-duplicate even if it would be the only member of that family on this board. If prior records are unavailable in a fresh chat, disclose that limit when necessary, use an intrinsic anti-template test, and never invent recollections. A compact optional class-novelty ledger may retain only truly known prior fingerprint/theme tags, rejection reasons and recent overused families, without fictional campaigns or personal histories. Such a ledger is state information, NOT a mandate to generate a downloadable file.\n6. **Remove example-list anchoring:** The named class-engine examples in this section are NON-PRESCRIPTIVE ILLUSTRATIONS, NOT a menu to draw from. Do not automatically generate from or blend those suggestions; explicitly scrutinize familiar debt/wound, storm, spatial-cutting, monarch, swarm, copying or Menagerie constructions even when they appear as rulebook examples. If the first pool clusters around recognizable examples, discard and replenish those seeds until the shortlist is genuinely different.\n7. **Prove the difference at the table:** For each finalist, ask: 'If I stripped the name, visuals and damage type, could this be another offered class with the same actions, economy and choices?' If yes, fail and redesign BEFORE the normal five rarity rolls. Show five classes whose defining tactics and useful out-of-combat applications differ, not five eccentric labels for ordinary attacks.\n8. **UNIQUE extra gate:** A UNIQUE result requires at least one singular, coherent, repeatedly useful class LAW that changes what the character is allowed to do, not a stronger numerical version of a known build. After rarity rolling, certify strong Level-1 offense, survivability, class-native Free Action when required, use frequency, bounded counterplay and credible noncombat utility. Creativity must not create an unplayable gimmick, ally-only dependency or an excuse to lower an honestly rolled rarity.\n9. **Extend without breaking synergy:** Apply the same anti-reskin and genuinely different-choice check to starting signatures, Talent Web boards, integrated Skill Evolution concepts and Hybrid Breakthrough/Grand Signature concepts. Compare each offer against actual owned powers, other offers and accessible past mechanics; preserve the mandatory build-synergy, integrated-passive identity, fixed breakthrough grade, milestone count and independent eligible rarity rolls. Reject redundant *concepts before their rolls*; after rolls, correct a failing result at its ALREADY fixed rarity under Section 5 instead of selective rerolling.\n10. **No new user micro-decisions:** Do all sketching, screening, fingerprinting and rejection privately. Do not ask the player to approve 12\u201315 seeds, inspect internal drafts, or decide whether each similarity passes. Only the normal five finished selectable offers appear publicly, with actual understandable gameplay consequences.",
+      "new": "1. **Generate a broader PRIVATE sketch pool, then select exactly eight:** Privately brainstorm roughly 12\u201315 concise, mechanically disparate class seeds. These sketches are NOT publicly offered candidates and receive NO rarity, Luck, or other candidate rolls. Discard derivatives and select exactly eight genuine candidate engines, including at least one actual inventive summoner. Only those eight selected engines receive the eight normal independent class rarity rolls and full rarity-dependent mechanics. This is concept filtering, never rarity cherry-picking or an excuse to reroll a poor tier.\n2. **Invent the gameplay law before the name or aesthetic:** For each seed, first state in plain terms what new legal operation the character can perform, what objects or states it can act on, what prevents abuse, and what decision it changes in a fight. Then design its normal-turn loop, costs, risks, defense and noncombat application. Assign the class name, motifs, element, occupation connection and visual style LAST. A poetic name without a distinct operational law fails.\n3. **Write a mechanical fingerprint:** Record privately (a) defining rule/permission, (b) repeated Action + Free Action + Reaction combat loop, (c) resource generation and expenditure, (d) spatial/terrain/target interaction, (e) independent exploration or social utility, (f) meaningful weakness/counterplay, and (g) naming/theme family. Compare gameplay structure, not just shared vocabulary or elemental skin.\n4. **Reject structural reskins and excessive reuse:** Do not merely rebrand a commander-with-creatures as another Menagerie; an injury/scar/debt tally and payout as a renamed Wound Broker; lightning/wind/weather zones as yet another storm sovereign; or a gap-cutting, line-carving, anchor-teleporting duelist as a new space cutter. These are examples of repeatedly encountered TEMPLATE RISKS, not permanent bans on summoning, injury mechanics, storms, mobility or space. A familiar theme can pass only if its core playable law, recurring decisions and resource logic are substantially different. Changing damage type, number of summons, titles, stat scaling, charge names or particles alone does not pass.\n5. **Compare against real accessible history:** Test the eight fingerprints against each other AND previous campaign class boards/archetype records that are actually accessible. Reject a substantial mechanical near-duplicate even if it would be the only member of that family on this board. If prior records are unavailable in a fresh chat, disclose that limit when necessary, use an intrinsic anti-template test, and never invent recollections. A compact optional class-novelty ledger may retain only truly known prior fingerprint/theme tags, rejection reasons and recent overused families, without fictional campaigns or personal histories. Such a ledger is state information, NOT a mandate to generate a downloadable file.\n6. **Remove example-list anchoring:** The named class-engine examples in this section are NON-PRESCRIPTIVE ILLUSTRATIONS, NOT a menu to draw from. Do not automatically generate from or blend those suggestions; explicitly scrutinize familiar debt/wound, storm, spatial-cutting, monarch, swarm, copying or Menagerie constructions even when they appear as rulebook examples. If the first pool clusters around recognizable examples, discard and replenish those seeds until the shortlist is genuinely different.\n7. **Prove the difference at the table:** For each finalist, ask: 'If I stripped the name, visuals and damage type, could this be another offered class with the same actions, economy and choices?' If yes, fail and redesign BEFORE the normal eight rarity rolls. Show eight classes whose defining tactics and useful out-of-combat applications differ, not eight eccentric labels for ordinary attacks.\n8. **UNIQUE extra gate:** A UNIQUE result requires at least one singular, coherent, repeatedly useful class LAW that changes what the character is allowed to do, not a stronger numerical version of a known build. After rarity rolling, certify strong Level-1 offense, survivability, class-native Free Action when required, use frequency, bounded counterplay and credible noncombat utility. Creativity must not create an unplayable gimmick, ally-only dependency or an excuse to lower an honestly rolled rarity.\n9. **Extend without breaking synergy:** Apply the same anti-reskin and genuinely different-choice check to starting signatures, Talent Web boards, integrated Skill Evolution concepts and Hybrid Breakthrough/Grand Signature concepts. Compare each offer against actual owned powers, other offers and accessible past mechanics; preserve the mandatory build-synergy, integrated-passive identity, fixed breakthrough grade, milestone count and independent eligible rarity rolls. Reject redundant *concepts before their rolls*; after rolls, correct a failing result at its ALREADY fixed rarity under Section 5 instead of selective rerolling.\n10. **No new user micro-decisions:** Do all sketching, screening, fingerprinting and rejection privately. Do not ask the player to approve 12\u201315 seeds, inspect internal drafts, or decide whether each similarity passes. Only the normal eight finished selectable offers appear publicly, with actual understandable gameplay consequences."
+    },
+    {
+      "id": "class-wording-0",
+      "old": "five-class",
+      "new": "eight-class",
+      "count": 1
+    },
+    {
+      "id": "class-wording-1",
+      "old": "five class",
+      "new": "eight class",
+      "count": 5
+    },
+    {
+      "id": "class-wording-2",
+      "old": "five Class",
+      "new": "eight Class",
+      "count": 1
+    },
+    {
+      "id": "class-wording-3",
+      "old": "five finalists",
+      "new": "eight finalists",
+      "count": 1
+    }
+  ],
+  "hardener": [
+    {
+      "id": "title",
+      "old": "# DnDGPT Rule Hardener",
+      "new": "# Shared DnDGPT execution checklist"
+    },
+    {
+      "id": "summoner-private",
+      "old": " Keep summoner-inclusion private, including generation commentary.",
+      "new": ""
+    },
+    {
+      "id": "dashboard-scope",
+      "old": "Seven core chapters plus Gallery stay in the dashboard.",
+      "new": "Core chapters, Sovereignty and Gallery stay in the dashboard."
+    },
+    {
+      "id": "sovereign-space",
+      "old": "Read gallery for image work: retain 1..3 already-shown web images per scene/overview with captions/credits. Generate only on request; verify actual saves. No routine media reads. Core chapters, Sovereignty and Gallery stay in the dashboard.",
+      "new": "Gallery: retain 1..3 shown web images with credits; generate on request. Core chapters, Sovereignty and Gallery belong in the dashboard."
+    },
+    {
+      "id": "sovereign-creation-checklist",
+      "old": "Read creation-order, generation, utility, class-craft, reach, 5-8 and the current stage (9 Signature, 10 Title, 11 Background). Keep four choice turns. Read direct-play: final choices commit the build, Your story and opening in one save with begin_adventure=true; no extra character/start approval. Honor an explicit draft/pause request. World Preview precedes Turn 1 Luck. Read world-preview/story/4: introduce region, everyday life, environment/pressures and HOW/WHERE it connected to Earth. Save public facts in World; preserve geography and propose missing history for existing campaigns.",
+      "new": "Read sovereign-creation and the shared stage rules: keep four choice turns, World Preview before Luck, eight Unique sovereign classes and the remaining normal boards. Save final choices, story, outfit and opening together with begin_adventure=true. Honor an explicit pause."
+    },
+    {
+      "id": "sovereign-story-checklist",
+      "old": "Read story/dashboard-writing: powers get short italic flavor_text, no extra effect. Write editable character.story_summary after final choices from owned sources/public facts. Preserve player identity. Log reflections use pov/pov_source; unapproved GM thoughts are **POV \u00b7 draft**. Never dictate beliefs/memories/commitments. Embedded no-ai-slop: concrete imagery/actions, player voice, minimal edits, varied prose, no stock hype/rhetorical formulas.",
+      "new": "Read story/dashboard-writing: save short italic flavor_text and editable story_summary from actual race/build/world. Preserve player identity and POV; unapproved thoughts stay drafts. Use concrete, varied prose."
+    }
+  ]
+}

@@ -153,6 +153,7 @@ dialog{color:var(--ink);background:var(--paper);border:1px solid var(--line);bor
 /* dashboard layouts */
 /* campaign tools styles */
 /* journal media styles */
+/* sovereign styles */
 </style>
 </head>
 <body>
@@ -162,6 +163,7 @@ dialog{color:var(--ink);background:var(--paper);border:1px solid var(--line);bor
 <aside id="layoutRail" class="layout-rail" hidden><div class="rail-brand" aria-hidden="true">DnDGPT<span>Your campaign record</span></div><div id="layoutEmblem" class="layout-emblem" aria-hidden="true"></div></aside>
 <div class="dashboard-surface">
 <header class="masthead row"><svg class="crest" viewBox="0 0 48 52" fill="none" aria-hidden="true"><path d="m24 2 21 12v24L24 50 3 38V14L24 2Z" stroke="currentColor" stroke-width="1.5"/><path d="m24 2-10 18 10 18 10-18L24 2ZM3 14l11 6L3 38l21 0 21 0-11-18 11-6M24 38v12" stroke="currentColor" stroke-width="1"/><text x="24" y="28" text-anchor="middle" fill="currentColor" font-family="Georgia,serif" font-size="11">20</text></svg><div class="identity"><p class="eyebrow">Campaign dashboard</p><h1>DnDGPT</h1></div></header>
+<div class="row game-picker"><label for="gameSelect">Game</label><span class="select-field"><select id="gameSelect"><option value="age-of-convergence">Age of Convergence</option><option value="sovereign-system">Sovereign System</option></select></span><button id="newGame" type="button">New campaign</button></div>
 <div class="row session-picker"><label for="session">Saved game</label><span class="select-field session-field"><select id="session"><option value="">Select a saved game</option></select></span><button id="deleteCampaign" class="danger" type="button" disabled>Delete Campaign</button></div>
 <details id="viewSettings" class="view-options"><summary>View options</summary>
 <div class="settings-body">
@@ -222,6 +224,7 @@ dialog{color:var(--ink);background:var(--paper);border:1px solid var(--line);bor
 <section class="companion-page" id="page-equipment" data-panel="equipment" aria-labelledby="title-equipment" hidden><header class="page-heading"><p class="eyebrow">Chapter 05</p><h2 id="title-equipment">Equipment &amp; Inventory</h2><p class="page-description">Everything carried into the unknown.</p></header><div id="equipment" class="page-content"><p class="empty muted">Choose a stored sandbox to view this chapter.</p></div></section>
 <section class="companion-page" id="page-quests" data-panel="quests" aria-labelledby="title-quests" hidden><header class="page-heading"><p class="eyebrow">Chapter 06</p><h2 id="title-quests">Quest Journal</h2><p class="page-description">Promises made. Paths still unwritten.</p></header><div id="quests" class="page-content"><p class="empty muted">Choose a stored sandbox to view this chapter.</p></div></section>
 <section class="companion-page" id="page-world" data-panel="world" aria-labelledby="title-world" hidden><header class="page-heading"><p class="eyebrow">Chapter 07</p><h2 id="title-world">World &amp; Campaign Log</h2><p class="page-description">Places discovered, and the story so far.</p></header><div id="world" class="page-content"><p class="empty muted">Choose a stored sandbox to view this chapter.</p></div></section>
+<section class="companion-page" id="page-sovereignty" data-panel="sovereignty" aria-labelledby="title-sovereignty" hidden><header class="page-heading"><p class="eyebrow">Sovereign System</p><h2 id="title-sovereignty">Sovereignty</h2><p class="page-description">Your domain, commanders and forces.</p></header><div id="sovereignty" class="page-content"></div></section>
 <!-- gallery panel -->
 </main>
 </div>
@@ -230,7 +233,7 @@ dialog{color:var(--ink);background:var(--paper);border:1px solid var(--line);bor
 "use strict";
 function selectCompanionPage(id){
   const button=document.querySelector('#sectionNav [data-target="'+id+'"]');
-  if(!button)return;
+  if(!button||button.hidden)return;
   for(const item of document.querySelectorAll("#sectionNav [data-target]")){
     if(item===button)item.setAttribute("aria-current","page");else item.removeAttribute("aria-current");
   }
@@ -241,7 +244,7 @@ for(const button of document.querySelectorAll("#sectionNav [data-target]")){
   button.addEventListener("click",()=>selectCompanionPage(button.dataset.target));
   button.addEventListener("keydown",event=>{
     if(event.altKey||event.ctrlKey||event.metaKey)return;
-    const buttons=[...document.querySelectorAll("#sectionNav [data-target]")],index=buttons.indexOf(button);
+    const buttons=[...document.querySelectorAll("#sectionNav [data-target]")].filter(item=>!item.hidden),index=buttons.indexOf(button);
     const steps={ArrowRight:1,ArrowDown:1,ArrowLeft:-1,ArrowUp:-1};
     let next;
     if(event.key in steps)next=(index+steps[event.key]+buttons.length)%buttons.length;
@@ -282,6 +285,8 @@ function rpc(method,params){
 }
 function notice(text){$("notice").textContent=text}
 function updateSyncStatus(){
+  $("gameSelect").disabled=deleting||deletionStarted||busy;
+  $("newGame").disabled=deleting||deletionStarted||busy;
   const status=$("syncStatus"), checked=lastVerifiedAt?.toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit"});
   status.dataset.state=syncIssue?"stale":lastVerifiedAt?"saved":"waiting";
   status.textContent=syncIssue?
@@ -417,7 +422,7 @@ function persistPreferences(){
     combat_tab:combatTab,
     scene, layout, ambient_motion:ambientMotion
   };
-  try{window.openai?.setWidgetState?.({campaign_id:state?.id||lastSelected,view_preferences:preferences,campaign_deletion:deletionStarted?deletion:null})}catch{}
+  try{window.openai?.setWidgetState?.({game_id:currentGame,campaign_id:state?.id||lastSelected,modelContent:selectedGameContext(),view_preferences:preferences,campaign_deletion:deletionStarted?deletion:null})}catch{}
   clearTimeout(savingTimer);
   if(standard||window.openai?.callTool)savingTimer=setTimeout(()=>{
     callTool("set_view_preferences",{preferences}).catch(()=>{});
@@ -440,6 +445,7 @@ function restorePreferences(){
   setTimeout(()=>{restoring=false},0);
 }
 async function callTool(name,args={}){
+  const requestEpoch=gameEpoch;
   const checksState=["get_campaign","render_dashboard","execute_confirmed_action","import_campaign","save_chat_update"].includes(name);
   let result;
   try{
@@ -447,6 +453,7 @@ async function callTool(name,args={}){
   else if(window.openai?.callTool)result=await window.openai.callTool(name,args);
   else throw new Error("Connected MCP tools are unavailable");
   if(result?.isError)throw Object.assign(new Error(result.structuredContent?.message||result.content?.find(c=>c.type==="text")?.text||"Tool failed"),{code:result.structuredContent?.error});
+  if(requestEpoch!==gameEpoch)return result;
   receive(result,checksState);
   if(checksState&&(result.structuredContent?.campaign||Array.isArray(result.structuredContent?.campaigns))){
     if(syncIssue)notice("Connection restored. Saved state refreshed.");
@@ -459,7 +466,7 @@ async function callTool(name,args={}){
   }
 }
 async function sendPrompt(text){
-  const prompt=(state?("[DnDGPT campaign "+state.id+", version "+state.version+"] "):"")+text;
+  const prompt=(state?("[DnDGPT game "+currentGame+", campaign "+state.id+", version "+state.version+"] "):("[DnDGPT game "+currentGame+"] "))+text;
   $("fallback").hidden=true;
   try{
     let result;
@@ -690,6 +697,13 @@ function selectSkillTab(id,save=true){
 }
 function renderSkills(abilities){
   const root=$("skills");root.replaceChildren();
+  if(currentGame==="sovereign-system"){
+    const scopes=element("div",undefined,"power-scopes");scopes.setAttribute("role","group");scopes.setAttribute("aria-label","Power ownership");
+    for(const [id,label]of [["all","All powers"],["personal","Personal"],["sovereign","Sovereign"]]){
+      const button=element("button",label);button.type="button";button.setAttribute("aria-pressed",String(powerScope===id));button.onclick=()=>{powerScope=id;renderSkills(state.abilities||[])};scopes.append(button);
+    }
+    root.append(scopes);abilities=abilities.filter(a=>powerScope==="all"||(a.scope||"personal")===powerScope);
+  }
   if(state?.mode==="chat"&&state.phase==="character_draft")paragraph(root,"Saved abilities · character creation is still in progress.","chapter-note");
   if(state?.rules_check?.missing?.length){
     const note=element("aside",undefined,"rules-notice");paragraph(note,"Class kit still needs: "+state.rules_check.missing.join(", ")+".");paragraph(note,"Ask your GM to complete the class kit before confirming the character.");root.append(note);
@@ -972,10 +986,12 @@ function renderGear(next,gear){
   selectGearTab(gearTab,false);
 }
 function renderCampaign(next){
+  activateGame(next.game_id||"age-of-convergence");
   if(state?.id===next.id&&next.version<state.version)return;
   const changed=!state||state.id!==next.id||state.version!==next.version;
   if(changed)lastVerifiedAt=null;
   state=next;lastSelected=next.id;
+  publishGameContext();
   if(changed)document.dispatchEvent(new CustomEvent("companion:campaign",{detail:{id:next.id}}));
   if(pending&&(pending.proposal.campaign_id!==next.id||pending.proposal.expected_version!==next.version))showApproval(null);
   $("session").value=next.id;
@@ -988,7 +1004,8 @@ function renderCampaign(next){
   $("characterPreview").textContent="Level "+c.level+" · XP "+c.xp+" / "+c.xp_next;
   $("skillsPreview").textContent=(next.abilities||[]).length+" owned · "+(next.mode==="chat"&&next.phase==="character_draft"?"creation draft":(next.abilities||[]).filter(a=>skillStatus(a)==="READY").length+" ready");
   $("healthPreview").textContent=next.conditions.length+" recorded conditions · DEF "+c.def;
-  $("summonsPreview").textContent=next.summons.length+(next.summons.length===1?" ally · ":" allies · ")+next.enemies.length+" known enemies";
+  const combatView=sovereignCombatView(next);
+  $("summonsPreview").textContent=combatView.summons.length+(combatView.summons.length===1?" ally · ":" allies · ")+next.enemies.length+" known enemies";
   $("equipmentPreview").textContent=gear.equipped.length+" equipped · "+gear.stored.length+" stored items";
   $("questsPreview").textContent=next.quest_log.filter(q=>!["completed","failed","abandoned"].includes(questStatus(q))).length+" active · "+next.quest_log.filter(q=>questStatus(q)==="completed").length+" completed";
   $("worldPreview").textContent=next.current_location;
@@ -1036,21 +1053,25 @@ function renderCampaign(next){
   renderSkills(next.abilities||[]);
   paragraph($("health"),"DEF "+c.def+" · "+(c.movement_mm===0?"Movement currently unavailable.":"One normal move per round; Dash uses your Action. Your GM checks the legal route."));
   renderRecords($("health"),next.conditions,"No recorded conditions.");
-  renderCombat(next);
+  renderCombat(combatView);
   renderGear(next,gear);
   renderQuests($("quests"),next.quest_log);
-  renderWorld(next);renderEventChecks(next);
+  renderWorld(next);renderEventChecks(next);renderSovereignty(next);
   renderChoices();restorePreferences();updateSaveTools();
 }
 function receive(result,verified=false){
   const data=result?.structuredContent||{};
+  const incoming=result?._meta?.campaign_snapshot||data.campaign;
+  if((gameSwitching||gameLocked)&&((data.game_id&&data.game_id!==currentGame)||(incoming&&(incoming.game_id||"age-of-convergence")!==currentGame)))return;
+  if(data.game_id)activateGame(data.game_id);
+  else if(incoming)activateGame(incoming.game_id||"age-of-convergence");
   receiveGallery(data);
   if(data.historical)return;
   if(data.view_preferences&&!preferencesLoaded){
     preferences={...preferences,...data.view_preferences};preferencesLoaded=true;restorePreferences();
   }
   if(Array.isArray(data.campaigns)){
-    campaigns=data.campaigns.filter(c=>!deletedCampaigns.has(c.id));$("session").replaceChildren(element("option","Select a saved game"));
+    campaigns=data.campaigns.filter(c=>!deletedCampaigns.has(c.id)&&(c.game_id||"age-of-convergence")===currentGame);$("session").replaceChildren(element("option","Select a saved game"));
     $("session").firstElementChild.value="";
     for(const c of campaigns){const option=element("option",c.name);option.value=c.id;$("session").append(option)}
     if(state)$("session").value=state.id;
@@ -1139,7 +1160,7 @@ async function confirmDeletion(){
       if(data.deleted){
         const name=deletion.campaign_name;deletion=null;deletionStarted=false;persistPreferences();
         $("deleteDialog").close();notice("Deleted “"+name+"”.");
-        try{await callTool("list_campaigns",{})}catch{notice("Campaign deleted. Refresh saved games to reload the list.")}
+        try{await callTool("list_campaigns",{game_id:currentGame})}catch{notice("Campaign deleted. Refresh saved games to reload the list.")}
         return;
       }
       if(!data.cleanup_pending)throw new Error("Deletion status is unavailable. Retry the same request.");
@@ -1160,7 +1181,7 @@ async function refresh(){
   try{
     if(state)await callTool("get_campaign",{campaign_id:state.id});
     else{
-      await callTool("render_dashboard",{});
+      await callTool("render_dashboard",{game_id:currentGame});
       if(lastSelected&&campaigns.some(c=>c.id===lastSelected))await callTool("get_campaign",{campaign_id:lastSelected});
     }
   }finally{polling=false}
@@ -1226,6 +1247,7 @@ document.addEventListener("toggle",event=>{if(event.target.matches?.("[data-deta
 new ResizeObserver(()=>{if(standard)notify("ui/notifications/size-changed",{height:document.body.scrollHeight})}).observe(document.body);
 /* campaign tools script */
 /* journal media script */
+/* sovereign script */
 (async()=>{
   renderChoices();restorePreferences();
   if(window.openai?.callTool){

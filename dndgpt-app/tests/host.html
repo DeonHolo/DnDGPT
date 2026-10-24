@@ -20,6 +20,7 @@ window.addEventListener("message",async event=>{
  try{
   if(m.method==="ui/initialize")result={protocolVersion:"2026-01-26",hostInfo:{name:"DnDGPT test host",version:"1.0.0"},hostCapabilities:{serverTools:{},message:{text:{}}},hostContext:{theme:"light",displayMode:"inline",availableDisplayModes:["inline","pip","fullscreen"]}};
   else if(m.method==="tools/call"){calls.push(m.params.name);const response=await fetch("/test-rpc",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(m)});const body=await response.json();if(body.error)throw new Error(body.error.message);result=body.result}
+  else if(m.method==="ui/update-model-context"){window.latestModelContext=m.params.structuredContent;result={}}
   else if(m.method==="ui/message"){if(!Array.isArray(m.params.content))throw new Error("content must be content blocks");messages.push(m.params.content.map(c=>c.text||"").join(""));const p=document.createElement("p");p.textContent=messages.at(-1);document.getElementById("chat").append(p);result={}}
   else if(m.method==="ui/request-display-mode")result={mode:"inline"};
   else throw new Error("Unsupported host method: "+m.method);

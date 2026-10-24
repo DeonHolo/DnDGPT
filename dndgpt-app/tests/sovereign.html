@@ -1,0 +1,68 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sovereign System checks</title>
+<style>body{background:#121711;color:#eee8db;font:15px/1.6 system-ui;margin:20px}iframe{width:1100px;max-width:none;height:950px;border:1px solid #99865b}.pass{color:#b7d89b}.fail{color:#ffaaa2}button{padding:12px}</style>
+<h1>Sovereign System checks</h1><p>Disposable campaigns. Real authenticated transport.</p><button id="run">Run checks</button><p id="result" role="status">Ready</p><ol id="results"></ol><iframe id="widget" src="/test-legacy-widget" title="Campaign fixture"></iframe>
+<script>
+const frame=document.getElementById('widget'),results=[],wait=ms=>new Promise(r=>setTimeout(r,ms));
+const assert=(value,message)=>{if(!value)throw Error(message)};
+async function until(fn){for(let i=0;i<100;i++){if(fn())return;await wait(100)}throw Error('Timed out waiting for UI')}
+async function test(name,fn){try{await fn();results.push({name,passed:true})}catch(e){results.push({name,passed:false,error:e.message})}const li=document.createElement('li');li.className=results.at(-1).passed?'pass':'fail';li.textContent=JSON.stringify(results.at(-1));document.getElementById('results').append(li)}
+document.getElementById('run').onclick=async()=>{
+ document.getElementById('run').disabled=true;const w=frame.contentWindow,d=frame.contentDocument;
+ const fixture=await(await fetch('/test-sovereign-fixture',{method:'POST'})).json();
+ await until(()=>d.getElementById('characterPreview')?.textContent.includes('Level'));
+ const before=await(await fetch('/test-sovereign-state')).json(),ageBefore=await(await fetch('/test-state')).json();
+ await test('Game switch filters saved games and clears the previous campaign',async()=>{
+  d.getElementById('gameSelect').value='sovereign-system';d.getElementById('gameSelect').dispatchEvent(new Event('change'));
+  await until(()=>d.getElementById('session').options.length===2&&d.getElementById('session').options[1].value===fixture.id);
+  assert(d.getElementById('hero').textContent==='No campaign selected','Old character remained visible');
+  assert(!d.getElementById('session').innerText.includes('UI test fixture'),'Another game leaked into saved games');
+  d.getElementById('session').value=fixture.id;d.getElementById('session').dispatchEvent(new Event('change'));
+  await until(()=>d.getElementById('hero').textContent.includes('Wandering Fortress'));
+  assert(!d.getElementById('nav-sovereignty').hidden,'Sovereignty chapter missing');
+ });
+ await test('Domain shows finite objectives and actual development choices',async()=>{
+  d.getElementById('nav-sovereignty').click();const panel=d.getElementById('sovereignty');
+  assert(panel.innerText.includes('Domain level 1')&&panel.innerText.includes('2 / 2 objectives complete'),'Domain level/progress missing');
+  const choices=panel.querySelectorAll('.development-options button');assert(choices.length===3&&[...choices].every(b=>!b.disabled),'Development choices unavailable');
+  choices[0].click();await until(()=>w.lastFixturePrompt?.includes('fortress-two'));
+  assert(w.lastFixturePrompt.includes('mobility'),'Choice sent an incorrect development');
+ });
+ await test('Commander has independent XP and functional three-tab powers',async()=>{
+  d.getElementById('sovereign-tab-commanders').click();const panel=d.getElementById('sovereign-panel-commanders');
+  assert(panel.innerText.includes('Level 3')&&panel.innerText.includes('XP 20 / 200'),'Commander progression missing');
+  panel.querySelector('summary').click();const tabs=[...panel.querySelectorAll('[role="tab"]')];
+  assert(tabs.length===3,'Commander power tabs missing');tabs[1].click();assert(panel.innerText.includes('Spend 10 MP'),'Full rules missing');tabs[2].click();assert(panel.innerText.includes('Twin arrival'),'Upgrades missing');
+ });
+ await test('Personal and sovereign power filters preserve the existing skill tabs',async()=>{
+  d.getElementById('nav-skills').click();const buttons=[...d.querySelectorAll('.power-scopes button')];
+  buttons.find(b=>b.textContent==='Personal').click();assert(d.getElementById('skills').innerText.includes('Iron sweep')&&!d.getElementById('skills').innerText.includes('Open the fortress gate'),'Personal filter mixed scopes');
+  [...d.querySelectorAll('.power-scopes button')].find(b=>b.textContent==='Sovereign').click();assert(d.getElementById('skills').innerText.includes('Open the fortress gate')&&!d.getElementById('skills').innerText.includes('Hold the line'),'Commander power leaked into player powers');
+  assert(d.querySelectorAll('#skillTabs [role="tab"]').length===4&&d.querySelectorAll('#skills .reading-tabs [role="tab"]').length===3,'Existing ability tabs regressed');
+ });
+ await test('Game picker and Sovereignty cards fit all layouts at narrow/wide widths',async()=>{
+  d.getElementById('nav-sovereignty').click();
+  for(const width of [390,1100]){frame.style.width=width+'px';for(const layout of ['original','reclaimed','orrery','ember']){
+   w.selectLayout(layout,false);await wait(60);d.getElementById('sovereign-tab-domain').click();
+   for(const node of [d.getElementById('gameSelect'),...d.querySelectorAll('#sovereign-panel-domain .sovereign-card')]){const box=node.getBoundingClientRect();assert(box.right<=d.documentElement.clientWidth+1&&node.scrollWidth<=node.clientWidth+1,'Overflow '+layout+'/'+width)}
+   const style=w.getComputedStyle(d.querySelector('#sovereign-panel-domain .sovereign-card'));for(const edge of ['Top','Right','Bottom','Left'])assert(parseFloat(style['border'+edge+'Width'])>=1,'Missing border '+layout+'/'+width);assert(parseFloat(style.paddingLeft)>=14,'Missing padding');
+  }}
+ });
+ await test('Late campaign response cannot undo a game switch',async()=>{
+  const original=w.openai.callTool;let release;const barrier=new Promise(r=>release=r);
+  w.openai.callTool=async(name,args)=>{const result=await original(name,args);if(name==='get_campaign'&&args.campaign_id===fixture.id)await barrier;return result};
+  const stale=w.callTool('get_campaign',{campaign_id:fixture.id});await wait(200);
+  await w.switchGame('age-of-convergence');release();await stale;w.openai.callTool=original;
+  assert(d.getElementById('gameSelect').value==='age-of-convergence','Late response switched the game');
+  assert(d.getElementById('nav-sovereignty').hidden,'Other game chapter stayed visible');
+  assert(!d.getElementById('session').innerText.includes('Sovereign fixture'),'Other game save stayed visible');
+ });
+ await test('Browsing, switching and choosing a chat action do not change either campaign',async()=>{
+  const after=await(await fetch('/test-sovereign-state')).json(),ageAfter=await(await fetch('/test-state')).json();
+  assert(JSON.stringify(before)===JSON.stringify(after),'Sovereign save changed');assert(JSON.stringify(ageBefore.campaign)===JSON.stringify(ageAfter.campaign),'Age save changed');
+ });
+ frame.style.width='1100px';await w.switchGame('sovereign-system');d.getElementById('nav-sovereignty').click();d.getElementById('sovereign-tab-domain').click();w.selectLayout('ember',false);
+ document.getElementById('result').textContent=results.filter(r=>r.passed).length+'/'+results.length+' passed';
+ await fetch('/test-sovereign-record',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({results,passed:results.every(r=>r.passed)})});
+};
+if(new URLSearchParams(location.search).has('autorun'))window.addEventListener('load',()=>document.getElementById('run').click());
+</script></html>

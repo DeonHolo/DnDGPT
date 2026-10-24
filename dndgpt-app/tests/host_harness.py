@@ -32,6 +32,7 @@ INNER = create_app(Path(TEMP.name) / "fixture.sqlite3", CONFIG, VERIFIER)
 OWNER = None
 CAMPAIGN_ID = None
 AVAILABLE = True
+SOVEREIGN_ID = None
 
 
 @asynccontextmanager
@@ -133,6 +134,58 @@ def test_player_view():
 @app.get("/test-journal-media")
 def test_journal_media():
     return FileResponse(HERE / "journal_media.html")
+
+
+@app.get("/test-sovereign")
+def test_sovereign_page():
+    return FileResponse(HERE / "sovereign.html")
+
+
+@app.post("/test-sovereign-fixture")
+def sovereign_fixture():
+    global SOVEREIGN_ID
+    if SOVEREIGN_ID is not None:
+        return {"id": SOVEREIGN_ID}
+    from .test_sovereign import fixture_state, milestone
+    from app import records
+    engine = INNER.state.engine
+    prepared = fixture_state(engine)
+    SOVEREIGN_ID = prepared["id"]
+    with engine.store.transaction() as db:
+        state = engine._get(db, "owner-a", SOVEREIGN_ID)
+        # Move this disposable fixture to the authenticated browser fixture owner.
+        records.update(db, "campaigns_v1", {"id": SOVEREIGN_ID}, {"owner": OWNER})
+        state.update(phase="adventure", paused=False, version=2)
+        state["character"].update(name="The awakened sovereign", class_name="Wandering Fortress", rarity="UNIQUE")
+        state["sovereignty"] = prepared["sovereignty"]
+        state["sovereignty"]["domain"]["next_milestone"] = milestone()
+        for objective in state["sovereignty"]["domain"]["next_milestone"]["objectives"]:
+            objective["status"] = "done"
+        power = {"id": "gate", "name": "Open the fortress gate", "rarity": "UNIQUE", "activation": "Active", "scope": "sovereign",
+                 "simple": "Deploy a formation through an established gate.",
+                 "mechanics_display": "Spend 10 MP and your Action to deploy an assigned formation at an established gate.",
+                 "upgrades": [{"id": "gate-two", "name": "Twin arrival", "change_display": "Deploy two formations."}]}
+        state["abilities"] = [power, {"id": "blade", "name": "Iron sweep", "rarity": "RARE", "activation": "Active", "scope": "personal",
+                                      "simple": "Strike an engaged enemy.", "mechanics_display": "Use your Action for a melee attack."}]
+        commander = state["sovereignty"]["commanders"][0]
+        commander.update(level=3, xp=20, xp_total=270, description="An autonomous veteran who directs the fortress guard.",
+                         abilities=[{**power, "id": "hold", "name": "Hold the line", "scope": "commander"}])
+        engine._append(db, state, {"kind": "test_fixture_seed", "result": "Disposable Sovereign UI data"})
+        records.update(db, "campaigns_v1", {"id": SOVEREIGN_ID}, {"version": 2, "data": canonical(state)})
+    return {"id": SOVEREIGN_ID}
+
+
+@app.get("/test-sovereign-state")
+def sovereign_state():
+    return INNER.state.engine.get_campaign(OWNER, SOVEREIGN_ID)
+
+
+@app.post("/test-sovereign-record")
+async def record_sovereign(request: Request):
+    result = await request.json()
+    result["environment"] = "Local browser, authenticated simulated host and disposable campaigns; not native ChatGPT"
+    (HERE.parent / "test-results/sovereign-browser.json").write_text(json.dumps(result, indent=2), encoding="utf-8")
+    return {"saved": True}
 
 
 @app.post("/test-journal-record")
@@ -246,7 +299,8 @@ async def proxy(request: Request):
         return JSONResponse({"error": {"code": -32000, "message": "Connection unavailable (test fixture)"}}, status_code=503)
     body = await request.json()
     if (body.get("method") == "tools/call" and body.get("params", {}).get("name") == "render_dashboard"
-            and not body["params"].get("arguments", {}).get("campaign_id")):
+            and not body["params"].get("arguments", {}).get("campaign_id")
+            and body["params"].get("arguments", {}).get("game_id", "age-of-convergence") == "age-of-convergence"):
         body["params"]["arguments"] = {"campaign_id": CAMPAIGN_ID}
     async with httpx.AsyncClient(transport=httpx.ASGITransport(app=INNER),
                                 base_url="http://127.0.0.1:8766") as client:

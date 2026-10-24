@@ -34,7 +34,7 @@ jobs:
         run: |
           python -m venv .test-tmp/hosted-runtime
           .test-tmp/hosted-runtime/bin/python -m pip install -r requirements-hosted.txt
-          .test-tmp/hosted-runtime/bin/python -c "from app.server import create_app; from app.presentation import dashboard_html; from PIL import features; assert features.check('webp'); assert 'galleryGrid' in dashboard_html()"
+          .test-tmp/hosted-runtime/bin/python -c "from app.server import create_app; from app.presentation import dashboard_html; from app.game_profiles import rule_source, SOVEREIGN; from PIL import features; assert features.check('webp'); assert 'galleryGrid' in dashboard_html(); assert len(rule_source(SOVEREIGN, 'hardener')['content']) < 8000"
       - name: Check rules, packaging, ownership and game behavior
         run: |
           python -c "from pathlib import Path; Path('.test-tmp').mkdir(exist_ok=True)"
