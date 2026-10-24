@@ -22,14 +22,14 @@ def test_every_rarity_boundary_and_exact_distribution():
         roll = dice.rarity(5)
         counts[roll["final_rarity"]] += 1
         assert roll["luck_roll"] is None
-    assert list(counts.values()) == [5500, 2500, 1200, 600, 170, 30]
+    assert list(counts.values()) == [2000, 3000, 2500, 1500, 700, 300]
 
 
 @pytest.mark.parametrize("luck,roll,enhanced", [(7, 500, True), (7, 501, False), (9, 1000, True),
                                              (20, 3500, True), (20, 3501, False)])
 def test_independent_luck_threshold(luck, roll, enhanced):
     calls = []
-    values = iter([5500, roll])
+    values = iter([2000, roll])
     def randbelow(sides):
         calls.append(sides)
         return next(values) - 1

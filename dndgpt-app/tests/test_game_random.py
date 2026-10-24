@@ -49,6 +49,24 @@ def test_retry_after_reopen_recovers_exact_receipt_and_conflicts_do_not_draw(tmp
     assert error.value.code == 'idempotency_conflict' and consumed == [20]
 
 
+def test_pre_update_rarity_receipt_keeps_its_original_tier(tmp_path):
+    from app import records
+    from app.storage import canonical
+    box, consumed = toolbox(tmp_path, [])
+    rolls = [{'label': 'Original issued offer', 'kind': 'rarity', 'luck': 5}]
+    old = {'action_id': 'pre-power-fantasy-roll', 'rng': 'recorded earlier',
+           'results': [{'label': rolls[0]['label'], 'kind': 'rarity', 'result': {
+               'natural': 5000, 'base_rarity': 'COMMON', 'final_rarity': 'COMMON',
+               'luck': 5, 'luck_roll': None, 'enhanced': False}}]}
+    with box.store.transaction() as db:
+        records.insert(db, 'game_rolls_v1', {'owner': 'owner-a', 'action_id': old['action_id'],
+            'campaign_id': '', 'request': canonical(rolls), 'result': canonical(old)})
+    # Under the new table this natural result is UNCOMMON; its saved outcome stays COMMON.
+    assert box.roll('owner-a', old['action_id'], rolls) == GameRandom.public(old)
+    assert box.get('owner-a', old['action_id'], True)['results'][0]['result']['base_rarity'] == 'COMMON'
+    assert not consumed
+
+
 @pytest.mark.parametrize('bad', [
     [], [{'label': 'bad', 'kind': 'dice', 'sides': True}],
     [{'label': 'bad', 'kind': 'dice', 'sides': 6, 'count': 0}],

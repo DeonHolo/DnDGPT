@@ -1,9 +1,9 @@
 {
   "rulebook-v1.0.txt": {
     "original_sha256": "fc1cd1ed39a9fc35961d0d1e9a5feb3035015339d435c6a3af80a3515960597b",
-    "sha256": "29304f597c69aebbc2d59924df976b86ca9b89b48a460084fb35eea84cc11fab",
+    "sha256": "c406028972eebe2b5b7f3d3fc67ad27cdcfed2c999779e9a9e0dadc9dfdfa93c",
     "original_bytes": 324754,
-    "bytes": 424542,
+    "bytes": 425231,
     "replacements": [
       [
         "V4.2",
@@ -198,6 +198,12 @@
         "source": "weighted-outfitting-2026-10-24.json",
         "before_sha256": "9fae3b9973e6a5d4a00ef2e46b2dba39f390792655a57dbe9e69e0ac424e30a8",
         "after_sha256": "29304f597c69aebbc2d59924df976b86ca9b89b48a460084fb35eea84cc11fab"
+      },
+      {
+        "id": "power-fantasy-rarity-2026-10-24",
+        "source": "power-fantasy-rarity-2026-10-24.json",
+        "before_sha256": "29304f597c69aebbc2d59924df976b86ca9b89b48a460084fb35eea84cc11fab",
+        "after_sha256": "c406028972eebe2b5b7f3d3fc67ad27cdcfed2c999779e9a9e0dadc9dfdfa93c"
       }
     ]
   },

@@ -1,0 +1,22 @@
+{
+  "id": "power-fantasy-rarity-2026-10-24",
+  "files": {
+    "rulebook-v1.0.txt": [
+      {
+        "new_start": 86018,
+        "before": "| Common | White / Neutral | 1–5,500 | 55% |\n| Uncommon | Green | 5,501–8,000 | 25% |\n| Rare | Blue | 8,001–9,200 | 12% |\n| Epic | Purple | 9,201–9,800 | 6% |\n| Legendary | Gold | 9,801–9,970 | 1.7% |\n| Unique | Red | 9,971–10,000 | 0.3% |\n",
+        "after": "| Common | White / Neutral | 1–2,000 | 20% |\n| Uncommon | Green | 2,001–5,000 | 30% |\n| Rare | Blue | 5,001–7,500 | 25% |\n| Epic | Purple | 7,501–9,000 | 15% |\n| Legendary | Gold | 9,001–9,700 | 7% |\n| Unique | Red | 9,701–10,000 | 3% |\n"
+      },
+      {
+        "new_start": 86268,
+        "before": "These probabilities apply before Luck Enhancement.\n",
+        "after": "These probabilities apply before Luck Enhancement. This power-fantasy table governs FUTURE standard random rarity rolls, including new rolls in ongoing campaigns. Preserve issued offers, recorded outcomes and owned rarities. Class-inherited powers and fixed-grade milestones keep their own existing rules; starting equipment uses its separate class-budgeted table.\n\nA major earned quest or chapter payoff may precommit a fixed UNIQUE System reward independently of these random odds. Establish the reward and attainable completion condition before the quest is undertaken; deliver it once when genuinely earned. Keep System rewards separate from NPC contract payment. Respect established world facts and original promised rewards.\n"
+      },
+      {
+        "new_start": 103356,
+        "before": "Talent rarity, Skill Evolution rarity, item rarity, title rarity, signature skill rarity, background rarity, and class rarity are distinct records. Higher-rarity offers must introduce mechanically meaningful differences appropriate to the source and level. Avoid a guaranteed high-rarity reward merely because a boss is important unless that fixed rarity was established as a true quest or treasure fact. The natural rarity odds and one-tier Luck Enhancement are unchanged.\n",
+        "after": "Talent rarity, Skill Evolution rarity, item rarity, title rarity, signature skill rarity, background rarity, and class rarity are distinct records. Higher-rarity offers must introduce mechanically meaningful differences appropriate to the source and level. Avoid a guaranteed high-rarity reward merely because a boss is important unless that fixed rarity was established as a true quest or treasure fact. The current Chapter 5 natural rarity table and one-tier Luck Enhancement govern.\n"
+      }
+    ]
+  }
+}

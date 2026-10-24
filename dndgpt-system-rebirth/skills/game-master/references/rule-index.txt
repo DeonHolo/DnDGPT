@@ -36,7 +36,7 @@ enemy-tactics | Enemy identity, adaptive tactics and visible voice | 3909 charac
 2 | THE TWO-DECISION OBSTACLE RULE | 1183 characters
 3 | CINEMATIC PACING | 4320 characters
 4 | THE WORLD — THE AGE OF CONVERGENCE (V4.0 WORLD BIBLE) | 15743 characters
-5 | SIX-TIER RARITY SYSTEM | 18635 characters
+5 | SIX-TIER RARITY SYSTEM | 19324 characters
 6 | LUCK ENHANCEMENT | 1650 characters
 7 | CHARACTER CREATION — FOUR CHOICE TURNS, FIVE PREPARATION PHASES | 13869 characters
 8 | CLASSES AND HEROIC POWER | 25087 characters

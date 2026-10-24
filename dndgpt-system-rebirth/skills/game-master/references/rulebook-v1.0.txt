@@ -558,14 +558,16 @@ Every eligible newly generated rarity uses one independent **d10,000**.
 
 | Rarity | Color | Natural result | Base chance |
 |---|---|---|---|
-| Common | White / Neutral | 1–5,500 | 55% |
-| Uncommon | Green | 5,501–8,000 | 25% |
-| Rare | Blue | 8,001–9,200 | 12% |
-| Epic | Purple | 9,201–9,800 | 6% |
-| Legendary | Gold | 9,801–9,970 | 1.7% |
-| Unique | Red | 9,971–10,000 | 0.3% |
+| Common | White / Neutral | 1–2,000 | 20% |
+| Uncommon | Green | 2,001–5,000 | 30% |
+| Rare | Blue | 5,001–7,500 | 25% |
+| Epic | Purple | 7,501–9,000 | 15% |
+| Legendary | Gold | 9,001–9,700 | 7% |
+| Unique | Red | 9,701–10,000 | 3% |
 
-These probabilities apply before Luck Enhancement.
+These probabilities apply before Luck Enhancement. This power-fantasy table governs FUTURE standard random rarity rolls, including new rolls in ongoing campaigns. Preserve issued offers, recorded outcomes and owned rarities. Class-inherited powers and fixed-grade milestones keep their own existing rules; starting equipment uses its separate class-budgeted table.
+
+A major earned quest or chapter payoff may precommit a fixed UNIQUE System reward independently of these random odds. Establish the reward and attainable completion condition before the quest is undertaken; deliver it once when genuinely earned. Keep System rewards separate from NPC contract payment. Respect established world facts and original promised rewards.
 
 Rarity can apply to:
 
@@ -670,7 +672,7 @@ Class rarity has **real and persistent mechanical consequences**; its meaning ca
 
 Rarity does not automatically mean a uniform damage multiplier. UNIQUE supremacy may manifest in command economy, manipulation of causality, spatial control, transformations, survival, resource interactions, or other genuinely unusual mechanisms. A lower-rarity character remains viable and can gain a Legendary or UNIQUE separately rolled talent; that does not retroactively upgrade their class rarity. Equally, a UNIQUE class can legitimately roll a Common talent. **Do not equalize rarities by inflating ordinary enemies' statistics.** Encounter suitability may account for the actual class and build during preparation, but established enemy HP, DEF, resistances, actions, and weaknesses remain fixed during resolution. Preserve useful lower-rarity characters rather than penalizing them for fair rolls.
 
-Talent rarity, Skill Evolution rarity, item rarity, title rarity, signature skill rarity, background rarity, and class rarity are distinct records. Higher-rarity offers must introduce mechanically meaningful differences appropriate to the source and level. Avoid a guaranteed high-rarity reward merely because a boss is important unless that fixed rarity was established as a true quest or treasure fact. The natural rarity odds and one-tier Luck Enhancement are unchanged.
+Talent rarity, Skill Evolution rarity, item rarity, title rarity, signature skill rarity, background rarity, and class rarity are distinct records. Higher-rarity offers must introduce mechanically meaningful differences appropriate to the source and level. Avoid a guaranteed high-rarity reward merely because a boss is important unless that fixed rarity was established as a true quest or treasure fact. The current Chapter 5 natural rarity table and one-tier Luck Enhancement govern.
 
 ## Hidden-roll presentation — mandatory V3.5 change
 

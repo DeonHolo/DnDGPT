@@ -6,7 +6,7 @@ from dataclasses import dataclass, replace
 from typing import Callable
 
 RARITIES = ("COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY", "UNIQUE")
-BANDS = (5500, 8000, 9200, 9800, 9970, 10000)
+BANDS = (2000, 5000, 7500, 9000, 9700, 10000)
 ATTRIBUTES = ("STR", "DEX", "INT", "CHA", "LCK")
 EQUIPMENT_SLOTS = ("Head", "Face", "Neck", "Shoulders", "Chest", "Arms", "Hands",
                    "Main Hand", "Off-Hand", "Waist", "Legs", "Feet", "Back",
