@@ -2,6 +2,8 @@
 
 Release: 1.0.37. Sovereign System is deferred.
 
+Equipment update in 1.0.38: [weighted slot allocation](STARTING_EQUIPMENT.md) supersedes the fixed roles described below.
+
 ## Player flow
 
 - Keep the four actual creation-choice turns. After the final Background, attributes and name, the GM writes Your story, equips the starting outfit and saves the first scene in one update. There is no separate character/start approval or dashboard button.

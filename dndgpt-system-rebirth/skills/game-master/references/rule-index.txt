@@ -20,7 +20,7 @@ loading | Rules loading and checklist precedence | 2498 characters
 continuity | Turn continuity and efficient resolution | 5360 characters
 creation-order | V1.0 surgical four-turn creation and in-chat continuation precedence | 1994 characters
 direct-play | Direct creation and advancement choices | 1757 characters
-starting-gear | Starting equipment by class rarity | 3399 characters
+starting-gear | Starting equipment by class rarity | 4973 characters
 story | Story flavor, character identity and player voice | 6960 characters
 generation | Generation breadth, reaction roles and a playable world | 7333 characters
 utility | Utility usefulness and creative application | 4658 characters

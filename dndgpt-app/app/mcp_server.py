@@ -179,7 +179,7 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         After the player's final Background/attribute/name choices, write character.story_summary,
         starting equipment and opening_preview in this SAME save with begin_adventure=true. This
         completes creation and opens the first scene directly, with no extra confirmation or button.
-        Save creation.outfitting.item_ids as the four equipped inventory IDs in drawn role order;
+        Save creation.outfitting.item_ids as the four equipped inventory IDs in allocation order;
         their rarities and actual effects must match the recorded starting-outfit receipt.
         Preserve a player-requested draft/pause. Never infer unchosen build options or opening actions.
         Advancement selections/banking apply immediately; clear level_up_freeze once all pending
@@ -214,7 +214,10 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         For NEW starting equipment, use kind=outfitting with class_rarity equal to the saved class,
         campaign_id set and action_id='starting-outfit-'+campaign_id. One immutable four-item
         budgeted draw per campaign; recover it with get_game_roll rather than drawing again.
-        Design full item effects at the returned tiers and save receipt under creation.outfitting.
+        Include slot_preferences=[{slot,weight,basis}]: 1 plausible (default), 2 class OR story fit,
+        3 both, 0 genuinely incompatible; justify overrides before rolling. Any legal slot can
+        receive the premium item. Equip drawn slots/tiers, weave their origin into Your story,
+        and save the receipt under creation.outfitting. Preserve established player history.
         """
         return invoke(lambda owner: game_random.roll(owner, action_id, rolls, campaign_id), True)
 

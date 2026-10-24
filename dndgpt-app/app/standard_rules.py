@@ -55,8 +55,8 @@ def rules_guidance():
             "attributes": ["STR", "DEX", "INT", "CHA", "LCK"],
             "completion": "Read direct-play. Final creation choices save story, gear and opening with "
                           "begin_adventure=true. Advancement choices commit and continue directly.",
-            "starting_equipment": "Read starting-gear for one recorded class-budgeted outfitting draw "
-                                  "and four functional equipped items; save receipt/item_ids in creation.outfitting.",
+            "starting_equipment": "Read starting-gear: precommit class/story slot_preferences for four "
+                                  "weighted slots; save functional gear and receipt/item_ids in creation.outfitting.",
             "distance_display": "From the FIRST reveal, use complete mechanics_display and range_display "
                                 "with descriptive reach (Engaged/Near/Far/Distant), including starting kits, "
                                 "summon stats/commands, Full rules and upgrades. Counted distances, including "

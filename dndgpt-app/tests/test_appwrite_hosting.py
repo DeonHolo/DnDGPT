@@ -198,13 +198,14 @@ def test_direct_creation_and_outfit_roundtrip_on_hosted_store(hosted):
     state = game.update('owner-a', state['id'], 'direct-hosted-class', 1, 'Actual class choice',
                         {'character': {'class_name': 'Fixture Warden'}})['campaign']
     receipt = GameRandom(store, engine=engine).roll('owner-a', 'starting-outfit-' + state['id'],
-        [{'label': 'Outfit', 'kind': 'outfitting', 'class_rarity': 'COMMON'}], state['id'])
+        [{'label': 'Outfit', 'kind': 'outfitting', 'class_rarity': 'COMMON', 'slot_preferences':
+          [{'slot': 'Artifact', 'weight': 2, 'basis': 'The chosen Warden class channels power through an implement'}]}], state['id'])
     plan = receipt['results'][0]['result']
     items = [{'id': f'gear-{i}', 'name': row['role'], 'rarity': row['rarity'], 'effects': ['Fixture effect']}
              for i, row in enumerate(plan['items'])]
     changes = {'character': {'background': 'Fixture keeper', 'story_summary': 'The keeper watches the crossing.'},
                'opening_preview': 'A messenger arrives.', 'upsert': {'inventory': items},
-               'equipment': dict(zip(('Main Hand', 'Chest', 'Feet', 'Neck'), [r['id'] for r in items])),
+               'equipment': dict(zip((r['slot'] for r in plan['items']), [r['id'] for r in items])),
                'creation': {'outfitting': {'item_ids': [r['id'] for r in items]}}}
     result = game.update('owner-a', state['id'], 'direct-hosted-finish', state['version'],
                          'Complete choices directly', changes, begin_adventure=True)

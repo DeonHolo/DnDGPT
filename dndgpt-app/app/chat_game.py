@@ -236,6 +236,7 @@ def complete_creation(state, outfit_receipt=None):
             item = items.get(key, {})
             if (item.get("rarity") != planned["rarity"] or not str(item.get("name", "")).strip()
                     or key not in state["equipment"].values()
+                    or (planned.get("slot") and state["equipment"].get(planned["slot"]) != key)
                     or not any(item.get(field) for field in ("effects", "stats", "mechanics", "mechanics_display"))):
                 fail(422, "starting_equipment_required", "Equip each planned item at its recorded tier with its actual effects")
     if state["level_up_freeze"]:

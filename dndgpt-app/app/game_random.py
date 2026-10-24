@@ -6,7 +6,7 @@ from .engine import fail, identifier
 from .rules import Dice, integer
 from .storage import canonical
 from . import records
-from .outfitting import BUDGETS, starting_outfit
+from .outfitting import BUDGETS, slot_pool, starting_outfit
 
 
 class GameRandom:
@@ -28,7 +28,7 @@ class GameRandom:
             labels.add(label)
             allowed = {'dice': {'sides', 'count', 'modifier'},
                        'check': {'dc', 'modifier', 'advantage', 'disadvantage'},
-                       'rarity': {'luck'}, 'outfitting': {'class_rarity'}}
+                       'rarity': {'luck'}, 'outfitting': {'class_rarity', 'slot_preferences'}}
             if type(kind) is not str or kind not in allowed or set(row) - allowed[kind] - {'label', 'kind'}:
                 raise ValueError('Unknown roll kind or unexpected fields')
             if kind == 'dice':
@@ -46,6 +46,8 @@ class GameRandom:
             elif row.get('class_rarity') not in BUDGETS:
                 raise ValueError('outfitting requires a recorded class_rarity')
             else:
+                if 'slot_preferences' in row:
+                    slot_pool(row['slot_preferences'])
                 outfitting_count += 1
                 if outfitting_count > 1:
                     raise ValueError('A campaign has one starting-equipment draw')
@@ -61,6 +63,7 @@ class GameRandom:
                 elif row['kind'] == 'outfitting':
                     for item in row['result']['items']:
                         item.pop('roll', None)
+                        item.pop('slot_roll', None)
         return result
 
     def roll(self, owner, action_id, rolls, campaign_id=None):
@@ -100,6 +103,9 @@ class GameRandom:
                     fail(422, 'rarity_mismatch', 'Use the saved class rarity for starting equipment')
                 if state.get('creation', {}).get('outfitting'):
                     fail(409, 'outfitting_exists', 'Reuse the saved starting-equipment receipt')
+                if 'slot_preferences' not in outfit:
+                    fail(422, 'slot_preferences_required',
+                         'Precommit class/story slot_preferences with slot, weight (0..3) and basis')
             results = []
             for row in rolls:
                 kind = row['kind']
@@ -113,7 +119,7 @@ class GameRandom:
                 elif kind == 'rarity':
                     result = self.dice.rarity(row['luck'])
                 else:
-                    result = starting_outfit(row['class_rarity'], self.dice)
+                    result = starting_outfit(row['class_rarity'], self.dice, row['slot_preferences'])
                 results.append({'label': row['label'], 'kind': kind, 'result': result})
             receipt = {'action_id': action_id, 'results': results, 'rng': self.dice.source,
                        'created_at': datetime.now(timezone.utc).isoformat(), 'campaign_changed': False}
