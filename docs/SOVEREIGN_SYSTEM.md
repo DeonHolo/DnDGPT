@@ -11,7 +11,7 @@ Approved 24 October 2026. The original startup document is design material, not 
 - [x] Keep personal powers, sovereign powers and entity-owned abilities distinct, with parent-owned upgrades and all three ability tabs.
 - [x] Resolve recorded formation phases inside the normal atomic save, using genuine rolls and retry protection. Advance operations only through fictional time.
 - [x] Add a Sovereignty chapter and game selector to the existing responsive dashboard. Preserve Gallery, history, corrections, imports, layouts and atmosphere choices.
-- [ ] Verify preservation, routing/isolation, progression, battle arithmetic, retry safety and narrow/wide real browser controls before publishing.
+- [x] Verify preservation, routing/isolation, progression, battle arithmetic, retry safety and narrow/wide real browser controls before publishing.
 
 ## Play contract
 
@@ -24,6 +24,8 @@ The game selector changes the saved-game list and available chapter. It never co
 ## Evidence
 
 The new browser matrix passed 7/7 checks across Original, Reclaimed Codex, The Orrery and Ember Ledger at 390/1100px, including real game/saved-campaign selection, independent commander displays, three-tab powers, personal/sovereign filters, domain choices, late responses and unchanged gameplay. This uses authenticated local transport and disposable campaigns, not a native ChatGPT acceptance run. Subsequent shared regression and publication evidence is recorded below when complete.
+
+Release candidate `8706667`: [full GitHub checks](https://github.com/DeonHolo/DnDGPT/actions/runs/40101660496) passed 565 tests, the isolated hosted-dependency import and portable packaging. Local focused source/rules/game checks passed 43; targeted import/credit/ledger checks passed four. The final browser run passed the seven new Sovereign checks, 24 existing player-view checks and eight quest/Gallery checks, including selection context with no unsolicited chat message. A first candidate had 560 passing checks and one failure caused by an extra REST response field; retaining the original REST list response fixed compatibility. No failing candidate was deployed to production.
 
 The base-phase resolver and progression are executable; arbitrary novel ability prose remains GM-adjudicated. Neither schema tests nor browser fixtures certify generated class quality, model prose, native phone behavior, campaign balance or a model latency percentage.
 
