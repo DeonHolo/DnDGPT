@@ -39,7 +39,8 @@ def class_kit_check(state):
     owned = [a for a in state.get("abilities", [])
              if str(a.get("source", "")).lower().startswith("class") or a.get("source_class")]
     if state.get("game_id") == "sovereign-system":
-        owned = [a for a in owned if a.get("scope") != "sovereign"]
+        from .sovereignty import is_foundation
+        owned = [a for a in owned if not is_foundation(a)]
     counts = {kind: 0 for kind in ("active", "passive", "reaction", "free_action", "utility")}
     for ability in owned:
         kind = ability_kind(ability)

@@ -402,3 +402,15 @@ def test_ordinary_update_preserves_passive_foundation_identity(engine):
     parent = {**state["abilities"][0], "activation": "Active"}
     with pytest.raises(EngineError, match="passive sovereign foundation"):
         apply_changes(state, {"upsert": {"abilities": [parent]}})
+
+
+def test_legacy_temporary_sovereign_command_counts_as_regular_skill(engine):
+    from app.standard_rules import class_kit_check
+    from app.sovereignty import sovereign_kit_check
+    state = fixture_state(engine); state["character"]["rarity"] = "UNIQUE"
+    state["abilities"] = [{"id": "old-command", "source": "Class", "scope": "sovereign", "activation": "Active"}]
+    assert "1 active" not in class_kit_check(state)["missing"]
+    state["abilities"] += [{"id": role, "name": role.title(), "scope": "sovereign", "sovereign_role": role,
+                            "activation": "Passive", "rarity": "UNIQUE", "mechanics": "The existing foundation.",
+                            "flavor_text": "The realm endures."} for role in ("domain", "general", "army")]
+    assert sovereign_kit_check(state)["ready"]

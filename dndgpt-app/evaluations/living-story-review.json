@@ -1,0 +1,150 @@
+{
+  "reviewer": "Codex manual review of captured native responses; single reviewer, no human-rater or reliability-score claim",
+  "rounds": 30,
+  "campaign_responses": 60,
+  "actual_gameplay_tool_calls": 0,
+  "player_campaigns_accessed": 0,
+  "reviewed_cases": [
+    {
+      "round": 6,
+      "focus": "Closed quest and once-only System reward; NPC payment stays separate",
+      "responses": [
+        {
+          "game_id": "age-of-convergence",
+          "opening_sentence": "The repaired crossing holds firm under your test. You report success to Mara; the ferry landing opens, and the completed quest's 30 XP and 50 silver remain granted exactly once.",
+          "dialogue": "Mara says, \"Everything works. I still owe you ten silver, and your passage is free.\"",
+          "next_decision": "Collect Mara's separate 10 silver payment, board the ferry using your promised free passage, or explore the shore."
+        },
+        {
+          "game_id": "sovereign-system",
+          "opening_sentence": "The crossing passes its test, and Mara receives your report. The quest is closed; its 30 XP and 50 silver were already awarded and cannot be claimed again.",
+          "dialogue": "Mara says, \"The crossing is open. Your ten silver is still owed, and your ferry passage costs nothing.\"",
+          "next_decision": "Collect the outstanding payment, take the free ferry, or pursue the Admiral's west-road scouting report."
+        }
+      ]
+    },
+    {
+      "round": 12,
+      "focus": "Enemy knowledge follows witnessed facts",
+      "responses": [
+        {
+          "game_id": "age-of-convergence",
+          "opening_sentence": "Behind the ridge wall, you question your companion while the Lantern Moth remains active.",
+          "dialogue": "Your companion replies, \"The captain saw the moth guarding you. He hasn't seen you unconscious, so he couldn't know whether it would remain active afterward.\"",
+          "next_decision": "Observe the raiders from cover, attempt a counterattack, or withdraw."
+        },
+        {
+          "game_id": "sovereign-system",
+          "opening_sentence": "Sheltered behind the stone wall, you ask your companion to assess what the raiders witnessed.",
+          "dialogue": "Your companion answers, \"Their captain saw your Lantern Moth protecting you, but never saw you lose consciousness. He cannot confirm its persistence from that encounter.\"",
+          "next_decision": "Monitor the raiders, confront their lookout, or retreat along the ridge."
+        }
+      ]
+    },
+    {
+      "round": 14,
+      "focus": "Journey stops before an unchosen risky route",
+      "responses": [
+        {
+          "game_id": "age-of-convergence",
+          "opening_sentence": "At the ferry landing, the newly washed-out side path ends in unstable ground. You halt before entering the damaged stretch. The repaired ferry crossing remains open.",
+          "next_decision": "Take the established ferry route, examine the washout from safe ground, or abandon the side path for another destination."
+        },
+        {
+          "game_id": "sovereign-system",
+          "opening_sentence": "You stop at the fresh washout. The side path is unsafe to cross without choosing a risky approach; no crossing is attempted. The completed ferry quest remains closed.",
+          "next_decision": "Use the repaired ferry crossing, assess an alternate route, or seek the Breakwater Admiral's west-road scouting report."
+        }
+      ]
+    },
+    {
+      "round": 18,
+      "focus": "Unspecified equipment is recognized instead of invented",
+      "responses": [
+        {
+          "game_id": "age-of-convergence",
+          "opening_sentence": "At the ferry landing, you inspect the previously recovered equipment. The examination is completed without altering its condition or your resources. Its precise inventory and earlier history are not established in the supplied record.",
+          "next_decision": "Continue toward a new objective, take your promised free ferry passage, or collect Mara's outstanding 10 silver."
+        },
+        {
+          "game_id": "sovereign-system",
+          "opening_sentence": "You examine the earlier recovered equipment at the restored landing. No additional properties, resource changes, or discoveries are established; the equipment's exact identity remains unspecified.",
+          "next_decision": "Pursue the Admiral's west-road reconnaissance report, take the free ferry, or collect Mara's separate 10 silver payment."
+        }
+      ]
+    },
+    {
+      "round": 20,
+      "focus": "Regular positional upgrade stays on its parent",
+      "responses": [
+        {
+          "game_id": "age-of-convergence",
+          "opening_sentence": "At the ferry landing, your chosen positional upgrade takes effect. The existing parent skill now supports ally repositioning; no independent passive is gained. The crossing quest remains closed.",
+          "next_decision": "Test the enhanced skill when an appropriate opportunity arises, collect Mara's outstanding 10 silver, or depart."
+        },
+        {
+          "game_id": "sovereign-system",
+          "opening_sentence": "The selected upgrade integrates ally repositioning into its existing regular skill. No separate passive or permanent Domain, General, or Army foundation improvement is acquired.",
+          "next_decision": "Review your Sovereignty foundations, pursue the Admiral's west-road report, or collect Mara's outstanding payment."
+        }
+      ]
+    },
+    {
+      "round": 23,
+      "focus": "Separate campaign knowledge; promised scouts return",
+      "responses": [
+        {
+          "game_id": "age-of-convergence",
+          "opening_sentence": "At the restored ferry landing, you ask Mara about the west road. No confirmed report is established in this campaign.",
+          "dialogue": "Mara says, \"I haven't any confirmed news to give you about the west road.\"",
+          "next_decision": "Investigate the west road yourself, collect Mara's outstanding 10 silver, or take your promised free ferry passage."
+        },
+        {
+          "game_id": "sovereign-system",
+          "opening_sentence": "You review the delegated scouts' report: the Breakwater Admiral returned its scouts before noon, fulfilling its promise. The west road was clear when surveyed, though current safety is not guaranteed.",
+          "next_decision": "Travel the west road, request further reconnaissance, or pursue another objective."
+        }
+      ]
+    },
+    {
+      "round": 24,
+      "focus": "General advice remains within its mandate",
+      "responses": [
+        {
+          "game_id": "age-of-convergence",
+          "opening_sentence": "At the restored ferry landing, your companion considers the uncertain west-road conditions.",
+          "dialogue": "Your companion says, \"We have no confirmed news. We could scout carefully rather than commit to an unknown route.\"",
+          "next_decision": "Scout the west-road approach, take the free ferry, or collect Mara's outstanding 10 silver."
+        },
+        {
+          "game_id": "sovereign-system",
+          "opening_sentence": "The Breakwater Admiral considers its scouts' completed report without exceeding its reconnaissance mandate.",
+          "dialogue": "The Admiral says, \"The west road was clear when surveyed. I recommend renewed reconnaissance before committing forces; conditions may have changed.\"",
+          "next_decision": "Authorize another scouting mission, travel the previously surveyed road, or pursue another objective."
+        }
+      ]
+    },
+    {
+      "round": 30,
+      "focus": "Early promise, quest closure and unconscious-summon rule retained",
+      "responses": [
+        {
+          "game_id": "age-of-convergence",
+          "opening_sentence": "At the frontier camp, you review the established agreements and abilities without taking further action.",
+          "historical_answer": "Mara promised free ferry passage for returning the bronze bell intact, which you did. She separately owes 10 silver. The crossing quest is completed; its 30 XP and 50 silver were already awarded once. Lantern Moth remains active even if its caller falls unconscious. The raider captain never witnessed that persistence.",
+          "next_decision": "Explore the frontier, consult your companion, or return to collect Mara's payment."
+        },
+        {
+          "game_id": "sovereign-system",
+          "opening_sentence": "At the frontier camp, you review the earlier promises and established powers without advancing the expedition.",
+          "historical_answer": "Mara promised free passage for the intact bronze bell, already returned. She still owes 10 silver. The crossing quest is complete, with 30 XP and 50 silver awarded once. Lantern Moth does not vanish when its caller becomes unconscious.",
+          "next_decision": "Continue exploring, consult the Admiral, or return for Mara's payment."
+        }
+      ]
+    }
+  ],
+  "observations": [
+    "The cautious-advice reply suggested renewed reconnaissance soon after a report. It was an optional next choice, not a forced prerequisite; watch for repetitive preparation in real play."
+  ],
+  "scope": "Thirty short paired fictional snapshots with explicit rules. No real long campaign, actual MCP save/retrieval, balance or model-latency certification."
+}

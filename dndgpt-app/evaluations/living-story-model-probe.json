@@ -1,0 +1,635 @@
+{
+  "provenance": "native_temporary_chat_read_only_probe",
+  "turns": [
+    {
+      "round": 1,
+      "prompt": "Read-only model-only continuity evaluation. These are disposable invented campaign snapshots, not real saves. Do not use any tools or plugins, roll, or change campaigns. This tests short-form narration, not native Intelligent UI or actual MCP execution. Use the supplied authoritative facts and earlier established records. Follow normal DnDGPT rules: connect the player action to its outcome and next scene, preserve closed quests and actual powers, respect player decisions, fictional time and NPC knowledge, and obtain full established details rather than inventing omitted history when needed. No invented player thoughts. Do not reprint kits or the HUD. For each snapshot return valid JSON only: {\"responses\":[{\"game_id\":\"...\",\"opening_sentence\":\"...\",\"dialogue\":\"optional NPC line\",\"next_decision\":\"...\",\"historical_answer\":\"only when the player asks about prior facts\"}]}. Keep both responses together under 140 words. No tools were called and no save was made; do not claim otherwise.\n\nInitial established records: In Age of Convergence, Mara the ferry keeper promised free ferry passage after the bronze bell is returned intact. The bell has already been returned intact. The class ability Lantern Moth remains active when its caller is unconscious. The raider captain survived seeing the moth guard its caller, but has never observed the caller fall unconscious. In Sovereign System, the Breakwater Admiral promised to scout the west road before noon. Its own Breakwater Order belongs to the general, not the sovereign. The sovereign has separate permanent Domain, General and Army foundations. Temporary commands use the regular skill tree. Each character level guarantees one lasting improvement to an actual foundation, displayed in Sovereignty. For this test it also owns Lantern Moth with the same persistence rule. Mara made the same bell-for-free-passage promise in this separate test world. These are separate campaigns; do not transfer units or inventory between them.\n\nStory evaluation round 1/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":2,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":300,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"active\",\"system_reward\":\"Published reward: 30 XP and 50 silver on completion\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Inspect the damaged ferry landing before choosing a repair.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"},{\"game_id\":\"sovereign-system\",\"version\":2,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":300,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"active\",\"system_reward\":\"Published reward: 30 XP and 50 silver on completion\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Inspect the damaged ferry landing before choosing a repair.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"}]",
+      "started_at": 1792859425194,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "At the ferry landing, inspection reveals two outstanding repairs: the damaged support beam and the faulty hinge. Neither has been repaired yet.",
+            "dialogue": "Mara says, \"The bell came back intact. Your free passage still stands.\"",
+            "next_decision": "Will you support the beam first, restore the hinge, or ask Mara about the landing's condition?"
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "The inspection identifies the support beam and hinge as separate repair tasks. Both remain unfinished, and the ferry crossing remains unresolved.",
+            "dialogue": "Mara says, \"You returned the bell. I'll honor the free crossing.\"",
+            "next_decision": "Will you reinforce the beam, repair the hinge, or request an update on the Breakwater Admiral's west-road scouting?"
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 58283
+    },
+    {
+      "round": 2,
+      "prompt": "\nStory evaluation round 2/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":3,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":600,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"active\",\"system_reward\":\"Published reward: 30 XP and 50 silver on completion\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Use the survey results to brace the loose beam.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"},{\"game_id\":\"sovereign-system\",\"version\":3,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":600,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"active\",\"system_reward\":\"Published reward: 30 XP and 50 silver on completion\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Use the survey results to brace the loose beam.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"}]",
+      "started_at": 1792859484041,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "Following the survey findings, you brace the loose support beam. The timber settles firmly into place, completing the first repair. The damaged hinge remains.",
+            "dialogue": "Mara says, \"That beam looks secure. Just the hinge left now.\"",
+            "next_decision": "Will you restore the hinge, inspect its fittings more closely, or ask Mara about available replacement parts?"
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "Using the survey results, you secure the loose beam against its supports. The beam objective is complete, but the hinge still prevents the landing's full restoration.",
+            "dialogue": "Mara says, \"Good work. The hinge is our last repair.\"",
+            "next_decision": "Will you repair the hinge directly, examine its damaged fittings, or ask Mara for suitable materials?"
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 33557
+    },
+    {
+      "round": 3,
+      "prompt": "\nStory evaluation round 3/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":4,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":900,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"active\",\"system_reward\":\"Published reward: 30 XP and 50 silver on completion\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Clear the debris after the beam is supported.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"},{\"game_id\":\"sovereign-system\",\"version\":4,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":900,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"active\",\"system_reward\":\"Published reward: 30 XP and 50 silver on completion\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Clear the debris after the beam is supported.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"}]",
+      "started_at": 1792859518204,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "You clear the scattered debris from beneath the braced beam, opening the landing's approach. The support remains secure, but the damaged hinge still needs restoration.",
+            "dialogue": "Mara says, \"That's cleared nicely. The hinge is all that's left.\"",
+            "next_decision": "Will you restore the hinge now or leave the unfinished repair and pursue another objective?"
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "You remove the debris around the secured beam, leaving the landing unobstructed. The beam objective remains complete; the hinge remains unrepaired.",
+            "dialogue": "Mara says, \"The approach is clear. We still need that hinge fixed.\"",
+            "next_decision": "Will you restore the hinge or depart to pursue another objective?"
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 90965
+    },
+    {
+      "round": 4,
+      "prompt": "\nStory evaluation round 4/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":5,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":1200,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"active\",\"system_reward\":\"Published reward: 30 XP and 50 silver on completion\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Ask the keeper which final repair remains.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"},{\"game_id\":\"sovereign-system\",\"version\":5,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":1200,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"active\",\"system_reward\":\"Published reward: 30 XP and 50 silver on completion\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Ask the keeper which final repair remains.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"}]",
+      "started_at": 1792859609891,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "At the cleared landing, Mara examines the braced beam and points toward the ferry's damaged hinge. The crossing quest remains unfinished.",
+            "dialogue": "Mara says, \"Only the hinge remains. The beam is secure, and your free passage is already promised.\"",
+            "next_decision": "Will you restore the hinge to finish the crossing repairs, or leave the job unfinished and travel elsewhere?"
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "Mara checks the secured beam, then identifies the damaged hinge as the final outstanding repair. The quest remains active.",
+            "dialogue": "Mara says, \"Restore that hinge and the repairs are finished. Your bell-earned passage is still free.\"",
+            "next_decision": "Will you repair the hinge or depart for another objective, such as following up on the Admiral's west-road scouting?"
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 72913
+    },
+    {
+      "round": 5,
+      "prompt": "\nStory evaluation round 5/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":6,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":1500,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"active\",\"system_reward\":\"Published reward: 30 XP and 50 silver on completion\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Fit the replacement hinge using the measured bracket.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"},{\"game_id\":\"sovereign-system\",\"version\":6,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":1500,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"active\",\"system_reward\":\"Published reward: 30 XP and 50 silver on completion\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Fit the replacement hinge using the measured bracket.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"}]",
+      "started_at": 1792859683705,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "The replacement hinge seats neatly against the measured bracket. The landing's mechanism swings freely; both repairs are complete, fulfilling the crossing quest.",
+            "dialogue": "Mara says, \"Beautiful work. Your ten silver is owed, and the free crossing I promised is yours.\"",
+            "next_decision": "Claim the 30 XP and 50 silver quest reward and 10 silver payment, then choose whether to board the ferry or explore the shore."
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "You fit the replacement hinge into its measured bracket. It swings smoothly, completing the landing repairs and satisfying both quest objectives.",
+            "dialogue": "Mara says, \"The landing's restored. I owe you ten silver, and your bell-earned passage remains free.\"",
+            "next_decision": "Collect the 30 XP and 50 silver quest reward and separate 10 silver payment; then board the ferry or pursue the Admiral's scouting report."
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 16174
+    },
+    {
+      "round": 6,
+      "prompt": "\nStory evaluation round 6/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":7,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":1800,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Test the repaired crossing and report to the keeper.\",\"authoritative_outcome\":\"Both fixed objectives are done. The crossing opens and the System reward is committed once.\"},{\"game_id\":\"sovereign-system\",\"version\":7,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":1800,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Test the repaired crossing and report to the keeper.\",\"authoritative_outcome\":\"Both fixed objectives are done. The crossing opens and the System reward is committed once.\"}]",
+      "started_at": 1792859700863,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "The repaired crossing holds firm under your test. You report success to Mara; the ferry landing opens, and the completed quest's 30 XP and 50 silver remain granted exactly once.",
+            "dialogue": "Mara says, \"Everything works. I still owe you ten silver, and your passage is free.\"",
+            "next_decision": "Collect Mara's separate 10 silver payment, board the ferry using your promised free passage, or explore the shore."
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "The crossing passes its test, and Mara receives your report. The quest is closed; its 30 XP and 50 silver were already awarded and cannot be claimed again.",
+            "dialogue": "Mara says, \"The crossing is open. Your ten silver is still owed, and your ferry passage costs nothing.\"",
+            "next_decision": "Collect the outstanding payment, take the free ferry, or pursue the Admiral's west-road scouting report."
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 41827
+    },
+    {
+      "round": 7,
+      "prompt": "\nStory evaluation round 7/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":8,\"current_location\":\"The ridge\",\"fictional_time_seconds\":2100,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Use the reopened crossing to reach the ridge.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"},{\"game_id\":\"sovereign-system\",\"version\":8,\"current_location\":\"The ridge\",\"fictional_time_seconds\":2100,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Use the reopened crossing to reach the ridge.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"}]",
+      "started_at": 1792859743591,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "You cross the restored ferry landing without paying for passage and reach the ridge. Behind you, the completed crossing remains open; its System reward is already settled.",
+            "next_decision": "Explore the ridge ahead, survey the surrounding terrain, or return to Mara to collect her outstanding 10 silver."
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "The repaired crossing carries you safely to the ridge. The crossing quest remains closed, its reward already granted, while Mara's separate 10 silver payment remains outstanding.",
+            "next_decision": "Scout the ridge, seek information about the Breakwater Admiral's west-road reconnaissance, or return to collect Mara's payment."
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 63321
+    },
+    {
+      "round": 8,
+      "prompt": "\nStory evaluation round 8/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":9,\"current_location\":\"The ridge\",\"fictional_time_seconds\":2400,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Investigate the tracks beside the ridge.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"},{\"game_id\":\"sovereign-system\",\"version\":9,\"current_location\":\"The ridge\",\"fictional_time_seconds\":2400,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Investigate the tracks beside the ridge.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"}]",
+      "started_at": 1792859807804,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "You examine the tracks beside the ridge, tracing their visible course across the ground. Their maker and destination remain unconfirmed. The ferry quest stays closed.",
+            "next_decision": "Follow the tracks along the ridge, survey the surrounding terrain, or return toward the ferry landing."
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "You inspect the tracks bordering the ridge, studying their direction without establishing who made them. The Breakwater Admiral's separate west-road reconnaissance remains unreported.",
+            "next_decision": "Follow the tracks, scout the ridge independently, or seek the Admiral's promised reconnaissance report."
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 25274
+    },
+    {
+      "round": 9,
+      "prompt": "\nStory evaluation round 9/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":10,\"current_location\":\"The ridge\",\"fictional_time_seconds\":2700,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Approach the raider lookout using the stone wall as cover.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"},{\"game_id\":\"sovereign-system\",\"version\":10,\"current_location\":\"The ridge\",\"fictional_time_seconds\":2700,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Approach the raider lookout using the stone wall as cover.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"}]",
+      "started_at": 1792859833939,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "You advance toward the raider lookout, keeping the stone wall between you and the exposed ridge. The lookout's awareness of your approach remains uncertain.",
+            "next_decision": "Observe the lookout from cover, attempt a quiet confrontation, or withdraw along the wall."
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "Using the stone wall for cover, you approach the raider lookout on the ridge. Your position improves, but whether the lookout has noticed you remains unknown.",
+            "next_decision": "Study the lookout's movements, issue a challenge from cover, or reposition without engaging."
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 78333
+    },
+    {
+      "round": 10,
+      "prompt": "\nStory evaluation round 10/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":11,\"current_location\":\"The ridge\",\"fictional_time_seconds\":3000,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Call the Lantern Moth and hold position.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"},{\"game_id\":\"sovereign-system\",\"version\":11,\"current_location\":\"The ridge\",\"fictional_time_seconds\":3000,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Call the Lantern Moth and hold position.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"}]",
+      "started_at": 1792859913116,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "You summon the Lantern Moth beside the stone wall and hold position. Its presence marks your defended position as the raider lookout remains ahead.",
+            "next_decision": "Observe the lookout while the moth guards you, challenge the raider from cover, or retreat with the moth."
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "The Lantern Moth answers your call, taking up its protective position beside the ridge wall. You remain stationary, with the raider lookout ahead.",
+            "next_decision": "Maintain your guarded position, confront the lookout, or withdraw toward the ridge path."
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 50270
+    },
+    {
+      "round": 11,
+      "prompt": "\nStory evaluation round 11/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":12,\"current_location\":\"The ridge\",\"fictional_time_seconds\":3300,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Withdraw behind the wall after the enemy volley.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"},{\"game_id\":\"sovereign-system\",\"version\":12,\"current_location\":\"The ridge\",\"fictional_time_seconds\":3300,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Withdraw behind the wall after the enemy volley.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"}]",
+      "started_at": 1792859964219,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "The enemy volley cuts across the ridge as you withdraw behind the stone wall. You reach cover, with the Lantern Moth still active nearby. The raider threat remains unresolved.",
+            "next_decision": "Observe the raiders from cover, counterattack with the moth's support, or retreat farther along the ridge."
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "After the hostile volley, you pull back behind the stone wall. The barrier shields your position while the Lantern Moth remains active. No casualties or resource changes are established.",
+            "next_decision": "Hold cover and assess the attackers, organize a counterattack, or withdraw along the ridge path."
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 87994
+    },
+    {
+      "round": 12,
+      "prompt": "\nStory evaluation round 12/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":13,\"current_location\":\"The ridge\",\"fictional_time_seconds\":3600,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Ask the companion what the enemy appeared to learn.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"},{\"game_id\":\"sovereign-system\",\"version\":13,\"current_location\":\"The ridge\",\"fictional_time_seconds\":3600,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Ask the companion what the enemy appeared to learn.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"}]",
+      "started_at": 1792860053028,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "Behind the ridge wall, you question your companion while the Lantern Moth remains active.",
+            "dialogue": "Your companion replies, \"The captain saw the moth guarding you. He hasn't seen you unconscious, so he couldn't know whether it would remain active afterward.\"",
+            "next_decision": "Observe the raiders from cover, attempt a counterattack, or withdraw."
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "Sheltered behind the stone wall, you ask your companion to assess what the raiders witnessed.",
+            "dialogue": "Your companion answers, \"Their captain saw your Lantern Moth protecting you, but never saw you lose consciousness. He cannot confirm its persistence from that encounter.\"",
+            "next_decision": "Monitor the raiders, confront their lookout, or retreat along the ridge."
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 66110
+    },
+    {
+      "round": 13,
+      "prompt": "\nStory evaluation round 13/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":14,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":3900,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Begin the already ordered return journey.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"},{\"game_id\":\"sovereign-system\",\"version\":14,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":3900,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Begin the already ordered return journey.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"}]",
+      "started_at": 1792860119969,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "Leaving the raider lookout behind, you follow your previously chosen return route and arrive at the ferry landing. The repaired crossing remains open, its quest completed and reward already granted.",
+            "dialogue": "Mara says, \"Welcome back. I still owe you ten silver.\"",
+            "next_decision": "Collect the outstanding payment, take another free ferry crossing, or pursue a different destination."
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "Your ordered return journey brings you safely from the ridge to the ferry landing. Both repairs remain complete, and the System reward cannot be earned again.",
+            "dialogue": "Mara says, \"The crossing is holding. Your ten silver is still waiting.\"",
+            "next_decision": "Collect Mara's payment, use your promised free passage, or seek an update on the Admiral's west-road reconnaissance."
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 96448
+    },
+    {
+      "round": 14,
+      "prompt": "\nStory evaluation round 14/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":15,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":4200,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Stop at the newly washed-out side path and assess the danger.\",\"authoritative_outcome\":\"The side path is newly washed out. Travel stops before choosing a risky route.\"},{\"game_id\":\"sovereign-system\",\"version\":15,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":4200,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Stop at the newly washed-out side path and assess the danger.\",\"authoritative_outcome\":\"The side path is newly washed out. Travel stops before choosing a risky route.\"}]",
+      "started_at": 1792860217235,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "At the ferry landing, the newly washed-out side path ends in unstable ground. You halt before entering the damaged stretch. The repaired ferry crossing remains open.",
+            "next_decision": "Take the established ferry route, examine the washout from safe ground, or abandon the side path for another destination."
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "You stop at the fresh washout. The side path is unsafe to cross without choosing a risky approach; no crossing is attempted. The completed ferry quest remains closed.",
+            "next_decision": "Use the repaired ferry crossing, assess an alternate route, or seek the Breakwater Admiral's west-road scouting report."
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 51590
+    },
+    {
+      "round": 15,
+      "prompt": "\nStory evaluation round 15/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":16,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":4500,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Take the marked safe route instead.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"},{\"game_id\":\"sovereign-system\",\"version\":16,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":4500,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Take the marked safe route instead.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"}]",
+      "started_at": 1792860269655,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "You follow the marked safe route around the fresh washout, leaving the unstable side path untouched. The detour keeps you clear of the damaged ground at the ferry landing.",
+            "next_decision": "Continue along the marked route, return to Mara for her outstanding 10 silver, or choose another destination."
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "You take the marked safe route, bypassing the washed-out side path without attempting a dangerous crossing. The completed ferry repairs remain undisturbed.",
+            "next_decision": "Continue along the safe route, collect Mara's outstanding payment, or seek news of the Breakwater Admiral's west-road reconnaissance."
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 35158
+    },
+    {
+      "round": 16,
+      "prompt": "\nStory evaluation round 16/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":17,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":4800,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Return to the restored ferry landing.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"},{\"game_id\":\"sovereign-system\",\"version\":17,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":4800,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Return to the restored ferry landing.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"}]",
+      "started_at": 1792860305669,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "You return to the restored ferry landing, leaving the washed-out side path behind. The braced beam and replacement hinge remain secure; the completed quest's reward stays settled.",
+            "dialogue": "Mara says, \"Welcome back. The crossing's still sound, and I owe you ten silver.\"",
+            "next_decision": "Collect Mara's outstanding payment, use your promised free ferry passage, or depart along the safe route."
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "The marked route leads you back to the restored ferry landing. Both repairs remain complete, with no additional System reward due.",
+            "dialogue": "Mara says, \"Everything's holding. Your ten silver is still owed.\"",
+            "next_decision": "Collect the payment, take the free ferry, or seek the Admiral's west-road reconnaissance report."
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 52656
+    },
+    {
+      "round": 17,
+      "prompt": "\nStory evaluation round 17/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":18,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":5100,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Talk with the keeper about what has changed.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"},{\"game_id\":\"sovereign-system\",\"version\":18,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":5100,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Talk with the keeper about what has changed.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"}]",
+      "started_at": 1792860359151,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "At the restored ferry landing, you ask Mara about recent changes. The crossing remains operational, while the side path has washed out.",
+            "dialogue": "Mara says, \"The ferry's working again, but that side path isn't safe. Your free passage still stands, and I owe you ten silver.\"",
+            "next_decision": "Collect the outstanding payment, take the free ferry, or investigate a new destination."
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "Mara discusses the restored landing and newly washed-out side path. The completed crossing quest remains closed.",
+            "dialogue": "Mara says, \"The repairs are holding. Only the side path has changed. Your passage is free, and I still owe you ten silver.\"",
+            "next_decision": "Collect payment, board the ferry, or pursue the Admiral's west-road report."
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 52429
+    },
+    {
+      "round": 18,
+      "prompt": "\nStory evaluation round 18/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":19,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":5400,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Inspect the equipment recovered earlier.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"},{\"game_id\":\"sovereign-system\",\"version\":19,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":5400,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Inspect the equipment recovered earlier.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"}]",
+      "started_at": 1792860412449,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "At the ferry landing, you inspect the previously recovered equipment. The examination is completed without altering its condition or your resources. Its precise inventory and earlier history are not established in the supplied record.",
+            "next_decision": "Continue toward a new objective, take your promised free ferry passage, or collect Mara's outstanding 10 silver."
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "You examine the earlier recovered equipment at the restored landing. No additional properties, resource changes, or discoveries are established; the equipment's exact identity remains unspecified.",
+            "next_decision": "Pursue the Admiral's west-road reconnaissance report, take the free ferry, or collect Mara's separate 10 silver payment."
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 31451
+    },
+    {
+      "round": 19,
+      "prompt": "\nStory evaluation round 19/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":20,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":5700,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Study one possible improvement to the owned power.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"},{\"game_id\":\"sovereign-system\",\"version\":20,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":5700,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Study one possible improvement to the owned power.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"}]",
+      "started_at": 1792860444765,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "At the ferry landing, you study a possible improvement to Lantern Moth, considering its existing ability to remain active even when its caller is unconscious. No upgrade is acquired or resources spent.",
+            "next_decision": "Continue studying the improvement, pursue another objective, or collect Mara's outstanding 10 silver."
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "You examine a possible improvement to Lantern Moth without modifying it. Permanent advancement remains distinct from temporary skill-tree commands; no Sovereignty foundation changes.",
+            "next_decision": "Review the established advancement options, seek the Admiral's west-road report, or collect Mara's outstanding payment."
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 32814
+    },
+    {
+      "round": 20,
+      "prompt": "\nStory evaluation round 20/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":21,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":6000,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Apply the explicitly chosen positional upgrade in the supplied save.\",\"authoritative_outcome\":\"The selected regular-skill upgrade adds ally repositioning to its existing parent; no separate passive was acquired.\"},{\"game_id\":\"sovereign-system\",\"version\":21,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":6000,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Apply the explicitly chosen positional upgrade in the supplied save.\",\"authoritative_outcome\":\"The selected regular-skill upgrade adds ally repositioning to its existing parent; no separate passive was acquired.\"}]",
+      "started_at": 1792860478553,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "At the ferry landing, your chosen positional upgrade takes effect. The existing parent skill now supports ally repositioning; no independent passive is gained. The crossing quest remains closed.",
+            "next_decision": "Test the enhanced skill when an appropriate opportunity arises, collect Mara's outstanding 10 silver, or depart."
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "The selected upgrade integrates ally repositioning into its existing regular skill. No separate passive or permanent Domain, General, or Army foundation improvement is acquired.",
+            "next_decision": "Review your Sovereignty foundations, pursue the Admiral's west-road report, or collect Mara's outstanding payment."
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 94256
+    },
+    {
+      "round": 21,
+      "prompt": "\nStory evaluation round 21/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":22,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":6300,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Test the upgraded power on the authorized training target.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"},{\"game_id\":\"sovereign-system\",\"version\":22,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":6300,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Test the upgraded power on the authorized training target.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"}]",
+      "started_at": 1792860573664,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "At the ferry landing, you test the upgraded skill against the authorized training target. The exercise concludes without reported damage or resource changes. Ally repositioning remains integrated into the parent skill, not a separate passive.",
+            "next_decision": "Finish training and depart, use your free ferry passage, or collect Mara's outstanding 10 silver."
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "You exercise the upgraded regular skill against the authorized training target. No additional effect or resource change is established. The permanent Sovereignty foundations remain unchanged.",
+            "next_decision": "Review your foundations, seek the Breakwater Admiral's scouting report, or collect Mara's outstanding payment."
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 75202
+    },
+    {
+      "round": 22,
+      "prompt": "\nStory evaluation round 22/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":23,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":6600,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Stop training when the ordered practice is complete.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"},{\"game_id\":\"sovereign-system\",\"version\":23,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":6600,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Stop training when the ordered practice is complete.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"}]",
+      "started_at": 1792860649706,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "You end the completed training exercise at the ferry landing. The positional upgrade remains integrated into its parent skill; no further practice or resource expenditure occurs.",
+            "next_decision": "Collect Mara's outstanding 10 silver, take your promised free ferry passage, or leave for a new objective."
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "You conclude the authorized practice and stand down. The regular skill retains its ally-repositioning upgrade, while the permanent Sovereignty foundations remain unchanged.",
+            "next_decision": "Seek the Breakwater Admiral's west-road report, review Sovereignty, or collect Mara's outstanding 10 silver."
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 172273
+    },
+    {
+      "round": 23,
+      "prompt": "\nStory evaluation round 23/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":24,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":6900,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Ask Mara what news has arrived from the west road.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"},{\"game_id\":\"sovereign-system\",\"version\":24,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":6900,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Review the authorized report from the delegated scouts.\",\"authoritative_outcome\":\"The Admiral returned its scouts before noon. The west road was clear when scouted.\"}]",
+      "started_at": 1792860822783,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "At the restored ferry landing, you ask Mara about the west road. No confirmed report is established in this campaign.",
+            "dialogue": "Mara says, \"I haven't any confirmed news to give you about the west road.\"",
+            "next_decision": "Investigate the west road yourself, collect Mara's outstanding 10 silver, or take your promised free ferry passage."
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "You review the delegated scouts' report: the Breakwater Admiral returned its scouts before noon, fulfilling its promise. The west road was clear when surveyed, though current safety is not guaranteed.",
+            "next_decision": "Travel the west road, request further reconnaissance, or pursue another objective."
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 47994
+    },
+    {
+      "round": 24,
+      "prompt": "\nStory evaluation round 24/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":25,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":7200,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Ask the companion to suggest a cautious next step.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"},{\"game_id\":\"sovereign-system\",\"version\":25,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":7200,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Ask the Breakwater Admiral for a cautious next step within its mandate.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"}]",
+      "started_at": 1792860871595,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "At the restored ferry landing, your companion considers the uncertain west-road conditions.",
+            "dialogue": "Your companion says, \"We have no confirmed news. We could scout carefully rather than commit to an unknown route.\"",
+            "next_decision": "Scout the west-road approach, take the free ferry, or collect Mara's outstanding 10 silver."
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "The Breakwater Admiral considers its scouts' completed report without exceeding its reconnaissance mandate.",
+            "dialogue": "The Admiral says, \"The west road was clear when surveyed. I recommend renewed reconnaissance before committing forces; conditions may have changed.\"",
+            "next_decision": "Authorize another scouting mission, travel the previously surveyed road, or pursue another objective."
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 71704
+    },
+    {
+      "round": 25,
+      "prompt": "\nStory evaluation round 25/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":26,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":7500,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Prepare supplies for the already planned expedition.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"},{\"game_id\":\"sovereign-system\",\"version\":26,\"current_location\":\"The ferry landing\",\"fictional_time_seconds\":7500,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Prepare supplies for the already planned expedition.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"}]",
+      "started_at": 1792860944147,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "At the restored ferry landing, you organize supplies for the planned expedition. Preparations conclude without any established inventory or resource changes. The crossing quest remains closed.",
+            "next_decision": "Begin the cautious west-road expedition, consult your companion, or collect Mara's outstanding 10 silver."
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "You prepare expedition supplies at the ferry landing. No inventory changes are established. The Admiral's earlier reconnaissance confirmed the west road was clear when surveyed, not necessarily now.",
+            "next_decision": "Depart along the west road, authorize fresh reconnaissance within the Admiral's mandate, or collect Mara's outstanding payment."
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 134091
+    },
+    {
+      "round": 26,
+      "prompt": "\nStory evaluation round 26/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":27,\"current_location\":\"The frontier camp\",\"fictional_time_seconds\":7800,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Travel to the established frontier camp.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"},{\"game_id\":\"sovereign-system\",\"version\":27,\"current_location\":\"The frontier camp\",\"fictional_time_seconds\":7800,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Travel to the established frontier camp.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"}]",
+      "started_at": 1792861079152,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "You complete the journey to the established frontier camp, leaving the restored ferry landing behind. The crossing quest remains closed, its reward already granted once; Mara's separate 10 silver remains unpaid.",
+            "next_decision": "Survey the camp, speak with its inhabitants, or investigate the surrounding frontier."
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "You arrive at the established frontier camp. The Admiral's earlier report confirmed the west road was clear when scouted, but establishes nothing about its present condition. Your permanent Sovereignty foundations remain unchanged.",
+            "next_decision": "Inspect the camp, consult the Breakwater Admiral, or organize reconnaissance of the surrounding frontier."
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 147783
+    },
+    {
+      "round": 27,
+      "prompt": "\nStory evaluation round 27/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":28,\"current_location\":\"The frontier camp\",\"fictional_time_seconds\":8100,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Inspect the camp without starting a new battle.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"},{\"game_id\":\"sovereign-system\",\"version\":28,\"current_location\":\"The frontier camp\",\"fictional_time_seconds\":8100,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Inspect the camp without starting a new battle.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"}]",
+      "started_at": 1792861227849,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "You inspect the frontier camp, examining its layout and surroundings without provoking combat. The inspection concludes peacefully; no new threats, discoveries, or resource changes are established.",
+            "next_decision": "Speak with the camp's inhabitants, survey the surrounding frontier, or continue the planned expedition."
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "You survey the frontier camp without initiating hostilities. The inspection ends peacefully, with no confirmed threats or new resources. Your permanent Sovereignty foundations remain unchanged.",
+            "next_decision": "Consult the Breakwater Admiral, investigate the surrounding terrain, or plan the expedition's next destination."
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 89935
+    },
+    {
+      "round": 28,
+      "prompt": "\nStory evaluation round 28/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":29,\"current_location\":\"The frontier camp\",\"fictional_time_seconds\":8400,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Speak with the returning companion about the old promise.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"},{\"game_id\":\"sovereign-system\",\"version\":29,\"current_location\":\"The frontier camp\",\"fictional_time_seconds\":8400,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Speak with the returning companion about the old promise.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"}]",
+      "started_at": 1792861318648,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "At the frontier camp, you speak with your returning companion about Mara's old promise.",
+            "dialogue": "Your companion says, \"Mara promised free ferry passage for returning the bronze bell intact. You fulfilled that bargain, and she still owes ten silver separately.\"",
+            "next_decision": "Continue the frontier expedition, discuss another concern with your companion, or plan a return to Mara."
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "At the frontier camp, you ask your returning companion about the earlier ferry agreement.",
+            "dialogue": "Your companion replies, \"Mara promised free passage when the bronze bell was returned intact. That promise stands, and her separate ten-silver payment remains outstanding.\"",
+            "next_decision": "Consult the Admiral about frontier reconnaissance, continue the expedition, or plan to collect Mara's payment."
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 110049
+    },
+    {
+      "round": 29,
+      "prompt": "\nStory evaluation round 29/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":30,\"current_location\":\"The frontier camp\",\"fictional_time_seconds\":8700,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Review the current choices before committing further resources.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"},{\"game_id\":\"sovereign-system\",\"version\":30,\"current_location\":\"The frontier camp\",\"fictional_time_seconds\":8700,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Review the current choices before committing further resources.\",\"authoritative_outcome\":\"The ordered action is resolved according to its ordinary stated purpose, with no additional check or resource change supplied.\"}]",
+      "started_at": 1792861429601,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "At the frontier camp, you review your options without spending resources. The ferry quest is closed, its 30 XP and 50 silver already awarded. Mara still owes 10 silver, and your free passage remains valid.",
+            "next_decision": "Explore the frontier, consult your companion, or return to collect Mara's payment."
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "You review your options without committing resources. The Admiral's west-road reconnaissance is complete. Permanent Domain, General, and Army foundations remain distinct from temporary skill-tree commands.",
+            "next_decision": "Explore the frontier, request fresh reconnaissance, review Sovereignty foundations, or return for Mara's payment."
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 138305
+    },
+    {
+      "round": 30,
+      "prompt": "\nStory evaluation round 30/30.\n[{\"game_id\":\"age-of-convergence\",\"version\":31,\"current_location\":\"The frontier camp\",\"fictional_time_seconds\":9000,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Ask what the keeper promised, whether the crossing quest is finished, and whether the moth vanishes if its caller falls unconscious.\",\"authoritative_outcome\":\"Answer the historical questions from established records; no new action is resolved.\"},{\"game_id\":\"sovereign-system\",\"version\":31,\"current_location\":\"The frontier camp\",\"fictional_time_seconds\":9000,\"quest\":{\"id\":\"crossing\",\"objectives\":[\"Support the beam\",\"Restore the hinge\"],\"status\":\"completed\",\"system_reward\":\"30 XP and 50 silver; already granted once\",\"contract_payment\":\"The keeper separately owes 10 silver\"},\"player_action\":\"Ask what the keeper promised, whether the crossing quest is finished, and whether the moth vanishes if its caller falls unconscious.\",\"authoritative_outcome\":\"Answer the historical questions from established records; no new action is resolved.\"}]",
+      "started_at": 1792861568753,
+      "response": {
+        "responses": [
+          {
+            "game_id": "age-of-convergence",
+            "opening_sentence": "At the frontier camp, you review the established agreements and abilities without taking further action.",
+            "historical_answer": "Mara promised free ferry passage for returning the bronze bell intact, which you did. She separately owes 10 silver. The crossing quest is completed; its 30 XP and 50 silver were already awarded once. Lantern Moth remains active even if its caller falls unconscious. The raider captain never witnessed that persistence.",
+            "next_decision": "Explore the frontier, consult your companion, or return to collect Mara's payment."
+          },
+          {
+            "game_id": "sovereign-system",
+            "opening_sentence": "At the frontier camp, you review the earlier promises and established powers without advancing the expedition.",
+            "historical_answer": "Mara promised free passage for the intact bronze bell, already returned. She still owes 10 silver. The crossing quest is complete, with 30 XP and 50 silver awarded once. Lantern Moth does not vanish when its caller becomes unconscious.",
+            "next_decision": "Continue exploring, consult the Admiral, or return for Mara's payment."
+          }
+        ]
+      },
+      "elapsed_ms_until_observed_complete": 95597
+    }
+  ],
+  "player_campaigns_accessed": 0,
+  "actual_gameplay_tool_calls": 0,
+  "scope": "Thirty short paired fictional snapshots with explicit DnDGPT rules; no native MCP retrieval, actual saved gameplay, or long-campaign reliability claim. Capture timings include interleaved work."
+}

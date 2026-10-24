@@ -346,7 +346,7 @@ def apply_sovereignty(before, state, changes, correction=False, dice=None):
         require(changes.get("spend_evolution_credit", {}).get("evolution_id") != spend.get("evolution_id")
                 if type(spend) is dict and type(changes.get("spend_evolution_credit", {})) is dict else False,
                 "An evolution uses one funding source")
-        require(s["ascension_earned"] > len(s["ascension_spent"]), "No unspent Sovereign Evolution credit")
+        require(s["ascension_earned"] > len(s["ascension_spent"]), "No permanent Sovereign upgrade is available yet")
         base = next((r for r in before["abilities"] if r["id"] == spend.get("ability_id")), None) if type(spend) is dict else None
         require(base is not None and is_foundation(base), "Evolve an owned Domain, General or Army foundation")
         parent = next((r for r in state["abilities"] if r["id"] == base["id"]), None)
@@ -376,7 +376,7 @@ def apply_sovereignty(before, state, changes, correction=False, dice=None):
             if added:
                 require(type(spend) is dict and spend.get("ability_id") == base["id"]
                         and added == {spend.get("evolution_id")},
-                        "Foundation upgrades use their dedicated Sovereign Evolution credit")
+                        "Apply foundation upgrades through the permanent Sovereign progression choice")
     if changes.get("sovereign_battle") is not None:
         require(state["fictional_time_seconds"] > before["fictional_time_seconds"], "A battle phase consumes declared fictional time")
         front_id = changes["sovereign_battle"].get("front_id") if type(changes["sovereign_battle"]) is dict else None
@@ -398,7 +398,7 @@ def sovereign_kit_check(state):
     if game_id(state) != SOVEREIGN:
         return {"required": False, "ready": True, "missing_roles": []}
     required = FOUNDATIONS
-    powers = [a for a in state.get("abilities", []) if a.get("scope") == "sovereign"]
+    powers = [a for a in state.get("abilities", []) if is_foundation(a)]
     roles = {a.get("sovereign_role") for a in powers if is_foundation(a) and a.get("rarity") == "UNIQUE" and
              text(a.get("name")) and text(a.get("activation")) and text(a.get("flavor_text")) and
              any(text(a.get(key)) for key in ("mechanics", "mechanics_display", "full_rules")) and

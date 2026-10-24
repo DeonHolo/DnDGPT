@@ -161,6 +161,17 @@ def living_fixture():
             raw.update(phase="adventure", paused=False)
             records.update(db, "campaigns_v1", {"id": raw["id"]}, {"data": canonical(raw)})
         patch = opening()
+        if selected == "sovereign-system":
+            patch["sovereignty"] = {
+                "commanders": [{"id": "own-general", "name": "The returning scout", "abilities": []},
+                               {"id": "enemy-general", "name": "PRIVATE_GENERAL", "side": "enemy", "abilities": []}],
+                "fronts": [{"id": "secret-front", "name": "PRIVATE_FRONT", "known": False, "objective": "Unrevealed enemy pressure",
+                            "target_progress": 2, "status": "active"}],
+                "operations": [{"id": "returned", "name": "West road scouts", "commander_id": "own-general", "formation_ids": [],
+                                "objective": "Scout the road", "mandate": "Return with observations", "started_at": 0, "due_at": 0,
+                                "status": "completed", "outcome": "The scouts returned with a clear-road report."},
+                               {"id": "secret-mission", "name": "PRIVATE_OPERATION", "commander_id": "enemy-general", "formation_ids": [],
+                                "objective": "Unrevealed mission", "mandate": "Hidden orders", "started_at": 0, "due_at": 60, "status": "active"}]}
         q = quest(); q["objectives"][0]["status"] = "done"
         patch["upsert"]["quest_log"] = [q]
         patch["life_updates"]["places"].append({"id": "bridge", "name": "The restored bridge", "kind": "holding", "description": "A crossing repaired during the quest.", "links": ["quay"]})

@@ -40,10 +40,12 @@ function renderCampaignLife(next){
     }
   }
   const s=next.sovereignty;
-  if(s){const fronts=lifeCard(root,"Active fronts & expeditions");
-    for(const f of s.fronts||[])if(f.status==="active")paragraph(fronts,f.name+" · "+f.objective+" · "+f.player_progress+" / "+f.target_progress);
-    for(const op of s.operations||[])if(op.status==="active")paragraph(fronts,op.name||op.objective);
-    if(!fronts.querySelector("p"))paragraph(fronts,"No active fronts or expeditions.","muted");
+  if(s){const fronts=lifeCard(root,"Fronts & expedition reports"),operations=(s.operations||[]).filter(op=>visibleSovereignOperation(next,op));
+    for(const f of s.fronts||[])if(f.status==="active"&&f.known!==false)paragraph(fronts,f.name+" · "+f.objective+" · "+f.player_progress+" / "+f.target_progress);
+    for(const op of operations)if(op.status==="active")paragraph(fronts,op.name||op.objective);
+    for(const op of operations.filter(op=>["completed","failed"].includes(op.status)).slice(-5).reverse())paragraph(fronts,(op.name||op.objective)+" · "+op.status+" · "+(op.outcome||"Report recorded"));
+    for(const development of (s.developments||[]).slice(-5).reverse())paragraph(fronts,"Development · "+development.choice.name);
+    if(!fronts.querySelector("p"))paragraph(fronts,"No recorded fronts or expedition reports.","muted");
   }
   if(life.aftermath?.length){root.append(element("h3","After the quest","group"));for(const row of life.aftermath.slice(-12).reverse())lifeCard(root,next.quest_log.find(q=>q.id===row.quest_id)?.name||"Resolved quest",row.summary)}
   if(life.developments?.length){const changes=recordDetail(root,"Acquired capabilities","life-developments");for(const row of life.developments.slice(-20).reverse())paragraph(changes,row.summary)}

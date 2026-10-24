@@ -29,6 +29,7 @@ document.getElementById('run').onclick=async()=>{
    assert(root.querySelector('a[href="#life-place-bridge"]'),'Known route missing');
    const detail=root.querySelector('details');if(!detail.open)detail.querySelector('summary').click();assert(root.innerText.includes('The moth protects its caller.'),'Learned observation missing');
    assert(!d.body.innerText.includes('PRIVATE_TACTICAL_PLAN'),'Private GM memory leaked');
+   if(game==='sovereign-system'){assert(root.textContent.includes('scouts returned with a clear-road report'),'Returning expedition report missing');const visible=root.textContent+d.getElementById('sovereignty').textContent;assert(!/PRIVATE_(?:FRONT|OPERATION|GENERAL)/.test(visible),'Hidden strategic knowledge leaked');}
   });
   await test(game+': pacing sends the actual player intent without saving',async()=>{
    const before=gameplayWrites;lastPrompt='';[...d.querySelectorAll('.life-actions button')].find(b=>b.textContent==='Travel to next decision').click();await until(()=>lastPrompt.includes('routine travel'));
