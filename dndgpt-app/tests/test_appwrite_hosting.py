@@ -29,6 +29,23 @@ def test_portable_recovery_and_overhead_against_hosted_store_contract(hosted):
     assert timings['combined_state_and_approval_read']['storage_api_calls'] < timings['separate_state_and_approval_reads']['storage_api_calls']
 
 
+def test_private_probe_uses_direct_creation_and_retains_correction_approval(hosted, monkeypatch):
+    from types import SimpleNamespace
+    import appwrite_probe
+    api, _, _, _ = hosted
+    monkeypatch.setattr(appwrite_probe, 'AppwriteAPI', lambda *args, **kwargs: api)
+    monkeypatch.setenv('APPWRITE_FUNCTION_API_ENDPOINT', 'https://fixture.example.test/v1')
+    monkeypatch.setenv('APPWRITE_FUNCTION_PROJECT_ID', 'fixture')
+    errors = []
+    context = SimpleNamespace(req=SimpleNamespace(headers={'x-appwrite-key': 'fixture-key'}),
+                              res=SimpleNamespace(json=lambda value, status=200: {'http_status': status, **value}),
+                              error=errors.append)
+    result = appwrite_probe.main(context)
+    assert result['status'] == 'passed', errors
+    assert {'direct_creation', 'no_creation_approval', 'correction_approval', 'correction_retry'} <= set(result['checks'])
+    assert 'living_memory_restored' in result['recovery']['checks']
+
+
 
 @pytest.mark.parametrize('remote', [False, True])
 def test_audit_does_not_hide_events_beyond_saved_version(remote, engine, state, hosted):

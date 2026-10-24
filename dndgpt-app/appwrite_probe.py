@@ -2,6 +2,7 @@
 import hashlib
 import os
 import time
+import traceback
 import uuid
 
 import httpx
@@ -41,16 +42,35 @@ def main(context):
             checks += ['save', 'exact_retry']
             assert game.version(owner, state['id'], 1)['campaign']['version'] == 1
             checks.append('historical_version')
-            proposal = engine.propose_action(owner, state['id'], 'confirm-' + run, 2, 'confirm_chat_character', {})
+            random = GameRandom(store, engine=engine)
+            outfit = random.roll(owner, 'starting-outfit-' + state['id'],
+                                 [{'kind': 'outfitting', 'label': 'Disposable starting equipment',
+                                   'class_rarity': 'COMMON', 'slot_preferences': [
+                                       {'slot': 'Artifact', 'weight': 3,
+                                        'basis': 'The disposable inspection class uses a calibration implement'}]}],
+                                 campaign_id=state['id'])
+            plan = outfit['results'][0]['result']
+            items = [{'id': 'fixture-outfit-' + str(i), 'name': 'Disposable ' + row['role'],
+                      'rarity': row['rarity'], 'effects': 'Recorded equipment fixture effect.'}
+                     for i, row in enumerate(plan['items'])]
+            checks.append('starting_outfit_draw')
+            begun = game.update(owner, state['id'], 'begin-' + run, 2, 'Finish disposable creation',
+                                {'character': {'background': 'Disposable test background',
+                                               'story_summary': 'A test character in the disposable probe room.'},
+                                 'upsert': {'inventory': items},
+                                 'equipment': {row['slot']: item['id'] for row, item in zip(plan['items'], items)},
+                                 'creation': {'outfitting': {**plan, 'item_ids': [item['id'] for item in items]}}},
+                                begin_adventure=True)
+            assert begun['campaign']['phase'] == 'adventure' and not begun['campaign']['paused']
+            assert engine.pending_approval(owner, state['id'])['approval'] is None
+            checks += ['direct_creation', 'no_creation_approval']
+            proposal = engine.propose_action(owner, state['id'], 'correct-' + run, 3, 'correct_chat_state',
+                                            {'changes': {'character': {'hp': 59}}, 'reason': 'Disposable correction test'})
             assert engine.pending_approval(owner, state['id'])['approval']
-            confirmed = engine.execute_confirmed_action(owner, proposal['proposal']['id'], proposal['_meta']['approval_token'])
-            assert confirmed['campaign']['phase'] == 'ready' and confirmed['campaign']['paused']
-            assert engine.execute_confirmed_action(owner, proposal['proposal']['id'], proposal['_meta']['approval_token']) == confirmed
-            checks += ['pending_approval', 'separate_confirmation', 'approval_retry']
-            proposal = engine.propose_action(owner, state['id'], 'start-' + run, 3, 'start_chat_adventure', {})
             result = engine.execute_confirmed_action(owner, proposal['proposal']['id'], proposal['_meta']['approval_token'])
-            assert result['campaign']['phase'] == 'adventure'
-            checks.append('separate_adventure_gate')
+            assert result['campaign']['character']['hp'] == 59
+            assert engine.execute_confirmed_action(owner, proposal['proposal']['id'], proposal['_meta']['approval_token']) == result
+            checks += ['correction_approval', 'correction_retry']
             assert Engine(AppwriteStore(store.api)).get_campaign(owner, state['id']) == result['campaign']
             checks.append('fresh_instance_reopen')
             other = hashlib.sha256(('different-probe-owner:' + run).encode()).hexdigest()
@@ -82,6 +102,6 @@ def main(context):
                                      'elapsed_seconds': round(time.monotonic() - started, 2),
                                      'real_campaign_accessed': False, 'model_api_calls': False})
         except (EngineError, AssertionError, ValueError) as error:
-            context.error(type(error).__name__ + ': ' + str(error))
+            context.error('Completed checks: ' + repr(checks if 'checks' in locals() else []) + '\n' + traceback.format_exc(limit=4))
             return context.res.json({'status': 'failed', 'code': getattr(error, 'code', type(error).__name__),
                                      'completed_checks': checks if 'checks' in locals() else []}, 500)
