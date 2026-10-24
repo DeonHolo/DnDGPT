@@ -99,7 +99,7 @@ def test_mcp_initialization_tools_and_ui_resource(web):
 
     render = by_name["render_dashboard"]
     assert render["_meta"]["ui"]["resourceUri"].startswith("ui://dndgpt/")
-    assert render["_meta"]["openai/ui"]["entrypoints"] == [{"type": "thread"}]
+    assert render["_meta"]["openai/ui"]["entrypoints"] == [{"type": "thread"}, {"type": "global"}]
     assert not tool(web, "render_dashboard", {}).get("isError")
     assert by_name["execute_confirmed_action"]["_meta"]["ui"]["visibility"] == ["app"]
     for name, item in by_name.items():
@@ -110,7 +110,7 @@ def test_mcp_initialization_tools_and_ui_resource(web):
     assert resource["mimeType"] == "text/html;profile=mcp-app"
     assert resource["_meta"]["ui"]["csp"] == {"connectDomains": [], "resourceDomains": []}
     assert resource["_meta"]["openai/ui"] == {
-        "availableDisplayModes": ["inline", "fullscreen"], "preferredDisplayMode": "inline"}
+        "availableDisplayModes": ["inline", "fullscreen", "pip"], "preferredDisplayMode": "inline"}
     compatibility = rpc(web, "resources/read", {"uri": render["_meta"]["openai/outputTemplate"]})["contents"][0]
     assert compatibility["mimeType"] == "text/html+skybridge"
     assert compatibility["text"] == resource["text"]

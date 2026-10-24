@@ -1,0 +1,197 @@
+{
+  "reviewer": "Codex qualitative review of captured ChatGPT development candidates; single reviewer, no balance or independent-rater claim",
+  "kits": [
+    {
+      "id": "aoc-rare-seamstep-vanguard",
+      "class_identity": {
+        "finding": "A mobile melee class built around terrain and temporary footholds; originality against other campaigns remains untested.",
+        "evidence": "Faultline Strike"
+      },
+      "redundancy": {
+        "finding": "The combat foothold and longer crossing need distinct uses; the initial Utility improperly overlaps combat.",
+        "evidence": "This ability can be used during combat under the ordinary Action economy."
+      },
+      "evolution_difference": {
+        "finding": "Choices add position control, ally protection and an adjustable route rather than three identical damage increases.",
+        "evidence": "push the target 2 meters"
+      },
+      "scenarios": {
+        "exploration": {
+          "verdict": "supported",
+          "reason": "Structural sensing and temporary routes create usable exploration options.",
+          "evidence": "load-bearing routes"
+        },
+        "conversation": {
+          "verdict": "conditional",
+          "reason": "Structural evidence can support a conversation about a damaged site.",
+          "evidence": "structural weaknesses"
+        },
+        "combat": {
+          "verdict": "supported",
+          "reason": "The attack, reduction reaction and movement passive form an explicit combat loop.",
+          "evidence": "2d8 + AGI modifier"
+        },
+        "escape": {
+          "verdict": "supported",
+          "reason": "The reaction repositions after reducing incoming damage.",
+          "evidence": "then move up to 2 meters"
+        },
+        "recovery": {
+          "verdict": "conditional",
+          "reason": "Platforms provide access for repairs and rescue when the site geometry fits.",
+          "evidence": "supports 200 kilograms"
+        }
+      },
+      "utilities": {
+        "aoc-sv-utility-01": {
+          "travel": {
+            "verdict": "supported",
+            "reason": "Identify a safer route through accessible structures.",
+            "evidence": "choosing climbing routes"
+          },
+          "shelter_and_repairs": {
+            "verdict": "supported",
+            "reason": "Locate unsafe or load-bearing sections before repairs.",
+            "evidence": "assessing damaged buildings"
+          },
+          "information": {
+            "verdict": "supported",
+            "reason": "Find cavities or concealed rooms.",
+            "evidence": "finding concealed rooms"
+          },
+          "helping_people": {
+            "verdict": "conditional",
+            "reason": "Structural knowledge supports rescuers working around damaged buildings.",
+            "evidence": "structural weaknesses"
+          }
+        },
+        "aoc-sv-utility-02": {
+          "travel": {
+            "verdict": "supported",
+            "reason": "Bridge a suitable gap with temporary platforms.",
+            "evidence": "crossing gaps"
+          },
+          "shelter_and_repairs": {
+            "verdict": "conditional",
+            "reason": "Give crews temporary access to equipment or elevated work.",
+            "evidence": "temporary access to equipment"
+          },
+          "information": {
+            "verdict": "conditional",
+            "reason": "Reach an elevated entrance that otherwise blocks investigation.",
+            "evidence": "reaching elevated entrances"
+          },
+          "helping_people": {
+            "verdict": "supported",
+            "reason": "Provide a temporary evacuation route.",
+            "evidence": "evacuation paths"
+          }
+        }
+      },
+      "findings": [
+        {
+          "finding": "Reject the initial Utility combat permission; outside-combat roles must remain distinct.",
+          "evidence": "This ability can be used during combat under the ordinary Action economy."
+        },
+        {
+          "finding": "Trim unchanged-cost reminders from the upgrade change log.",
+          "evidence": "You still pay the original MP cost and Reaction."
+        }
+      ]
+    },
+    {
+      "id": "ss-unique-keeper-of-the-last-harbor",
+      "class_identity": {
+        "finding": "A harbor-based support and logistics class with an independent admiral; initial output fails to expose separate sovereign parents.",
+        "evidence": "Admiralty Presence"
+      },
+      "redundancy": {
+        "finding": "Manifest tracks people/cargo while Mooring anchors loads; these serve different ordinary tasks.",
+        "evidence": "whether marked objects were opened or damaged"
+      },
+      "evolution_difference": {
+        "finding": "Split-area targeting, ally movement relays and a working chain change different applications.",
+        "evidence": "two separate 2-meter-radius blasts"
+      },
+      "scenarios": {
+        "exploration": {
+          "verdict": "supported",
+          "reason": "Track designated expedition members and cargo.",
+          "evidence": "direction and distance"
+        },
+        "conversation": {
+          "verdict": "conditional",
+          "reason": "Recorded cargo changes can support negotiation or a theft investigation.",
+          "evidence": "detecting theft"
+        },
+        "combat": {
+          "verdict": "supported",
+          "reason": "Area pressure and defensive recall provide explicit tactical options.",
+          "evidence": "4d8 + CHA modifier"
+        },
+        "escape": {
+          "verdict": "supported",
+          "reason": "Recall moves an eligible target away from an attack.",
+          "evidence": "Teleport the chosen target up to 5 meters"
+        },
+        "recovery": {
+          "verdict": "conditional",
+          "reason": "Mooring stabilizes machinery and temporary crossings for repair work.",
+          "evidence": "stabilizing heavy machinery"
+        }
+      },
+      "utilities": {
+        "ss-lh-utility-01": {
+          "travel": {
+            "verdict": "supported",
+            "reason": "Track separated expedition members.",
+            "evidence": "tracking expedition members"
+          },
+          "shelter_and_repairs": {
+            "verdict": "unsupported",
+            "reason": "Manifest gives tracking and damage information, rather than a repair or construction operation.",
+            "evidence": "monitoring separated equipment"
+          },
+          "information": {
+            "verdict": "supported",
+            "reason": "Notice relevant cargo tampering.",
+            "evidence": "detecting theft"
+          },
+          "helping_people": {
+            "verdict": "supported",
+            "reason": "Keep track of designated evacuees.",
+            "evidence": "organizing evacuations"
+          }
+        },
+        "ss-lh-utility-02": {
+          "travel": {
+            "verdict": "supported",
+            "reason": "Anchor climbing equipment or a vessel.",
+            "evidence": "climbing"
+          },
+          "shelter_and_repairs": {
+            "verdict": "supported",
+            "reason": "Stabilize heavy machinery during work.",
+            "evidence": "stabilizing heavy machinery"
+          },
+          "information": {
+            "verdict": "unsupported",
+            "reason": "Anchoring equipment alone does not establish new information.",
+            "evidence": "fixed anchor"
+          },
+          "helping_people": {
+            "verdict": "conditional",
+            "reason": "Anchors support appropriately equipped rescue crossings.",
+            "evidence": "securing temporary crossings"
+          }
+        }
+      },
+      "findings": [
+        {
+          "finding": "Trim unchanged-cost and Action commentary from the upgrade log.",
+          "evidence": "The original MP cost and Action remain the same."
+        }
+      ]
+    }
+  ]
+}

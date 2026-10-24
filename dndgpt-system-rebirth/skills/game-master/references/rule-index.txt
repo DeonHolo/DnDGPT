@@ -17,6 +17,7 @@ Creation completion/advancement: direct-play. Final creation saves Your story, o
 Starting outfit: starting-gear, 23, 27. Equipment: 23 through 28. Story/quests: 31, 32, 32A. Saves/compatibility: 40 through 42.
 
 ## Current amendments
+living-campaigns | Living campaigns, growth and pacing | 8706 characters
 loading | Rules loading and checklist precedence | 2498 characters
 continuity | Turn continuity and efficient resolution | 5360 characters
 creation-order | V1.0 surgical four-turn creation and in-chat continuation precedence | 1994 characters

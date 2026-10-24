@@ -1,0 +1,59 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Living campaign checks</title>
+<style>body{background:#121711;color:#eee8db;font:15px/1.6 system-ui;margin:20px}iframe{width:1100px;max-width:none;height:720px;border:1px solid #99865b}.pass{color:#b7d89b}.fail{color:#ffaaa2}button{padding:12px}</style>
+<h1>Living campaign checks</h1><p>Disposable campaigns. Simulated mobile hosts and real authenticated transport.</p><button id="run">Run checks</button><p id="result" role="status">Ready</p><ol id="results"></ol><iframe id="widget" src="/test-widget" title="Campaign fixture"></iframe>
+<script>
+const frame=document.getElementById('widget'),results=[],wait=ms=>new Promise(r=>setTimeout(r,ms));let lateBridge=false,toolCalls=0,gameplayWrites=0,lastPrompt='';
+const assert=(v,m)=>{if(!v)throw Error(m)};
+async function until(fn){for(let i=0;i<120;i++){if(fn())return;await wait(75)}throw Error('Timed out waiting for UI')}
+async function call(name,args){toolCalls++;if(['save_chat_update','propose_action','execute_confirmed_action'].includes(name))gameplayWrites++;const response=await fetch('/test-rpc',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json, text/event-stream'},body:JSON.stringify({jsonrpc:'2.0',id:toolCalls,method:'tools/call',params:{name,arguments:args}})});const body=await response.json();if(!response.ok||body.error)throw Error(body.error?.message||'Fixture transport failed');const result=body.result;if(result?.isError)throw Error(result.content?.[0]?.text);return result}
+window.addEventListener('message',async event=>{
+ if(event.source!==frame.contentWindow||!event.data?.id)return;
+ const m=event.data;let result;
+ if(m.method==='ui/initialize'){if(lateBridge)return;result={protocolVersion:'2026-01-26',hostInfo:{name:'Constrained mobile fixture',version:'1'},hostCapabilities:{serverTools:{},message:{text:{}}},hostContext:{displayMode:'fullscreen',maxHeight:440,safeAreaInsets:{top:48,bottom:28}}}}
+ else if(m.method==='tools/call')result=await call(m.params.name,m.params.arguments);
+ else if(m.method==='ui/message'){lastPrompt=m.params.content[0].text;result={}}
+ else if(m.method==='ui/update-model-context')result={};else result={};
+ event.source.postMessage({jsonrpc:'2.0',id:m.id,result},'*');
+});
+async function test(name,fn){try{await fn();results.push({name,passed:true})}catch(e){results.push({name,passed:false,error:e.message})}const li=document.createElement('li');li.className=results.at(-1).passed?'pass':'fail';li.textContent=JSON.stringify(results.at(-1));document.getElementById('results').append(li)}
+document.getElementById('run').onclick=async()=>{
+ document.getElementById('run').disabled=true;const fixtures=await(await fetch('/test-living-fixture',{method:'POST'})).json();
+ let w=frame.contentWindow,d=frame.contentDocument;
+ await until(()=>d.getElementById('session')?.options.length>1);
+ for(const [game,snapshot]of Object.entries(fixtures)){
+  await test(game+': known people, routes and aftermath are readable',async()=>{
+   w.receive({structuredContent:{campaign:snapshot}});d.getElementById('nav-world').click();d.getElementById('world-tab-living').click();const root=d.getElementById('world-page-living');
+   assert(root.innerText.includes('The river captain')&&root.innerText.includes('accepted a truce'),'Relationship history missing');
+   assert(root.innerText.includes('Working ferry')&&root.innerText.includes('The restored bridge'),'Places did not change');
+   assert(root.innerText.includes('keeper resumes crossings'),'Quest aftermath missing');
+   assert(root.querySelector('a[href="#life-place-bridge"]'),'Known route missing');
+   const detail=root.querySelector('details');if(!detail.open)detail.querySelector('summary').click();assert(root.innerText.includes('The moth protects its caller.'),'Learned observation missing');
+   assert(!d.body.innerText.includes('PRIVATE_TACTICAL_PLAN'),'Private GM memory leaked');
+  });
+  await test(game+': pacing sends the actual player intent without saving',async()=>{
+   const before=gameplayWrites;lastPrompt='';[...d.querySelectorAll('.life-actions button')].find(b=>b.textContent==='Travel to next decision').click();await until(()=>lastPrompt.includes('routine travel'));
+   assert(lastPrompt.includes(snapshot.id)&&lastPrompt.includes('does not choose a destination'),'Pacing intent lost campaign or agency');assert(before===gameplayWrites,'A pacing button changed gameplay');
+  });
+  await test(game+': four layouts fit narrow and wide screens',async()=>{
+   for(const width of [390,1100]){frame.style.width=width+'px';for(const layout of ['original','reclaimed','orrery','ember']){w.selectLayout(layout,false);await wait(70);
+    for(const node of d.querySelectorAll('#world-page-living .life-card')){const box=node.getBoundingClientRect(),style=w.getComputedStyle(node);assert(box.right<=d.documentElement.clientWidth+1&&node.scrollWidth<=node.clientWidth+1,'Overflow '+layout+'/'+width);assert(parseFloat(style.paddingLeft)>=16,'Missing padding '+layout);for(const edge of ['Top','Right','Bottom','Left'])assert(parseFloat(style['border'+edge+'Width'])>=1,'Missing border '+layout+'/'+edge)}
+   }}
+  });
+  await test(game+': routes and world tabs work from the keyboard',async()=>{const first=d.getElementById('world-tab-world');first.dispatchEvent(new KeyboardEvent('keydown',{key:'End',bubbles:true}));assert(d.getElementById('world-tab-living').getAttribute('aria-selected')==='true','End did not select the final tab');d.querySelector('a[href="#life-place-bridge"]').click();assert(!d.getElementById('world-page-living').hidden,'Inspecting a route left the view')});
+ }
+ await test('Sovereign creation exposes three passive foundation histories in Sovereignty',async()=>{
+  const result=await(await fetch('/test-sovereign-draft-fixture',{method:'POST'})).json();assert(result.campaign,'Draft fixture failed: '+JSON.stringify(result));await w.callTool('render_dashboard',{game_id:'sovereign-system'});await until(()=>[...d.getElementById('session').options].some(o=>o.value===result.campaign.id));d.getElementById('session').value=result.campaign.id;d.getElementById('session').dispatchEvent(new Event('change'));await until(()=>d.querySelector('.starting-sovereign-kit'));d.getElementById('nav-character').click();const root=d.querySelector('.starting-sovereign-kit');
+  assert(root&&root.textContent.includes('Your sovereignty'),'Creation foundation link is absent');root.querySelector('button').click();const sovereign=d.getElementById('sovereignty');assert(sovereign.querySelectorAll('.sovereign-foundation details').length===3,'Three foundation histories are not displayed');assert(sovereign.querySelectorAll('.sovereign-foundation .reading-tabs [role="tab"]').length===9,'Foundations lost their three tabs');d.getElementById('nav-skills').click();assert(!d.querySelector('.power-scopes')&&!d.getElementById('skills').textContent.includes('Fixture domain power'),'Foundations leaked into regular Skills');
+  assert(result.campaign.rules_check.sovereign_kit.ready,'Recorded roles were not recognized');assert(result.campaign.phase==='character_draft'&&result.campaign.paused,'Inspecting creation started the adventure');
+ });
+ await test('Late compatibility bridge recovers without reloading or advancing play',async()=>{
+  lateBridge=true;frame.src='/test-widget?late-bridge';await new Promise(resolve=>frame.onload=resolve);w=frame.contentWindow;d=frame.contentDocument;
+  await until(()=>d.getElementById('session'));assert(!d.getElementById('hero').textContent.includes('Level'),'Fixture unexpectedly connected');
+  w.openai={widgetState:{},callTool:call,sendFollowUpMessage:async({prompt})=>{lastPrompt=prompt},setWidgetState:value=>w.openai.widgetState=value};
+  w.dispatchEvent(new CustomEvent('openai:set_globals',{detail:{globals:{displayMode:'fullscreen',maxHeight:440,safeAreaInsets:{top:48,bottom:28}}}}));
+  await until(()=>d.getElementById('session').options.length>1);assert(d.getElementById('connection').textContent.includes('Connected'),'Late connection did not recover');assert(parseFloat(w.getComputedStyle(d.body).paddingTop)>=48,'Mobile safe area ignored');
+ });
+ const report={checks:results,passed:results.filter(r=>r.passed).length,total:results.length,scope:'Local simulated hosts; not actual ChatGPT phone acceptance',player_campaigns_accessed:0};
+ document.getElementById('result').textContent=report.passed+'/'+report.total+' passed';await fetch('/test-living-record',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(report)});
+};
+</script></html>

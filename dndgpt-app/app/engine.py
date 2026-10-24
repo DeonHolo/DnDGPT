@@ -75,6 +75,9 @@ def public_state(state):
     if state.get("mode") == "chat":
         from .standard_rules import class_kit_check, uses_standard_rules
         result["rules_check"] = {"current_profile": uses_standard_rules(state), **class_kit_check(state)}
+        if result["game_id"] == "sovereign-system":
+            from .sovereignty import sovereign_kit_check
+            result["rules_check"]["sovereign_kit"] = sovereign_kit_check(state)
     result["rarity_candidates"] = {
         key: {"final_rarity": roll["final_rarity"], "enhanced": roll["enhanced"]}
         for key, roll in result["rarity_candidates"].items()}
@@ -82,6 +85,9 @@ def public_state(state):
         result["last_event"] = safe_event(result["last_event"])
     from .continuity import resume_brief
     result["resume_brief"] = resume_brief(state)
+    if "campaign_life" in result:
+        result["campaign_life"].pop("event_ledger", None)
+        result["campaign_life"].pop("source_receipts", None)
     return json.loads(canonical(result))
 
 

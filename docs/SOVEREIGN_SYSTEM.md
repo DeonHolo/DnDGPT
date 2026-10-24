@@ -17,7 +17,7 @@ Approved 24 October 2026. The original startup document is design material, not 
 
 Keep approximately 75% personal adventure and 25% strategy. A new sovereign begins with a functioning class-specific domain, major autonomous commander and useful forces. Classes have genuinely different production, command, expansion and recovery rules. The class board contains eight Unique sovereigns; ordinary subsequent acquisition retains the shared rarity rules. Charm governs class-specific sovereign mechanics. Starting Luck allocation remains a player choice.
 
-Character XP, domain milestones, formation veterancy and commander XP are separate tracks. A character level also earns one sovereign evolution credit. Routine entity growth is automatic; the player chooses significant domain development and their own sovereign evolutions. Published milestones have finite objectives and a fixed next level. Development never requires another confirmation after choosing it.
+Character XP, domain milestones, formation veterancy and commander XP are separate tracks. Each character level guarantees one permanent significant Sovereign Evolution for the actual domain, general or army. The player chooses from five compatible offers; applying the selection needs no further approval. Routine entity growth is automatic. Domain development still follows its finite published milestone; it does not replace the guaranteed character-level improvement.
 
 The game selector changes the saved-game list and available chapter. It never converts a save, creates a campaign, rolls or advances time. A campaign ID determines its authoritative rules; a contradictory game argument is rejected. Layout and reading atmosphere remain independent presentation preferences.
 
@@ -39,10 +39,20 @@ The selected game/campaign is published to host model context without posting a 
 
 ## Progression and saves
 
-Character growth follows the shared XP rules. Each gained level also awards one Sovereign Evolution credit. It upgrades an actually owned sovereign parent and has its own spending ledger, separate from quest credits and SP. General XP carries across thresholds of 100 + 50*(current level-1). Formation veterancy uses cumulative thresholds 0/100/250/450/700/1000. Domain advancement requires its finite, published milestone and one of three development choices. Force capacity is declared from the actual class and checked against the saved roster.
+Character growth follows the shared XP rules. Each gained level guarantees one permanent significant Sovereign Evolution on Domain, General or Army. An internal once-only ledger tracks the award separately from ordinary SP and quest evolutions; it is not presented as another player currency. General XP carries across thresholds of 100 + 50*(current level-1). Formation veterancy uses cumulative thresholds 0/100/250/450/700/1000. Domain advancement requires its finite, published milestone and one of three development choices. Force capacity is declared from the actual class and checked against the saved roster.
 
 Standing orders have fictional start/due times, objectives and mandates. A due report requires actual adjudication and a recorded outcome; passing real time alone does nothing. Current snapshots keep the latest 50 full battle reports plus compact permanent retry receipts. Earlier full reports remain in save-history versions. Export/import retains game identity and sovereign state and restores a separate paused copy.
 
 ## Edited Intelligent UI prompt
 
 [Copyable prompt](INTELLIGENT_STORY_UI_PROMPT.txt): 4,839 characters including its final newline. The added fix gives tooltip category, title, description and stats explicit separate rows, gaps, typography and wrapping while preserving the inline story trigger and full opaque four-sided border. The shared rulebook and both game checklists inherit the same instruction. Prompt delivery cannot prove that a future native generated tooltip renders correctly.
+
+## Permanent Sovereign progression — 25 October 2026
+
+Sovereignty owns the three passive foundation histories: Domain, General and Army. Each has Overview, Full rules and Upgrades beside the actual domain, commander or formation records. Regular Skills contains attacks, reactions, utility and temporary commands, including powers that affect allies or armies. The old personal/sovereign skill filter is removed.
+
+Creation previews the actual functioning domain, persistent major general and useful army alongside a solo-viable regular kit. It records three UNIQUE passive foundation parents with sovereign_role=domain/general/army; these establish current functions, not extra casts. Fully expand the selected class during the next existing creation response. The same four choice stages remain.
+
+A chosen Sovereign Evolution changes the combined foundation and at least one real owned capability in the same atomic save. The acquired child references target_id/capability_id through sovereign_changes; its referenced domain capability or general/formation ability records source_evolution_id, activation=Passive and duration=Permanent. Temporary buffs, ordinary active skills, nonexistent targets, unchanged records, duplicate spending and replacement of a passive foundation with an active command are rejected. Novel mechanical significance remains a GM/design judgment; a schema cannot certify balance or interpret arbitrary prose.
+
+Existing adventures retain their history and earned commands. The interface continues to show older active commands in regular Skills. A missing or misclassified older foundation needs a requested correction using the actual saved class; this release does not silently invent replacement powers in player campaigns.

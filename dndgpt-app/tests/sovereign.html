@@ -13,7 +13,7 @@ document.getElementById('run').onclick=async()=>{
  const before=await(await fetch('/test-sovereign-state')).json(),ageBefore=await(await fetch('/test-state')).json();
  await test('Game switch filters saved games and clears the previous campaign',async()=>{
   d.getElementById('gameSelect').value='sovereign-system';d.getElementById('gameSelect').dispatchEvent(new Event('change'));
-  await until(()=>d.getElementById('session').options.length===2&&d.getElementById('session').options[1].value===fixture.id);
+  await until(()=>[...d.getElementById('session').options].some(o=>o.value===fixture.id));
   assert(d.getElementById('hero').textContent==='No campaign selected','Old character remained visible');
   assert(!d.getElementById('session').innerText.includes('UI test fixture'),'Another game leaked into saved games');
   d.getElementById('session').value=fixture.id;d.getElementById('session').dispatchEvent(new Event('change'));
@@ -33,20 +33,26 @@ document.getElementById('run').onclick=async()=>{
  await test('Commander has independent XP and functional three-tab powers',async()=>{
   d.getElementById('sovereign-tab-commanders').click();const panel=d.getElementById('sovereign-panel-commanders');
   assert(panel.innerText.includes('Level 3')&&panel.innerText.includes('XP 20 / 200'),'Commander progression missing');
-  panel.querySelector('summary').click();const tabs=[...panel.querySelectorAll('[role="tab"]')];
+  panel.querySelector('.sovereign-card summary').click();const tabs=[...panel.querySelectorAll('.sovereign-card [role="tab"]')];
   assert(tabs.length===3,'Commander power tabs missing');tabs[1].click();assert(panel.innerText.includes('Spend 10 MP'),'Full rules missing');tabs[2].click();assert(panel.innerText.includes('Twin arrival'),'Upgrades missing');
  });
- await test('Personal and sovereign power filters preserve the existing skill tabs',async()=>{
-  d.getElementById('nav-skills').click();const buttons=[...d.querySelectorAll('.power-scopes button')];
-  buttons.find(b=>b.textContent==='Personal').click();assert(d.getElementById('skills').innerText.includes('Iron sweep')&&!d.getElementById('skills').innerText.includes('Open the fortress gate'),'Personal filter mixed scopes');
-  [...d.querySelectorAll('.power-scopes button')].find(b=>b.textContent==='Sovereign').click();assert(d.getElementById('skills').innerText.includes('Open the fortress gate')&&!d.getElementById('skills').innerText.includes('Hold the line'),'Commander power leaked into player powers');
-  assert(d.querySelectorAll('#skillTabs [role="tab"]').length===4&&d.querySelectorAll('#skills .reading-tabs [role="tab"]').length===3,'Existing ability tabs regressed');
+ await test('Regular skills retain commands; permanent foundation histories live in Sovereignty',async()=>{
+  d.getElementById('nav-skills').click();const skills=d.getElementById('skills');
+  assert(!d.querySelector('.power-scopes'),'Redundant Sovereign filter remained');
+  assert(skills.innerText.includes('Iron sweep')&&skills.innerText.includes('Open the fortress gate'),'Regular command or attack disappeared');
+  assert(!skills.textContent.includes('Fortress domain')&&!skills.textContent.includes('Hold the line'),'Foundation or commander power leaked into regular Skills');
+  assert(d.querySelectorAll('#skillTabs [role="tab"]').length===4,'Existing skill groups regressed');
+  for(const [tab,role]of [['domain','domain'],['commanders','general'],['forces','army']]){
+   d.getElementById('nav-sovereignty').click();d.getElementById('sovereign-tab-'+tab).click();
+   const root=d.querySelector('#sovereign-panel-'+tab+' .sovereign-foundation');assert(root,'Foundation absent: '+role);root.querySelector('summary').click();
+   const tabs=[...root.querySelectorAll('.reading-tabs [role="tab"]')];assert(tabs.length===3,'Foundation detail tabs missing');tabs[1].click();assert(root.innerText.includes('permanent '+role),'Combined rules missing');tabs[2].click();assert(root.innerText.includes(role[0].toUpperCase()+role.slice(1)+' growth'),'Acquired upgrade missing');
+  }
  });
  await test('Game picker and Sovereignty cards fit all layouts at narrow/wide widths',async()=>{
   d.getElementById('nav-sovereignty').click();
   for(const width of [390,1100]){frame.style.width=width+'px';for(const layout of ['original','reclaimed','orrery','ember']){
    w.selectLayout(layout,false);await wait(60);d.getElementById('sovereign-tab-domain').click();
-   for(const node of [d.getElementById('gameSelect'),...d.querySelectorAll('#sovereign-panel-domain .sovereign-card')]){const box=node.getBoundingClientRect();assert(box.right<=d.documentElement.clientWidth+1&&node.scrollWidth<=node.clientWidth+1,'Overflow '+layout+'/'+width)}
+   for(const node of [d.getElementById('gameSelect'),...d.querySelectorAll('#sovereign-panel-domain .sovereign-card, #sovereign-panel-domain .sovereign-foundation')]){const box=node.getBoundingClientRect();assert(box.right<=d.documentElement.clientWidth+1&&node.scrollWidth<=node.clientWidth+1,'Overflow '+layout+'/'+width)}
    const style=w.getComputedStyle(d.querySelector('#sovereign-panel-domain .sovereign-card'));for(const edge of ['Top','Right','Bottom','Left'])assert(parseFloat(style['border'+edge+'Width'])>=1,'Missing border '+layout+'/'+width);assert(parseFloat(style.paddingLeft)>=14,'Missing padding');
   }}
  });

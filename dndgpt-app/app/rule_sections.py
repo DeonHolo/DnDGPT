@@ -3,6 +3,7 @@ import re
 
 
 AMENDMENTS = {
+    "living-campaigns": "Living campaigns, growth and pacing",
     "loading": "Rules loading and checklist precedence",
     "continuity": "Turn continuity and efficient resolution",
     "creation-order": "V1.0 surgical four-turn creation and in-chat continuation precedence",

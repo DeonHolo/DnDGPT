@@ -207,6 +207,8 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         continuity merges short scene/last_player_intent/last_action/outcome/pending_decision/transition
         text (600 characters each) and unresolved_threads/npc_commitments (at most 8 strings of 240).
         Update it in this SAME save after a meaningful change; never invent a thought or future outcome.
+        life_updates optionally saves actors/places, evidence-backed events and player-authorized pacing
+        in this same call. Read living-campaigns before first use; no per-turn review/read is required.
         Never set mode/phase/paused/version/authorization. Draft preparation is allowed before play;
         After the player's final Background/attribute/name choices, write character.story_summary,
         starting equipment and opening_preview in this SAME save with begin_adventure=true. This
@@ -358,6 +360,8 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         view=resume supplies a compact continuity brief for a fresh chat; inspect full details only as needed.
         A brief read never authorizes continuing, rolling or resuming. Missing continuity is marked, not invented.
         Reuse the latest successful read/save in the current context; no obligatory read before every save.
+        Plan authorized rounds/choices from the actual equipped effects and upgraded skills in that state;
+        respect triggers, charges, cooldowns and action costs, counting derived passive bonuses once.
         """
         return invoke(lambda owner: campaign_view(engine.campaign_context(owner, campaign_id), view))
 
@@ -437,18 +441,21 @@ def build_mcp(engine, config, verifier, creation_repository=None):
     render_meta = metadata()
     render_meta["ui"]["resourceUri"] = resource_uri
     render_meta["openai/outputTemplate"] = legacy_uri
-    render_meta["openai/ui"] = {"entrypoints": [{"type": "thread"}]}
+    render_meta["openai/ui"] = {"entrypoints": [{"type": "thread"}, {"type": "global"}]}
 
     @server.tool(title="Campaign dashboard", annotations=read, meta=render_meta)
     def render_dashboard(campaign_id: str | None = None,
                          game_id: Literal["age-of-convergence", "sovereign-system"] | None = None) -> CallToolResult:
-        """Render the seven core gameplay chapters and Gallery. Does not create, roll, or resume anything.
-        Use data tools for mutations; keep this view mounted and refresh it through get_campaign.
+        """Use when the player asks to open/show the campaign dashboard on desktop or mobile.
+        Call again when it is closed, missing or outdated, even for the same campaign.
+        get_campaign refreshes saved data but cannot open an absent UI. Return this component.
+        Includes core chapters, Gallery and the selected game's panels. Read-only: never starts play.
+        Once visibly mounted, normal saves/data calls update it without routine per-turn renders.
         """
         return invoke(lambda owner: engine.dashboard(owner, campaign_id, game_id))
 
     ui_meta = {"ui": {"prefersBorder": True, "csp": {"connectDomains": [], "resourceDomains": []}},
-               "openai/ui": {"availableDisplayModes": ["inline", "fullscreen"],
+               "openai/ui": {"availableDisplayModes": ["inline", "fullscreen", "pip"],
                              "preferredDisplayMode": "inline"},
                "openai/widgetDescription": "Seven core RPG chapters plus a saved-image Gallery; action choices send chat follow-ups.",
                "openai/widgetPrefersBorder": True,

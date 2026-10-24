@@ -1,0 +1,5 @@
+.life-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:14px;margin-block:16px}
+.life-card{min-width:0;border:1px solid var(--line,var(--border));border-radius:8px;padding:18px;margin-block:14px;background:var(--surface);overflow-wrap:anywhere}
+.life-grid>.life-card{margin:0}.life-card h3{margin:0 0 12px}.life-card p{line-height:1.65;margin:10px 0}.life-meta{font-size:.82rem;color:var(--muted)}
+.life-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}.life-actions button{min-height:44px;white-space:normal}.life-memory,.life-change{border-inline-start:2px solid var(--accent);padding-inline-start:12px}.life-routes a{display:inline-block;padding-block:4px}
+@media(max-width:520px){.life-card{padding:16px}.life-actions{display:grid;grid-template-columns:1fr}.life-actions button{width:100%}}

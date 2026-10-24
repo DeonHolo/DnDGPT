@@ -1,0 +1,24 @@
+{
+  "id": "owned-kit-planning-2026-10-25",
+  "files": {
+    "rulebook-v1.0.txt": [
+      {
+        "new_start": 2012,
+        "before": "",
+        "after": "\n**Plan from the actual kit.** Before offering choices or resolving an authorized round, inspect the owned powers and equipped item effects already in the current save. Include integrated upgrades, passives, conditional triggers, legal item activations, remaining charges, cooldowns, MP, action economy, reach and the current terrain/targets. Use each equipped effect when its real trigger applies; count already-derived bonuses once. Carried or stored gear confers only its written carried effect; equipping, drawing or activating has its actual cost. Empty charges and spent reactions are unavailable. Commands and independent ally turns respect their real owner and timing.\n\nWhen the player authorizes autonomous legal actions, select and sequence useful actions from that actual kit within their stated objective, resource/risk limits and authorized rounds. Apply automatic triggers, spend real costs and record outcomes in the normal batched save. Present situation-specific next actions that exploit meaningful owned options, rather than repeating generic attack/defend/end-turn menus. Use a distinctive item, synergy or companion when it improves a real decision; do not force every effect into every turn or inflate a damage-only turn with an inventory recital. Inspect an omitted rule only when genuinely needed; current known mechanics need no new routine tool call. Custom prose remains GM-adjudicated, never an invented automatic server program. Pause at a material unapproved decision or existing advancement freeze; delegated tactics do not choose the player's thoughts or unrelated commitments.\n"
+      }
+    ],
+    "rule-hardener.txt": [
+      {
+        "new_start": 6168,
+        "before": "Read living-campaigns once: save evidence-backed rival learning, relationships, promises, places, quest aftermath and owned growth via life_updates. Authorized journeys stop for decisions. Review generation during development, never each turn.\n",
+        "after": "Read living-campaigns: save witnessed learning, promises, places, quest aftermath and owned growth in life_updates. Plan authorized rounds/options from current gear, upgrades and skills; honor triggers, charges, cooldowns and action costs, counting bonuses once. Journeys stop for decisions. Generation reviews are development-only.\n"
+      },
+      {
+        "new_start": 7694,
+        "before": "Check intent, current rules/state, legal timing/targets/costs, fixed rolls/offers, known facts, consequences and save status. Preserve typed actions/depletion/cooldowns. Show effects; omit caveats/unchanged stats. GM handles misuse. Flavor/POV/tooltips add no mechanics. UI fixes never replay or reroll. Do not claim unperformed tests.\n",
+        "after": "Check intent, current state, timing/targets/costs, fixed rolls/offers, known facts and save status. Preserve typed actions/depletion. Show effects, omit caveats/unchanged stats. GM handles misuse. Flavor/POV/tooltips add no mechanics. UI fixes never replay/reroll. Claim only performed tests.\n"
+      }
+    ]
+  }
+}

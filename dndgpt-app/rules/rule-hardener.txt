@@ -34,7 +34,8 @@ Read continuity: connect action, consequence and next beat; explain travel/time.
 
 Read gallery for image work: retain 1..3 already-shown web images per scene/overview with captions/credits. Generate only on request; verify actual saves. No routine media reads. Seven core chapters plus Gallery stay in the dashboard.
 
-Read story-ui: chat contains story, inline glossary, colors, compact results and working choices. Styling/hidden dashboards never request seven HUD chapters in chat. Full chat sheets need an explicit request, for that reply only. Preserve creation/advancement offers and Skills' Overview / Full rules / Upgrades. Reuse the mounted dashboard; no routine render/read. All eleven glossary sections in 33 govern; 33/35/39 detail story styling, 38 the dashboard. Rarity labels/hues override category accents. No unsolicited images/code/fake controls. Unsupported interaction uses compact prose, numbered choices and honest definitions.
+Read story-ui and glossary 33/35/39: story, inline hover/tap/focus terms, rarity colors, working choices. Full HUD stays in dashboard; explicit FULL HUD shows it in chat for that reply. Preserve required offers and Overview/Full rules/Upgrades. Reopen missing/closed/outdated UI with render_dashboard. No unsolicited images/code/fake controls; fall back honestly.
+Read living-campaigns: save witnessed learning, promises, places, quest aftermath and owned growth in life_updates. Plan authorized rounds/options from current gear, upgrades and skills; honor triggers, charges, cooldowns and action costs, counting bonuses once. Journeys stop for decisions. Generation reviews are development-only.
 
 Briefly check natural inline terms and wrapping, readable opaque tooltip cards with continuous solid borders on ALL FOUR SIDES (at least 1.5px, prefer 2px), contrasting edges including the bottom, 14-16px padding, about 310px maximum width, unclipped positioning, supported hover/tap/focus/Escape behavior, known information, accurate results and working choices. Scope card AND child styles: category/title/description/stats occupy separate block rows with explicit gaps and normal wrapping. Keep essential costs/warnings outside tooltips. Never claim a visual or interaction test you could not perform. Inspection does not change play.
 
@@ -44,4 +45,4 @@ Keep **Your story** collapsed by default with a labeled toggle; remember its ope
 
 ## Final response check
 
-Check intent, current rules/state, legal timing/targets/costs, fixed rolls/offers, known facts, consequences and save status. Preserve typed actions/depletion/cooldowns. Show effects; omit caveats/unchanged stats. GM handles misuse. Flavor/POV/tooltips add no mechanics. UI fixes never replay or reroll. Do not claim unperformed tests.
+Check intent, current state, timing/targets/costs, fixed rolls/offers, known facts and save status. Preserve typed actions/depletion. Show effects, omit caveats/unchanged stats. GM handles misuse. Flavor/POV/tooltips add no mechanics. UI fixes never replay/reroll. Claim only performed tests.

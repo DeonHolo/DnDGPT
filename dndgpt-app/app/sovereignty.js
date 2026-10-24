@@ -1,5 +1,6 @@
 let currentGame=window.openai?.toolOutput?.game_id||window.openai?.widgetState?.game_id||"age-of-convergence",gameEpoch=0,gameSwitching=false,gameLocked=false;
-let sovereignTab="domain",powerScope="all";
+let sovereignTab="domain";
+function isSovereignFoundation(a){return a.scope==="sovereign"&&["domain","general","army"].includes(a.sovereign_role)&&String(a.activation).toLowerCase()==="passive"}
 const gameNames={"age-of-convergence":"Age of Convergence","sovereign-system":"Sovereign System"};
 const gameSelections={};
 function sovereignCombatView(next){
@@ -26,7 +27,7 @@ function activateGame(id){
   document.querySelector(".identity h1").textContent=id==="sovereign-system"?"Sovereign System":"DnDGPT";
   sovereignNav.hidden=id!=="sovereign-system";
   $("nav-gallery").querySelector(".nav-index").textContent=id==="sovereign-system"?"09":"08";
-  if(changed){powerScope="all";campaigns=[];$("session").replaceChildren(element("option","Select a saved game"));$("session").firstElementChild.value="";if(id!=="sovereign-system"&&document.querySelector('#sectionNav [aria-current="page"]')===sovereignNav)selectCompanionPage("character")}
+  if(changed){campaigns=[];$("session").replaceChildren(element("option","Select a saved game"));$("session").firstElementChild.value="";if(id!=="sovereign-system"&&document.querySelector('#sectionNav [aria-current="page"]')===sovereignNav)selectCompanionPage("character")}
 }
 function clearGameSnapshot(){
   if(state)gameSelections[currentGame]=state.id;
@@ -54,6 +55,21 @@ function entityPowers(parent,entity){
     const reader=element("article",undefined,"ability-inspector");disclosure.append(reader);parent.append(disclosure);
     renderAbilityInspector(reader,{...ability,id:entity.id+":"+ability.id});
   }
+}
+function renderStartingSovereignKit(next){
+  if(next.game_id!=="sovereign-system"||next.phase!=="character_draft")return;
+  const root=element("section",undefined,"starting-sovereign-kit");root.append(element("h3","Your sovereignty","group"));
+  paragraph(root,"Your domain, general and army grow through permanent Sovereign Evolutions.");
+  const inspect=element("button","Inspect Sovereignty");inspect.type="button";inspect.onclick=()=>selectCompanionPage("sovereignty");root.append(inspect);
+  const missing=next.rules_check?.sovereign_kit?.missing_roles||[];
+  if(missing.length)paragraph(root,"Still taking shape: "+missing.map(fieldLabel).join(", ")+".","muted");
+  $("character").append(root);
+}
+function renderFoundation(parent,next,role){
+  const powers=(next.abilities||[]).filter(a=>isSovereignFoundation(a)&&a.sovereign_role===role);
+  if(!powers.length)return;
+  const section=element("section",undefined,"sovereign-foundation");section.append(element("h3","Sovereign upgrades","group"));
+  entityPowers(section,{id:"foundation-"+role,abilities:powers});parent.append(section);
 }
 function sovereigntyCard(parent,title,meta,description){
   const card=element("section",undefined,"sovereign-card");card.append(element("h3",title));if(meta)paragraph(card,meta,"sovereign-meta");if(description)paragraph(card,description);parent.append(card);return card;
@@ -86,6 +102,7 @@ function renderSovereignty(next){
     for(const choice of milestone.choices){const button=element("button");button.type="button";button.disabled=done!==milestone.objectives.length;button.append(element("strong",choice.name),element("span",choice.description));button.onclick=()=>sendPrompt("Choose domain development "+choice.id+" ("+choice.name+") for milestone "+milestone.id+". Apply the published development and save it; no further approval.");options.append(button)}section.append(options);
   }
   if(s.developments.length){const history=recordDetail(panels.domain,"Completed developments","sovereign-developments");for(const d of s.developments)paragraph(history,"Level "+d.level+" · "+d.choice.name)}
+  renderFoundation(panels.domain,next,"domain");renderFoundation(panels.commanders,next,"general");renderFoundation(panels.forces,next,"army");
   for(const c of s.commanders.filter(c=>c.side!=="enemy"||c.known===true)){const card=sovereigntyCard(panels.commanders,c.name,"Level "+c.level+" · XP "+(c.xp||0)+" / "+(100+50*(c.level-1))+" · "+(c.status||"active"),c.description);if(c.nature)paragraph(card,c.nature);entityPowers(card,c);if(c.equipment?.length){const gear=recordDetail(card,"Equipment","commander-gear-"+c.id);for(const item of c.equipment)renderValue(gear,item)}}
   if(!s.commanders.length)paragraph(panels.commanders,"Your first commander will appear here during creation.","muted");
   for(const f of s.formations.filter(f=>f.side==="player"||f.known===true)){const card=sovereigntyCard(panels.forces,f.name,(f.side==="player"?"Your forces":"Known opposing force")+" · "+f.strength+" / "+f.maximum_strength+" · "+(f.status||"active"),f.description);paragraph(card,"Veterancy "+(f.veterancy||0)+" / 5 · XP "+(f.xp_total||0)+" · Cohesion "+f.morale,"sovereign-meta");const commander=s.commanders.find(c=>c.id===f.commander_id);if(commander)paragraph(card,"Commander · "+commander.name);const stats=recordDetail(card,"Formation rules","formation-"+f.id);renderFacts(stats,[["Attack",f.attack],["Defense",f.defense],["Power",f.power],["Armor",f.armor]]);entityPowers(card,f)}

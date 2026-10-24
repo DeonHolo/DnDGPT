@@ -44,7 +44,10 @@ function renderQuestCard(parent,quest){
   if(quest.contract_payment){
     const pay=quest.contract_payment;renderReward(card,"Contract payment · "+pay.creditor,pay.reward,pay.status==="collected"?"Collected":pay.status==="unavailable"?"Unavailable":"Owed · "+pay.condition);
   }
-  if(quest.progress_note)card.append(element("p",quest.progress_note,"muted"));parent.append(card);
+  if(quest.progress_note)card.append(element("p",quest.progress_note,"muted"));
+  const aftermath=state?.campaign_life?.aftermath?.find(row=>row.quest_id===quest.id);
+  if(aftermath){const result=element("aside",undefined,"life-change");result.append(element("strong","After the quest"),element("p",aftermath.summary));card.append(result)}
+  parent.append(card);
 }
 function renderQuests(parent,rows){
   parent.replaceChildren();if(!rows.length){paragraph(parent,"No quests recorded.","muted");return}

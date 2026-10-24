@@ -44,7 +44,7 @@ def bounded_json(value, depth=0, field=""):
     if depth > 12:
         fail(422, "invalid_chat_update", "Record nesting exceeds 12 levels")
     if type(value) is dict:
-        if len(value) > (10000 if field == "award_ledger" else 500) or any(type(k) is not str or len(k) > 128 for k in value):
+        if len(value) > (10000 if field in {"award_ledger", "event_ledger", "source_receipts"} else 500) or any(type(k) is not str or len(k) > 128 for k in value):
             fail(422, "invalid_chat_update", "Invalid object keys")
         for key, item in value.items():
             bounded_json(item, depth + 1, key)
@@ -71,7 +71,7 @@ def validate_changes(changes):
     allowed = TEXT_FIELDS | OBJECT_FIELDS | {"character", "equipment", "fictional_time_seconds",
                                            "level_up_freeze", "upsert", "remove", "replace",
                                            "spend_evolution_credit", "event_transition", "sovereign_awards",
-                                           "sovereign_development", "spend_sovereign_evolution", "sovereign_battle"}
+                                           "sovereign_development", "spend_sovereign_evolution", "sovereign_battle", "life_updates"}
     if set(changes) - allowed:
         fail(422, "protected_field", "Unknown or server-controlled state field")
     for key in TEXT_FIELDS & changes.keys():
@@ -181,6 +181,8 @@ def apply_changes(state, changes, *, correction=False, completing=False, event_r
     apply_quests(state, projected, changes, correction)
     from .sovereignty import apply_sovereignty
     apply_sovereignty(state, projected, changes, correction, dice)
+    from .campaign_life import apply_life
+    apply_life(state, projected, changes, correction)
     if not correction:
         apply_tracking(state, projected, changes, event_receipt)
     ch = projected["character"]

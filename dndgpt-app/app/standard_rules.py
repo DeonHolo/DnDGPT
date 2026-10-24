@@ -38,6 +38,8 @@ def class_kit_check(state):
         return {"missing": [], "utility_required": 0, "utility_recorded": 0}
     owned = [a for a in state.get("abilities", [])
              if str(a.get("source", "")).lower().startswith("class") or a.get("source_class")]
+    if state.get("game_id") == "sovereign-system":
+        owned = [a for a in owned if a.get("scope") != "sovereign"]
     counts = {kind: 0 for kind in ("active", "passive", "reaction", "free_action", "utility")}
     for ability in owned:
         kind = ability_kind(ability)

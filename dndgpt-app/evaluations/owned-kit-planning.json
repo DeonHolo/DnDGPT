@@ -1,0 +1,255 @@
+{
+  "provenance": "actual_read_only_native_model_output",
+  "model_ui_setting": "Medium; user default unchanged",
+  "prompt": "Development-only read-only evaluation of DnDGPT rules. No plugin tools, dice, campaign creation or saved-game changes. Plan from supplied fictional snapshots; do not resolve unknown outcomes. Return concise JSON with one entry per case, including intended legal sequence, triggered equipment effects, effective DEF, resource expenditure, and three genuinely different next-action options when appropriate.\n\nRules: Use current equipped effects, combined upgrades, passive triggers, charges, cooldowns, MP, reach and one Action / one Free Action / one Reaction each round. Count bonuses already included in derived statistics once. Stored items provide only expressly stated carried effects. Follow the player's actual autonomous-round objective and limits. Useful choices should arise from the owned kit and situation. Sovereign progression: every character level guarantees one permanent significant Domain, General or Army improvement with five compatible choices. Temporary player-issued commands and timed buffs belong in the regular skill tree. An actual permanent foundation capability changes in the same save, and its acquired upgrade nests with the combined parent. No extra approval after a choice. Internal award accounting is not player currency.\n\nCommon snapshot: player MP 18, derived DEF 14 (already includes the equipped cloak's +4), HP 24/30. An allied moth is Engaged with the raider, DEF 10. The player is Near the raider and can move to available cover within normal movement. Player Action 'Glass dart': 3 MP, attacks one Near enemy; hit not supplied. Free Action 'Direct the moth': 5 MP, commands its independent attack; ready. The moth attacks only when commanded and otherwise guards. Equipped signet: after Direct the moth, give that moth +2 DEF until the player's next turn, once per round; no charge or action. Equipped belt 'Brace': Reaction, 1 charge, reduces incoming damage by 4 when actually hit; 1 charge remains. Cloak: +4 player DEF already applied. Stored wand: Action, requires equipped, 0 charges; carried grants no effects. No other abilities, upgrades or item effects are known.\nCase A: The player authorizes one autonomous legal round to press the raider, protect the moth and spend at most 8 MP. There is no incoming hit yet.\nCase B: Same scene, but the signet is unequipped in a packed bag, belt 0 charges, Reaction already spent and MP 3. The objective is safely disengage this one round. Equipping the signet takes the Action. Describe current legal possibilities only.\nCase C: Sovereign level-up, regular attack/command kit unchanged. Existing Domain: a moving refuge with a working smithy; General: a persistent construct commander with standing scout orders; Army: two construct formations with fixed production and repair rules. One guaranteed permanent Sovereign Evolution is due. Give five coherent candidates across the actual foundations, identify which foundation each changes and which lasting record would change. Then classify a separate proposed power 'Order a general to grant a formation +3 DEF for three rounds': where does it belong and does it satisfy that guaranteed improvement?\n",
+  "response": {
+    "evaluation": "DnDGPT development-only, read-only",
+    "execution": {
+      "dice_rolled": false,
+      "outcomes_resolved": false,
+      "campaign_mutated": false,
+      "saved_game_changed": false,
+      "plugin_tools_used": false
+    },
+    "cases": [
+      {
+        "case": "A",
+        "objective": "Press the raider, protect the moth, spend no more than 8 MP.",
+        "intended_legal_sequence": [
+          "Move to available cover within normal movement, maintaining Near attack range if possible.",
+          "Action: Glass dart targeting the raider (3 MP). Attack outcome remains unknown.",
+          "Free Action: Direct the moth (5 MP). The moth independently attacks the raider; outcome remains unknown.",
+          "Passive: Equipped signet automatically grants the commanded moth +2 DEF until the player's next turn.",
+          "Reaction: Reserve Brace for an actual incoming hit. Do not activate preemptively."
+        ],
+        "equipment_effects": {
+          "cloak": "+4 player DEF, already included",
+          "signet": "Triggered once; moth +2 DEF, no charge or action",
+          "belt": "Brace remains available until an actual hit",
+          "stored_wand": "No effect"
+        },
+        "effective_DEF": {
+          "player": 14,
+          "moth": 12,
+          "player_cover": "Possible situational benefit; unspecified, not numerically added"
+        },
+        "resources": {
+          "MP_start": 18,
+          "MP_spent": 8,
+          "MP_end": 10,
+          "HP": "24/30, unchanged absent resolved damage",
+          "actions": "1/1 used",
+          "free_actions": "1/1 used",
+          "reactions": "0/1 used; reserved",
+          "brace_charges": 1
+        },
+        "unknown_outcomes": [
+          "Glass dart hit or miss",
+          "Moth attack hit or miss",
+          "Raider response",
+          "Whether incoming damage triggers Brace",
+          "Numerical cover modifier"
+        ],
+        "next_action_options": [
+          {
+            "id": 1,
+            "title": "Maintain ranged pressure",
+            "action": "On the next eligible turn, use Glass dart against the raider.",
+            "cost": "3 MP",
+            "purpose": "Continue direct offense."
+          },
+          {
+            "id": 2,
+            "title": "Prioritize moth defense",
+            "action": "On the next eligible turn, Direct the moth again while repositioning defensively.",
+            "cost": "5 MP",
+            "purpose": "Renew the signet's defensive effect and command another independent attack."
+          },
+          {
+            "id": 3,
+            "title": "Conserve resources",
+            "action": "Use normal movement to improve positioning without spending MP; leave the moth guarding.",
+            "cost": "0 MP",
+            "purpose": "Preserve resources and avoid unnecessary exposure."
+          }
+        ]
+      },
+      {
+        "case": "B",
+        "objective": "Safely disengage this round.",
+        "intended_legal_sequence": [
+          "Prioritize moving toward available cover or away from the raider within normal movement.",
+          "Do not Direct the moth: insufficient MP.",
+          "Do not use Brace: zero charges and Reaction already spent.",
+          "Do not equip the signet unless deliberately sacrificing the Action; doing so provides no current signet benefit because Direct the moth is unaffordable.",
+          "Leave the moth guarding unless an independent permitted behavior is explicitly established."
+        ],
+        "equipment_effects": {
+          "cloak": "+4 player DEF, already included",
+          "signet": "Unequipped; inactive",
+          "belt": "Unavailable; zero charges",
+          "stored_wand": "Unequipped, zero charges; no effect"
+        },
+        "effective_DEF": {
+          "player": 14,
+          "moth": 10,
+          "cover": "May improve safety; numerical benefit unspecified"
+        },
+        "resources": {
+          "MP_start": 3,
+          "MP_spent_recommended": 0,
+          "MP_end_recommended": 3,
+          "alternative_Glass_dart_cost": 3,
+          "HP": "24/30 before unresolved enemy activity",
+          "reaction": "Already spent",
+          "brace_charges": 0,
+          "free_action_Direct_the_moth": "Unavailable: needs 5 MP",
+          "action": "Available; equipping signet consumes it"
+        },
+        "limitations": [
+          "No disengage-specific Action or opportunity-attack immunity is defined.",
+          "Normal movement does not automatically guarantee safe disengagement.",
+          "The moth cannot be commanded without 5 MP.",
+          "Equipping the signet cannot retroactively activate its passive.",
+          "No unlisted Dodge, Dash, Withdraw or disengage ability is assumed."
+        ],
+        "next_action_options": [
+          {
+            "id": 1,
+            "title": "Retreat into cover",
+            "action": "Move toward cover while preserving MP and the Action.",
+            "cost": "0 MP",
+            "risk": "Potential enemy response remains unresolved."
+          },
+          {
+            "id": 2,
+            "title": "Covering attack",
+            "action": "Use Glass dart against the raider, then move away as legally permitted.",
+            "cost": "3 MP",
+            "risk": "Attack outcome unknown; no guaranteed movement protection."
+          },
+          {
+            "id": 3,
+            "title": "Reequip for later",
+            "action": "Spend the Action equipping the signet and use permitted movement toward safety.",
+            "cost": "0 MP",
+            "risk": "No immediate signet trigger; weaker fit for the disengagement objective."
+          }
+        ]
+      },
+      {
+        "case": "C",
+        "event": "Sovereign level-up",
+        "guaranteed_improvement": {
+          "count": 1,
+          "required_type": "Permanent significant Domain, General or Army evolution",
+          "offers_required": 5,
+          "selection_status": "Pending",
+          "award_accounting": "Internal only; no player-facing currency",
+          "application": "One selected evolution permanently modifies its existing foundation and nests under the combined parent.",
+          "additional_approval": false
+        },
+        "candidates": [
+          {
+            "id": 1,
+            "name": "Marching Bastion",
+            "foundation": "Domain",
+            "parent": "Moving Refuge",
+            "permanent_change": "Integrate a durable defensive shell into the refuge, providing lasting structural protection against ordinary external attacks while deployed.",
+            "lasting_record_changed": "Domain.MovingRefuge.defensive_structure",
+            "mechanical_boundary": "Persistent structural capability; no temporary DEF buff."
+          },
+          {
+            "id": 2,
+            "name": "Sovereign Foundry",
+            "foundation": "Domain",
+            "parent": "Moving Refuge > Smithy",
+            "permanent_change": "Upgrade the working smithy into a permanent advanced forge capable of producing and restoring more complex construct components using the foundation's existing material economy.",
+            "lasting_record_changed": "Domain.MovingRefuge.Smithy.capabilities",
+            "mechanical_boundary": "Does not create free materials or bypass existing production costs."
+          },
+          {
+            "id": 3,
+            "name": "Autonomous Theater Command",
+            "foundation": "General",
+            "parent": "Persistent Construct Commander",
+            "permanent_change": "Expand the general's standing-order system from scouting to independent multi-stage reconnaissance, threat reporting and lawful fallback behavior without repeated player commands.",
+            "lasting_record_changed": "General.ConstructCommander.standing_order_capabilities",
+            "mechanical_boundary": "Persistent autonomy; does not grant extra player Actions or Free Actions."
+          },
+          {
+            "id": 4,
+            "name": "Independent Repair Corps",
+            "foundation": "Army",
+            "parent": "Two Construct Formations",
+            "permanent_change": "Establish an enduring repair organization able to schedule and perform repairs for the existing formations under their established repair costs and constraints.",
+            "lasting_record_changed": "Army.Formations.repair_infrastructure",
+            "mechanical_boundary": "Improves logistical capability without granting free repairs or overriding existing resource rules."
+          },
+          {
+            "id": 5,
+            "name": "Third Formation Charter",
+            "foundation": "Army",
+            "parent": "Construct Army",
+            "permanent_change": "Permanently unlock the organizational capacity to establish and maintain a third construct formation, subject to normal construction, production and upkeep requirements.",
+            "lasting_record_changed": "Army.Formations.capacity",
+            "mechanical_boundary": "Raises formation capacity from 2 to 3; does not automatically create a fully equipped formation."
+          }
+        ],
+        "proposed_power_review": {
+          "name": "Order a general to grant a formation +3 DEF for three rounds",
+          "classification": "Temporary command/buff",
+          "correct_location": "Regular skill tree, nested under the appropriate General command skill",
+          "satisfies_guaranteed_sovereign_evolution": false,
+          "reason": "A three-round defensive order does not permanently expand the Domain, General or Army foundation.",
+          "action_economy": "Activation requires an explicitly defined Action or Free Action; no extra activation is granted by default.",
+          "requirements_before_use": [
+            "Define MP cost",
+            "Define command reach",
+            "Define activation economy",
+            "Define cooldown and applicable targets",
+            "Define stacking and expiry",
+            "Respect one Action, one Free Action and one Reaction per round"
+          ],
+          "guaranteed_permanent_offer_still_due": true
+        },
+        "effective_DEF": "Unchanged by level-up alone; no candidate selected or equipped DEF modification specified.",
+        "resource_expenditure": {
+          "MP": 0,
+          "charges": 0,
+          "advancement_currency": 0,
+          "internal_award_consumed": false
+        },
+        "next_action_options": [
+          {
+            "id": 1,
+            "title": "Choose a Domain evolution",
+            "eligible_candidates": [
+              1,
+              2
+            ]
+          },
+          {
+            "id": 2,
+            "title": "Choose a General evolution",
+            "eligible_candidates": [
+              3
+            ]
+          },
+          {
+            "id": 3,
+            "title": "Choose an Army evolution",
+            "eligible_candidates": [
+              4,
+              5
+            ]
+          }
+        ],
+        "application_note": "Selecting exactly one of the five candidates applies that permanent improvement immediately to the same save, without a second approval step. This evaluation performs no selection or mutation."
+      }
+    ]
+  },
+  "player_campaigns_accessed": 0,
+  "actual_gameplay_tool_calls": 0,
+  "latency_note": "Elapsed capture time includes other work; not a measured gameplay response time."
+}

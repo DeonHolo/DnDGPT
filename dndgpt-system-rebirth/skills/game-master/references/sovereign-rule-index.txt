@@ -18,6 +18,7 @@ Creation completion/advancement: direct-play. Final creation saves Your story, o
 Starting outfit: starting-gear, 23, 27. Equipment: 23 through 28. Story/quests: 31, 32, 32A. Saves/compatibility: 40 through 42.
 
 ## Current amendments
+living-campaigns | Living campaigns, growth and pacing | 8706 characters
 loading | Rules loading and checklist precedence | 2498 characters
 continuity | Turn continuity and efficient resolution | 5360 characters
 creation-order | V1.0 surgical four-turn creation and in-chat continuation precedence | 2012 characters
@@ -36,10 +37,10 @@ ancestry | Player ancestry and nonhuman identity | 2109 characters
 dashboard-writing | Player-facing dashboard writing contract | 6144 characters
 story-ui | Compact Intelligent Story UI contract | 6877 characters
 enemy-tactics | Enemy identity, adaptive tactics and visible voice | 3909 characters
-sovereign-creation | Sovereign creation and inherited rules | 3004 characters
-sovereign-progression | Sovereign ownership and progression | 4121 characters
+sovereign-creation | Sovereign creation and inherited rules | 4622 characters
+sovereign-progression | Sovereign ownership and progression | 5687 characters
 sovereign-warfare | Sovereign warfare and consequences | 4004 characters
-sovereign-dashboard | Sovereign dashboard and efficient play | 1150 characters
+sovereign-dashboard | Sovereign dashboard and efficient play | 1411 characters
 
 ## Full chapters
 1 | THE CORE EXPERIENCE | 1127 characters
@@ -48,7 +49,7 @@ sovereign-dashboard | Sovereign dashboard and efficient play | 1150 characters
 4 | THE WORLD — THE AGE OF CONVERGENCE (V4.0 WORLD BIBLE) | 15743 characters
 5 | SIX-TIER RARITY SYSTEM | 19324 characters
 6 | LUCK ENHANCEMENT | 1650 characters
-7 | CHARACTER CREATION — FOUR CHOICE TURNS, FIVE PREPARATION PHASES | 13944 characters
+7 | CHARACTER CREATION — FOUR CHOICE TURNS, FIVE PREPARATION PHASES | 14287 characters
 8 | CLASSES AND HEROIC POWER | 25098 characters
 9 | SIGNATURE SKILLS | 11950 characters
 10 | STARTING TITLES | 951 characters

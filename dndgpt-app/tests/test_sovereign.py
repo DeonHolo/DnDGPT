@@ -65,6 +65,31 @@ def test_rules_are_composed_without_rewriting_shared_source():
         compose("Changed source", [{"id": "test", "old": "Missing", "new": "New"}])
 
 
+def test_starting_sovereign_kit_is_real_and_distinct_from_personal_powers(engine):
+    from app.sovereignty import complete_sovereign, sovereign_kit_check
+    state = fixture_state(engine)
+    state["character"]["rarity"] = "UNIQUE"
+    state["abilities"] = [{"id": role, "name": "Recorded "+role+" power", "scope": "sovereign", "sovereign_role": role,
+                           "rarity": "UNIQUE", "activation": "Passive",
+                           "mechanics": "A concrete test capability.", "flavor_text": "The domain answers."}
+                          for role in ("domain", "general", "army")]
+    complete_sovereign(state)
+    assert sovereign_kit_check(state)["ready"]
+    for key, value in (("scope", "personal"), ("flavor_text", ""), ("parent_id", "other-power"), ("rarity", "COMMON")):
+        broken = copy.deepcopy(state)
+        broken["abilities"][1][key] = value
+        assert sovereign_kit_check(broken)["missing_roles"] == ["general"]
+        with pytest.raises(EngineError, match="sovereign powers"):
+            complete_sovereign(broken)
+    token = copy.deepcopy(state); token["abilities"] = token["abilities"][:1]
+    with pytest.raises(EngineError):
+        complete_sovereign(token)
+    from app.standard_rules import class_kit_check
+    for power in state["abilities"]:
+        power["source"] = "Class"
+    assert "1 passive" in class_kit_check(state)["missing"]
+
+
 @pytest.mark.parametrize("game", [AGE, SOVEREIGN])
 def test_selected_rules_checklist_is_one_page_and_sections_are_lossless(game):
     hardener = rules_page("hardener", 0, game_id=game)
@@ -151,17 +176,62 @@ def test_domain_milestone_is_fixed_and_development_advances_once(engine):
     with pytest.raises(EngineError): apply_changes(result, {"sovereign_development": request})
 
 
-def test_level_up_credit_only_upgrades_owned_sovereign_parent(engine):
+def foundation_request(state, role):
+    target = state["sovereignty"]["domain"] if role == "domain" else state["sovereignty"]["commanders" if role == "general" else "formations"][0]
+    field = "capabilities" if role == "domain" else "abilities"
+    base = {"id": role, "name": role.title(), "scope": "sovereign", "sovereign_role": role,
+            "activation": "Passive", "rarity": "UNIQUE", "mechanics": "The original permanent foundation.", "upgrades": []}
+    state["abilities"] = [base]
+    state["sovereignty"]["ascension_earned"] = 1
+    evolution_id = role+"-upgrade"
+    capability = {"id": role+"-capability", "name": "A lasting capability", "description": "A new standing defensive capability.",
+                  "activation": "Passive", "duration": "Permanent", "source_evolution_id": evolution_id}
+    parent = {**base, "mechanics": "The combined foundation now includes the standing defense.",
+              "upgrades": [{"id": evolution_id, "name": "Permanent improvement", "change_display": "Gain a standing defense.",
+                            "sovereign_changes": [{"target_id": target["id"], "capability_id": capability["id"]}]}]}
+    changed = {**target, field: [*target.get(field, []), capability]}
+    strategy = {"domain": changed} if role == "domain" else {"commanders" if role == "general" else "formations":
+               [changed, *state["sovereignty"]["commanders" if role == "general" else "formations"][1:]]}
+    return {"upsert": {"abilities": [parent]}, "sovereignty": strategy,
+            "spend_sovereign_evolution": {"ability_id": role, "evolution_id": evolution_id}}
+
+
+@pytest.mark.parametrize("role", ["domain", "general", "army"])
+def test_level_credit_guarantees_permanent_change_on_actual_foundation(engine, role):
     state = fixture_state(engine)
-    state["abilities"] = [{"id": "command", "name": "Open the gate", "scope": "sovereign", "rarity": "UNIQUE", "upgrades": []}]
+    request = foundation_request(state, role)
     leveled = apply_changes(state, {"character": {"level": 2}})
-    assert leveled["sovereignty"]["ascension_earned"] == 1
-    parent = {**state["abilities"][0], "upgrades": [{"id": "gate-upgrade", "name": "A second gate", "change_display": "Deploy two formations."}]}
-    spent = apply_changes(leveled, {"upsert": {"abilities": [parent]}, "spend_sovereign_evolution": {"ability_id": "command", "evolution_id": "gate-upgrade"}})
-    assert spent["sovereignty"]["ascension_spent"] == ["gate-upgrade"]
+    assert leveled["sovereignty"]["ascension_earned"] == 2
+    spent = apply_changes(state, request)
+    assert spent["sovereignty"]["ascension_spent"] == [role+"-upgrade"]
     assert spent["character"]["skill_points"] == 0
     with pytest.raises(EngineError):
-        apply_changes(spent, {"spend_sovereign_evolution": {"ability_id": "command", "evolution_id": "another"}})
+        apply_changes(spent, request)
+
+
+@pytest.mark.parametrize("defect", ["timed", "active", "missing_target", "unchanged", "wrong_foundation", "no_combined_rules"])
+def test_temporary_or_unapplied_sovereign_upgrades_are_rejected(engine, defect):
+    state = fixture_state(engine)
+    request = foundation_request(state, "domain")
+    capability = request["sovereignty"]["domain"]["capabilities"][-1]
+    if defect == "timed": capability["duration"] = "3 rounds"
+    if defect == "active": capability["activation"] = "Active"
+    if defect == "missing_target": request["upsert"]["abilities"][0]["upgrades"][0]["sovereign_changes"][0]["target_id"] = "imaginary-city"
+    if defect == "unchanged": request.pop("sovereignty")
+    if defect == "wrong_foundation": state["abilities"][0]["activation"] = "Active"
+    if defect == "no_combined_rules": request["upsert"]["abilities"][0]["mechanics"] = state["abilities"][0]["mechanics"]
+    original = copy.deepcopy(state)
+    with pytest.raises(EngineError):
+        apply_changes(state, request)
+    assert state == original
+
+
+def test_regular_free_credit_cannot_replace_guaranteed_sovereign_credit(engine):
+    state = fixture_state(engine); request = foundation_request(state, "domain")
+    state["reward_credits"] = {"earned": 1, "spent": []}
+    request["spend_evolution_credit"] = request.pop("spend_sovereign_evolution")
+    with pytest.raises(EngineError, match="dedicated Sovereign"):
+        apply_changes(state, request)
 
 
 def orders():
@@ -325,3 +395,10 @@ def test_malformed_strategy_values_are_validation_errors(engine, field):
     with pytest.raises(EngineError) as error:
         apply_changes(state, changes, dice=Dice())
     assert error.value.status == 422
+
+
+def test_ordinary_update_preserves_passive_foundation_identity(engine):
+    state = fixture_state(engine); foundation_request(state, "domain")
+    parent = {**state["abilities"][0], "activation": "Active"}
+    with pytest.raises(EngineError, match="passive sovereign foundation"):
+        apply_changes(state, {"upsert": {"abilities": [parent]}})

@@ -78,7 +78,8 @@ This private ChatGPT release references the verified DnDGPT Cloud Dashboard App 
 When the actual tools become available through a verified connection:
 
 1. Use `list_campaigns` and `get_campaign` to read this authenticated user's authoritative stored state. Never choose or import a campaign automatically.
-2. Open `render_dashboard` once when requested. Use subsequent data calls to update the existing view. Supported hosts may expose a Campaign dashboard thread tab; display modes are controlled by the host.
+2. Use `render_dashboard` whenever the player asks to open it, including on mobile or when a prior view is missing, closed or outdated. `get_campaign` alone cannot open an absent component. Once mounted, normal saves/data calls update it without routine renders. The host controls available display modes.
+3. Before first use, read `living-campaigns` for `life_updates` actor/place registries, witnessed observations, relationships, commitments, quest aftermath, acquired capabilities and player-directed pacing. Save them with the normal turn, citing actual recorded sources. Private observations stay out of player-facing UI. Reuse this section; generation reviews belong in development and add no routine gameplay calls.
 3. Select the path from the actual saved mode. Chat-led games use the batched save and lifecycle flow above. Legacy development sandboxes use `propose_action` for implemented mechanics only. Read the latest version first and supply a unique action ID. A proposal performs no rolls or gameplay mutation.
 4. For manual pause/resume, corrections and legacy development proposals only, show the exact preview for explicit approval in the app. `execute_confirmed_action` is app-only; its approval token is widget-only metadata. Never fabricate approval, call execution on the user's behalf, or expose the token in narration.
 5. For those reviewed operations, after approval read and narrate the committed result. Retry the same proposal after transport failure; never reroll or invent a second action to retry.
@@ -106,3 +107,9 @@ New abilities may be proposed as data. They cannot install executable code or ch
 - `assets/prototype/CLIENT_ACCEPTANCE.md`: actual host/hosting evidence and outstanding gates.
 - `assets/prototype/rules/integrity.json`: original hashes, reversible edition labels and exact user-authorized additive amendments.
 - `assets/prototype/SKILL_HARDENING.md`: ability originality scope and source-preservation audit.
+
+## Owned kit and sovereignty
+
+Plan authorized autonomous rounds and meaningful choices from the current equipped effects, integrated powers and ally rules. Apply real triggers, charges, cooldowns, costs and action economy; count derived passive bonuses once. Reuse current mechanics rather than adding routine reads or an inventory recital. Follow living-campaigns for scope and decision stops.
+
+Sovereign Evolutions guarantee permanent Domain, General or Army improvements. Keep their parent-owned three-tab history in Sovereignty. Temporary orders and buffs belong in regular Skills; they never spend that guaranteed credit. Read sovereign-progression once for its same-save capability references.

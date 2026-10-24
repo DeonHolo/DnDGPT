@@ -141,6 +141,60 @@ def test_sovereign_page():
     return FileResponse(HERE / "sovereign.html")
 
 
+@app.get("/test-living")
+def test_living_page():
+    return FileResponse(HERE / "living.html")
+
+
+@app.post("/test-living-fixture")
+def living_fixture():
+    from app.chat_game import ChatGame
+    from app import records
+    from .test_campaign_life import opening, quest
+    engine = INNER.state.engine
+    game = ChatGame(engine)
+    output = {}
+    for selected in ("age-of-convergence", "sovereign-system"):
+        state = game.create(OWNER, "Living demo · "+selected, "living-fixture-"+selected+"-"+str(time.time_ns()), True, selected)
+        with engine.store.transaction() as db:
+            raw = engine._get(db, OWNER, state["id"])
+            raw.update(phase="adventure", paused=False)
+            records.update(db, "campaigns_v1", {"id": raw["id"]}, {"data": canonical(raw)})
+        patch = opening()
+        q = quest(); q["objectives"][0]["status"] = "done"
+        patch["upsert"]["quest_log"] = [q]
+        patch["life_updates"]["places"].append({"id": "bridge", "name": "The restored bridge", "kind": "holding", "description": "A crossing repaired during the quest.", "links": ["quay"]})
+        patch["life_updates"]["places"][0]["links"] = ["bridge"]
+        patch["life_updates"]["events"] += [
+            {"id": "private-plan", "kind": "observation", "subject_id": "captain", "source_id": "encounter", "memory_id": "private", "summary": "PRIVATE_TACTICAL_PLAN", "known_to_player": False},
+            {"id": "relationship", "kind": "relationship", "subject_id": "captain", "source_id": "encounter", "stance": "wary", "summary": "The captain accepted a truce after the rescue."},
+            {"id": "ferry", "kind": "place_change", "subject_id": "quay", "source_id": "bell", "summary": "The ferry landing reopens.", "controller": "The ferry keeper", "feature": {"id": "ferry", "name": "Working ferry", "description": "Passage to the far bank is available."}},
+            {"id": "aftermath", "kind": "quest_aftermath", "subject_id": "quay", "source_id": "bell", "quest_id": "bell", "summary": "The keeper resumes crossings after you return the bell."}]
+        state = game.update(OWNER, state["id"], "life-demo-seed", state["version"], "Disposable presentation fixture", patch)["campaign"]
+        output[selected] = state
+    return output
+
+
+@app.post("/test-living-record")
+async def record_living(request: Request):
+    result = await request.json()
+    (HERE.parent / "test-results").mkdir(exist_ok=True)
+    (HERE.parent / "test-results/living-browser.json").write_text(json.dumps(result, indent=2), encoding="utf-8")
+    return {"recorded": True}
+
+
+@app.post("/test-sovereign-draft-fixture")
+def sovereign_draft_fixture():
+    from app.chat_game import ChatGame
+    game = ChatGame(INNER.state.engine)
+    state = game.create(OWNER, "Sovereign starting powers · disposable draft", "draft-powers-"+str(time.time_ns()), True, "sovereign-system")
+    powers = [{"id": role, "name": "Fixture "+role+" power", "scope": "sovereign", "sovereign_role": role,
+               "source": "Class", "rarity": "UNIQUE", "activation": "Passive",
+               "mechanics": "A recorded starting-power renderer fixture.", "flavor_text": "The domain answers."}
+              for role in ("domain", "general", "army")]
+    return game.update(OWNER, state["id"], "draft-power-seed", state["version"], "Record disposable starting-power fixtures", {"upsert": {"abilities": powers}})
+
+
 @app.post("/test-sovereign-fixture")
 def sovereign_fixture():
     global SOVEREIGN_ID
@@ -167,6 +221,11 @@ def sovereign_fixture():
                  "upgrades": [{"id": "gate-two", "name": "Twin arrival", "change_display": "Deploy two formations."}]}
         state["abilities"] = [power, {"id": "blade", "name": "Iron sweep", "rarity": "RARE", "activation": "Active", "scope": "personal",
                                       "simple": "Strike an engaged enemy.", "mechanics_display": "Use your Action for a melee attack."}]
+        state["abilities"].extend({"id": "foundation-"+role, "name": "Fortress "+role, "rarity": "UNIQUE",
+                                  "scope": "sovereign", "sovereign_role": role, "activation": "Passive",
+                                  "mechanics_display": "The permanent "+role+" foundation.",
+                                  "upgrades": [{"id": role+"-growth", "name": role.title()+" growth", "change_display": "Gain a standing capability."}]}
+                                 for role in ("domain", "general", "army"))
         commander = state["sovereignty"]["commanders"][0]
         commander.update(level=3, xp=20, xp_total=270, description="An autonomous veteran who directs the fortress guard.",
                          abilities=[{**power, "id": "hold", "name": "Hold the line", "scope": "commander"}])

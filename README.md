@@ -28,7 +28,7 @@ You can write your own class or ability, ask ChatGPT to revise an offer, or chan
 
 Choose **Age of Convergence** or **Sovereign System** in the dashboard's Game selector. Each game shows its own saved campaigns and serves its own rules through the same DnDGPT connection. Switching the view leaves both campaigns untouched; a campaign keeps the game it was created for.
 
-Sovereign System adds a domain, autonomous commanders, army formations and independent strategic progression alongside personal adventures. Its rulebook is compiled from the shared manual with scoped replacements and added systems. [Game rules, progression and implementation details](docs/SOVEREIGN_SYSTEM.md).
+Sovereign System adds a domain, autonomous commanders, army formations and independent strategic progression alongside personal adventures. Each character level guarantees a permanent Sovereign upgrade to the domain, general or army, with its history in Sovereignty. Temporary orders and combat buffs stay in the regular skill tree. Its rulebook is compiled from the shared manual with scoped replacements and added systems. [Game rules, progression and implementation details](docs/SOVEREIGN_SYSTEM.md).
 
 ### Why I made this
 
@@ -91,6 +91,8 @@ Send this to begin:
 After a saved choice, you can say **“Open my campaign dashboard.”** Updates appear when ChatGPT saves the result; narration alone does not update it.
 
 **Managing saves:** Use the **Saved game** selector at the top of the dashboard. Under **View options → Campaign brief, history & portable saves**, read the resume brief, compare earlier versions, preview a correction or download a campaign file. Restoring a file creates a separate paused copy. Reading history never replaces your current save. See [continuity and recovery](docs/CONTINUITY_AND_RECOVERY.md).
+
+**People and places:** Both games can keep rival observations, relationships, promises, known routes and lasting quest consequences in the same saved turn. Open **World & Campaign Log → People & places** to inspect them and choose your pace. Sovereign System also shows active fronts and expeditions. The GM records these from what happened; older chat details do not appear automatically. [Living campaigns](docs/LIVING_CAMPAIGNS.md).
 
 To remove a campaign, select it and click **Delete Campaign**. Review what will be removed or retained, type its name, then choose **Delete permanently**. This cannot be undone. If a large history needs several cleanup batches, use **Continue cleanup** to finish the same deletion.
 

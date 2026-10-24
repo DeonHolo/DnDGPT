@@ -17,7 +17,7 @@
   --shadow:light-dark(#49300e12,#00000030);--scene-art:none;--scene-opacity:0;
   color:var(--ink);background:var(--surface)
 }
-*{box-sizing:border-box}html{min-height:100%;background-color:var(--surface)}body{max-width:1240px;margin:0 auto;padding:20px;line-height:1.5;min-height:100dvh}
+*{box-sizing:border-box}html{min-height:100%;background-color:var(--surface)}body{max-width:1240px;margin:0 auto;padding:20px;line-height:1.5;min-height:max(280px,100dvh)}
 html::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:var(--scene-art) center / cover no-repeat;opacity:var(--scene-opacity)}
 /* scene assets */
 button,input,textarea,select{font:inherit;color:inherit;background:var(--soft);border:1px solid var(--line);border-radius:5px;padding:10px 12px;max-width:100%}
@@ -154,6 +154,7 @@ dialog{color:var(--ink);background:var(--paper);border:1px solid var(--line);bor
 /* campaign tools styles */
 /* journal media styles */
 /* sovereign styles */
+/* campaign life styles */
 </style>
 </head>
 <body>
@@ -698,11 +699,7 @@ function selectSkillTab(id,save=true){
 function renderSkills(abilities){
   const root=$("skills");root.replaceChildren();
   if(currentGame==="sovereign-system"){
-    const scopes=element("div",undefined,"power-scopes");scopes.setAttribute("role","group");scopes.setAttribute("aria-label","Power ownership");
-    for(const [id,label]of [["all","All powers"],["personal","Personal"],["sovereign","Sovereign"]]){
-      const button=element("button",label);button.type="button";button.setAttribute("aria-pressed",String(powerScope===id));button.onclick=()=>{powerScope=id;renderSkills(state.abilities||[])};scopes.append(button);
-    }
-    root.append(scopes);abilities=abilities.filter(a=>powerScope==="all"||(a.scope||"personal")===powerScope);
+    abilities=abilities.filter(a=>!isSovereignFoundation(a));
   }
   if(state?.mode==="chat"&&state.phase==="character_draft")paragraph(root,"Saved abilities · character creation is still in progress.","chapter-note");
   if(state?.rules_check?.missing?.length){
@@ -870,7 +867,7 @@ function renderCombat(next){
   selectCombatTab(combatTab,false);
 }
 function selectWorldTab(id,save=true){
-  worldTab=id==="log"?"log":"world";
+  worldTab=["log","living"].includes(id)?id:"world";
   for(const button of document.querySelectorAll('#worldTabs [role="tab"]')){
     const selected=button.dataset.world===worldTab;button.setAttribute("aria-selected",String(selected));button.tabIndex=selected?0:-1;
   }
@@ -880,12 +877,12 @@ function selectWorldTab(id,save=true){
 function renderWorld(next){
   const root=$("world");root.replaceChildren();
   const tabs=element("div",undefined,"gear-tabs");tabs.id="worldTabs";tabs.setAttribute("role","tablist");tabs.setAttribute("aria-label","World and campaign log");root.append(tabs);
-  for(const [id,label]of [["world","World"],["log","Campaign Log"]]){
+  for(const [id,label]of [["world","World"],["log","Campaign Log"],["living","People & places"]]){
     const button=element("button",label);button.id="world-tab-"+id;button.type="button";button.dataset.world=id;
     button.setAttribute("role","tab");button.setAttribute("aria-controls","world-page-"+id);button.onclick=()=>selectWorldTab(id);
     button.onkeydown=event=>{
       if(event.altKey||event.ctrlKey||event.metaKey||!["ArrowRight","ArrowLeft","Home","End"].includes(event.key))return;
-      event.preventDefault();const target=event.key==="Home"?"world":event.key==="End"?"log":id==="world"?"log":"world";
+      event.preventDefault();const keys=["world","log","living"],index=keys.indexOf(id),target=event.key==="Home"?keys[0]:event.key==="End"?keys[2]:keys[(index+(event.key==="ArrowRight"?1:2))%3];
       selectWorldTab(target);$("world-tab-"+target).focus();
     };
     tabs.append(button);
@@ -906,7 +903,7 @@ function renderWorld(next){
     }
     show(selected);
   }
-  const records=[...(next.world_log||[])].reverse();
+  const records=[...(next.world_log||[])].filter(row=>row?.known_to_player!==false).reverse();
   if(next.notes)records.unshift({name:"Current scene",text:next.notes});
   if(next.opening_preview&&next.phase!=="adventure")records.push({name:"Opening preview",text:next.opening_preview});
   if(!records.length)paragraph(log,"No campaign log entries recorded.","muted");
@@ -1002,7 +999,8 @@ function renderCampaign(next){
   $("hero").textContent=c.name+" · Level "+c.level+" · "+c.class_name;
   renderResources(c);
   $("characterPreview").textContent="Level "+c.level+" · XP "+c.xp+" / "+c.xp_next;
-  $("skillsPreview").textContent=(next.abilities||[]).length+" owned · "+(next.mode==="chat"&&next.phase==="character_draft"?"creation draft":(next.abilities||[]).filter(a=>skillStatus(a)==="READY").length+" ready");
+  const regularAbilities=(next.abilities||[]).filter(a=>next.game_id!=="sovereign-system"||!isSovereignFoundation(a));
+  $("skillsPreview").textContent=regularAbilities.length+" owned · "+(next.mode==="chat"&&next.phase==="character_draft"?"creation draft":regularAbilities.filter(a=>skillStatus(a)==="READY").length+" ready");
   $("healthPreview").textContent=next.conditions.length+" recorded conditions · DEF "+c.def;
   const combatView=sovereignCombatView(next);
   $("summonsPreview").textContent=combatView.summons.length+(combatView.summons.length===1?" ally · ":" allies · ")+next.enemies.length+" known enemies";
@@ -1037,7 +1035,7 @@ function renderCampaign(next){
     const stat=element("div",undefined,"stat"),modifier=Math.floor((value-5)/2);
     stat.append(element("span",key,"stat-label"),element("strong",value,"stat-value"),element("span",(modifier>=0?"+":"")+modifier+" modifier","stat-mod"));attributes.append(stat);
   }
-  $("character").append(attributes);
+  $("character").append(attributes);renderStartingSovereignKit(next);
   const progression=element("div",undefined,"record-grid");
   for(const [label,value]of [["Level",c.level],["Experience",c.xp+" / "+c.xp_next]]){
     const record=element("div",undefined,"record");record.append(element("span",label,"eyebrow"),element("strong",value));progression.append(record);
@@ -1056,7 +1054,7 @@ function renderCampaign(next){
   renderCombat(combatView);
   renderGear(next,gear);
   renderQuests($("quests"),next.quest_log);
-  renderWorld(next);renderEventChecks(next);renderSovereignty(next);
+  renderWorld(next);renderCampaignLife(next);renderEventChecks(next);renderSovereignty(next);
   renderChoices();restorePreferences();updateSaveTools();
 }
 function receive(result,verified=false){
@@ -1208,7 +1206,8 @@ window.addEventListener("message",event=>{
 window.addEventListener("openai:set_globals",event=>{
   const globals=event.detail?.globals||{};
   if(globals.toolOutput)receive({structuredContent:globals.toolOutput,_meta:toolMetadata(globals.toolResponseMetadata)});
-  applyHostContext({theme:globals.theme||hostContext.theme,displayMode:globals.displayMode||hostContext.displayMode});
+  applyHostContext({theme:globals.theme||hostContext.theme,displayMode:globals.displayMode||hostContext.displayMode,maxHeight:globals.maxHeight??hostContext.maxHeight,safeAreaInsets:globals.safeAreaInsets||hostContext.safeAreaInsets});
+  if(window.openai?.callTool&&!standard)startSavedConnection();
 });
 $("customForm").onsubmit=event=>{event.preventDefault();const text=$("custom").value.trim();if(text)sendPrompt(text)};
 $("hideHud").onclick=()=>{$("hud").hidden=!$("hud").hidden;$("hideHud").textContent=$("hud").hidden?"Show codex":"Hide codex";updateLayoutRail();persistPreferences()};
@@ -1248,6 +1247,13 @@ new ResizeObserver(()=>{if(standard)notify("ui/notifications/size-changed",{heig
 /* campaign tools script */
 /* journal media script */
 /* sovereign script */
+/* campaign life script */
+function startSavedConnection(){
+  if(pollingTimer||(!standard&&!window.openai?.callTool))return;
+  $("connection").textContent="Connected to saved state.";
+  pollingTimer=setInterval(()=>{if(document.visibilityState==="visible"&&(!lastVerifiedAt||Date.now()-lastVerifiedAt.getTime()>=45000))refresh().catch(error=>notice(error.message))},45000);
+  refresh().catch(error=>notice(error.message));
+}
 (async()=>{
   renderChoices();restorePreferences();
   if(window.openai?.callTool){
@@ -1264,10 +1270,7 @@ new ResizeObserver(()=>{if(standard)notify("ui/notifications/size-changed",{heig
     }
   }else $("connection").textContent="Local preview · not connected to a ChatGPT conversation.";
   if(window.openai?.toolOutput)receive({structuredContent:window.openai.toolOutput,_meta:toolMetadata(window.openai.toolResponseMetadata)});
-  if(standard||window.openai?.callTool){
-    try{await refresh()}catch(error){notice(error.message)}
-    pollingTimer=setInterval(()=>{if(!lastVerifiedAt||Date.now()-lastVerifiedAt.getTime()>=45000)refresh().catch(error=>notice(error.message))},45000);
-  }
+  startSavedConnection();
   if(!standard&&!window.openai?.callTool){$("syncStatus").dataset.state="preview";$("syncStatus").textContent="Preview · no saved state connection."}
   applyHostContext(hostContext);
 })();

@@ -1,9 +1,9 @@
 {
   "rulebook-v1.0.txt": {
     "original_sha256": "fc1cd1ed39a9fc35961d0d1e9a5feb3035015339d435c6a3af80a3515960597b",
-    "sha256": "460e8f101def38857b6a484b1bd51ceee38f57db53f14b8674c03d01f8180795",
+    "sha256": "d3abeee6eecb866d9e8b64a6500636fd292052a724c9fd273383222fc8fe28c7",
     "original_bytes": 324754,
-    "bytes": 438579,
+    "bytes": 447285,
     "replacements": [
       [
         "V4.2",
@@ -222,14 +222,26 @@
         "source": "tooltip-content-rows-2026-10-24.json",
         "before_sha256": "f83a95831e75c72241ba3ee276ac1358e0119deb661b3b9e0ee52aca30031d18",
         "after_sha256": "460e8f101def38857b6a484b1bd51ceee38f57db53f14b8674c03d01f8180795"
+      },
+      {
+        "id": "living-campaigns-2026-10-24",
+        "source": "living-campaigns-2026-10-24.json",
+        "before_sha256": "460e8f101def38857b6a484b1bd51ceee38f57db53f14b8674c03d01f8180795",
+        "after_sha256": "8848c0a9f4fafdd415dad8da48a15fe6e1ad23c499ef5677bccc287463c527ec"
+      },
+      {
+        "id": "owned-kit-planning-2026-10-25",
+        "source": "owned-kit-planning-2026-10-25.json",
+        "before_sha256": "8848c0a9f4fafdd415dad8da48a15fe6e1ad23c499ef5677bccc287463c527ec",
+        "after_sha256": "d3abeee6eecb866d9e8b64a6500636fd292052a724c9fd273383222fc8fe28c7"
       }
     ]
   },
   "rule-hardener.txt": {
     "original_sha256": "bc21947f299ae37dc306581aa7110231809140c332ed4e8b1ceccbb86cbce8da",
-    "sha256": "31549b7452a4031246b4f1a000f8aeb959805bec361a2e24f8864db277ae8737",
+    "sha256": "0040e7c6a9f01bd8466c9812bae1244f72b1798f75d1a07fd1def32a0a7d8344",
     "original_bytes": 10370,
-    "bytes": 7964,
+    "bytes": 7987,
     "replacements": [
       [
         "V4.2-R1",
@@ -414,6 +426,18 @@
         "source": "tooltip-content-rows-2026-10-24.json",
         "before_sha256": "0e53e9148aafe467b2e79fd0ca2675fe66e7528c3900854ca02c947d775e8d03",
         "after_sha256": "31549b7452a4031246b4f1a000f8aeb959805bec361a2e24f8864db277ae8737"
+      },
+      {
+        "id": "living-campaigns-2026-10-24",
+        "source": "living-campaigns-2026-10-24.json",
+        "before_sha256": "31549b7452a4031246b4f1a000f8aeb959805bec361a2e24f8864db277ae8737",
+        "after_sha256": "06828a2312c3324f336a8734e294b3c6d1dc5f5e4fd3c53cd9b23ab3b3c87d50"
+      },
+      {
+        "id": "owned-kit-planning-2026-10-25",
+        "source": "owned-kit-planning-2026-10-25.json",
+        "before_sha256": "06828a2312c3324f336a8734e294b3c6d1dc5f5e4fd3c53cd9b23ab3b3c87d50",
+        "after_sha256": "0040e7c6a9f01bd8466c9812bae1244f72b1798f75d1a07fd1def32a0a7d8344"
       }
     ]
   }
