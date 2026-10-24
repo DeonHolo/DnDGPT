@@ -230,7 +230,7 @@ def test_regular_free_credit_cannot_replace_guaranteed_sovereign_credit(engine):
     state = fixture_state(engine); request = foundation_request(state, "domain")
     state["reward_credits"] = {"earned": 1, "spent": []}
     request["spend_evolution_credit"] = request.pop("spend_sovereign_evolution")
-    with pytest.raises(EngineError, match="dedicated Sovereign"):
+    with pytest.raises(EngineError, match="permanent Sovereign progression choice"):
         apply_changes(state, request)
 
 
