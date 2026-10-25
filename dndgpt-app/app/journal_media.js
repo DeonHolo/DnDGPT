@@ -110,7 +110,7 @@ function renderGallery(){
   const removed=$("galleryRemoved")?.checked,shown=galleryItems.filter(item=>removed||!item.removed);
   const count=galleryItems.filter(item=>!item.removed).length;
   $("galleryPreview").textContent=galleryLoaded?count+" saved image"+(count===1?"":"s"):"Saved campaign images";
-  if(!shown.length){paragraph(root,galleryLoaded?"No saved images yet. Ask ChatGPT to save an image, or add one here.":"Open Gallery to load saved images.","muted");return}
+  if(!shown.length){paragraph(root,galleryLoaded?"No saved images yet. Ask ChatGPT to save an image, or add one here.":"Open Gallery to load saved images.","muted");refreshDashboardSearch();return}
   for(const item of shown){
     const card=element("article",undefined,"gallery-card"),button=element("button",undefined,"gallery-open");button.type="button";button.dataset.imageId=item.id;button.setAttribute("aria-label","View image: "+item.title);
     const img=element("img");img.alt=item.caption||item.title;img.width=400;img.height=200;img.loading="lazy";button.append(img);button.onclick=()=>openGalleryImage(item);card.append(button,element("h3",item.title));
@@ -120,6 +120,7 @@ function renderGallery(){
     if(item.source_url?.startsWith("https://")){const source=element("a","Source / credit");source.href=item.source_url;source.target="_blank";source.rel="noopener noreferrer";card.append(source)}
     const remove=element("button",item.removed?"Restore image":"Remove from Gallery","gallery-remove");remove.type="button";remove.onclick=async()=>{remove.disabled=true;try{await callTool("set_gallery_image_removed",{campaign_id:state.id,image_id:item.id,removed:!item.removed})}catch(error){notice(error.message);remove.disabled=false}};card.append(remove);root.append(card);galleryObserver.observe(button);
   }
+  refreshDashboardSearch();
 }
 async function saveGalleryFile(file,title,caption){
   const common={campaign_id:state.id,action_id:"gallery-"+crypto.randomUUID(),title,caption};

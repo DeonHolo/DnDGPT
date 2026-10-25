@@ -31,6 +31,7 @@ function activateGame(id){
   if(changed){campaigns=[];$("session").replaceChildren(element("option","Select a saved game"));$("session").firstElementChild.value="";if(id!=="sovereign-system"&&document.querySelector('#sectionNav [aria-current="page"]')===sovereignNav)selectCompanionPage("character")}
 }
 function clearGameSnapshot(){
+  resetDashboardSearch();
   if(state)gameSelections[currentGame]=state.id;
   state=null;lastSelected=null;lastVerifiedAt=null;syncIssue=false;pending=null;dismissedProposal=null;
   galleryReset(null);$("approval").hidden=true;$("resources").replaceChildren();$("hero").textContent="No campaign selected";$("progress").textContent="Select a saved game to continue.";$("location").textContent="";$("xpMeter").value=0;$("stateVersion").textContent="No saved state selected";$("lastEvent").textContent="";

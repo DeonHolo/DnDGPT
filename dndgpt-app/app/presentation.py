@@ -40,6 +40,9 @@ def dashboard_html():
             .replace("/* sovereign script */", (HERE / "sovereignty.js").read_text(encoding="utf-8"))
             .replace("/* campaign life styles */", (HERE / "campaign_life.css").read_text(encoding="utf-8") + "\n" + (HERE / "campaign_focus.css").read_text(encoding="utf-8"))
             .replace("/* campaign life script */", (HERE / "campaign_life.js").read_text(encoding="utf-8") + "\n" + (HERE / "campaign_focus.js").read_text(encoding="utf-8"))
+            .replace("/* dashboard search styles */", (HERE / "dashboard_search.css").read_text(encoding="utf-8"))
+            .replace("/* dashboard search script */", (HERE / "dashboard_search.js").read_text(encoding="utf-8"))
+            .replace("<!-- dashboard search -->", (HERE / "dashboard_search.html").read_text(encoding="utf-8"))
             .replace("<!-- gallery panel -->", (HERE / "gallery.html").read_text(encoding="utf-8"))
             .replace('<script id="sceneCatalog" type="application/json">[]</script>',
                      '<script id="sceneCatalog" type="application/json">' + catalog.replace("<", "\\u003c") + '</script>'))

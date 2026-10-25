@@ -155,6 +155,7 @@ dialog{color:var(--ink);background:var(--paper);border:1px solid var(--line);bor
 /* journal media styles */
 /* sovereign styles */
 /* campaign life styles */
+/* dashboard search styles */
 </style>
 </head>
 <body>
@@ -166,6 +167,7 @@ dialog{color:var(--ink);background:var(--paper);border:1px solid var(--line);bor
 <header class="masthead row"><svg class="crest" viewBox="0 0 48 52" fill="none" aria-hidden="true"><path d="m24 2 21 12v24L24 50 3 38V14L24 2Z" stroke="currentColor" stroke-width="1.5"/><path d="m24 2-10 18 10 18 10-18L24 2ZM3 14l11 6L3 38l21 0 21 0-11-18 11-6M24 38v12" stroke="currentColor" stroke-width="1"/><text x="24" y="28" text-anchor="middle" fill="currentColor" font-family="Georgia,serif" font-size="11">20</text></svg><div class="identity"><p class="eyebrow">Campaign dashboard</p><h1>DnDGPT</h1></div></header>
 <div class="row game-picker"><label for="gameSelect">Game</label><span class="select-field"><select id="gameSelect"><option value="age-of-convergence">Age of Convergence</option><option value="sovereign-system">Sovereign System</option></select></span><button id="newGame" type="button">New campaign</button></div>
 <div class="row session-picker"><label for="session">Saved game</label><span class="select-field session-field"><select id="session"><option value="">Select a saved game</option></select></span><button id="deleteCampaign" class="danger" type="button" disabled>Delete Campaign</button></div>
+<!-- dashboard search -->
 <details id="viewSettings" class="view-options"><summary>View options</summary>
 <div class="settings-body">
 <div class="row"><button id="refresh" type="button">Refresh saved state</button><button id="hideHud" type="button">Hide codex</button></div>
@@ -898,7 +900,7 @@ function renderWorld(next){
     index.setAttribute("role","group");index.setAttribute("aria-label","World articles");
     const show=([name,value])=>{selectedWorld=name;article.replaceChildren(element("h3",fieldLabel(name)));renderValue(article,value)};
     for(const entry of entries){
-      const button=element("button",fieldLabel(entry[0]),"index-entry");button.type="button";button.setAttribute("aria-pressed",String(entry===selected));
+      const button=element("button",fieldLabel(entry[0]),"index-entry");button.type="button";button.dataset.worldArticle=entry[0];button.setAttribute("aria-pressed",String(entry===selected));
       button.onclick=()=>{for(const row of index.children)row.setAttribute("aria-pressed",String(row===button));show(entry)};index.append(button);
     }
     show(selected);
@@ -916,7 +918,7 @@ function renderWorld(next){
     const draw=()=>{
       timeline.replaceChildren();const query=search.value.trim().toLowerCase(),matches=records.filter(row=>JSON.stringify(publicRecord(row)).toLowerCase().includes(query));
       for(const [index,row]of matches.slice(0,visible).entries()){
-        const entry=element("article",undefined,"journal-entry"),record=publicRecord(row);
+        const entry=element("article",undefined,"journal-entry"),record=publicRecord(row);entry.dataset.logKey=searchLogKey(row,records.indexOf(row));
         entry.append(element("h3",record.name||record.title||"Campaign entry"));
         const stamp=record.date||record.timestamp||record.location;if(stamp)paragraph(entry,String(stamp),"entry-meta");
         if(typeof record==="string")renderValue(entry,record);
@@ -930,6 +932,7 @@ function renderWorld(next){
       if(!matches.length)paragraph(timeline,"No entries match your search.","muted");more.hidden=matches.length<=visible;
     };
     search.oninput=()=>{visible=8;draw()};more.onclick=()=>{visible+=8;draw()};log.append(timeline,more);draw();
+    log.revealSearchEntry=key=>{search.value="";visible=Math.max(8,records.findIndex((row,index)=>searchLogKey(row,index)===key)+1);draw();return [...timeline.children].find(node=>node.dataset.logKey===key)};
   }
   selectWorldTab(worldTab,false);
 }
@@ -1055,7 +1058,7 @@ function renderCampaign(next){
   renderGear(next,gear);
   renderQuests($("quests"),next.quest_log);
   renderWorld(next);renderCampaignLife(next);renderCampaignFocus(next);renderEventChecks(next);renderSovereignty(next);
-  renderChoices();restorePreferences();updateSaveTools();
+  renderChoices();restorePreferences();updateSaveTools();refreshDashboardSearch();
 }
 function receive(result,verified=false){
   const data=result?.structuredContent||{};
@@ -1114,6 +1117,7 @@ function clearDeletedCampaign(id){
   for(const option of $("session").options)if(option.value===id)option.remove();
   if(state?.id!==id)return;
   state=null;lastSelected=null;lastVerifiedAt=null;showApproval(null);
+  resetDashboardSearch();
   $("session").value="";$("hero").textContent="No campaign selected";$("resources").replaceChildren();
   $("progress").textContent="Select a saved game to continue.";$("location").textContent="";$("xpMeter").value=0;
   $("stateVersion").textContent="No saved state selected";$("lastEvent").textContent="";
@@ -1248,6 +1252,7 @@ new ResizeObserver(()=>{if(standard)notify("ui/notifications/size-changed",{heig
 /* journal media script */
 /* sovereign script */
 /* campaign life script */
+/* dashboard search script */
 function startSavedConnection(){
   if(pollingTimer||(!standard&&!window.openai?.callTool))return;
   $("connection").textContent="Connected to saved state.";

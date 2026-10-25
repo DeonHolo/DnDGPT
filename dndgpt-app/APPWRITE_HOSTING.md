@@ -43,6 +43,7 @@ Existing-row reads stage a private guard update and use the returned snapshot be
 
 1. Run the Python regression suite and hosted contract tests.
 2. Run `appwrite_probe.py` in a **private function with no public execution permissions** against disposable fixture records.
+   Set `DNDGPT_PUBLIC_RESOURCE_URL` on that probe to the production `/mcp` URL. It checks public HTTP health/version, OAuth metadata and anonymous denial as well as Gallery file ingestion, persistence and gameplay isolation. The file download is a fixture; this does not certify ChatGPT's generated-image handoff.
 3. Verify `/api/hosting-readiness`, protected-resource metadata, anonymous denial and signed HTTP/MCP requests on the public function.
 4. Verify sign-in, save, display and reopening in regular ChatGPT and with a separate real account before claiming player sharing.
 

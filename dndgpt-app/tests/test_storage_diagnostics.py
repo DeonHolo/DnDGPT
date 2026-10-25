@@ -59,3 +59,22 @@ def test_storage_credential_comes_from_hosted_secret_or_execution(monkeypatch, c
     body, status = asyncio.run(main(context))
     assert seen == ["HOSTED_PRIVATE_KEY" if configured else "EXECUTION_KEY"]
     assert status == 503 and "KEY" not in str(body)
+
+
+@pytest.mark.parametrize("health_status", [200, 503])
+def test_public_probe_catches_failure_that_internal_execution_can_miss(health_status):
+    from app.version import APP_VERSION
+    from appwrite_probe import check_public_connection
+    resource = "https://fixture.example.test/mcp"
+    def respond(request):
+        if request.url.path == "/api/health":
+            return httpx.Response(health_status, json={"version": APP_VERSION})
+        if request.method == "POST":
+            return httpx.Response(401, headers={"www-authenticate": 'Bearer resource_metadata="fixture"'})
+        return httpx.Response(200, json={"resource": resource})
+    with httpx.Client(transport=httpx.MockTransport(respond)) as client:
+        if health_status == 503:
+            with pytest.raises(AssertionError):
+                check_public_connection(client, resource)
+        else:
+            assert len(check_public_connection(client, resource)) == 3

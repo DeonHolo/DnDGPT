@@ -131,6 +131,19 @@ def test_player_view():
     return FileResponse(HERE / "player_view.html")
 
 
+@app.get("/test-search")
+def test_search_page():
+    return FileResponse(HERE / "dashboard_search.html")
+
+
+@app.post("/test-search-record")
+async def test_search_record(request: Request):
+    output = HERE.parent / "test-results/dashboard-search.json"
+    output.parent.mkdir(exist_ok=True)
+    output.write_text(json.dumps(await request.json(), indent=2) + "\n", encoding="utf-8")
+    return {"saved": True}
+
+
 @app.get("/test-journal-media")
 def test_journal_media():
     return FileResponse(HERE / "journal_media.html")

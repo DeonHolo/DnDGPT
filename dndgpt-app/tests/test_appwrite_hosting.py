@@ -43,6 +43,7 @@ def test_private_probe_uses_direct_creation_and_retains_correction_approval(host
                               error=errors.append, log=lambda value: None)
     result = appwrite_probe.main(context)
     assert result['status'] == 'passed', errors
+    assert {'gallery_file_save', 'gallery_reopen', 'gallery_no_gameplay_change'} <= set(result['checks'])
     assert {'direct_creation', 'no_creation_approval', 'correction_approval', 'correction_retry'} <= set(result['checks'])
     assert 'living_memory_restored' in result['recovery']['checks']
 
