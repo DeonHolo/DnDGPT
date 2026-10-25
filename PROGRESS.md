@@ -1,6 +1,12 @@
 # Continuity and recovery release
 
-## Latest published follow-up — rosters and Sovereignty — 2026-10-25
+## Latest published follow-up — proactive story — 2026-10-26
+
+Runtime **1.0.50**, checked commit `6065f4d45925ca0b9f0dd0f18969768b1bb5ea62`: both games require GM-initiated world developments and genuinely different pursuits. Minor obstacles conclude or close in the reply resolving the second approach; renamed menus do not reset the count. Random no-event results preserve ordinary story development without rerolls or substitute incidents. Rules stay cached and changes use the normal save.
+
+Verification: **49 focused + 659 CI checks passed**. Public health reports 1.0.50; native rules match released hashes. Continuity is one 7,797-character page; both hardeners remain one page. No player campaign read/edited or ZIP uploaded. These are rule delivery/engine checks, not measured model narration. Details: `docs/PROACTIVE_STORY_RULES_2026_10_26.md`.
+
+## Previous published follow-up — rosters and Sovereignty — 2026-10-25
 
 Runtime **1.0.49**, checked commit `12838a739e5d4f456a76045b22a7549338eb55ef`: one Sovereignty record per owner, distinct earned upgrades/core capabilities, original foundation snapshots where genuinely available, readable status/stat copy, and compact active combat rosters with a shared inspector. Both games have a cached roster-cleanup rule; cleanup uses the normal save and preserves protected Sovereign casualty history.
 
