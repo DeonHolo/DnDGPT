@@ -26,6 +26,10 @@ def test_preferences_merge_retry_and_keep_existing_gameplay(engine, game):
     assert changed["campaign_preferences"] == {"focus": "conquest", "dialogue": "normal"}
     changed = save(engine, changed, {"campaign_preferences": {"dialogue": "on-request"}})
     assert changed["campaign_preferences"] == {"focus": "conquest", "dialogue": "on-request"}
+    assert ChatGame(engine).version("owner-a", state["id"], state["version"])["campaign"]["campaign_preferences"] == DEFAULTS
+    with pytest.raises(EngineError) as rejected:
+        ChatGame(engine).update("owner-b", state["id"], "other-owner-focus", changed["version"], "Choose conquest", first)
+    assert rejected.value.code == "not_found"
     for key in ("game_id", "character", "equipment", "abilities", "quest_log", "world", "phase", "paused", "fictional_time_seconds"):
         assert changed[key] == state[key]
     if game == SOVEREIGN:

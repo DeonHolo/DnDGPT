@@ -22,7 +22,8 @@ def test_portable_recovery_and_overhead_against_hosted_store_contract(hosted):
     _, _, engine, game = hosted
     state = game.create('owner-recovery-fixture', 'Recovery fixture', 'create-recovery-probe', True)
     result = check_recovery(engine, 'owner-recovery-fixture', state, 'test-recovery-probe')
-    assert len(result['checks']) == 13
+    assert len(result['checks']) == 15
+    assert {'campaign_focus_in_existing_save_and_views', 'campaign_focus_restored'} <= set(result['checks'])
     assert {'living_memory_in_existing_save', 'living_memory_restored'} <= set(result['checks'])
     assert {'compact_world_update_preserves_details', 'full_read_recovers_omitted_history'} <= set(result['checks'])
     timings = result['timings']
