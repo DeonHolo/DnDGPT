@@ -319,7 +319,7 @@ function element(tag,text,className){
   if(className)node.className=className;return node;
 }
 function highlightText(parent,value){
-  const text=String(value),pattern=/\b\d+\s*(?:HP|MP)\b|\bDC\s*\d+(?:\s*\+\s*\w+(?:\s+mod(?:ifier)?)?)?|\b\d+d\d+(?:\s*[+−-]\s*\d+)?|\b\d+(?:\.\d+)?\s*(?:m|meters?|metres?|rounds?|minutes?)\b|\b(?:Free Action|Action|Reaction)\b|\b(?:prone|grappled|restrained|stunned|incapacitated|cooldown)\b/gi;
+  const text=playerText(value),pattern=/\b\d+\s*(?:HP|MP)\b|\bDC\s*\d+(?:\s*\+\s*\w+(?:\s+mod(?:ifier)?)?)?|\b\d+d\d+(?:\s*[+−-]\s*\d+)?|\b\d+(?:\.\d+)?\s*(?:m|meters?|metres?|rounds?|minutes?)\b|\b(?:Free Action|Action|Reaction)\b|\b(?:prone|grappled|restrained|stunned|incapacitated|cooldown)\b/gi;
   let start=0;
   for(const match of text.matchAll(pattern)){
     if(match.index>start)parent.append(document.createTextNode(text.slice(start,match.index)));
@@ -847,7 +847,8 @@ function selectCombatTab(id,save=true){
   if(save)persistPreferences();
 }
 function renderCombat(next){
-  const root=$("summons");root.replaceChildren();
+  const root=$("summons");root.replaceChildren();actorOpeners.clear();
+  if(root.dataset.campaign!==next.id){actorSelections={};root.dataset.campaign=next.id}
   const tabs=element("div",undefined,"gear-tabs");tabs.id="combatTabs";tabs.setAttribute("role","tablist");tabs.setAttribute("aria-label","Allies and combat");root.append(tabs);
   for(const [id,label,count]of [["summons","Allies",next.summons.length],["combat","Combat",next.enemies.length]]){
     const button=element("button");button.append(element("span",label),element("span"," · "+count,"gear-count"));
@@ -861,9 +862,9 @@ function renderCombat(next){
     page.setAttribute("role","tabpanel");page.setAttribute("aria-labelledby",button.id);page.tabIndex=0;root.append(page);
   }
   const summons=$("combat-page-summons"),combat=$("combat-page-combat");
-  if(next.summons.length)renderActors(summons,next.summons,"summon");else paragraph(summons,"No recorded allies.","muted");
-  paragraph(combat,"Known enemies","page-lead");
-  if(next.enemies.length)renderActors(combat,next.enemies,"enemy");else paragraph(combat,"No known enemies.","muted");
+  renderActorRoster(summons,next.summons,"summon");
+  paragraph(combat,"Active enemies","page-lead");
+  renderActorRoster(combat,next.enemies,"enemy");
   if(next.combat)renderValue(recordDetail(combat,"Encounter details","combat-encounter"),next.combat);
   if(next.mode==="sandbox")paragraph(combat,"Combat action resolution is not implemented in this sandbox.","muted");
   selectCombatTab(combatTab,false);
@@ -1006,7 +1007,7 @@ function renderCampaign(next){
   $("skillsPreview").textContent=regularAbilities.length+" owned · "+(next.mode==="chat"&&next.phase==="character_draft"?"creation draft":regularAbilities.filter(a=>skillStatus(a)==="READY").length+" ready");
   $("healthPreview").textContent=next.conditions.length+" recorded conditions · DEF "+c.def;
   const combatView=sovereignCombatView(next);
-  $("summonsPreview").textContent=combatView.summons.length+(combatView.summons.length===1?" ally · ":" allies · ")+next.enemies.length+" known enemies";
+  $("summonsPreview").textContent=combatView.summons.length+(combatView.summons.length===1?" ally · ":" allies · ")+combatView.enemies.length+" active enemies";
   $("equipmentPreview").textContent=gear.equipped.length+" equipped · "+gear.stored.length+" stored items";
   $("questsPreview").textContent=next.quest_log.filter(q=>!["completed","failed","abandoned"].includes(questStatus(q))).length+" active · "+next.quest_log.filter(q=>questStatus(q)==="completed").length+" completed";
   $("worldPreview").textContent=next.current_location;

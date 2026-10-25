@@ -30,11 +30,11 @@ document.getElementById('run').onclick=async()=>{
   choices[0].click();await until(()=>w.lastFixturePrompt?.includes('fortress-two'));
   assert(w.lastFixturePrompt.includes('mobility'),'Choice sent an incorrect development');
  });
- await test('Commander has independent XP and functional three-tab powers',async()=>{
+ await test('Commander has independent XP and readable owned powers',async()=>{
   d.getElementById('sovereign-tab-commanders').click();const panel=d.getElementById('sovereign-panel-commanders');
   assert(panel.innerText.includes('Level 3')&&panel.innerText.includes('XP 20 / 200'),'Commander progression missing');
-  panel.querySelector('.sovereign-card summary').click();const tabs=[...panel.querySelectorAll('.sovereign-card [role="tab"]')];
-  assert(tabs.length===3,'Commander power tabs missing');tabs[1].click();assert(panel.innerText.includes('Spend 10 MP'),'Full rules missing');tabs[2].click();assert(panel.innerText.includes('Twin arrival'),'Upgrades missing');
+  for(const detail of panel.querySelectorAll('details'))detail.open=true;
+  assert(!panel.querySelector('.reading-tabs'),'Nested skill tabs remained');assert(panel.innerText.includes('Spend 10 MP'),'Owned rules missing');assert(panel.innerText.includes('Twin arrival'),'Owned improvement missing');
  });
  await test('Regular skills retain commands; permanent foundation histories live in Sovereignty',async()=>{
   d.getElementById('nav-skills').click();const skills=d.getElementById('skills');
@@ -44,8 +44,8 @@ document.getElementById('run').onclick=async()=>{
   assert(d.querySelectorAll('#skillTabs [role="tab"]').length===4,'Existing skill groups regressed');
   for(const [tab,role]of [['domain','domain'],['commanders','general'],['forces','army']]){
    d.getElementById('nav-sovereignty').click();d.getElementById('sovereign-tab-'+tab).click();
-   const root=d.querySelector('#sovereign-panel-'+tab+' .sovereign-foundation');assert(root,'Foundation absent: '+role);root.querySelector('summary').click();
-   const tabs=[...root.querySelectorAll('.reading-tabs [role="tab"]')];assert(tabs.length===3,'Foundation detail tabs missing');tabs[1].click();assert(root.innerText.includes('permanent '+role),'Combined rules missing');tabs[2].click();assert(root.innerText.includes(role[0].toUpperCase()+role.slice(1)+' growth'),'Acquired upgrade missing');
+   const root=d.querySelector('#sovereign-panel-'+tab+' .sovereign-card');assert(root,'Owner absent: '+role);for(const detail of root.querySelectorAll('details'))detail.open=true;
+   assert(!root.querySelector('.reading-tabs'),'Foundation rendered as another skill');assert(root.innerText.includes('permanent '+role),'Combined rules missing');assert(root.querySelector('.sovereign-earned').innerText.includes(role[0].toUpperCase()+role.slice(1)+' growth'),'Acquired upgrade missing');
   }
  });
  await test('Game picker and Sovereignty cards fit all layouts at narrow/wide widths',async()=>{

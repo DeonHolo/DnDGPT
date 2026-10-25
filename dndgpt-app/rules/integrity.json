@@ -1,9 +1,9 @@
 {
   "rulebook-v1.0.txt": {
     "original_sha256": "fc1cd1ed39a9fc35961d0d1e9a5feb3035015339d435c6a3af80a3515960597b",
-    "sha256": "6d28b20a0f4bf31f27ac697d95af3f3eb05743ef14513a4d74d30a81084df25c",
+    "sha256": "d9d3b494268843e29e8152c2dded7d0fdd234b6bc5218afe67b2574146f4c3d2",
     "original_bytes": 324754,
-    "bytes": 455040,
+    "bytes": 456862,
     "replacements": [
       [
         "V4.2",
@@ -246,14 +246,20 @@
         "source": "campaign-focus-dialogue-2026-10-25.json",
         "before_sha256": "d4441c0e8703ab07b258cac22ce20b2cc2f95e1b098b5006a87b5ffa61adcf9c",
         "after_sha256": "6d28b20a0f4bf31f27ac697d95af3f3eb05743ef14513a4d74d30a81084df25c"
+      },
+      {
+        "id": "combat-roster-cleanup-2026-10-25",
+        "source": "combat-roster-cleanup-2026-10-25.json",
+        "before_sha256": "6d28b20a0f4bf31f27ac697d95af3f3eb05743ef14513a4d74d30a81084df25c",
+        "after_sha256": "d9d3b494268843e29e8152c2dded7d0fdd234b6bc5218afe67b2574146f4c3d2"
       }
     ]
   },
   "rule-hardener.txt": {
     "original_sha256": "bc21947f299ae37dc306581aa7110231809140c332ed4e8b1ceccbb86cbce8da",
-    "sha256": "ac3a7a1e0ca906b0bb64c486eb666343dfe2dbf6eacb8eeea08aca1d05d45901",
+    "sha256": "172f4a332f5dcb1d156ef145a07b6331447114d6bb624d197cd833ab43e38042",
     "original_bytes": 10370,
-    "bytes": 7943,
+    "bytes": 7949,
     "replacements": [
       [
         "V4.2-R1",
@@ -462,6 +468,18 @@
         "source": "campaign-focus-dialogue-2026-10-25.json",
         "before_sha256": "ce36e4de47397ad3f84774cc8c3ea2b864436d4f738a6abf46099dc0dcc9f866",
         "after_sha256": "ac3a7a1e0ca906b0bb64c486eb666343dfe2dbf6eacb8eeea08aca1d05d45901"
+      },
+      {
+        "id": "combat-roster-cleanup-2026-10-25",
+        "source": "combat-roster-cleanup-2026-10-25.json",
+        "before_sha256": "ac3a7a1e0ca906b0bb64c486eb666343dfe2dbf6eacb8eeea08aca1d05d45901",
+        "after_sha256": "86a6ecc8e234b4bf64d377336ebc340acbb36e7a8a438fb80a4c0a9185a7bec7"
+      },
+      {
+        "id": "combat-hardener-one-page-2026-10-25",
+        "source": "combat-hardener-one-page-2026-10-25.json",
+        "before_sha256": "86a6ecc8e234b4bf64d377336ebc340acbb36e7a8a438fb80a4c0a9185a7bec7",
+        "after_sha256": "172f4a332f5dcb1d156ef145a07b6331447114d6bb624d197cd833ab43e38042"
       }
     ]
   }

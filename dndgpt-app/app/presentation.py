@@ -2,6 +2,7 @@
 from base64 import b64encode
 from functools import lru_cache
 import json
+import re
 from pathlib import Path
 
 from .scenes import PALETTES, SCENES
@@ -28,12 +29,14 @@ def dashboard_html():
         data = b64encode((HERE / "assets/layouts" / f"{name}.svg").read_bytes()).decode("ascii")
         layout_art.append(f'--layout-{name}:url("data:image/svg+xml;base64,{data}")')
     layouts = ":root{" + ";".join(layout_art) + "}\n" + (HERE / "layouts.css").read_text(encoding="utf-8")
-    return ((HERE / "index.html").read_text(encoding="utf-8")
+    template = re.sub(r"(<script>)\s*[\s\S]*?(</script>)",
+                      lambda match: match[1] + (HERE / "dashboard_modules.min.js").read_text(encoding="utf-8") + match[2],
+                      (HERE / "index.html").read_text(encoding="utf-8"))
+    return (template
             .replace("__DNDGPT_UI_VERSION__", APP_VERSION)
             .replace("/* scene assets */", "\n".join(styles))
             .replace("/* dashboard layouts */", layouts)
             .replace("/* campaign tools styles */", (HERE / "campaign_tools.css").read_text(encoding="utf-8"))
-            .replace("/* campaign tools script */", (HERE / "dashboard_modules.min.js").read_text(encoding="utf-8"))
             .replace("/* journal media styles */", (HERE / "journal_media.css").read_text(encoding="utf-8"))
             .replace("/* journal media script */", "")
             .replace("/* sovereign styles */", (HERE / "sovereignty.css").read_text(encoding="utf-8"))

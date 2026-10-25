@@ -6,8 +6,8 @@ const gameNames={"age-of-convergence":"Age of Convergence","sovereign-system":"S
 const gameSelections={};
 function sovereignCombatView(next){
   const allies=new Map((next.summons||[]).map(c=>[c.id,c]));
-  if(next.game_id==="sovereign-system")for(const c of next.sovereignty?.commanders||[])if(c.side!=="enemy")allies.set(c.id,c);
-  return {...next,summons:[...allies.values()]};
+  if(next.game_id==="sovereign-system")for(const c of next.sovereignty?.commanders||[])if(c.side!=="enemy")allies.set(c.id,{...c,permanent:true});
+  return {...next,summons:[...allies.values()].filter(c=>activeActor(c)),enemies:(next.enemies||[]).filter(c=>activeActor(c,true))};
 }
 let lastGameContext="";
 function selectedGameContext(){return {game_id:currentGame,campaign_id:state?.id||null,selection_only:true,rules_request:state?{campaign_id:state.id}:{game_id:currentGame}}}
@@ -51,13 +51,70 @@ async function switchGame(id){
     publishGameContext();
   }catch(error){notice(error.message)}finally{gameSwitching=false}
 }
-function entityPowers(parent,entity){
-  for(const ability of entity.abilities||[]){
-    const disclosure=element("details");disclosure.append(element("summary",ability.name||"Recorded power"));
-    const reader=element("article",undefined,"ability-inspector");disclosure.append(reader);parent.append(disclosure);
-    renderAbilityInspector(reader,{...ability,id:entity.id+":"+ability.id});
-  }
+let sovereignSearchTargets=new Map();
+const sovereignChildren=power=>["upgrades","evolutions"].flatMap(key=>Array.isArray(power[key])?power[key]:[]).filter(child=>child?.known_to_player!==false);
+function sovereignEffect(parent,power,key){
+  const detail=recordDetail(parent,power.name||"Recorded capability",key);
+  detail.classList.add("sovereign-effect");
+  if(power.rarity)detail.querySelector("summary").classList.add("rarity-"+String(power.rarity).toUpperCase());
+  if(power.flavor_text)paragraph(detail,power.flavor_text,"ability-flavor");
+  renderValue(detail,abilityCopy(power.mechanics_display??power.mechanics??power.description??power.effect??power.rules??power.full_rules));
+  for(const child of sovereignChildren(power)){detail.append(element("h5",child.name||"Improvement"));renderValue(detail,upgradeContent(child,power))}
+  return detail;
 }
+function sovereignRecords(card,next,entity,role){
+  card.dataset.sovereignEntity=entity.id;
+  const stats=[["HP",entity.hp===undefined?null:entity.hp+(entity.hp_max===undefined?"":" / "+entity.hp_max)],["DEF",entity.def??entity.defense],["Attack",entity.attack_bonus],["Damage",entity.damage]].filter(([label,value])=>meaningful(value,label));
+  if(stats.length)paragraph(card,stats.map(([label,value])=>label+" "+value).join(" · "),"sovereign-meta");
+  const field=role==="domain"?"capabilities":"abilities",caps=(entity[field]||[]).filter(cap=>cap.known_to_player!==false);
+  const foundations=entity.side==="enemy"?[]:(next.abilities||[]).filter(power=>isSovereignFoundation(power)&&power.sovereign_role===role&&power.known_to_player!==false);
+  const peers=role==="domain"?[entity]:next.sovereignty[role==="general"?"commanders":"formations"].filter(row=>row.side!=="enemy");
+  const earned=[],used=new Set();
+  for(const foundation of foundations){
+    for(const child of sovereignChildren(foundation)){
+      const refs=(child.sovereign_changes||[]).filter(ref=>ref.target_id===entity.id);
+      const effects=caps.filter(cap=>cap.source_evolution_id===child.id||refs.some(ref=>ref.capability_id===cap.id));
+      if(!refs.length&&!effects.length&&(child.sovereign_changes?.length||peers.length!==1))continue;
+      for(const cap of effects)used.add(cap.id);
+      earned.push({child,foundation,effects});
+    }
+  }
+  for(const cap of caps)if(cap.source_evolution_id&&!used.has(cap.id)){
+    const entry=earned.find(row=>row.child.id===cap.source_evolution_id);
+    if(entry)entry.effects.push(cap);else earned.push({child:cap,foundation:{},effects:[cap]});used.add(cap.id);
+  }
+  const upgrades=element("section",undefined,"sovereign-earned");upgrades.dataset.sovereignUpgrades=entity.id;
+  upgrades.append(element("h4","Earned upgrades · "+earned.length,"group"));
+  if(!earned.length)paragraph(upgrades,"Your first permanent improvement will appear here.","muted");
+  const seen=new Set();
+  for(const {child,foundation,effects}of earned){
+    if(seen.has(child.id))continue;seen.add(child.id);
+    const entry=element("section",undefined,"sovereign-upgrade");entry.dataset.sovereignUpgrade=child.id;
+    entry.append(element("h5",child.name||"Permanent upgrade",child.rarity?"rarity-"+String(child.rarity).toUpperCase():""));
+    if(child.rarity)paragraph(entry,child.rarity,"sovereign-meta");
+    const change=upgradeContent(child,foundation);
+    if(change)renderValue(entry,change);
+    else for(const effect of effects)renderValue(entry,abilityCopy(effect.mechanics_display??effect.mechanics??effect.description));
+    if(change&&effects.length){const detail=recordDetail(entry,"Current effect",entity.id+"-"+child.id);for(const effect of effects)renderValue(detail,abilityCopy(effect.mechanics_display??effect.mechanics??effect.description))}
+    upgrades.append(entry);
+    if(!sovereignSearchTargets.has(foundation.id+":"+child.id))sovereignSearchTargets.set(foundation.id+":"+child.id,entry);
+    if(!sovereignSearchTargets.has(foundation.id+":upgrades"))sovereignSearchTargets.set(foundation.id+":upgrades",upgrades);
+  }
+  card.append(upgrades);
+  const core=caps.filter(cap=>!used.has(cap.id));
+  const capabilities=element("section",undefined,"sovereign-core");capabilities.append(element("h4","Core capabilities","group"));
+  for(const cap of core)sovereignEffect(capabilities,cap,entity.id+"-"+cap.id);
+  for(const foundation of foundations){
+    const base=foundation.base_mechanics_display??foundation.base_mechanics;
+    if(base){const detail=recordDetail(capabilities,"Starting foundation",entity.id+"-base-"+foundation.id);renderValue(detail,abilityCopy(base))}
+    else if(!core.length&&!earned.length)renderValue(capabilities,abilityCopy(foundation.mechanics_display??foundation.mechanics??foundation.full_rules));
+    if(!base&&(core.length||earned.length)){const detail=recordDetail(capabilities,"Foundation reference",entity.id+"-foundation-"+foundation.id);paragraph(detail,"Recorded class description. Current values appear in this record’s header.","muted");renderValue(detail,abilityCopy(foundation.mechanics_display??foundation.mechanics??foundation.full_rules))}
+    if(!sovereignSearchTargets.has(foundation.id+":rules"))sovereignSearchTargets.set(foundation.id+":rules",card);
+    if(!sovereignSearchTargets.has(foundation.id+":upgrades"))sovereignSearchTargets.set(foundation.id+":upgrades",upgrades);
+  }
+  if(capabilities.children.length>1)card.append(capabilities);
+}
+
 function renderStartingSovereignKit(next){
   if(next.game_id!=="sovereign-system"||next.phase!=="character_draft")return;
   const root=element("section",undefined,"starting-sovereign-kit");root.append(element("h3","Your sovereignty","group"));
@@ -67,17 +124,11 @@ function renderStartingSovereignKit(next){
   if(missing.length)paragraph(root,"Still taking shape: "+missing.map(fieldLabel).join(", ")+".","muted");
   $("character").append(root);
 }
-function renderFoundation(parent,next,role){
-  const powers=(next.abilities||[]).filter(a=>isSovereignFoundation(a)&&a.sovereign_role===role);
-  if(!powers.length)return;
-  const section=element("section",undefined,"sovereign-foundation");section.append(element("h3","Sovereign upgrades","group"));
-  entityPowers(section,{id:"foundation-"+role,abilities:powers});parent.append(section);
-}
 function sovereigntyCard(parent,title,meta,description){
   const card=element("section",undefined,"sovereign-card");card.append(element("h3",title));if(meta)paragraph(card,meta,"sovereign-meta");if(description)paragraph(card,description);parent.append(card);return card;
 }
 function renderSovereignty(next){
-  const root=$("sovereignty");root.replaceChildren();
+  const root=$("sovereignty");root.replaceChildren();sovereignSearchTargets.clear();
   if((next.game_id||"age-of-convergence")!=="sovereign-system")return;
   const s=next.sovereignty;if(!s){paragraph(root,"Your domain has not been established yet.","muted");return}
   const ownCommanders=s.commanders.filter(c=>c.side!=="enemy").length,ownFormations=s.formations.filter(f=>f.side==="player").length;
@@ -91,8 +142,8 @@ function renderSovereignty(next){
     button.onkeydown=event=>{if(!["ArrowRight","ArrowLeft","Home","End"].includes(event.key))return;event.preventDefault();const controls=[...tabs.children],index=controls.indexOf(button);const target=event.key==="Home"?0:event.key==="End"?controls.length-1:(index+(event.key==="ArrowRight"?1:-1)+controls.length)%controls.length;controls[target].click();controls[target].focus()};
   }
   const domain=sovereigntyCard(panels.domain,s.domain.name,"Domain level "+s.domain.level,s.domain.description);
-  for(const capability of s.domain.capabilities||[]){domain.append(element("h4",capability.name||"Domain capability"));paragraph(domain,capability.description||capability.mechanics_display||"")}
   if(s.domain.limits)paragraph(domain,"Force capacity · "+s.formations.filter(f=>f.side==="player"&&f.status!=="destroyed").reduce((sum,f)=>sum+f.strength,0)+" / "+s.domain.limits.max_strength+" strength · "+s.domain.limits.max_formations+" formations","sovereign-meta");
+  sovereignRecords(domain,next,s.domain,"domain");
   const credit=Math.max(0,s.ascension_earned-s.ascension_spent.length);if(credit)paragraph(domain,"Sovereign Evolutions available · "+credit,"pending");
   const milestone=s.domain.next_milestone;
   if(milestone){
@@ -104,13 +155,12 @@ function renderSovereignty(next){
     for(const choice of milestone.choices){const button=element("button");button.type="button";button.disabled=done!==milestone.objectives.length;button.append(element("strong",choice.name),element("span",choice.description));button.onclick=()=>sendPrompt("Choose domain development "+choice.id+" ("+choice.name+") for milestone "+milestone.id+". Apply the published development and save it; no further approval.");options.append(button)}section.append(options);
   }
   if(s.developments.length){const history=recordDetail(panels.domain,"Completed developments","sovereign-developments");for(const d of s.developments)paragraph(history,"Level "+d.level+" · "+d.choice.name)}
-  renderFoundation(panels.domain,next,"domain");renderFoundation(panels.commanders,next,"general");renderFoundation(panels.forces,next,"army");
-  for(const c of s.commanders.filter(c=>c.side!=="enemy"||c.known===true)){const card=sovereigntyCard(panels.commanders,c.name,"Level "+c.level+" · XP "+(c.xp||0)+" / "+(100+50*(c.level-1))+" · "+(c.status||"active"),c.description);if(c.nature)paragraph(card,c.nature);entityPowers(card,c);if(c.equipment?.length){const gear=recordDetail(card,"Equipment","commander-gear-"+c.id);for(const item of c.equipment)renderValue(gear,item)}}
+  for(const c of s.commanders.filter(c=>c.side!=="enemy"||c.known===true)){const card=sovereigntyCard(panels.commanders,c.name,"Level "+c.level+" · XP "+(c.xp||0)+" / "+(100+50*(c.level-1))+" · "+playerStatus(c.status||"active"),c.description);if(c.nature)paragraph(card,c.nature);sovereignRecords(card,next,c,"general");if(c.equipment?.length){const gear=recordDetail(card,"Equipment","commander-gear-"+c.id);for(const item of c.equipment)renderValue(gear,item)}}
   if(!s.commanders.length)paragraph(panels.commanders,"Your first commander will appear here during creation.","muted");
-  for(const f of s.formations.filter(f=>f.side==="player"||f.known===true)){const card=sovereigntyCard(panels.forces,f.name,(f.side==="player"?"Your forces":"Known opposing force")+" · "+f.strength+" / "+f.maximum_strength+" · "+(f.status||"active"),f.description);paragraph(card,"Veterancy "+(f.veterancy||0)+" / 5 · XP "+(f.xp_total||0)+" · Cohesion "+f.morale,"sovereign-meta");const commander=s.commanders.find(c=>c.id===f.commander_id);if(commander)paragraph(card,"Commander · "+commander.name);const stats=recordDetail(card,"Formation rules","formation-"+f.id);renderFacts(stats,[["Attack",f.attack],["Defense",f.defense],["Power",f.power],["Armor",f.armor]]);entityPowers(card,f)}
-  for(const op of s.operations.filter(op=>visibleSovereignOperation(next,op))){const card=sovereigntyCard(panels.operations,op.name,op.status+" · "+(op.status==="active"?(next.fictional_time_seconds>=op.due_at?"Report due":"Orders underway"):"Report recorded"),op.objective);paragraph(card,op.mandate);if(op.outcome)paragraph(card,op.outcome)}
-  for(const front of s.fronts.filter(f=>f.known!==false)){const card=sovereigntyCard(panels.operations,front.name,front.status||"active",front.objective);card.classList.add("sovereign-front");paragraph(card,"Your objective "+(front.player_progress||0)+" / "+front.target_progress);}
-  if(s.battle_reports.length){const reports=recordDetail(panels.operations,"Battle reports","sovereign-battles");for(const r of s.battle_reports.slice(-10).reverse()){const front=s.fronts.find(f=>f.id===r.front_id);paragraph(reports,(front?.name||"Battle")+" · "+r.phases.length+" phases · "+r.outcome.replaceAll("_"," "));}}
+  for(const f of s.formations.filter(f=>f.side==="player"||f.known===true)){const card=sovereigntyCard(panels.forces,f.name,(f.side==="player"?"Your forces":"Known opposing force")+" · "+f.strength+" / "+f.maximum_strength+" · "+playerStatus(f.status||"active"),f.description);paragraph(card,"Veterancy "+(f.veterancy||0)+" / 5 · XP "+(f.xp_total||0)+" · Cohesion "+f.morale,"sovereign-meta");const commander=s.commanders.find(c=>c.id===f.commander_id);if(commander)paragraph(card,"Commander · "+commander.name);const stats=recordDetail(card,"Formation rules","formation-"+f.id);renderFacts(stats,[["Attack",f.attack],["Defense",f.defense],["Power",f.power],["Armor",f.armor]]);sovereignRecords(card,next,f,"army")}
+  for(const op of s.operations.filter(op=>visibleSovereignOperation(next,op))){const card=sovereigntyCard(panels.operations,op.name,playerStatus(op.status)+" · "+(op.status==="active"?(next.fictional_time_seconds>=op.due_at?"Report due":"Orders underway"):"Report recorded"),op.objective);paragraph(card,op.mandate);if(op.outcome)paragraph(card,op.outcome)}
+  for(const front of s.fronts.filter(f=>f.known!==false)){const card=sovereigntyCard(panels.operations,front.name,playerStatus(front.status||"active"),front.objective);card.classList.add("sovereign-front");paragraph(card,"Your objective "+(front.player_progress||0)+" / "+front.target_progress);}
+  if(s.battle_reports.length){const reports=recordDetail(panels.operations,"Battle reports","sovereign-battles");for(const r of s.battle_reports.slice(-10).reverse()){const front=s.fronts.find(f=>f.id===r.front_id);paragraph(reports,(front?.name||"Battle")+" · "+r.phases.length+" phases · "+playerStatus(r.outcome));}}
   if(!s.operations.length&&!s.fronts.length)paragraph(panels.operations,"Standing orders and battle fronts appear here when established.","muted");
   $("sovereign-tab-"+sovereignTab).click();
 }

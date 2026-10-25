@@ -1,0 +1,87 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Roster and Sovereignty checks</title><style>body{background:#121711;color:#eee8db;font:15px/1.6 system-ui;margin:20px}iframe{width:1100px;height:850px;border:1px solid #99865b}.pass{color:#b7d89b}.fail{color:#ffaaa2}button{padding:12px}</style>
+<h1>Roster and Sovereignty checks</h1><button id="run">Run checks</button><p id="result">Ready</p><ol id="results"></ol><iframe id="widget" src="/test-widget" title="Disposable roster fixture"></iframe>
+<script>
+const frame=document.getElementById('widget'),results=[],calls=[],wait=ms=>new Promise(r=>setTimeout(r,ms));
+const assert=(value,message)=>{if(!value)throw Error(message)};
+async function until(fn){for(let i=0;i<120;i++){if(fn())return;await wait(70)}throw Error('Timed out waiting for UI')}
+window.addEventListener('message',async event=>{if(event.source!==frame.contentWindow||!event.data?.id)return;const m=event.data;let result={};if(m.method==='ui/initialize')result={protocolVersion:'2026-01-26',hostInfo:{name:'Local roster fixture',version:'1'},hostCapabilities:{serverTools:{},message:{text:{}}},hostContext:{displayMode:'fullscreen'}};else if(m.method==='tools/call'){calls.push(m.params.name);const response=await fetch('/test-rpc',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json, text/event-stream'},body:JSON.stringify({jsonrpc:'2.0',id:calls.length,method:'tools/call',params:m.params})});result=(await response.json()).result}event.source.postMessage({jsonrpc:'2.0',id:m.id,result},'*')});
+async function test(name,fn){try{await fn();results.push({name,passed:true})}catch(error){results.push({name,passed:false,error:error.message})}const li=document.createElement('li');li.className=results.at(-1).passed?'pass':'fail';li.textContent=JSON.stringify(results.at(-1));document.getElementById('results').append(li)}
+document.getElementById('run').onclick=async()=>{
+ document.getElementById('run').disabled=true;const w=frame.contentWindow,d=frame.contentDocument;
+ await until(()=>d.getElementById('session')?.options.length>1);
+ const before=await(await fetch('/test-state')).json(),age=structuredClone(before.campaign);age.version+=9000;age.phase='adventure';age.mode='chat';age.level_up_freeze=true;age.name='Roster sample';
+ age.summons=[{id:'guardian',name:'Resting guardian',hp:0,hp_max:18,duration:'Permanent',recovery:'Recovers after a long rest.'},
+ {id:'fallen-husk',name:'FALLEN_HUSK_CANARY',hp:0},{id:'ended-husk',name:'ENDED_HUSK_CANARY',hp:22,status:'expired'},
+ {id:'timer-husk',name:'TIMER_HUSK_CANARY',hp:22,rounds_remaining:0},
+ {id:'live-a',name:'Mortar-Husk',hp:22,hp_max:22,source_ability_id:'hatch',rounds_remaining:3,abilities:[{name:'Shell burst',mechanics:'A close-range blast.'}]},
+ {id:'live-b',name:'Mortar-Husk',hp:11,hp_max:22,source_ability_id:'hatch',rounds_remaining:2}];
+ for(let i=0;i<16;i++)age.summons.push({id:'ally-'+i,name:'Field companion '+i,hp:10+i,hp_max:30,permanent:true});
+ age.enemies=[{id:'dead',name:'DEAD_ENEMY_CANARY',hp:0},{id:'retired',name:'RETIRED_ENEMY_CANARY',hp:2,status:'withdrawn'},
+ {id:'sentry',name:'Rivetjack marksman',hp:2,hp_max:20,attack:'Crossbow shot'},
+ {id:'captain',name:'Battery captain',hp:20,hp_max:40}];
+ age.abilities=[{id:'lance',name:'Spore lance',activation:'Active',rarity:'RARE',mechanics_display:'Strike a nearby foe.',upgrades:[{id:'fork',name:'Forked lance',change_display:'Strike a second foe.'}]}];
+ const receive=campaign=>w.receive({structuredContent:{campaign}});receive(age);await wait(100);const untouched=w.eval('JSON.stringify(state)');
+ await test('Only active enemies and live summons appear; downed permanent allies remain',async()=>{
+  d.getElementById('nav-summons').click();assert(d.getElementById('summonsPreview').textContent.includes('19 allies · 2 active enemies'),'Active counts wrong');
+  assert(d.querySelectorAll('#combat-page-summons [data-actor-id]').length===19,'Allies missing or ended summons retained');
+  assert(d.querySelectorAll('#combat-page-combat [data-actor-id]').length===2,'Inactive enemies retained');
+  assert(!/CANARY/.test(d.getElementById('summons').textContent),'Ended unit visible');
+  assert(d.querySelector('#combat-page-summons .actor-card').textContent.includes('0 / 18'),'Recoverable companion disappeared');
+  for(const detail of d.querySelectorAll('#combat-page-summons .actor-card details'))detail.open=true;
+  assert(d.querySelector('#combat-page-summons .actor-card').textContent.includes('Recovers after a long rest'),'Recovery rules lost');
+ });
+ await test('Related summons group with independent HP, timers and selection',async()=>{
+  const group=[...d.querySelectorAll('.actor-group')].find(g=>g.querySelector('summary').textContent==='Mortar-Husk × 2');assert(group,'Summon group missing');group.open=true;
+  const rows=group.querySelectorAll('button');assert(rows[0].textContent.includes('22 / 22')&&rows[0].textContent.includes('3 rounds'),'First instance wrong');assert(rows[1].textContent.includes('11 / 22')&&rows[1].textContent.includes('2 rounds'),'Second instance wrong');
+  rows[1].click();assert(d.querySelector('#combat-page-summons .actor-card').textContent.includes('11 / 22'),'Wrong individual inspected');
+  rows[1].dispatchEvent(new KeyboardEvent('keydown',{key:'Home',bubbles:true}));assert(d.activeElement.dataset.actorId==='guardian','Roster keyboard navigation failed');
+ });
+ await test('Search opens an unselected living actor and excludes ended roster entries',async()=>{
+  const input=d.getElementById('dashboardSearch');input.value='Battery captain';input.dispatchEvent(new Event('input'));d.querySelector('#dashboardSearchList button').click();
+  assert(d.getElementById('combat-tab-combat').getAttribute('aria-selected')==='true','Search opened wrong roster');assert(d.querySelector('#combat-page-combat .actor-card').textContent.includes('Battery captain'),'Unselected enemy not indexed');
+  input.value='CANARY';input.dispatchEvent(new Event('input'));assert(d.getElementById('dashboardSearchCount').textContent.includes('No matches'),'Inactive unit searchable in active roster');d.getElementById('dashboardSearchClear').click();
+ });
+ for(const width of [390,800,1200])for(const layout of ['original','reclaimed','orrery','ember'])await test('Roster geometry '+layout+' / '+width,async()=>{
+  frame.style.width=width+'px';w.selectLayout(layout,false);d.getElementById('nav-summons').click();d.getElementById('combat-tab-summons').click();await wait(45);
+  const rows=[...d.querySelectorAll('#combat-page-summons [data-actor-id]')];
+  for(const row of rows){const box=row.getBoundingClientRect();assert(box.height>=44&&row.scrollHeight<=row.clientHeight+1,'Compressed row '+row.dataset.actorId);assert(box.right<=d.documentElement.clientWidth+1,'Row overflow')}
+  assert(d.querySelectorAll('#combat-page-summons .actor-card').length===1,'Multiple detail cards stacked');
+  const inspector=d.querySelector('#combat-page-summons .reading-article');assert(inspector.scrollWidth<=inspector.clientWidth+1,'Inspector overflow');
+ });
+ await test('Roster inspection does not change saved gameplay or frozen time',async()=>{assert(w.eval('JSON.stringify(state)')===untouched,'Inspection changed state');const now=await(await fetch('/test-state')).json();assert(JSON.stringify(now.campaign)===JSON.stringify(before.campaign),'Server save changed')});
+ await fetch('/test-sovereign-fixture',{method:'POST'});const sov=await(await fetch('/test-sovereign-state')).json();sov.version+=9000;sov.name='Sovereignty sample';
+ const s=sov.sovereignty;s.commanders=s.commanders.slice(0,1);s.formations=s.formations.filter(f=>f.side==='player');s.commanders[0].name='Zrrha';s.commanders[0].hp=43;s.commanders[0].hp_max=43;s.formations[0].name='Husk Guards';s.formations[0].strength=5;s.formations[0].maximum_strength=12;
+ s.fronts[0].name='Spinejack Battery';s.fronts[0].status='player_victory';
+ const roles=[['domain',s.domain,'capabilities','Scavenger Maw','Crypt renewal'],['general',s.commanders[0],'abilities','Chrysalis Spear Assault',"Zrrha’s Serrated Pursuit"],['army',s.formations[0],'abilities','Chitin Spearline','Seed of the Defeated']];
+ sov.abilities=sov.abilities.filter(a=>!a.sovereign_role);
+ for(const [role,entity,field,base,upgrade]of roles){
+  entity[field]=[{id:role+'-base',name:base,mechanics_display:role==='domain'?'Consume one food ration over15min, once per24hours.':'Use the established '+base+'.'},
+   {id:role+'-cap',name:upgrade,description:'A permanent '+role+' improvement with a real owned effect.',source_evolution_id:role+'-evolution',activation:'Passive',duration:'Permanent'}];
+  sov.abilities.push({id:role+'-foundation',name:'The '+role+' foundation',scope:'sovereign',sovereign_role:role,rarity:'UNIQUE',activation:'Passive',base_mechanics_display:'The original '+role+' foundation.',mechanics_display:'Level1 independent commander: Zrrha HP43 DEF14, speed6m. Combined '+role+' rules.',upgrades:[{id:role+'-evolution',name:upgrade,rarity:'LEGENDARY',change_display:'Gain a lasting '+role+' capability.',sovereign_changes:[{target_id:entity.id,capability_id:role+'-cap'}]}]});
+ }
+ receive(sov);await wait(100);d.getElementById('nav-sovereignty').click();
+ for(const [tab,role]of [['domain','domain'],['commanders','general'],['forces','army']])await test('One '+role+' record separates baseline and earned upgrades',async()=>{
+  d.getElementById('sovereign-tab-'+tab).click();const panel=d.getElementById('sovereign-panel-'+tab);
+  assert(panel.querySelectorAll('[data-sovereign-entity]').length===1,'Duplicated owner/foundation card');assert(panel.querySelectorAll('.sovereign-upgrade').length===1,'Duplicated earned upgrade');
+  assert(!panel.querySelector('.reading-tabs'),'Sovereign upgrade treated as a skill');assert(panel.querySelectorAll('.sovereign-core .sovereign-effect').length===1,'Upgrade repeated in core capabilities');
+  assert(panel.querySelector('.sovereign-core').textContent.includes('Starting foundation'),'Confirmed baseline not available');
+ });
+ await test('Player-facing status labels, real rarity and readable mechanical spacing',async()=>{
+  d.getElementById('sovereign-tab-operations').click();assert(d.getElementById('sovereign-panel-operations').innerText.includes('Victory'),'Raw outcome label');assert(!d.getElementById('sovereignty').textContent.includes('player_victory'),'Backend enum leaked');
+  d.getElementById('sovereign-tab-domain').click();for(const detail of d.querySelectorAll('#sovereign-panel-domain details'))detail.open=true;
+  assert(d.getElementById('sovereign-panel-domain').innerText.includes('over 15 min, once per 24 hours'),'Glued time/units');assert(d.querySelector('.sovereign-upgrade h5').classList.contains('rarity-LEGENDARY'),'Upgrade rarity changed');
+  assert(w.playerText('Level1 HP43 DEF14 speed6m')==='Level 1 HP 43 DEF 14 speed 6 m','Glued stat words');
+ });
+ for(const width of [390,800,1200])for(const layout of ['original','reclaimed','orrery','ember'])await test('Sovereignty geometry '+layout+' / '+width,async()=>{
+  frame.style.width=width+'px';w.selectLayout(layout,false);d.getElementById('nav-sovereignty').click();await wait(45);
+  for(const tab of ['domain','commanders','forces']){d.getElementById('sovereign-tab-'+tab).click();for(const node of d.querySelectorAll('#sovereign-panel-'+tab+' .sovereign-card, #sovereign-panel-'+tab+' .sovereign-upgrade')){const box=node.getBoundingClientRect(),style=w.getComputedStyle(node);assert(box.right<=d.documentElement.clientWidth+1&&node.scrollWidth<=node.clientWidth+1,'Overflow');for(const edge of ['Top','Right','Bottom','Left'])assert(parseFloat(style['border'+edge+'Width'])>=1,'Missing border');assert(parseFloat(style.paddingLeft)>=14,'Missing inset')}}
+ });
+ await test('Regular player skills retain Overview, Full rules and Upgrades',async()=>{receive(age);d.getElementById('nav-skills').click();assert(d.querySelectorAll('#skills .reading-tabs [role="tab"]').length===3,'Regular skill views lost')});
+ assert(!calls.some(name=>/apply_chat_update|execute|propose_action/.test(name)),'Read-only test mutated gameplay');
+ receive(sov);frame.style.width='1100px';w.selectLayout('original',false);d.getElementById('nav-sovereignty').click();d.getElementById('sovereign-tab-forces').click();
+ const report={passed:results.every(row=>row.passed),checks:results,toolCalls:calls,environment:'Local in-app browser; disposable fixtures, not native ChatGPT'};document.getElementById('result').textContent=(report.passed?'PASS':'FAIL')+' · '+results.filter(row=>row.passed).length+'/'+results.length;await fetch('/test-roster-record',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(report)});
+};
+if(location.search.includes('preview')){const style=document.createElement('style');style.textContent='body{margin:0}body>:not(iframe):not(script){display:none}iframe{border:0}';document.head.append(style)}
+if(location.search.includes('autorun'))window.addEventListener('load',()=>document.getElementById('run').click());
+</script></html>

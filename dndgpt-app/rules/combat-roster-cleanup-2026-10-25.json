@@ -1,0 +1,69 @@
+{
+  "id": "combat-roster-cleanup-2026-10-25",
+  "files": {
+    "rulebook-v1.0.txt": [
+      {
+        "new_start": 317838,
+        "before": "",
+        "after": "## Combat roster cleanup\n\nUpdate Allies & Combat in the same ordinary save as the resolved turn. Retire dead, defeated, surrendered, captured or departed enemies from the active roster. Retire a temporary summon when its actual destruction, dismissal, duration, concentration or explicit scene-end rule ends it. Ending combat alone spends no duration and does not dismiss a surviving summon.\n\nUse existing stable IDs when updating an instance. A genuinely new legal summon gets its own instance; do not leave an ended copy beside its replacement. Distinct simultaneous summons retain their individual HP, conditions and remaining duration. Keep permanent companions and recoverable downed allies with their actual wounds, status and recovery rules.\n\nFor transient chat-game records, changes.remove.enemies and changes.remove.summons accept IDs. Save significant outcomes in the campaign log; immutable save versions retain the earlier records. Protected Sovereign commanders and formations keep their identity, progression and history: mark their actual casualty/status instead of deleting them. Inspection filters inactive records from the field roster without changing the save. Sovereignty and battle reports retain those historical entities.\n\nBatch cleanup with the normal turn update. It grants no extra roll, reward, resource refresh or fictional time. During an advancement freeze, reconcile only already resolved outcomes; clocks and the next encounter stay frozen.\n\nShow compact active roster rows with name, HP and readable status, plus one selected unit's detail panel. Group only explicitly related temporary instances, retaining individual HP and timers. Use full player-facing names and readable status labels throughout the dashboard; internal keys, IDs and formulas stay out of labels and narrative copy.\n\n"
+      }
+    ],
+    "rule-hardener.txt": [
+      {
+        "new_start": 69,
+        "before": "Read this checklist and read_rules(document=\"index\"). Full rules/custom forks govern. Finish needed sections through next_offset=null with the SAME section; only that selection is complete. Cache by source_sha256; refresh missing/changed rules. Read loading for audits. Pause decisions dependent on inaccessible rules.\n",
+        "after": "Read this checklist and read_rules(document=\"index\"). Full rules/custom forks govern. Finish needed sections to next_offset=null using the SAME section; only that selection is complete. Cache by source_sha256; refresh missing/changed rules. Audits: loading. Pause decisions needing inaccessible rules.\n"
+      },
+      {
+        "new_start": 2801,
+        "before": "Utility offers require ordinary use, three applications across two problem types, and whole-kit overlap checks.\n",
+        "after": "Utility offers need three ordinary-use applications across two problem types and whole-kit overlap checks.\n"
+      },
+      {
+        "new_start": 2951,
+        "before": "Read 12-16/29-30 for checks/resources/combat/conditions/rests/companions/fortune. Honor action budgets, source reach/movement/cover/duration, triggers/cooldowns and autonomous turns. Player text uses descriptive reach from first reveal; measured source on request/audit. Labels grant no range/movement; Reactions grant no extra Action. Resolve known illegal targets before costs.\n",
+        "after": "Read 12-16/29-30: checks/resources/combat/conditions/rests/companions/fortune. Honor budgets, source reach/movement/cover/duration, triggers/cooldowns and autonomous turns. Use descriptive reach from first reveal; measured source on request/audit. Labels grant no range/movement; Reactions no extra Action. Check known illegal targets before costs.\n"
+      },
+      {
+        "new_start": 3301,
+        "before": "Read enemy-tactics: distinct kits/roles, terrain, observed-threat targeting and brief dialogue. Recognized reachable controllers are valid priorities; dismissal follows summon rules. Reuse profiles; no per-round audits/retroactive upgrades.\n",
+        "after": "Read roster-cleanup: retire ended foes/temporary summons by stable ID in the normal save. Keep lasting/downed allies, live timers and protected Sovereign history; log outcomes. Combat ending alone does not expire summons.\n\nRead enemy-tactics: distinct kits/roles, terrain, observed-threat targeting, brief dialogue. Recognized reachable controllers are valid priorities; dismissal follows summon rules. Reuse profiles; no per-round audits/retroactive upgrades.\n"
+      },
+      {
+        "new_start": 5067,
+        "before": "Read 40-42. Distinguish proposed, narrated-unsaved and committed outcomes. Use current owned state/version and retry-safe batches. Restyling/inspection/glossary/rule reads/mockups never change play.\n",
+        "after": "Read 40-42: proposed, narrated-unsaved and committed outcomes differ. Use current owned state/version, retry-safe batches. Restyling/inspection/glossary/rule reads/mockups change no play.\n"
+      },
+      {
+        "new_start": 5256,
+        "before": "Read continuity: connect action, consequence and next beat; explain travel/time. Preserve threads, scene identity and player thoughts in bounded notes in the SAME save. Renamed obstacles keep the two-decision ceiling. Reuse known state/version; refresh uncertainty/conflicts and omitted facts. Cache rules; batch rolls and one save whose success verifies the commit. Resume/history/export/import stay on demand.\n",
+        "after": "Read continuity: connect action/consequence/next beat; explain travel/time. Save threads, scene identity and player thoughts in bounded notes in the SAME save. Renamed obstacles keep the two-decision ceiling. Reuse known state/version; refresh uncertainty/conflicts/omitted facts. Cache rules; batch rolls and one save verifying the commit. Resume/history/export/import on demand.\n"
+      },
+      {
+        "new_start": 5895,
+        "before": "Read story-ui and glossary 33/35/39: story, inline hover/tap/focus terms, rarity colors, working choices. Full HUD stays in dashboard; explicit FULL HUD shows it in chat for that reply. Preserve required offers and Overview/Full rules/Upgrades. Reopen missing/closed/outdated UI with render_dashboard. No unsolicited images/code/fake controls; fall back honestly.\n",
+        "after": "Read story-ui/33/35/39: story, inline hover/tap/focus glossary, rarity colors, working choices. HUD stays in dashboard; explicit FULL HUD shows it in chat for one reply. Preserve offers and regular skill Overview/Full rules/Upgrades. Reopen missing/closed/outdated UI via render_dashboard. No unsolicited images/code/fake controls; honest fallback.\n"
+      },
+      {
+        "new_start": 7125,
+        "before": "Use the permanent palette in `story-ui`: COMMON neutral, UNCOMMON green, RARE blue, EPIC purple, LEGENDARY gold, UNIQUE coral-red. Non-rarity lore/places are gold, evidence/mechanics light blue, NPCs lavender, benefits soft green and danger/failure soft red. Color never promises success or grants rarity. Preserve contrast and text equivalents; themes change no gameplay or dashboard styling.\n",
+        "after": "Use `story-ui`'s fixed palette: COMMON neutral, UNCOMMON green, RARE blue, EPIC purple, LEGENDARY gold, UNIQUE coral-red. Other lore/places: gold; evidence/mechanics: light blue; NPCs: lavender; benefits: soft green; danger/failure: soft red. Color grants no success/rarity. Keep contrast/text equivalents; themes change no gameplay/dashboard styling.\n"
+      },
+      {
+        "new_start": 7478,
+        "before": "Keep **Your story** collapsed by default with a labeled toggle; remember its open/closed preference. Hiding changes no saved facts.\n",
+        "after": "**Your story**: collapsed by default, labeled toggle, remembered open/closed preference. Hiding changes no saved facts.\n"
+      },
+      {
+        "new_start": 7599,
+        "before": "Use full ability/item/character names in player-facing text. IDs such as S1 stay internal.\n",
+        "after": "Use full names, readable status labels and spaced prose on the dashboard. IDs/enums stay internal.\n"
+      },
+      {
+        "new_start": 7724,
+        "before": "Check intent/state, timing/targets/costs, fixed rolls/offers, known facts and save status. Preserve typed actions/depletion. Show effects; omit caveats/unchanged stats. GM handles misuse. Flavor/POV/tooltips add no mechanics. UI fixes never replay/reroll; claim tested results only.\n",
+        "after": "Check intent/state, timing/targets/costs, fixed rolls/offers, known facts/save status. Preserve typed actions/depletion. Show effects; omit caveats/unchanged stats; GM handles misuse. Flavor/POV/tooltips add no mechanics. UI fixes never replay/reroll; claim tested results only.\n"
+      }
+    ]
+  }
+}

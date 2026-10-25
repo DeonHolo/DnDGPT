@@ -136,6 +136,19 @@ def test_search_page():
     return FileResponse(HERE / "dashboard_search.html")
 
 
+@app.get("/test-roster")
+def test_roster_page():
+    return FileResponse(HERE / "roster_sovereignty.html")
+
+
+@app.post("/test-roster-record")
+async def test_roster_record(request: Request):
+    output = HERE.parent / "test-results/roster-sovereignty.json"
+    output.parent.mkdir(exist_ok=True)
+    output.write_text(json.dumps(await request.json(), indent=2) + "\n", encoding="utf-8")
+    return {"saved": True}
+
+
 @app.post("/test-search-record")
 async def test_search_record(request: Request):
     output = HERE.parent / "test-results/dashboard-search.json"

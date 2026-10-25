@@ -26,6 +26,7 @@ AMENDMENTS = {
 SUBSECTIONS = {
     "story-ui": "Compact Intelligent Story UI contract",
     "enemy-tactics": "Enemy identity, adaptive tactics and visible voice",
+    "roster-cleanup": "Combat roster cleanup",
 }
 
 GAME_SECTIONS = {"sovereign-creation": "Sovereign creation and inherited rules",
@@ -72,7 +73,7 @@ def index_text(text):
              "Quests/rewards: quest-journal, 17, 24, 32. Random events: 32A. Saved illustrations: gallery.",
              "Class offers: creation-order, generation, utility, class-craft, reach, 5, 6, 7, 8. Read 9/10/11 for their creation stage.",
              "Utility offers and revisions: utility, generation, class-craft and the applicable acquisition chapter.",
-             "Combat: enemy-tactics, reach, 12, 13, 14; also 15/16/29/30 when applicable. Reuse prepared enemy profiles.",
+             "Combat: enemy-tactics, roster-cleanup, reach, 12, 13, 14; also 15/16/29/30 when applicable. Reuse prepared enemy profiles; batch roster cleanup with the turn save.",
              "Advancement: 17, 18 and the applicable track in 19 through 22; interfaces 37/38. Chapter 19 includes standalone-passive eligibility and nested upgrade saves; 38 distinguishes base skills from dependent riders.",
              "Routine narrative/presentation: continuity and story-ui. Intelligent UI means story, inline glossary, colors and choices in chat; never a seven-chapter dump. Cache current sections; do not reload every turn.",
              "Story styling/tooltips: story-ui; 33 has the full glossary, 35 colors, 39 choices. Story flavor: story. Ability copy/details: dashboard-writing, 34. Dashboard architecture only: 38; full in-chat sheet only on explicit request.",

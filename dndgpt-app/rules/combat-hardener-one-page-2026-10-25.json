@@ -1,0 +1,27 @@
+{
+  "id": "combat-hardener-one-page-2026-10-25",
+  "files": {
+    "rule-hardener.txt": [
+      {
+        "new_start": 2801,
+        "before": "Utility offers need three ordinary-use applications across two problem types and whole-kit overlap checks.\n",
+        "after": "Utility offers need three ordinary uses across two problem types and whole-kit overlap checks.\n"
+      },
+      {
+        "new_start": 5055,
+        "before": "Read 40-42: proposed, narrated-unsaved and committed outcomes differ. Use current owned state/version, retry-safe batches. Restyling/inspection/glossary/rule reads/mockups change no play.\n",
+        "after": "Read 40-42: proposed, unsaved and committed differ. Use current owned state/version, retry-safe batches. Restyling/inspection/glossary/rule reads/mockups change no play.\n"
+      },
+      {
+        "new_start": 7448,
+        "before": "**Your story**: collapsed by default, labeled toggle, remembered open/closed preference. Hiding changes no saved facts.\n",
+        "after": "Collapse **Your story** by default. Label its toggle and remember its state. Hiding changes no facts.\n"
+      },
+      {
+        "new_start": 7551,
+        "before": "Use full names, readable status labels and spaced prose on the dashboard. IDs/enums stay internal.\n",
+        "after": "Dashboard: full names, readable status labels, spaced prose; internal IDs/enums stay hidden.\n"
+      }
+    ]
+  }
+}

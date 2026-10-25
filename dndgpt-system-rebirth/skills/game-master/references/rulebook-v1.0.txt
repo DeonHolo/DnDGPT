@@ -2595,6 +2595,18 @@ High-rarity evolution may change:
 
 Never assume all summoners evolve through increasing the number of creatures.
 
+## Combat roster cleanup
+
+Update Allies & Combat in the same ordinary save as the resolved turn. Retire dead, defeated, surrendered, captured or departed enemies from the active roster. Retire a temporary summon when its actual destruction, dismissal, duration, concentration or explicit scene-end rule ends it. Ending combat alone spends no duration and does not dismiss a surviving summon.
+
+Use existing stable IDs when updating an instance. A genuinely new legal summon gets its own instance; do not leave an ended copy beside its replacement. Distinct simultaneous summons retain their individual HP, conditions and remaining duration. Keep permanent companions and recoverable downed allies with their actual wounds, status and recovery rules.
+
+For transient chat-game records, changes.remove.enemies and changes.remove.summons accept IDs. Save significant outcomes in the campaign log; immutable save versions retain the earlier records. Protected Sovereign commanders and formations keep their identity, progression and history: mark their actual casualty/status instead of deleting them. Inspection filters inactive records from the field roster without changing the save. Sovereignty and battle reports retain those historical entities.
+
+Batch cleanup with the normal turn update. It grants no extra roll, reward, resource refresh or fictional time. During an advancement freeze, reconcile only already resolved outcomes; clocks and the next encounter stay frozen.
+
+Show compact active roster rows with name, HP and readable status, plus one selected unit's detail panel. Group only explicitly related temporary instances, retaining individual HP and timers. Use full player-facing names and readable status labels throughout the dashboard; internal keys, IDs and formulas stay out of labels and narrative copy.
+
 ## Independent companions
 
 NPC companions have their own motivations.

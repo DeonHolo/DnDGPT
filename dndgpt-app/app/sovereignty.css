@@ -2,4 +2,8 @@
 .starting-sovereign-kit>details{border:1px solid var(--line);border-radius:8px;padding:16px;margin-block:14px;min-width:0;overflow-wrap:anywhere}
 .starting-sovereign-kit>details>summary{padding:0;line-height:1.6}
 
-.sovereign-foundation{margin:1rem 0;padding:1rem;border:1px solid var(--line);border-radius:6px}.sovereign-foundation>details{margin-top:.75rem}.sovereign-foundation .ability-inspector{padding-top:1rem}
+.sovereign-earned,.sovereign-core{margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}
+.sovereign-upgrade{margin:12px 0;padding:14px 16px;border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:4px;min-width:0}
+.sovereign-upgrade h5{font-size:1rem;line-height:1.45;margin:0 0 6px}.sovereign-upgrade .sovereign-meta{margin:0 0 8px}
+.sovereign-upgrade p,.sovereign-effect p{line-height:1.7}.sovereign-core .group,.sovereign-earned .group{margin:0 0 12px}
+.actor-group{margin:0;padding-left:8px}.actor-group>summary{font-size:.8rem;padding:10px 4px}.actor-index .entry-meta{display:block;line-height:1.6}.actor-inspector .actor-card{border:0;padding:0}

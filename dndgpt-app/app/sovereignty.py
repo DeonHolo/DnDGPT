@@ -413,6 +413,20 @@ def apply_sovereignty(before, state, changes, correction=False, dice=None):
                 require(type(spend) is dict and spend.get("ability_id") == base["id"]
                         and added == {spend.get("evolution_id")},
                         "Apply foundation upgrades through the permanent Sovereign progression choice")
+    # Preserve a real initial foundation; legacy combined prose is not an initial snapshot.
+    previous = {row["id"]: row for row in before["abilities"]}
+    for parent in state["abilities"]:
+        if not is_foundation(parent):
+            continue
+        original = previous.get(parent["id"], parent)
+        baseline = original.get("base_mechanics_display")
+        if not baseline and not any(original.get(key) for key in ("upgrades", "evolutions")):
+            baseline = next((original[key] for key in ("mechanics_display", "mechanics", "full_rules")
+                             if text(original.get(key))), None)
+        if baseline:
+            parent["base_mechanics_display"] = baseline
+        else:
+            parent.pop("base_mechanics_display", None)
     if changes.get("sovereign_battle") is not None:
         require(state["fictional_time_seconds"] > before["fictional_time_seconds"], "A battle phase consumes declared fictional time")
         front_id = changes["sovereign_battle"].get("front_id") if type(changes["sovereign_battle"]) is dict else None

@@ -52,17 +52,19 @@ function refreshDashboardSearch(){
     for(const key of ["evolutions","imprints","integrated_imprints","upgrades"]){
       const children=Array.isArray(ability[key])?ability[key]:ability[key]?[ability[key]]:[];
       for(const child of children)if(child&&typeof child==="object"&&child.known_to_player!==false)
-        add(child.name||"Upgrade",section+" › "+ability.name+" › Upgrades",searchPowerText(ability,child),()=>openSearchPower(ability,"upgrades"));
+        add(child.name||"Upgrade",section+" › "+ability.name+" › Upgrades",searchPowerText(ability,child),()=>openSearchPower(ability,"upgrades",child));
     }
   }
   const domGroups=[
     ["#equipment .item-card","Equipment & inventory","equipment"],
     ["#quests .quest-card","Quest Journal","quests"],
-    ["#summons .actor-card","Allies & combat","summons"],
     ["#world-page-living .life-card","People & places","world"],
     ["#sovereignty .sovereign-card","Sovereignty","sovereignty"],
     ["#galleryGrid .gallery-card","Gallery","gallery"]
   ];
+  const actors=sovereignCombatView(state);
+  for(const [group,enemy]of [[actors.summons,false],[actors.enemies,true]])for(const actor of group)
+    add(actor.name,"Allies & combat",[actorSummary(actor),searchPublicText(actor)].join(" "),()=>openSearchActor(actor,enemy));
   for(const [selector,section,page]of domGroups)for(const node of document.querySelectorAll(selector)){
     const title=node.querySelector(".item-name,h3,summary")?.textContent;if(!title)continue;
     add(title,section,searchableText(node),()=>{selectCompanionPage(page);return node});
@@ -81,11 +83,11 @@ function refreshDashboardSearch(){
   });
   dashboardSearchEntries=entries;drawDashboardSearch();
 }
-function openSearchPower(ability,view){
+function openSearchPower(ability,view,child){
   let identity=ability.id;
   if(currentGame==="sovereign-system"&&isSovereignFoundation(ability)){
     selectCompanionPage("sovereignty");$("sovereign-tab-"+({domain:"domain",general:"commanders",army:"forces"}[ability.sovereign_role]))?.click();
-    identity="foundation-"+ability.sovereign_role+":"+ability.id;
+    return sovereignSearchTargets.get(ability.id+":"+(child?.id||view));
   }else{
     selectCompanionPage("skills");const tab=skillTabs[skillGroup(ability)][0];selectSkillTab(tab);
     [...document.querySelectorAll("#skill-page-"+tab+" [data-ability-id]")].find(b=>b.dataset.abilityId===ability.id)?.click();
