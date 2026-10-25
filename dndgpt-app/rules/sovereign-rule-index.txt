@@ -37,7 +37,7 @@ ancestry | Player ancestry and nonhuman identity | 2109 characters
 dashboard-writing | Player-facing dashboard writing contract | 6144 characters
 story-ui | Compact Intelligent Story UI contract | 6877 characters
 enemy-tactics | Enemy identity, adaptive tactics and visible voice | 3909 characters
-sovereign-creation | Sovereign creation and inherited rules | 4630 characters
+sovereign-creation | Sovereign creation and inherited rules | 5067 characters
 sovereign-progression | Sovereign ownership and progression | 6346 characters
 sovereign-warfare | Sovereign warfare and consequences | 4004 characters
 sovereign-dashboard | Sovereign dashboard and efficient play | 1411 characters
