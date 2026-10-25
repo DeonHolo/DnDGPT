@@ -17,7 +17,7 @@ Approved 24 October 2026. The original startup document is design material, not 
 
 Keep approximately 75% personal adventure and 25% strategy. A new sovereign begins with a functioning class-specific domain, major autonomous commander and useful forces. Classes have genuinely different production, command, expansion and recovery rules. The class board contains eight Unique sovereigns; ordinary subsequent acquisition retains the shared rarity rules. Charm governs class-specific sovereign mechanics. Starting Luck allocation remains a player choice.
 
-Character XP, domain milestones, formation veterancy and commander XP are separate tracks. Each character level guarantees one permanent significant Sovereign Evolution for the actual domain, general or army. The player chooses from five compatible offers; applying the selection needs no further approval. Routine entity growth is automatic. Domain development still follows its finite published milestone; it does not replace the guaranteed character-level improvement.
+Character XP, domain milestones, formation veterancy and commander XP are separate tracks. Creation grants one free permanent Sovereign Evolution after Class selection, within an existing creation board. Each gained character level then guarantees one permanent significant Sovereign Evolution for the actual domain, general or army. The player chooses from five compatible offers; applying the selection needs no further approval. Routine entity growth is automatic. Domain development still follows its finite published milestone; it does not replace the guaranteed character-level improvement.
 
 The game selector changes the saved-game list and available chapter. It never converts a save, creates a campaign, rolls or advances time. A campaign ID determines its authoritative rules; a contradictory game argument is rejected. Layout and reading atmosphere remain independent presentation preferences.
 
@@ -58,3 +58,9 @@ A chosen Sovereign Evolution changes the combined foundation and at least one re
 Existing adventures retain their history and earned commands. The interface continues to show older active commands in regular Skills. A missing or misclassified older foundation needs a requested correction using the actual saved class; this release does not silently invent replacement powers in player campaigns.
 
 The compact territory view includes known fronts, returning expedition reports and recent completed developments. It omits unrevealed enemy operations. Legacy temporary commands remain visible and count as regular skills even if their older stored scope label was sovereign; they do not invalidate three otherwise complete permanent foundations or become eligible for a guaranteed foundation upgrade.
+
+## Creation completion compatibility — 1.0.44
+
+The final player choices start play through save_chat_update with changes.begin_adventure=true, using the existing changes object supported by older tool catalogs. The top-level flag remains supported. Retired confirmation/start proposals return a read-only handoff to that save, with no approval proposal. Actual missing build, story or outfit prerequisites still reject atomically.
+
+The starting gift is separate from the Level 2 award. Older saves receive the missing allowance once on their next ordinary committed save. Previously selected and permanently applied creation overrides are accounted as already spent; their powers are preserved and are not granted again. Stable receipt and skill IDs remain internal; prose, offers, upgrade descriptions and display fields use actual names.

@@ -28,7 +28,7 @@ You can write your own class or ability, ask ChatGPT to revise an offer, or chan
 
 Choose **Age of Convergence** or **Sovereign System** in the dashboard's Game selector. Each game shows its own saved campaigns and serves its own rules through the same DnDGPT connection. Switching the view leaves both campaigns untouched; a campaign keeps the game it was created for.
 
-Sovereign System adds a domain, autonomous commanders, army formations and independent strategic progression alongside personal adventures. Each character level guarantees a permanent Sovereign upgrade to the domain, general or army, with its history in Sovereignty. Temporary orders and combat buffs stay in the regular skill tree. Its rulebook is compiled from the shared manual with scoped replacements and added systems. [Game rules, progression and implementation details](docs/SOVEREIGN_SYSTEM.md).
+Sovereign System adds a domain, autonomous commanders, army formations and independent strategic progression alongside personal adventures. Creation grants one free permanent Sovereign upgrade, and each gained character level grants another upgrade to the domain, general or army, with its history in Sovereignty. Temporary orders and combat buffs stay in the regular skill tree. Its rulebook is compiled from the shared manual with scoped replacements and added systems. [Game rules, progression and implementation details](docs/SOVEREIGN_SYSTEM.md).
 
 ### Why I made this
 

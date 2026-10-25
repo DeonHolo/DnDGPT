@@ -211,7 +211,8 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         in this same call. Read living-campaigns before first use; no per-turn review/read is required.
         Never set mode/phase/paused/version/authorization. Draft preparation is allowed before play;
         After the player's final Background/attribute/name choices, write character.story_summary,
-        starting equipment and opening_preview in this SAME save with begin_adventure=true. This
+        starting equipment and opening_preview in this SAME save with changes.begin_adventure=true
+        (or top-level begin_adventure=true). The nested form works with older cached tool schemas. This
         completes creation and opens the first scene directly, with no extra confirmation or button.
         Save creation.outfitting.item_ids as the four equipped inventory IDs in allocation order;
         their rarities and actual effects must match the recorded starting-outfit receipt.
@@ -401,15 +402,31 @@ def build_mcp(engine, config, verifier, creation_repository=None):
     def propose_action(campaign_id: str, action_id: str, expected_version: int,
                        kind: str, payload: dict) -> CallToolResult:
         """Preview a manual pause{}, resume{} or correct_chat_state{changes,reason} for app approval.
-        Creation completes through save_chat_update(begin_adventure=true), without an approval.
+        Creation completes through save_chat_update(changes={begin_adventure:true}), without an approval.
+        Retired creation kinds return a direct-save handoff, never an approval proposal or a commit.
         Advancement choices apply through save_chat_update and resume automatically when resolved.
         Routine chat-led turns use save_chat_update without per-turn approval. Legacy engine commands
         remain sandbox-only. Present the exact proposal for user approval in render_dashboard.
         """
         def propose(owner):
             if kind in {"confirm_chat_character", "start_chat_adventure"}:
-                raise EngineError(422, "creation_approval_retired",
-                                  "Save the completed character, Your story and opening with begin_adventure=true; no approval")
+                state = engine.get_campaign(owner, campaign_id)
+                if state.get("mode") != "chat" or payload:
+                    raise EngineError(422, "invalid_creation_handoff", "Use an owned chat-led draft and an empty payload")
+                if state["version"] != expected_version:
+                    raise EngineError(409, "version_conflict", f"Current version is {state['version']}; read before saving again")
+                if state["phase"] == "adventure":
+                    return {"status": "paused" if state["paused"] else "already_active",
+                            "campaign_id": campaign_id, "version": state["version"], "approval_required": False}
+                return {"status": "direct_creation_save_required", "approval_required": False,
+                        "committed": False,
+                        "message": "Complete actual player choices, story and equipment, then save once through chat. "
+                                   "Use the saved opening; no confirmation button or repeat player acceptance is needed.",
+                        "next_action": {"tool": "save_chat_update", "arguments": {
+                            "campaign_id": campaign_id, "action_id": action_id,
+                            "expected_version": expected_version,
+                            "summary": "Complete the chosen character and open the saved first scene",
+                            "changes": {"begin_adventure": True}}}}
             return engine.propose_action(owner, campaign_id, action_id, expected_version, kind, payload)
         return invoke(propose, True)
 

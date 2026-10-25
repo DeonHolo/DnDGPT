@@ -15,14 +15,14 @@ SLOT_PREFERENCES = [
 ]
 
 
-def prepare(web):
+def prepare(web, game_id="age-of-convergence", rarity="COMMON"):
     state = tool(web, "create_chat_game", {"name": "Disposable direct-play fixture",
-                 "action_id": "direct-create", "disposable": True})["structuredContent"]["campaign"]
+                 "action_id": "direct-create", "disposable": True, "game_id": game_id})["structuredContent"]["campaign"]
     state = tool(web, "save_chat_update", {"campaign_id": state["id"], "action_id": "class-selected",
                  "expected_version": state["version"], "summary": "Actual class choice",
-                 "changes": {"character": {"class_name": "Door Warden"}}})["structuredContent"]["campaign"]
+                 "changes": {"character": {"class_name": "Door Warden", "rarity": rarity}}})["structuredContent"]["campaign"]
     draw = {"campaign_id": state["id"], "action_id": "starting-outfit-" + state["id"],
-            "rolls": [{"label": "Starting equipment", "kind": "outfitting", "class_rarity": "COMMON",
+            "rolls": [{"label": "Starting equipment", "kind": "outfitting", "class_rarity": rarity,
                        "slot_preferences": SLOT_PREFERENCES}]}
     receipt = tool(web, "roll_game_random", draw)
     assert not receipt.get("isError"), receipt
@@ -90,7 +90,11 @@ def test_retired_approvals_are_not_proposed_and_outfit_cannot_be_redrawn(web):
     for kind in ("confirm_chat_character", "start_chat_adventure"):
         result = tool(web, "propose_action", {"campaign_id": draft["id"], "action_id": "old-" + kind,
                       "expected_version": draft["version"], "kind": kind, "payload": {}})
-        assert result.get("isError") and result["structuredContent"]["error"] == "creation_approval_retired"
+        assert not result.get("isError"), result
+        handoff = result["structuredContent"]
+        assert handoff["approval_required"] is False and handoff["committed"] is False
+        assert handoff["next_action"]["arguments"]["changes"] == {"begin_adventure": True}
+        assert not tool(web, "render_dashboard", {"campaign_id": draft["id"]})["_meta"].get("approval")
     changed = copy.deepcopy(draw)
     changed["action_id"] = "another-outfit"
     assert tool(web, "roll_game_random", changed).get("isError")
@@ -99,6 +103,88 @@ def test_retired_approvals_are_not_proposed_and_outfit_cannot_be_redrawn(web):
     assert tool(web, "roll_game_random", changed)["structuredContent"]["error"] == "idempotency_conflict"
     assert tool(web, "roll_game_random", {**draw, "rolls": [*draw["rolls"],
         {**draw["rolls"][0], "label": "Second outfit"}]}).get("isError")
+
+
+def test_cached_tool_shape_and_retired_start_handoff_complete_saved_draft(web):
+    draft, _, _, args = prepare(web)
+    prepared = tool(web, "save_chat_update", {**args, "action_id": "prepare-final-build", "begin_adventure": False})
+    before = prepared["structuredContent"]["campaign"]
+    assert before["phase"] == "character_draft" and before["paused"]
+    handoff = tool(web, "propose_action", {"campaign_id": draft["id"], "action_id": "cached-start",
+                   "expected_version": before["version"], "kind": "start_chat_adventure", "payload": {}})
+    assert not handoff.get("isError"), handoff
+    direct = handoff["structuredContent"]["next_action"]["arguments"]
+    # Exactly the old five-field tool schema: no new top-level flag is required.
+    assert set(direct) == {"campaign_id", "action_id", "expected_version", "summary", "changes"}
+    assert tool(web, "get_campaign", {"campaign_id": draft["id"]})["structuredContent"]["campaign"] == before
+    result = tool(web, "save_chat_update", direct)
+    assert not result.get("isError"), result
+    after = result["structuredContent"]["campaign"]
+    assert after["phase"] == "adventure" and not after["paused"]
+    assert after["version"] == before["version"] + 1 and after["fictional_time_seconds"] == 0
+    assert after["abilities"] == before["abilities"] and after["inventory"] == before["inventory"]
+    assert tool(web, "save_chat_update", direct)["structuredContent"] == result["structuredContent"]
+    equivalent = {**direct, "changes": {}, "begin_adventure": True}
+    assert tool(web, "save_chat_update", equivalent)["structuredContent"] == result["structuredContent"]
+
+
+@pytest.mark.parametrize("flag", [1, "true", None, False])
+def test_nested_start_is_explicit_boolean_and_keeps_incomplete_draft_atomic(web, flag):
+    draft, _, _, _ = prepare(web)
+    result = tool(web, "save_chat_update", {"campaign_id": draft["id"], "action_id": "bad-start",
+                  "expected_version": draft["version"], "summary": "Cannot start incomplete choices",
+                  "changes": {"begin_adventure": flag}})
+    assert result.get("isError")
+    assert tool(web, "get_campaign", {"campaign_id": draft["id"]})["structuredContent"]["campaign"] == draft
+
+
+def test_retired_start_handoff_retains_ownership_and_version_guards(web, tokens):
+    draft, _, _, _ = prepare(web)
+    args = {"campaign_id": draft["id"], "action_id": "stale-start", "expected_version": 1,
+            "kind": "start_chat_adventure", "payload": {}}
+    assert tool(web, "propose_action", args)["structuredContent"]["error"] == "version_conflict"
+    web.headers["Authorization"] = "Bearer " + tokens(subject="user-b")
+    assert tool(web, "propose_action", {**args, "expected_version": draft["version"]}).get("isError")
+
+
+def test_sovereign_starting_gift_and_cached_start_work_together_without_approvals(web, engine):
+    from .test_sovereign import fixture_state
+    _, _, _, args = prepare(web, "sovereign-system", "UNIQUE")
+    strategy = fixture_state(engine)["sovereignty"]
+    parents = [{"id": role, "name": role.title(), "scope": "sovereign", "sovereign_role": role,
+                "activation": "Passive", "rarity": "UNIQUE", "mechanics": "The existing permanent foundation.",
+                "flavor_text": "The realm remembers."} for role in ("domain", "general", "army")]
+    regular = [{"id": str(i), "name": "Fixture skill "+str(i), "activation": activation,
+                "source": "Class", "group": group, "rarity": "UNIQUE"}
+               for i, (activation, group) in enumerate([(a, "Combat") for a in
+                   ("Active", "Passive", "Reaction", "Free action")] + [("Active", "Utility")]*2)]
+    args["changes"].update(sovereignty=strategy)
+    args["changes"]["upsert"]["abilities"] = parents + regular
+    ready = tool(web, "save_chat_update", {**args, "action_id": "complete-sovereign-build", "begin_adventure": False})
+    assert not ready.get("isError"), ready
+    before = ready["structuredContent"]["campaign"]
+    cap = {"id": "standing-workshop", "name": "Standing workshop", "description": "The workshop permanently refits two constructs.",
+           "source_evolution_id": "starting-gift", "activation": "Passive", "duration": "Permanent"}
+    parent = {**parents[0], "mechanics": "The permanent domain includes a workshop that refits two constructs.",
+              "upgrades": [{"id": "starting-gift", "name": "Workshop expansion", "change_display": cap["description"],
+                            "sovereign_changes": [{"target_id": "domain", "capability_id": cap["id"]}]}]}
+    start = {"campaign_id": before["id"], "action_id": "sovereign-cached-start", "expected_version": before["version"],
+             "summary": "Apply the chosen free starting evolution and open the saved first scene",
+             "changes": {"begin_adventure": True, "upsert": {"abilities": [parent]},
+                         "spend_sovereign_evolution": {"ability_id": "domain", "evolution_id": "starting-gift"},
+                         "sovereignty": {"domain": {"capabilities": [*strategy["domain"]["capabilities"], cap]}}}}
+    result = tool(web, "save_chat_update", start)
+    assert not result.get("isError"), result
+    after = result["structuredContent"]["campaign"]
+    assert after["phase"] == "adventure" and not after["paused"] and after["fictional_time_seconds"] == 0
+    assert after["character"]["level"] == 1 and after["character"]["skill_points"] == 0
+    assert after["sovereignty"]["ascension_spent"] == ["starting-gift"]
+    assert not tool(web, "render_dashboard", {"campaign_id": after["id"]})["_meta"].get("approval")
+    assert tool(web, "save_chat_update", start)["structuredContent"] == result["structuredContent"]
+    leveled = tool(web, "save_chat_update", {"campaign_id": after["id"], "action_id": "sovereign-level-two",
+                   "expected_version": after["version"], "summary": "Fixture Level 2 progression",
+                   "changes": {"character": {"level": 2}}})["structuredContent"]["campaign"]
+    assert leveled["sovereignty"]["ascension_earned"] - len(leveled["sovereignty"]["ascension_spent"]) == 1
 
 
 def test_outfit_context_is_validated_before_any_other_roll(engine):

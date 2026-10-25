@@ -60,11 +60,11 @@ def main(context):
                                                'story_summary': 'A test character in the disposable probe room.'},
                                  'upsert': {'inventory': items},
                                  'equipment': {row['slot']: item['id'] for row, item in zip(plan['items'], items)},
-                                 'creation': {'outfitting': {**plan, 'item_ids': [item['id'] for item in items]}}},
-                                begin_adventure=True)
+                                 'creation': {'outfitting': {**plan, 'item_ids': [item['id'] for item in items]}},
+                                 'begin_adventure': True})
             assert begun['campaign']['phase'] == 'adventure' and not begun['campaign']['paused']
             assert engine.pending_approval(owner, state['id'])['approval'] is None
-            checks += ['direct_creation', 'no_creation_approval']
+            checks += ['direct_creation', 'cached_schema_creation_start', 'no_creation_approval']
             proposal = engine.propose_action(owner, state['id'], 'correct-' + run, 3, 'correct_chat_state',
                                             {'changes': {'character': {'hp': 59}}, 'reason': 'Disposable correction test'})
             assert engine.pending_approval(owner, state['id'])['approval']

@@ -8,6 +8,7 @@ from .storage import canonical
 
 VETERANCY = (0, 100, 250, 450, 700, 1000)
 FOUNDATIONS = {"domain", "general", "army"}
+STARTING_EVOLUTION = "creation:sovereign-evolution"
 ROOT_FIELDS = {"domain", "commanders", "formations", "operations", "fronts", "developments",
                "award_ledger", "ascension_earned", "ascension_spent", "battle_reports"}
 
@@ -40,6 +41,40 @@ def is_foundation(ability):
     return (ability.get("scope") == "sovereign" and ability.get("sovereign_role") in FOUNDATIONS
             and str(ability.get("activation", "")).lower() == "passive"
             and not any(ability.get(k) for k in ("parent_id", "parent_ability_id", "parent_skill_id")))
+
+
+def starting_evolution_receipt(adopted=()):
+    return hashlib.sha256(canonical({"kind": STARTING_EVOLUTION, "adopted": list(adopted)}).encode()).hexdigest()
+
+
+def reconcile_starting_evolution(before, strategy):
+    """Account once for an older save's starting gift, preserving already applied choices."""
+    if STARTING_EVOLUTION in strategy["award_ledger"]:
+        return
+    selected = before.get("creation", {}).get("bonus_sovereign_selected_ids", [])
+    selected = {key for key in selected if type(key) is str} if type(selected) is list else set()
+    adopted = []
+    for parent in before["abilities"]:
+        if not is_foundation(parent):
+            continue
+        role = parent["sovereign_role"]
+        targets = ([before["sovereignty"]["domain"]] if role == "domain" else
+                   before["sovereignty"]["commanders" if role == "general" else "formations"])
+        owned = {(target["id"], cap["id"]): cap for target in targets if target.get("side") != "enemy"
+                 for cap in target.get("capabilities" if role == "domain" else "abilities", [])}
+        for child in [*parent.get("upgrades", []), *parent.get("evolutions", [])]:
+            key, effects = child.get("id"), child.get("sovereign_changes", [])
+            if key not in selected or key in adopted or not effects:
+                continue
+            caps = [owned.get((effect.get("target_id"), effect.get("capability_id")), {})
+                    for effect in effects if type(effect) is dict]
+            if len(caps) == len(effects) and all(cap.get("source_evolution_id") == key and
+                    cap.get("activation") == "Passive" and cap.get("duration") == "Permanent" for cap in caps):
+                adopted.append(key)
+    recorded_start = max(0, strategy["ascension_earned"] - max(0, before["character"]["level"] - 1))
+    strategy["ascension_earned"] += max(0, max(1, len(adopted)) - recorded_start)
+    strategy["ascension_spent"].extend(key for key in adopted if key not in strategy["ascension_spent"])
+    strategy["award_ledger"][STARTING_EVOLUTION] = starting_evolution_receipt(adopted)
 
 
 def foundation_evolution(before, state, base, parent, evolution_id):
@@ -87,7 +122,7 @@ def initial():
     return {"domain": {"id": "domain", "name": "Unestablished domain", "level": 1,
                        "capabilities": [], "next_milestone": None},
             "commanders": [], "formations": [], "operations": [], "fronts": [],
-            "developments": [], "award_ledger": {}, "ascension_earned": 0,
+            "developments": [], "award_ledger": {STARTING_EVOLUTION: starting_evolution_receipt()}, "ascension_earned": 1,
             "ascension_spent": [], "battle_reports": []}
 
 
@@ -331,13 +366,14 @@ def apply_sovereignty(before, state, changes, correction=False, dice=None):
         if op["status"] in {"completed", "failed"}:
             require(state["fictional_time_seconds"] >= op["due_at"] and text(op.get("outcome")), "Resolve operations with elapsed fictional time and a recorded outcome")
     gained = max(0, state["character"]["level"] - before["character"]["level"])
+    reconcile_starting_evolution(before, s)
     s["ascension_earned"] += gained
     if changes.get("sovereign_awards") or changes.get("sovereign_battle") or changes.get("sovereign_development"):
         require(before["phase"] == "adventure" and not before["paused"] and not before["level_up_freeze"], "Strategic advancement needs active adventure play")
     awards = changes.get("sovereign_awards", [])
     require(type(awards) is list and len(awards) <= 30, "Batch up to 30 earned strategic awards")
     for entry in awards:
-        require(type(entry) is dict and not str(entry.get("id", "")).startswith(("phase:", "battle-")), "Battle award IDs are reserved")
+        require(type(entry) is dict and not str(entry.get("id", "")).startswith(("phase:", "battle-", "creation:")), "System award IDs are reserved")
         award(s, entry)
     if changes.get("sovereign_development") is not None:
         develop(s, changes["sovereign_development"])

@@ -62,8 +62,8 @@ def bounded_json(value, depth=0, field=""):
         fail(422, "invalid_chat_update", "Non-finite or oversized number")
 
 
-def validate_changes(changes):
-    if type(changes) is not dict or not changes:
+def validate_changes(changes, *, allow_empty=False):
+    if type(changes) is not dict or not changes and not allow_empty:
         fail(422, "invalid_chat_update", "changes must be a nonempty object")
     bounded_json(changes)
     if len(canonical(changes).encode()) > 250000:
@@ -145,7 +145,7 @@ def merge_world(before, patch):
 
 
 def apply_changes(state, changes, *, correction=False, completing=False, event_receipt=None, dice=None):
-    validate_changes(changes)
+    validate_changes(changes, allow_empty=completing)
     projected = copy.deepcopy(state)
     for key in TEXT_FIELDS | OBJECT_FIELDS | {"fictional_time_seconds", "level_up_freeze"}:
         if key in changes:
@@ -366,9 +366,16 @@ class ChatGame:
         text(summary, "summary", 2000)
         if not summary.strip():
             fail(422, "invalid_chat_update", "A save needs a summary")
-        validate_changes(changes)
         if type(begin_adventure) is not bool:
             fail(422, "invalid_chat_update", "begin_adventure must be boolean")
+        # Older connected tool schemas only expose the existing changes object.
+        if type(changes) is dict and "begin_adventure" in changes:
+            changes = copy.deepcopy(changes)
+            nested_start = changes.pop("begin_adventure")
+            if type(nested_start) is not bool or begin_adventure and not nested_start:
+                fail(422, "invalid_chat_update", "Use a consistent boolean begin_adventure")
+            begin_adventure = begin_adventure or nested_start
+        validate_changes(changes, allow_empty=begin_adventure)
         request = canonical({"expected_version": expected_version, "summary": summary, "changes": changes})
         if begin_adventure:
             request = canonical({"expected_version": expected_version, "summary": summary,

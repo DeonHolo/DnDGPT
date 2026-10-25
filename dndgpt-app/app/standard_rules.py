@@ -57,7 +57,7 @@ def rules_guidance():
             "starting_mp": "75 + 5 * INT",
             "attributes": ["STR", "DEX", "INT", "CHA", "LCK"],
             "completion": "Read direct-play. Final creation choices save story, gear and opening with "
-                          "begin_adventure=true. Advancement choices commit and continue directly.",
+                          "changes.begin_adventure=true. Advancement choices commit and continue directly.",
             "starting_equipment": "Read starting-gear: precommit class/story slot_preferences for four "
                                   "weighted slots; save functional gear and receipt/item_ids in creation.outfitting.",
             "distance_display": "From the FIRST reveal, use complete mechanics_display and range_display "

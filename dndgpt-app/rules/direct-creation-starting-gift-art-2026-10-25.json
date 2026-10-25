@@ -1,0 +1,54 @@
+{
+  "id": "direct-creation-starting-gift-art-2026-10-25",
+  "files": {
+    "rulebook-v1.0.txt": [
+      {
+        "new_start": 16711,
+        "before": "The player's selection commits that choice. Keep the four creation boards, their dependencies and genuine rolls. After final Background/Attribute choices, use the supplied name or existing character label, calculate the completed build, write character.story_summary and prepare the opening. Save these together through save_chat_update(begin_adventure=true); this atomically completes creation and opens the adventure, without a lifecycle proposal, approval token, confirmation or start button. Initial NEW CAMPAIGN authorization remains required. Reading rules or opening a dashboard never starts a game.\n",
+        "after": "The player's selection commits that choice. Keep the four creation boards, their dependencies and genuine rolls. After final Background/Attribute choices, use the supplied name or existing character label, calculate the completed build, write character.story_summary and prepare the opening. Save these together through save_chat_update(changes={begin_adventure:true}); this atomically completes creation and opens the adventure, without a lifecycle proposal, approval token, confirmation or start button. Initial NEW CAMPAIGN authorization remains required. Reading rules or opening a dashboard never starts a game. Older cached tool catalogs can use the existing changes object: changes.begin_adventure=true. A retired confirmation/start request returns a noncommitting next_action handoff to that same save; follow it after the actual final choices, honoring an explicit pause. Never direct the player to a retired confirmation button. On failure use the actual error code and missing prerequisite, preserving the saved build and completed choices.\n"
+      },
+      {
+        "new_start": 24660,
+        "before": "",
+        "after": "\n**House art direction for requested generation.** Use painterly fantasy illustration: opaque gouache color, fine dark-umber ink contours, dry-brush texture and atmospheric depth. Favor one focal action, bold silhouettes, asymmetrical composition, tactile architecture/gear and distinct faces. Balance amber light with cool slate, teal or violet shadows while preserving the scene's weather, time and local palette. Keep wonder, danger and everyday life visible. Preserve established ancestry, anatomy, equipment and scale. Age of Convergence shows the specific meeting of Earth and the unfamiliar world when established; Sovereign System emphasizes the class's distinctive working domain, general and forces, with inhabited scale and activity. Use a text-free illustration unless labels are requested. Player-specified style takes precedence. Apply this only to new requested generation; preserve credits and the original look of curated web images. Image work grants no mechanics and requires no routine per-turn read.\n\n**Reusable generation prompt:** Create a painterly fantasy illustration of [SUBJECT] in [PLACE] during [MOMENT], using opaque gouache, fine umber ink detail, dry-brush texture and atmospheric depth. Use one clear focal action, bold silhouettes and tactile faces, tools, clothing and architecture. Balance warm amber light with cool slate/teal/violet shadows adapted to the scene. Preserve [KNOWN ANCESTRY, APPEARANCE, GEAR AND SCALE]. Convey power through its visible effect. Frame as [PORTRAIT/WIDE SCENE/ACTION]. Keep the image text-free and grounded in known campaign facts.\n"
+      },
+      {
+        "new_start": 67258,
+        "before": "",
+        "after": "\n**Use names, keep IDs internal.** In story prose, dialogue, tooltips, creation offers, upgrade descriptions and dashboard display fields, refer to skills, signatures, talents, items, classes, commanders and formations by their actual saved names. Codes such as S1-S5, D3 or A2 are internal keys, not player-facing names or progression labels. Say which named upgrade improves which named parent ability; never present 'Upgrade to S1' as the explanation. Preserve stable IDs inside tool arguments and saved references. Ordinary numbered choices remain valid when each number accompanies the full option name; acknowledge the selection by name. Resolve names from already available state, retrieving only a missing relevant record. If a name is genuinely absent, describe the known effect plainly and establish its display name rather than inventing a previous name.\n"
+      },
+      {
+        "new_start": 137869,
+        "before": "Present local situation, concise world context, location/time, tangible opportunities, relevant known dangers and three to five meaningfully different actions. Complete creation and save this first scene in the SAME response to the final required creation choices, using begin_adventure=true in connected play. No separate start approval follows. The scene is active; do not choose or resolve an opening action for the player. Preserve an explicit draft/pause request. Keep the full sheet in the dashboard and story in chat.\n",
+        "after": "Present local situation, concise world context, location/time, tangible opportunities, relevant known dangers and three to five meaningfully different actions. Complete creation and save this first scene in the SAME response to the final required creation choices, using changes.begin_adventure=true in connected play. No separate start approval follows. The scene is active; do not choose or resolve an opening action for the player. Preserve an explicit draft/pause request. Keep the full sheet in the dashboard and story in chat.\n"
+      },
+      {
+        "new_start": 430437,
+        "before": "**Step 20 — Save the completed character and opening together with begin_adventure=true.** Complete creation and open the first scene without character/start approval. Honor an explicit draft/pause request; wait only for the next genuine gameplay action.\n",
+        "after": "**Step 20 — Save the completed character and opening together with changes.begin_adventure=true.** Complete creation and open the first scene without character/start approval. Honor an explicit draft/pause request; wait only for the next genuine gameplay action.\n"
+      }
+    ],
+    "rule-hardener.txt": [
+      {
+        "new_start": 705,
+        "before": "Read creation-order, generation, utility, class-craft, reach, 5-8 and the current stage (9 Signature, 10 Title, 11 Background). Keep four choice turns. Read direct-play: final choices commit the build, Your story and opening in one save with begin_adventure=true; no extra character/start approval. Honor an explicit draft/pause request. World Preview precedes Turn 1 Luck. Read world-preview/story/4: introduce region, everyday life, environment/pressures and HOW/WHERE it connected to Earth. Save public facts in World; preserve geography and propose missing history for existing campaigns.\n",
+        "after": "Read creation-order, generation, utility, class-craft, reach, 5-8 and the current stage (9 Signature, 10 Title, 11 Background). Keep four choice turns. Read direct-play: final choices commit the build, Your story and opening in one save with changes.begin_adventure=true; no extra character/start approval. Honor an explicit draft/pause request. World Preview precedes Turn 1 Luck. Read world-preview/story/4: introduce region, everyday life, environment/pressures and HOW/WHERE it connected to Earth. Save public facts in World; preserve geography and propose missing history for existing campaigns.\n"
+      },
+      {
+        "new_start": 5576,
+        "before": "Read gallery for image work: retain 1..3 already-shown web images per scene/overview with captions/credits. Generate only on request; verify actual saves. No routine media reads. Seven core chapters plus Gallery stay in the dashboard.\n",
+        "after": "Read gallery for requested generation and its house art style. Retain 1..3 shown web images per scene/overview with credits; verify saves. No routine media reads. Seven core chapters plus Gallery stay in the dashboard.\n"
+      },
+      {
+        "new_start": 6494,
+        "before": "Briefly check natural inline terms and wrapping, readable opaque tooltip cards with continuous solid borders on ALL FOUR SIDES (at least 1.5px, prefer 2px), contrasting edges including the bottom, 14-16px padding, about 310px maximum width, unclipped positioning, supported hover/tap/focus/Escape behavior, known information, accurate results and working choices. Scope card AND child styles: category/title/description/stats occupy separate block rows with explicit gaps and normal wrapping. Keep essential costs/warnings outside tooltips. Never claim a visual or interaction test you could not perform. Inspection does not change play.\n",
+        "after": "Check inline terms/wrapping, readable opaque tooltip cards with continuous solid borders on ALL FOUR SIDES (at least 1.5px, prefer 2px), contrasting edges including the bottom, 14-16px padding, about 310px maximum width, unclipped positioning, supported hover/tap/focus/Escape behavior, known information, accurate results and working choices. Scope card and child styles; category/title/description/stats use separate block rows with gaps and wrapping. Keep costs/warnings outside tooltips. Claim only performed UI tests. Inspection changes no play.\n"
+      },
+      {
+        "new_start": 7574,
+        "before": "",
+        "after": "Use full ability/item/character names in player-facing text. IDs such as S1 stay internal.\n\n"
+      }
+    ]
+  }
+}

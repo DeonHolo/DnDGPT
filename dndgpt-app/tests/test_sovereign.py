@@ -367,7 +367,8 @@ def test_long_progression_ledger_is_compact_and_portable(engine):
         state = apply_changes(state, {"sovereign_awards": [{"id": "achievement-" + str(i), "kind": "formation",
             "target_id": "guard", "amount": 1, "reason": "A recorded training accomplishment"}]})
     ledger = state["sovereignty"]["award_ledger"]
-    assert len(ledger) == 550 and all(len(value) == 64 for value in ledger.values())
+    assert sum(key.startswith("achievement-") for key in ledger) == 550
+    assert all(len(value) == 64 for value in ledger.values())
     bounded_json(state)
     assert state["sovereignty"]["formations"][0]["xp_total"] == 550
 
@@ -414,3 +415,45 @@ def test_legacy_temporary_sovereign_command_counts_as_regular_skill(engine):
                             "activation": "Passive", "rarity": "UNIQUE", "mechanics": "The existing foundation.",
                             "flavor_text": "The realm endures."} for role in ("domain", "general", "army")]
     assert sovereign_kit_check(state)["ready"]
+
+
+def test_starting_sovereign_upgrade_is_free_before_any_level_up(engine):
+    state = fixture_state(engine)
+    assert state["character"]["level"] == 1 and state["sovereignty"]["ascension_earned"] == 1
+    request = foundation_request(state, "domain")
+    spent = apply_changes(state, request)
+    assert len(spent["sovereignty"]["ascension_spent"]) == 1 and spent["character"]["skill_points"] == 0
+    next_level = apply_changes(spent, {"character": {"level": 2}})
+    assert next_level["sovereignty"]["ascension_earned"] - len(next_level["sovereignty"]["ascension_spent"]) == 1
+
+
+def test_old_save_receives_missing_starting_upgrade_once_without_changing_its_kit(engine):
+    from app.sovereignty import STARTING_EVOLUTION
+    state = fixture_state(engine)
+    state["sovereignty"]["award_ledger"].pop(STARTING_EVOLUTION)
+    state["sovereignty"]["ascension_earned"] = 0
+    after = apply_changes(state, {"notes": "Record existing draft"})
+    assert after["sovereignty"]["ascension_earned"] == 1
+    assert after["abilities"] == state["abilities"] and after["character"] == state["character"]
+    assert apply_changes(after, {"notes": "Another save"})["sovereignty"]["ascension_earned"] == 1
+
+
+def test_two_already_applied_creation_overrides_are_accounted_without_reapplying_or_spending_level_two(engine):
+    from app.sovereignty import STARTING_EVOLUTION
+    domain, army = fixture_state(engine), fixture_state(engine)
+    domain = apply_changes(domain, foundation_request(domain, "domain"))
+    army = apply_changes(army, foundation_request(army, "army"))
+    state = copy.deepcopy(domain)
+    state["abilities"] += army["abilities"]
+    state["sovereignty"]["formations"] = army["sovereignty"]["formations"]
+    state["creation"]["bonus_sovereign_selected_ids"] = ["domain-upgrade", "army-upgrade"]
+    state["sovereignty"]["award_ledger"].pop(STARTING_EVOLUTION)
+    state["sovereignty"].update(ascension_earned=0, ascension_spent=[])
+    after = apply_changes(state, {"notes": "Preserve both previously chosen creation upgrades"})
+    assert after["abilities"] == state["abilities"]
+    assert after["sovereignty"]["domain"] == state["sovereignty"]["domain"]
+    assert after["sovereignty"]["formations"] == state["sovereignty"]["formations"]
+    assert after["sovereignty"]["ascension_earned"] == 2
+    assert set(after["sovereignty"]["ascension_spent"]) == {"domain-upgrade", "army-upgrade"}
+    next_level = apply_changes(after, {"character": {"level": 2}})
+    assert next_level["sovereignty"]["ascension_earned"] - len(next_level["sovereignty"]["ascension_spent"]) == 1
