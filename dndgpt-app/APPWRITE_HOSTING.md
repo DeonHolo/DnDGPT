@@ -29,7 +29,9 @@ DNDGPT_OAUTH_ISSUER=https://YOUR-ISSUER/
 DNDGPT_JWKS_URL=https://YOUR-ISSUER/.well-known/jwks.json
 ```
 
-Appwrite supplies `APPWRITE_FUNCTION_API_ENDPOINT`, `APPWRITE_FUNCTION_PROJECT_ID` and the `x-appwrite-key` execution header. No permanent Appwrite API key belongs in the repository.
+Appwrite supplies `APPWRITE_FUNCTION_API_ENDPOINT`, `APPWRITE_FUNCTION_PROJECT_ID` and the `x-appwrite-key` execution header. Storage defaults to that per-execution credential. A dedicated server key can be configured as the secret function variable `DNDGPT_APPWRITE_STORAGE_KEY`, limited to `tables.read`, `rows.read`, `rows.write`. The service reads it only from its environment and never returns it to clients. No key belongs in the repository.
+
+On 2026-10-25 the public domain's injected key returned `401 api_key_invalid`, while internal executions of the same deployment passed. Production now uses the dedicated secret to restore storage access. Reapplying scopes and redeploying alone did not repair the injected credential. Keep public HTTP/MCP acceptance separate from the private probe; internal success does not certify the public connection.
 
 Set environment variables before deployment, or redeploy after changing them. A domain tied to a VCS branch follows that branch's deployments; activating a separate commit deployment does not retarget the branch domain. Verify the domain's actual deployment ID and HTTP response after rollout.
 

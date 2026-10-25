@@ -38,3 +38,24 @@ def test_entry_logs_only_sanitized_storage_diagnostics(monkeypatch):
     body, status = asyncio.run(main(context))
     assert status == 503 and "upstream" not in str(body)
     assert messages == ["Hosted storage rejected request: status=401 type=user_unauthorized"]
+
+
+@pytest.mark.parametrize("configured", [False, True])
+def test_storage_credential_comes_from_hosted_secret_or_execution(monkeypatch, configured):
+    import app.appwrite_entry as entry
+    monkeypatch.setenv("APPWRITE_FUNCTION_API_ENDPOINT", "https://fixture.example.test/v1")
+    monkeypatch.setenv("APPWRITE_FUNCTION_PROJECT_ID", "fixture-project")
+    monkeypatch.delenv("DNDGPT_APPWRITE_STORAGE_KEY", raising=False)
+    if configured:
+        monkeypatch.setenv("DNDGPT_APPWRITE_STORAGE_KEY", "HOSTED_PRIVATE_KEY")
+    seen = []
+    def capture(endpoint, project, key, **kwargs):
+        seen.append(key)
+        raise EngineError(503, "fixture_stop", "Fixture stopped before storage")
+    monkeypatch.setattr(entry, "AppwriteAPI", capture)
+    context = SimpleNamespace(req=SimpleNamespace(headers={"x-appwrite-key": "EXECUTION_KEY",
+        "DNDGPT_APPWRITE_STORAGE_KEY": "UNTRUSTED_HEADER"}),
+        res=SimpleNamespace(json=lambda body, status: (body, status)))
+    body, status = asyncio.run(main(context))
+    assert seen == ["HOSTED_PRIVATE_KEY" if configured else "EXECUTION_KEY"]
+    assert status == 503 and "KEY" not in str(body)

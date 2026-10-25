@@ -48,7 +48,7 @@ async def main(context):
     try:
         api = AppwriteAPI(os.environ["APPWRITE_FUNCTION_API_ENDPOINT"],
                           os.environ["APPWRITE_FUNCTION_PROJECT_ID"],
-                          context.req.headers.get("x-appwrite-key", ""), client=client)
+                          os.getenv("DNDGPT_APPWRITE_STORAGE_KEY") or context.req.headers.get("x-appwrite-key", ""), client=client)
         store = AppwriteStore(api, os.getenv("DNDGPT_APPWRITE_DATABASE", "dndgpt"),
                               os.getenv("DNDGPT_APPWRITE_TABLE", "records"))
         config = AuthConfig.from_env()
