@@ -1,9 +1,9 @@
 {
   "rulebook-v1.0.txt": {
     "original_sha256": "fc1cd1ed39a9fc35961d0d1e9a5feb3035015339d435c6a3af80a3515960597b",
-    "sha256": "d9d3b494268843e29e8152c2dded7d0fdd234b6bc5218afe67b2574146f4c3d2",
+    "sha256": "94ec7b0882418a00fc6140c09fa725984be02aaa3d70f9cf7664fcb55399a529",
     "original_bytes": 324754,
-    "bytes": 456862,
+    "bytes": 460733,
     "replacements": [
       [
         "V4.2",
@@ -252,14 +252,20 @@
         "source": "combat-roster-cleanup-2026-10-25.json",
         "before_sha256": "6d28b20a0f4bf31f27ac697d95af3f3eb05743ef14513a4d74d30a81084df25c",
         "after_sha256": "d9d3b494268843e29e8152c2dded7d0fdd234b6bc5218afe67b2574146f4c3d2"
+      },
+      {
+        "id": "proactive-story-2026-10-26",
+        "source": "proactive-story-2026-10-26.json",
+        "before_sha256": "d9d3b494268843e29e8152c2dded7d0fdd234b6bc5218afe67b2574146f4c3d2",
+        "after_sha256": "94ec7b0882418a00fc6140c09fa725984be02aaa3d70f9cf7664fcb55399a529"
       }
     ]
   },
   "rule-hardener.txt": {
     "original_sha256": "bc21947f299ae37dc306581aa7110231809140c332ed4e8b1ceccbb86cbce8da",
-    "sha256": "172f4a332f5dcb1d156ef145a07b6331447114d6bb624d197cd833ab43e38042",
+    "sha256": "a0eecb1057ae5419150907646aebceabc4df537d8be0fd233915439a2f0d32c2",
     "original_bytes": 10370,
-    "bytes": 7949,
+    "bytes": 7902,
     "replacements": [
       [
         "V4.2-R1",
@@ -480,6 +486,12 @@
         "source": "combat-hardener-one-page-2026-10-25.json",
         "before_sha256": "86a6ecc8e234b4bf64d377336ebc340acbb36e7a8a438fb80a4c0a9185a7bec7",
         "after_sha256": "172f4a332f5dcb1d156ef145a07b6331447114d6bb624d197cd833ab43e38042"
+      },
+      {
+        "id": "proactive-story-2026-10-26",
+        "source": "proactive-story-2026-10-26.json",
+        "before_sha256": "172f4a332f5dcb1d156ef145a07b6331447114d6bb624d197cd833ab43e38042",
+        "after_sha256": "a0eecb1057ae5419150907646aebceabc4df537d8be0fd233915439a2f0d32c2"
       }
     ]
   }

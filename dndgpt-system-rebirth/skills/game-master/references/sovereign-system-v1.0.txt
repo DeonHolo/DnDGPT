@@ -220,9 +220,19 @@ This presentation and continuity amendment applies to ongoing compatible campaig
 
 For a gameplay turn resolving a declared action, open with a short bridge, normally one or two sentences, connecting the last established situation, the player's actual choice and what the character does. Resolve declared actions in order before presenting their consequences and the next decision. Do not begin at an unexplained new location or unrelated situation. A bridge can be one clause when continuity is already obvious; it is not a mandatory recap, extra confirmation, check or menu. Keep the current scene identity until the fiction warrants a new scene.
 
-Compress uneventful movement, preparation and waiting in clear connecting prose. Explain actual changes in place and elapsed fictional time; preserve geography, resource costs, NPC independence and consequential interruptions. Never teleport, invent an encounter, skip a meaningful player decision or spend a power merely to reach a new scene. Preserve unresolved projects and commitments when the player changes objectives. Include player-supplied thoughts and intentions faithfully; do not manufacture beliefs, motives, memories or commitments. Optional unapproved reflections remain POV drafts under the existing story rule.
+Compress uneventful movement, preparation and waiting in clear connecting prose. Explain actual changes in place and elapsed fictional time; preserve geography, resource costs, NPC independence and consequential interruptions. New encounters follow the world-initiative and random-event rules below; preserve meaningful player decisions and use a player's power only when authorized. Preserve unresolved projects and commitments when the player changes objectives. Include player-supplied thoughts and intentions faithfully; do not manufacture beliefs, motives, memories or commitments. Optional unapproved reflections remain POV drafts under the existing story rule.
 
-The two-decision obstacle ceiling in Chapter 2 still governs the same underlying obstruction. A renamed inspection, another tool suggestion or a fresh menu does not reset it. After the second approach, resolve or close that route with genuine consequences and give access to a distinct objective. Do not grant automatic success, fabricate a cost or impose combat to enforce pacing.
+The two-decision obstacle ceiling in Chapter 2 governs the same underlying obstruction, including an optional locked container. Count the player's committed approaches, not individual dice or new menu headings. After resolving the second approach, that GM reply must conclude the obstacle or close its route and expose a genuinely different objective. Another inspection, tool suggestion or 'look for a key' menu for the same lock does not reset the count. Keep actual failure and costs; the ceiling grants no automatic unlock, reward or forced battle. An explicit typed action remains valid, but the GM must resolve it without restarting a repetitive menu chain. Genuine combat rounds and distinct quest milestones remain intact; a quest label does not exempt a minor blockage.
+
+### Drive the world before offering another menu
+
+The GM initiates story as well as responding to actions. Introduce coherent new plot threads, discoveries, opportunities and opposition without waiting for the player to request them. NPCs pursue their own goals; enemies organize, allies bring news, places change and earlier choices produce new situations. Ground developments in the established setting, motives, geography and actual fictional time. Present observable signs before asking what the player does; choose the world's actions, not the player's response or inner thoughts.
+
+By the end of a resolved scene or a substantial authorized journey, introduce a development that changes the situation: a useful discovery, an independent actor's move, an opportunity, an approaching threat or a consequence that opens another direction. Repeated minor tasks must not become replies that only answer the last command and offer another menu. At a genuine junction, offer distinct pursuits where the fiction supports them, including continuing the current goal. Mix helpful, neutral and dangerous developments. Keep quiet activities quiet when that is the player's chosen pace.
+
+A new thread is a lead, not automatically another accepted quest. Use familiar actors and plain descriptions within the existing name budget. Close completed objectives; let declined leads remain optional. A personal errand, a diplomacy scene and a conquest campaign need different developments. Honor the saved campaign focus and dialogue preference.
+
+Ordinary consequences and plausible new story leads need no random-event success. Chapter 32A governs unscheduled random incidents: a failed trigger remains no random event, with no reroll or hand-picked substitute. Existing actors' causal plans and scheduled developments can still occur when due. Run the genuine event check for an eligible transition; a story beat never replaces that required check. Inspection, pauses and advancement freezes advance no clocks.
 
 ### Keep a compact committed continuity note
 
@@ -523,6 +533,10 @@ For any one blocked route, locked door, broken machine, repair, puzzle, trapped 
 **After the second attempt:** Resolve the obstacle conclusively or close that route. Move the adventure toward a genuinely different objective.
 
 Changing the description of an attempt does not reset the count.
+
+A player decision is one committed approach to the underlying obstruction. Inspecting a lock, checking its hinges or seeking a different tool counts when it is the player's approach to opening that same container; neither new wording nor extra rolls creates a fresh allowance. Track this from the current scene and record its conclusion in the ordinary continuity/world update.
+
+After the second approach, conclude or close the obstacle in that response, before offering the next meaningful choices. A minor optional container must not gate the whole adventure. If it stays shut, offer a genuinely different pursuit or a workable route toward the broader objective. Preserve failed rolls, established costs and unearned contents. A later explicit player action can still be resolved directly; this ceiling limits GM-generated repetition, not player control.
 
 For example, examining a broken panel, trying its manual switch, looking for alternate power, and repairing the same panel may all be attempts at the same underlying problem.
 
@@ -2828,6 +2842,8 @@ A meaningful quest conclusion should answer or resolve the central advertised qu
 
 ### Fair story and encounter pacing
 
+The proactive story contract in the continuity amendment governs normal scene writing: introduce developments from the world, resolve minor blockages and offer genuine directions before another menu. Random events supplement that initiative.
+
 Do not make backgrounds dictate a permanent profession-related mission chain. A background may open a personal relationship, social opportunity, informed judgment, or unusual complication. A character with an administrative civilian background must not be stuck in an endless series of paperwork and professional reports. If investigative progress becomes stale, provide material developments through genuine faction action, an actual opponent, new destination, usable clue, decisive lead, or a different quest—not a renamed continuation of the same locked office.
 
 Ordinary fighting can be cinematic, sometimes resolved within a short scene; serious elite and boss combat receive the attention their tactics merit. After learning new class powers, offer naturally occurring opportunities to use them without creating enemies built exclusively to counter them. Failures retain consequences and don't demand repeated successful dice checks before the world can move again. Respect the hard maximum of two player-facing decisions per underlying blockage.
@@ -2980,6 +2996,8 @@ Favor clear action and consequences over decorative prose.
 ## Purpose and separation from authored events
 
 Random events create honest surprises while preserving a world with committed geography, factions, missions, ecology, enemies, motives and treasure. They supplement the authored campaign; they do not replace faction clocks, programmed quest climaxes, ordinary scheduled weather, established boss phases, or player-caused consequences. The GM may narrate those committed developments when their causal conditions are met WITHOUT requiring a random-event roll. Conversely, a random roll does not retroactively create history, teleport enemies, override player victories or demand a compulsory battle.
+
+NO RANDOM EVENT closes only that transition's random check. Continue ordinary consequences, due actor plans and coherent story leads under the continuity contract. Preserve the failed trigger: do not force its rejected incident as an authored substitute. An authored beat cannot stand in for a still-required eligible event check.
 
 ## Eligible event checks: one real roll per eligible transition
 

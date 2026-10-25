@@ -1,0 +1,39 @@
+{
+  "id": "proactive-story-2026-10-26",
+  "files": {
+    "rulebook-v1.0.txt": [
+      {
+        "new_start": 39878,
+        "before": "Compress uneventful movement, preparation and waiting in clear connecting prose. Explain actual changes in place and elapsed fictional time; preserve geography, resource costs, NPC independence and consequential interruptions. Never teleport, invent an encounter, skip a meaningful player decision or spend a power merely to reach a new scene. Preserve unresolved projects and commitments when the player changes objectives. Include player-supplied thoughts and intentions faithfully; do not manufacture beliefs, motives, memories or commitments. Optional unapproved reflections remain POV drafts under the existing story rule.\n",
+        "after": "Compress uneventful movement, preparation and waiting in clear connecting prose. Explain actual changes in place and elapsed fictional time; preserve geography, resource costs, NPC independence and consequential interruptions. New encounters follow the world-initiative and random-event rules below; preserve meaningful player decisions and use a player's power only when authorized. Preserve unresolved projects and commitments when the player changes objectives. Include player-supplied thoughts and intentions faithfully; do not manufacture beliefs, motives, memories or commitments. Optional unapproved reflections remain POV drafts under the existing story rule.\n"
+      },
+      {
+        "new_start": 40547,
+        "before": "The two-decision obstacle ceiling in Chapter 2 still governs the same underlying obstruction. A renamed inspection, another tool suggestion or a fresh menu does not reset it. After the second approach, resolve or close that route with genuine consequences and give access to a distinct objective. Do not grant automatic success, fabricate a cost or impose combat to enforce pacing.\n",
+        "after": "The two-decision obstacle ceiling in Chapter 2 governs the same underlying obstruction, including an optional locked container. Count the player's committed approaches, not individual dice or new menu headings. After resolving the second approach, that GM reply must conclude the obstacle or close its route and expose a genuinely different objective. Another inspection, tool suggestion or 'look for a key' menu for the same lock does not reset the count. Keep actual failure and costs; the ceiling grants no automatic unlock, reward or forced battle. An explicit typed action remains valid, but the GM must resolve it without restarting a repetitive menu chain. Genuine combat rounds and distinct quest milestones remain intact; a quest label does not exempt a minor blockage.\n\n### Drive the world before offering another menu\n\nThe GM initiates story as well as responding to actions. Introduce coherent new plot threads, discoveries, opportunities and opposition without waiting for the player to request them. NPCs pursue their own goals; enemies organize, allies bring news, places change and earlier choices produce new situations. Ground developments in the established setting, motives, geography and actual fictional time. Present observable signs before asking what the player does; choose the world's actions, not the player's response or inner thoughts.\n\nBy the end of a resolved scene or a substantial authorized journey, introduce a development that changes the situation: a useful discovery, an independent actor's move, an opportunity, an approaching threat or a consequence that opens another direction. Repeated minor tasks must not become replies that only answer the last command and offer another menu. At a genuine junction, offer distinct pursuits where the fiction supports them, including continuing the current goal. Mix helpful, neutral and dangerous developments. Keep quiet activities quiet when that is the player's chosen pace.\n\nA new thread is a lead, not automatically another accepted quest. Use familiar actors and plain descriptions within the existing name budget. Close completed objectives; let declined leads remain optional. A personal errand, a diplomacy scene and a conquest campaign need different developments. Honor the saved campaign focus and dialogue preference.\n\nOrdinary consequences and plausible new story leads need no random-event success. Chapter 32A governs unscheduled random incidents: a failed trigger remains no random event, with no reroll or hand-picked substitute. Existing actors' causal plans and scheduled developments can still occur when due. Run the genuine event check for an eligible transition; a story beat never replaces that required check. Inspection, pauses and advancement freezes advance no clocks.\n"
+      },
+      {
+        "new_start": 94216,
+        "before": "",
+        "after": "\nA player decision is one committed approach to the underlying obstruction. Inspecting a lock, checking its hinges or seeking a different tool counts when it is the player's approach to opening that same container; neither new wording nor extra rolls creates a fresh allowance. Track this from the current scene and record its conclusion in the ordinary continuity/world update.\n\nAfter the second approach, conclude or close the obstacle in that response, before offering the next meaningful choices. A minor optional container must not gate the whole adventure. If it stays shut, offer a genuinely different pursuit or a workable route toward the broader objective. Preserve failed rolls, established costs and unearned contents. A later explicit player action can still be resolved directly; this ceiling limits GM-generated repetition, not player control.\n"
+      },
+      {
+        "new_start": 337451,
+        "before": "",
+        "after": "The proactive story contract in the continuity amendment governs normal scene writing: introduce developments from the world, resolve minor blockages and offer genuine directions before another menu. Random events supplement that initiative.\n\n"
+      },
+      {
+        "new_start": 345702,
+        "before": "",
+        "after": "\nNO RANDOM EVENT closes only that transition's random check. Continue ordinary consequences, due actor plans and coherent story leads under the continuity contract. Preserve the failed trigger: do not force its rejected incident as an authored substitute. An authored beat cannot stand in for a still-required eligible event check.\n"
+      }
+    ],
+    "rule-hardener.txt": [
+      {
+        "new_start": 5226,
+        "before": "Read continuity: connect action/consequence/next beat; explain travel/time. Save threads, scene identity and player thoughts in bounded notes in the SAME save. Renamed obstacles keep the two-decision ceiling. Reuse known state/version; refresh uncertainty/conflicts/omitted facts. Cache rules; batch rolls and one save verifying the commit. Resume/history/export/import on demand.\n",
+        "after": "Read continuity: world initiative, causal transitions/travel/time. Minor obstacles: max two player decisions across renames; resolve or open another route. Save scene/threads/POV in bounded SAME-save notes. Cache state/version/rules; refresh conflicts/omissions. Batch rolls/one verified save; resume/history/export/import on demand.\n"
+      }
+    ]
+  }
+}

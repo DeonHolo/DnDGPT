@@ -35,7 +35,7 @@ Read 17-22/37: freeze clocks/hazards for pending advancement; preserve tracks, o
 
 Read 40-42: proposed, unsaved and committed differ. Use current owned state/version, retry-safe batches. Restyling/inspection/glossary/rule reads/mockups change no play.
 
-Read continuity: connect action/consequence/next beat; explain travel/time. Save threads, scene identity and player thoughts in bounded notes in the SAME save. Renamed obstacles keep the two-decision ceiling. Reuse known state/version; refresh uncertainty/conflicts/omitted facts. Cache rules; batch rolls and one save verifying the commit. Resume/history/export/import on demand.
+Read continuity: world initiative, causal transitions/travel/time. Minor obstacles: max two player decisions across renames; resolve or open another route. Save scene/threads/POV in bounded SAME-save notes. Cache state/version/rules; refresh conflicts/omissions. Batch rolls/one verified save; resume/history/export/import on demand.
 
 ## Presentation and inline glossary
 

@@ -13,7 +13,7 @@ Class offers: creation-order, generation, utility, class-craft, reach, 5, 6, 7, 
 Utility offers and revisions: utility, generation, class-craft and the applicable acquisition chapter.
 Combat: enemy-tactics, roster-cleanup, reach, 12, 13, 14; also 15/16/29/30 when applicable. Reuse prepared enemy profiles; batch roster cleanup with the turn save.
 Advancement: 17, 18 and the applicable track in 19 through 22; interfaces 37/38. Chapter 19 includes standalone-passive eligibility and nested upgrade saves; 38 distinguishes base skills from dependent riders.
-Routine narrative/presentation: continuity and story-ui. Intelligent UI means story, inline glossary, colors and choices in chat; never a seven-chapter dump. Cache current sections; do not reload every turn.
+Routine story/presentation: continuity (world initiative, causal bridges and conclusive two-decision obstacles) and story-ui. Intelligent UI means story, inline glossary, colors and choices in chat; never a seven-chapter dump. Cache current sections; do not reload every turn.
 Story styling/tooltips: story-ui; 33 has the full glossary, 35 colors, 39 choices. Story flavor: story. Ability copy/details: dashboard-writing, 34. Dashboard architecture only: 38; full in-chat sheet only on explicit request.
 Creation completion/advancement: direct-play. Final creation saves Your story, outfit and opening together with changes.begin_adventure=true; selections need no follow-up approval. Advancement continues automatically when all pending tracks are resolved.
 Starting outfit: starting-gear, 23, 27. Equipment: 23 through 28. Story/quests: 31, 32, 32A. Saves/compatibility: 40 through 42.
@@ -22,7 +22,7 @@ Starting outfit: starting-gear, 23, 27. Equipment: 23 through 28. Story/quests: 
 campaign-focus | Campaign focus, dialogue and action-led play | 4828 characters
 living-campaigns | Living campaigns, growth and pacing | 8706 characters
 loading | Rules loading and checklist precedence | 2498 characters
-continuity | Turn continuity and efficient resolution | 5360 characters
+continuity | Turn continuity and efficient resolution | 7797 characters
 creation-order | V1.0 surgical four-turn creation and in-chat continuation precedence | 2012 characters
 direct-play | Direct creation and advancement choices | 2202 characters
 starting-gear | Starting equipment by class rarity | 4973 characters
@@ -47,7 +47,7 @@ sovereign-dashboard | Sovereign dashboard and efficient play | 1411 characters
 
 ## Full chapters
 1 | THE CORE EXPERIENCE | 1127 characters
-2 | THE TWO-DECISION OBSTACLE RULE | 1183 characters
+2 | THE TWO-DECISION OBSTACLE RULE | 2042 characters
 3 | CINEMATIC PACING | 4320 characters
 4 | THE WORLD — THE AGE OF CONVERGENCE (V4.0 WORLD BIBLE) | 15743 characters
 5 | SIX-TIER RARITY SYSTEM | 19324 characters
@@ -77,8 +77,8 @@ sovereign-dashboard | Sovereign dashboard and efficient play | 1411 characters
 29 | SUMMONS AND COMPANIONS | 4476 characters
 30 | FORTUNE CHECKS | 700 characters
 31 | CHARACTER-AWARE GAMEPLAY OPTIONS | 867 characters
-32 | QUESTS, NPCS AND STORY CLARITY | 19982 characters
-32A | LIVING-WORLD RANDOM EVENT ENGINE — V1.0 CODE-ROLLED, CONTEXTUAL, AUDITABLE | 11635 characters
+32 | QUESTS, NPCS AND STORY CLARITY | 20225 characters
+32A | LIVING-WORLD RANDOM EVENT ENGINE — V1.0 CODE-ROLLED, CONTEXTUAL, AUDITABLE | 11967 characters
 33 | INTELLIGENT INTERACTIVE UI | 32819 characters
 34 | SIMPLIFIED ABILITY DISPLAY | 4795 characters
 35 | RARITY COLORS AND VISUAL PRIORITY | 2594 characters

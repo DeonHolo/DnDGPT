@@ -75,7 +75,7 @@ def index_text(text):
              "Utility offers and revisions: utility, generation, class-craft and the applicable acquisition chapter.",
              "Combat: enemy-tactics, roster-cleanup, reach, 12, 13, 14; also 15/16/29/30 when applicable. Reuse prepared enemy profiles; batch roster cleanup with the turn save.",
              "Advancement: 17, 18 and the applicable track in 19 through 22; interfaces 37/38. Chapter 19 includes standalone-passive eligibility and nested upgrade saves; 38 distinguishes base skills from dependent riders.",
-             "Routine narrative/presentation: continuity and story-ui. Intelligent UI means story, inline glossary, colors and choices in chat; never a seven-chapter dump. Cache current sections; do not reload every turn.",
+             "Routine story/presentation: continuity (world initiative, causal bridges and conclusive two-decision obstacles) and story-ui. Intelligent UI means story, inline glossary, colors and choices in chat; never a seven-chapter dump. Cache current sections; do not reload every turn.",
              "Story styling/tooltips: story-ui; 33 has the full glossary, 35 colors, 39 choices. Story flavor: story. Ability copy/details: dashboard-writing, 34. Dashboard architecture only: 38; full in-chat sheet only on explicit request.",
              "Creation completion/advancement: direct-play. Final creation saves Your story, outfit and opening together with changes.begin_adventure=true; selections need no follow-up approval. Advancement continues automatically when all pending tracks are resolved.",
              "Starting outfit: starting-gear, 23, 27. Equipment: 23 through 28. Story/quests: 31, 32, 32A. Saves/compatibility: 40 through 42.", "",
