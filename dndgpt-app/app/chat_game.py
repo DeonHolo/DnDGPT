@@ -71,7 +71,8 @@ def validate_changes(changes, *, allow_empty=False):
     allowed = TEXT_FIELDS | OBJECT_FIELDS | {"character", "equipment", "fictional_time_seconds",
                                            "level_up_freeze", "upsert", "remove", "replace",
                                            "spend_evolution_credit", "event_transition", "sovereign_awards",
-                                           "sovereign_development", "spend_sovereign_evolution", "sovereign_battle", "life_updates"}
+                                           "sovereign_development", "spend_sovereign_evolution", "sovereign_battle", "life_updates",
+                                           "campaign_preferences"}
     if set(changes) - allowed:
         fail(422, "protected_field", "Unknown or server-controlled state field")
     for key in TEXT_FIELDS & changes.keys():
@@ -82,6 +83,9 @@ def validate_changes(changes, *, allow_empty=False):
     if "continuity" in changes:
         from .continuity import validate_continuity
         validate_continuity(changes["continuity"])
+    if "campaign_preferences" in changes:
+        from .campaign_focus import validate_preferences
+        validate_preferences(changes["campaign_preferences"])
     if "fictional_time_seconds" in changes:
         number(changes["fictional_time_seconds"], "fictional_time_seconds", high=10**12)
     if "level_up_freeze" in changes and type(changes["level_up_freeze"]) is not bool:
@@ -147,6 +151,13 @@ def merge_world(before, patch):
 def apply_changes(state, changes, *, correction=False, completing=False, event_receipt=None, dice=None):
     validate_changes(changes, allow_empty=completing)
     projected = copy.deepcopy(state)
+    from .campaign_focus import apply_preferences
+    apply_preferences(state, projected, changes)
+    if set(changes) == {"campaign_preferences"} and not completing:
+        # Preferences alone cannot advance time, migrate powers or release a pause/freeze.
+        if len(canonical(projected).encode()) > 2000000:
+            fail(422, "invalid_chat_update", "Saved record exceeds 2000000 bytes")
+        return projected
     for key in TEXT_FIELDS | OBJECT_FIELDS | {"fictional_time_seconds", "level_up_freeze"}:
         if key in changes:
             if key in {"world", "sovereignty"} and not correction:
@@ -207,7 +218,7 @@ def apply_changes(state, changes, *, correction=False, completing=False, event_r
             fail(422, "time_reversal", "Use an approved correction to move fictional time backwards")
         if state["phase"] != "adventure" and projected["fictional_time_seconds"] != 0:
             fail(423, "adventure_not_authorized", "No fictional time before adventure authorization")
-        if state["phase"] == "ready" and not completing and changes.keys() - {"opening_preview", "world", "notes", "current_location"}:
+        if state["phase"] == "ready" and not completing and changes.keys() - {"opening_preview", "world", "notes", "current_location", "campaign_preferences"}:
             fail(423, "character_confirmed", "Review a correction to change a confirmed character before play")
         if state["phase"] == "adventure" and state["paused"]:
             fail(423, "paused", "Resume explicitly or review a correction while paused")
@@ -347,6 +358,8 @@ class ChatGame:
                      **{key: [] for key in COLLECTIONS}, "world": {}, "creation": {}, "funds": {},
                      "current_location": "Character creation", "opening_preview": "", "notes": "",
                      "fictional_time_seconds": 0, "advancement": {}, "rarity_candidates": {}, "last_event": None}
+            from .campaign_focus import DEFAULTS
+            state["campaign_preferences"] = dict(DEFAULTS)
             if game_id == SOVEREIGN:
                 from .sovereignty import initial
                 state["sovereignty"] = initial()

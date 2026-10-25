@@ -867,7 +867,7 @@ function renderCombat(next){
   selectCombatTab(combatTab,false);
 }
 function selectWorldTab(id,save=true){
-  worldTab=["log","living"].includes(id)?id:"world";
+  worldTab=["log","living","objectives"].includes(id)?id:"world";
   for(const button of document.querySelectorAll('#worldTabs [role="tab"]')){
     const selected=button.dataset.world===worldTab;button.setAttribute("aria-selected",String(selected));button.tabIndex=selected?0:-1;
   }
@@ -877,12 +877,12 @@ function selectWorldTab(id,save=true){
 function renderWorld(next){
   const root=$("world");root.replaceChildren();
   const tabs=element("div",undefined,"gear-tabs");tabs.id="worldTabs";tabs.setAttribute("role","tablist");tabs.setAttribute("aria-label","World and campaign log");root.append(tabs);
-  for(const [id,label]of [["world","World"],["log","Campaign Log"],["living","People & places"]]){
+  for(const [id,label]of [["world","World"],["log","Campaign Log"],["living","People & places"],["objectives","Objectives"]]){
     const button=element("button",label);button.id="world-tab-"+id;button.type="button";button.dataset.world=id;
     button.setAttribute("role","tab");button.setAttribute("aria-controls","world-page-"+id);button.onclick=()=>selectWorldTab(id);
     button.onkeydown=event=>{
       if(event.altKey||event.ctrlKey||event.metaKey||!["ArrowRight","ArrowLeft","Home","End"].includes(event.key))return;
-      event.preventDefault();const keys=["world","log","living"],index=keys.indexOf(id),target=event.key==="Home"?keys[0]:event.key==="End"?keys[2]:keys[(index+(event.key==="ArrowRight"?1:2))%3];
+      event.preventDefault();const keys=["world","log","living","objectives"],index=keys.indexOf(id),target=event.key==="Home"?keys[0]:event.key==="End"?keys.at(-1):keys[(index+(event.key==="ArrowRight"?1:keys.length-1))%keys.length];
       selectWorldTab(target);$("world-tab-"+target).focus();
     };
     tabs.append(button);
@@ -1054,7 +1054,7 @@ function renderCampaign(next){
   renderCombat(combatView);
   renderGear(next,gear);
   renderQuests($("quests"),next.quest_log);
-  renderWorld(next);renderCampaignLife(next);renderEventChecks(next);renderSovereignty(next);
+  renderWorld(next);renderCampaignLife(next);renderCampaignFocus(next);renderEventChecks(next);renderSovereignty(next);
   renderChoices();restorePreferences();updateSaveTools();
 }
 function receive(result,verified=false){

@@ -45,6 +45,11 @@ def reward(value, contract=False):
 
 def normalize(quest):
     require(nonblank(quest.get("name") or quest.get("title"), 200), "A quest needs a short title")
+    if "activity" in quest:
+        require(type(quest["activity"]) is str and quest["activity"] in {"hunt", "conquest"}, "Activity must be hunt or conquest")
+    for key in ("target", "known_opposition", "victory_benefit"):
+        if key in quest:
+            require(nonblank(quest[key]), "Activity details need short public text")
     require(nonblank(quest.get("finish_condition")), "A quest needs an explicit finish condition")
     objectives = quest.get("objectives")
     require(type(objectives) is list and 1 <= len(objectives) <= 12, "A quest needs 1..12 finite objectives")

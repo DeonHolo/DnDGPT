@@ -69,6 +69,8 @@ def safe_event(event):
 
 def public_state(state):
     result = json.loads(canonical(state))
+    from .campaign_focus import preferences
+    result["campaign_preferences"] = preferences(state)
     from .game_profiles import game_id, VERSION
     result["game_id"] = game_id(state)
     result["game_rules_version"] = state.get("game_rules_version", VERSION)

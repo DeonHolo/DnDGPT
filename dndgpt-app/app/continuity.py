@@ -25,12 +25,14 @@ def short(value, limit=240):
 
 
 def resume_brief(state):
+    from .campaign_focus import preferences
     note = state.get("continuity", {})
     character = state.get("character", {})
     event = state.get("last_event") or {}
     quests = [row for row in state.get("quest_log", []) if isinstance(row, dict) and
               str(row.get("status", "active")).lower() not in {"completed", "failed", "abandoned"}]
     return {"campaign_id": state["id"], "version": state["version"],
+            "campaign_preferences": preferences(state),
             "name": state.get("name", ""), "phase": state.get("phase"),
             "paused": state["paused"], "level_up_freeze": state["level_up_freeze"],
             "current_location": short(state.get("current_location")),

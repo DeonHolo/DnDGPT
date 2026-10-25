@@ -13,7 +13,7 @@ function renderReward(parent,title,reward,status){
 }
 function renderObjectives(parent,rows){
   const list=element("ul",undefined,"quest-objectives");
-  for(const objective of rows){
+  for(const objective of rows.filter(row=>row.known_to_player!==false)){
     const status=objective.status||"pending",li=element("li",undefined,status==="done"?"done":"");
     const icon=element("span",status==="done"?"✓":status==="blocked"?"!":"○","objective-icon");icon.setAttribute("aria-hidden","true");
     const copy=element("div");copy.append(element("span",objective.text||"Objective"));
@@ -50,6 +50,7 @@ function renderQuestCard(parent,quest){
   parent.append(card);
 }
 function renderQuests(parent,rows){
+  rows=rows.filter(row=>row.known_to_player!==false);
   parent.replaceChildren();if(!rows.length){paragraph(parent,"No quests recorded.","muted");return}
   const active=rows.filter(row=>!["completed","failed","abandoned"].includes(questStatus(row)));
   for(const row of active)renderQuestCard(parent,row);

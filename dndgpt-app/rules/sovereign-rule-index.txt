@@ -7,6 +7,7 @@ Offsets are relative to the requested selection. Finishing a section is not a co
 An omitted section still governs play; fetch it when the situation needs it.
 
 World preview: loading, world-preview, story, ancestry, clear-story, 4.
+Campaign preferences: campaign-focus. Apply saved focus and dialogue from every view; choose during existing creation, change on request, no extra turn or routine read.
 Quests/rewards: quest-journal, 17, 24, 32. Random events: 32A. Saved illustrations: gallery.
 Class offers: creation-order, generation, utility, class-craft, reach, 5, 6, 7, 8. Read 9/10/11 for their creation stage.
 Utility offers and revisions: utility, generation, class-craft and the applicable acquisition chapter.
@@ -18,6 +19,7 @@ Creation completion/advancement: direct-play. Final creation saves Your story, o
 Starting outfit: starting-gear, 23, 27. Equipment: 23 through 28. Story/quests: 31, 32, 32A. Saves/compatibility: 40 through 42.
 
 ## Current amendments
+campaign-focus | Campaign focus, dialogue and action-led play | 4828 characters
 living-campaigns | Living campaigns, growth and pacing | 8706 characters
 loading | Rules loading and checklist precedence | 2498 characters
 continuity | Turn continuity and efficient resolution | 5360 characters
@@ -37,7 +39,7 @@ ancestry | Player ancestry and nonhuman identity | 2109 characters
 dashboard-writing | Player-facing dashboard writing contract | 6144 characters
 story-ui | Compact Intelligent Story UI contract | 6877 characters
 enemy-tactics | Enemy identity, adaptive tactics and visible voice | 3909 characters
-sovereign-creation | Sovereign creation and inherited rules | 5067 characters
+sovereign-creation | Sovereign creation and inherited rules | 5251 characters
 sovereign-progression | Sovereign ownership and progression | 6346 characters
 sovereign-warfare | Sovereign warfare and consequences | 4004 characters
 sovereign-dashboard | Sovereign dashboard and efficient play | 1411 characters

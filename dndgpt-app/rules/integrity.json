@@ -1,9 +1,9 @@
 {
   "rulebook-v1.0.txt": {
     "original_sha256": "fc1cd1ed39a9fc35961d0d1e9a5feb3035015339d435c6a3af80a3515960597b",
-    "sha256": "d4441c0e8703ab07b258cac22ce20b2cc2f95e1b098b5006a87b5ffa61adcf9c",
+    "sha256": "6d28b20a0f4bf31f27ac697d95af3f3eb05743ef14513a4d74d30a81084df25c",
     "original_bytes": 324754,
-    "bytes": 450212,
+    "bytes": 455040,
     "replacements": [
       [
         "V4.2",
@@ -240,14 +240,20 @@
         "source": "direct-creation-starting-gift-art-2026-10-25.json",
         "before_sha256": "d3abeee6eecb866d9e8b64a6500636fd292052a724c9fd273383222fc8fe28c7",
         "after_sha256": "d4441c0e8703ab07b258cac22ce20b2cc2f95e1b098b5006a87b5ffa61adcf9c"
+      },
+      {
+        "id": "campaign-focus-dialogue-2026-10-25",
+        "source": "campaign-focus-dialogue-2026-10-25.json",
+        "before_sha256": "d4441c0e8703ab07b258cac22ce20b2cc2f95e1b098b5006a87b5ffa61adcf9c",
+        "after_sha256": "6d28b20a0f4bf31f27ac697d95af3f3eb05743ef14513a4d74d30a81084df25c"
       }
     ]
   },
   "rule-hardener.txt": {
     "original_sha256": "bc21947f299ae37dc306581aa7110231809140c332ed4e8b1ceccbb86cbce8da",
-    "sha256": "ce36e4de47397ad3f84774cc8c3ea2b864436d4f738a6abf46099dc0dcc9f866",
+    "sha256": "ac3a7a1e0ca906b0bb64c486eb666343dfe2dbf6eacb8eeea08aca1d05d45901",
     "original_bytes": 10370,
-    "bytes": 7984,
+    "bytes": 7943,
     "replacements": [
       [
         "V4.2-R1",
@@ -450,6 +456,12 @@
         "source": "direct-creation-starting-gift-art-2026-10-25.json",
         "before_sha256": "0040e7c6a9f01bd8466c9812bae1244f72b1798f75d1a07fd1def32a0a7d8344",
         "after_sha256": "ce36e4de47397ad3f84774cc8c3ea2b864436d4f738a6abf46099dc0dcc9f866"
+      },
+      {
+        "id": "campaign-focus-dialogue-2026-10-25",
+        "source": "campaign-focus-dialogue-2026-10-25.json",
+        "before_sha256": "ce36e4de47397ad3f84774cc8c3ea2b864436d4f738a6abf46099dc0dcc9f866",
+        "after_sha256": "ac3a7a1e0ca906b0bb64c486eb666343dfe2dbf6eacb8eeea08aca1d05d45901"
       }
     ]
   }

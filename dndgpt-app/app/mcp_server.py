@@ -209,6 +209,9 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         Update it in this SAME save after a meaningful change; never invent a thought or future outcome.
         life_updates optionally saves actors/places, evidence-backed events and player-authorized pacing
         in this same call. Read living-campaigns before first use; no per-turn review/read is required.
+        campaign_preferences merges focus=mixed|hunt-explore|conquest and
+        dialogue=normal|minimal|on-request. Read campaign-focus once when selecting/changing it;
+        keep the saved preference on future turns. A preferences-only save preserves pause/time/build.
         Never set mode/phase/paused/version/authorization. Draft preparation is allowed before play;
         After the player's final Background/attribute/name choices, write character.story_summary,
         starting equipment and opening_preview in this SAME save with changes.begin_adventure=true
@@ -219,7 +222,7 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         Preserve a player-requested draft/pause. Never infer unchosen build options or opening actions.
         Advancement selections/banking apply immediately; clear level_up_freeze once all pending
         tracks are resolved, then continue already ordered actions without confirmation/resume prompts.
-        Paused games require explicit resume or approved correct_chat_state. Reuse EXACT arguments
+        Gameplay in paused games requires explicit resume or approved correct_chat_state. Reuse EXACT arguments
         and action_id after timeout; never double-apply a reward. A 409 needs a fresh read and review.
         """
         return invoke(lambda owner: campaign_view(chat_game.update(owner, campaign_id, action_id,

@@ -3,6 +3,7 @@ import re
 
 
 AMENDMENTS = {
+    "campaign-focus": "Campaign focus, dialogue and action-led play",
     "living-campaigns": "Living campaigns, growth and pacing",
     "loading": "Rules loading and checklist precedence",
     "continuity": "Turn continuity and efficient resolution",
@@ -67,6 +68,7 @@ def index_text(text):
              "Offsets are relative to the requested selection. Finishing a section is not a complete manual read.",
              "An omitted section still governs play; fetch it when the situation needs it.", "",
              "World preview: loading, world-preview, story, ancestry, clear-story, 4.",
+             "Campaign preferences: campaign-focus. Apply saved focus and dialogue from every view; choose during existing creation, change on request, no extra turn or routine read.",
              "Quests/rewards: quest-journal, 17, 24, 32. Random events: 32A. Saved illustrations: gallery.",
              "Class offers: creation-order, generation, utility, class-craft, reach, 5, 6, 7, 8. Read 9/10/11 for their creation stage.",
              "Utility offers and revisions: utility, generation, class-craft and the applicable acquisition chapter.",

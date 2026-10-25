@@ -19,7 +19,7 @@ STATE_FIELDS = {"id", "name", "version", "mode", "rules_version", "rules_profile
                 "disposable", "character", "level_up_freeze", "equipment", "current_location", "opening_preview",
                 "notes", "fictional_time_seconds", "world", "creation", "advancement", "funds",
                 "rarity_candidates", "last_event", "continuity", "restored_from"} | COLLECTIONS
-STATE_FIELDS |= {"sovereignty", "quest_settlements", "reward_credits", "event_tracking", "campaign_life"}
+STATE_FIELDS |= {"sovereignty", "quest_settlements", "reward_credits", "event_tracking", "campaign_life", "campaign_preferences"}
 
 
 def digest(value):
@@ -33,6 +33,9 @@ def validate_archive(archive):
     if type(source) is not dict or source.keys() - STATE_FIELDS:
         fail(422, "invalid_archive", "Unsupported campaign fields")
     bounded_json(source)
+    if "campaign_preferences" in source:
+        from .campaign_focus import validate_preferences
+        validate_preferences(source["campaign_preferences"])
     if "campaign_life" in source:
         from .campaign_life import validate_snapshot
         validate_snapshot(source["campaign_life"])
@@ -44,7 +47,7 @@ def validate_archive(archive):
             or not secrets.compare_digest(digest(source), checksum)):
         fail(422, "archive_checksum", "Campaign export is damaged or its checksum does not match")
     required = (STATE_FIELDS - {"continuity", "restored_from", "rules_profile", "game_id", "game_rules_version", "sovereignty",
-                               "quest_settlements", "reward_credits", "event_tracking", "campaign_life"})
+                               "quest_settlements", "reward_credits", "event_tracking", "campaign_life", "campaign_preferences"})
     if not required <= source.keys() or source["mode"] != "chat":
         fail(422, "invalid_archive", "Only complete chat-led campaign snapshots can be restored")
     if type(source["phase"]) is not str or source["phase"] not in {"character_draft", "ready", "adventure"}:

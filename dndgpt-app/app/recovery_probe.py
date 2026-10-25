@@ -31,7 +31,8 @@ def check_recovery(engine, owner, state, run):
         return result
 
     try:
-        changes = {"continuity": {"scene": "Disposable recovery scene", "last_player_intent": "Inspect the fixture",
+        changes = {"campaign_preferences": {"focus": "conquest", "dialogue": "minimal"},
+            "continuity": {"scene": "Disposable recovery scene", "last_player_intent": "Inspect the fixture",
             "last_action": "Inspected the fixture", "outcome": "The fixture is intact",
             "pending_decision": "Continue the test?", "unresolved_threads": ["Fixture repair pending"],
             "npc_commitments": ["Fixture keeper returns at noon"]},
@@ -56,6 +57,11 @@ def check_recovery(engine, owner, state, run):
         assert updated["campaign_life"]["actors"][0]["commitments"][0]["text"] == "The fixture keeper returns at noon."
         assert updated["campaign_life"]["places"][0]["features"][0]["id"] == "passage"
         checks.append("living_memory_in_existing_save")
+        for view in ("full", "turn", "resume"):
+            shown = model_view(updated, view)
+            preferences = shown["resume_brief"]["campaign_preferences"] if view == "resume" else shown["campaign_preferences"]
+            assert preferences == {"focus": "conquest", "dialogue": "minimal"}
+        checks.append("campaign_focus_in_existing_save_and_views")
         measure("separate_state_and_approval_reads", lambda: (
             engine.get_campaign(owner, updated["id"]), engine.pending_approval(owner, updated["id"])))
         context = measure("combined_state_and_approval_read", lambda: engine.campaign_context(owner, updated["id"]))
@@ -98,6 +104,8 @@ def check_recovery(engine, owner, state, run):
         assert restored["character"] == updated["character"] and restored["continuity"] == updated["continuity"]
         assert restored["campaign_life"] == updated["campaign_life"]
         checks.append("living_memory_restored")
+        assert restored["campaign_preferences"] == updated["campaign_preferences"]
+        checks.append("campaign_focus_restored")
         assert restored["phase"] == updated["phase"] and restored["fictional_time_seconds"] == updated["fictional_time_seconds"]
         assert archive.restore(owner, exported, "restore-" + run, True) == restored_result
         assert engine.get_campaign(owner, updated["id"]) == updated
