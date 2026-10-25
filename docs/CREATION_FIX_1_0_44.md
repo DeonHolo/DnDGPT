@@ -18,4 +18,14 @@ Requested new images use the Gallery house direction: painted fantasy with gouac
 
 Local full suite: 621 passed, two existing dependency warnings. Focused tests cover old-schema nested starts, a complete Sovereign creation plus a free permanent starting evolution, separate Level 2 entitlement, no approval control, idempotent replay, incomplete-build rollback, owner/version guards and two already-applied creation overrides without reapplication. Both hardeners remain below 8,000 characters. Canonical/shared revisions are reversible, and compiled and bundled copies are synchronized.
 
-Production inspection was read-only. The affected draft had its completed story/opening, four matching equipped outfit items and two permanently applied creation overrides. This release does not itself start or advance that player campaign. Hosted release verification is recorded after publication.
+Production inspection was read-only. The affected draft had its completed story/opening, four matching equipped outfit items and two permanently applied creation overrides. This release does not itself start or advance that player campaign. Hosted verification is complete.
+
+## Published verification
+
+Version 1.0.44 is live. Code revision 946febd78dc220d0712936a02d5ca9ecb5e271c7 passed [the complete 621-test release workflow](https://github.com/DeonHolo/DnDGPT/actions/runs/40165170728). Public deployment 6add92080b9fefcc4b1f is ready; health execution 6add92757a1944e32c28 returned 200 and version 1.0.44.
+
+Hosted execution 6add91c2a6a40fff06a4 passed 16 hosting and 13 recovery checks in 23.24 seconds, including cached-schema creation start. That run used 7311881; the final follow-up only adds explicit placement in the creation chapter, updates compiled references/indexes and strengthens the corresponding test. The underlying creation/allowance implementation is unchanged.
+
+An existing explicitly disposable native-tool fixture reproduced creation_approval_retired before release. Afterwards the same legacy call returned the direct-save next_action without an error, approval or version/phase mutation. The real affected campaign was inspected read-only and remained at its existing version and draft phase.
+
+A separate native ChatGPT temporary chat fetched the published Sovereign rules and correctly reported the free upgrade on the Signature/Title turn, the separate Level 2 upgrade, the changes.begin_adventure compatibility argument and actual-name presentation. Its source_sha256 matched the deployed and local compiled rulebook: 4e616bd037d24495dd53e7500329aa20b3aa418b5ab7f8500eb8b68e1824dc8a. The displayed 36-second duration belongs to this controlled read-only check, not a gameplay latency benchmark. No player campaign was opened, advanced or rewritten by this verification. Screenshot and raw native reply are retained locally under dndgpt-app/test-results.
