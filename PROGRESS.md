@@ -1,6 +1,12 @@
 # Continuity and recovery release
 
-## Latest published follow-up — search and Gallery — 2026-10-25
+## Latest published follow-up — rosters and Sovereignty — 2026-10-25
+
+Runtime **1.0.49**, checked commit `12838a739e5d4f456a76045b22a7549338eb55ef`: one Sovereignty record per owner, distinct earned upgrades/core capabilities, original foundation snapshots where genuinely available, readable status/stat copy, and compact active combat rosters with a shared inspector. Both games have a cached roster-cleanup rule; cleanup uses the normal save and preserves protected Sovereign casualty history.
+
+Verification: **659 CI + 83 browser checks passed**; **22 hosted/public-connection + 15 recovery checks passed**. Public health reports 1.0.49; native rules match released hashes. No player campaign edited or ZIP uploaded. Reopen existing dashboards for the new UI. Details: `docs/ROSTER_SOVEREIGNTY_RELEASE_2026_10_25.md`.
+
+## Previous published follow-up — search and Gallery — 2026-10-25
 
 Runtime **1.0.48**, checked commit `4c5fd73d5222637fab4642792544b62465bf0fc0`: current-campaign dashboard search opens matching panels, items, rules/upgrades and archived entries. Typing stays local. Public storage access was repaired after `401 api_key_invalid` failures affected the public connection while internal checks passed.
 
