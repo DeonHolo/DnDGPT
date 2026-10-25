@@ -8,7 +8,7 @@ import uuid
 import httpx
 
 from . import records
-from .engine import fail
+from .engine import EngineError, fail
 from .storage import canonical
 
 FIELDS = {"id": "record_id", "owner": "owner", "campaign_id": "campaign_id",
@@ -40,7 +40,15 @@ class AppwriteAPI:
         if response.status_code == 409:
             fail(409, "storage_conflict", "Concurrent save conflict; read state and retry the same action_id")
         if not response.is_success:
-            fail(503, "storage_unavailable", "Hosted storage rejected the request")
+            error = EngineError(503, "storage_unavailable", "Hosted storage rejected the request")
+            try:
+                kind = response.json().get("type", "unknown")
+            except (ValueError, AttributeError):
+                kind = "unknown"
+            error.upstream_status = response.status_code
+            error.upstream_type = kind if (type(kind) is str and len(kind) <= 80 and
+                                          kind.isascii() and kind.replace("_", "").isalnum()) else "unknown"
+            raise error
         return response.json() if response.content else {}
 
 

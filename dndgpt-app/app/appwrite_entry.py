@@ -64,6 +64,8 @@ async def main(context):
         application = create_app(auth_config=config, token_verifier=verifier(config), store=store)
         return await dispatch(context, application, config.resource_url)
     except EngineError as error:
+        if hasattr(error, "upstream_status") and callable(getattr(context, "error", None)):
+            context.error(f"Hosted storage rejected request: status={error.upstream_status} type={error.upstream_type}")
         return context.res.json({"code": error.code, "detail": str(error)}, error.status)
     except (KeyError, ValueError):
         return context.res.json({"detail": "Hosted configuration is incomplete"}, 503)
