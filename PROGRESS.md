@@ -1,6 +1,12 @@
 # Continuity and recovery release
 
-## Latest published follow-up — 2026-10-25
+## Latest published follow-up — search and Gallery — 2026-10-25
+
+Runtime **1.0.48**, checked commit `4c5fd73d5222637fab4642792544b62465bf0fc0`: current-campaign dashboard search opens matching panels, items, rules/upgrades and archived entries. Typing stays local. Public storage access was repaired after `401 api_key_invalid` failures affected the public connection while internal checks passed.
+
+Verification: **650 CI + 65 browser checks passed**; live public health reports 1.0.48; native MCP reads succeed; **22 hosted/public-connection + 15 recovery checks passed** on disposable records. Original player artworks have not been resaved from their ChatGPT conversation. No player campaign edited or ZIP uploaded. Details: `docs/SEARCH_GALLERY_RELEASE_2026_10_25.md`.
+
+## Previously published follow-up — 2026-10-25
 
 Application **1.0.45**, implementation `86032ca0e71b52a40e58cf6076056190cb8e777b`: both games have saved campaign focus/dialogue preferences and an Objectives view. Sovereign Mixed defaults to 70% personal adventure / 30% strategy; Conquest can center warfare. Preferences-only changes preserve pause/time/build. Finite hunts, conquest aftermath and delegated upkeep reuse existing quest/living-campaign records and the normal batched save. Character/start/level-up choices remain direct under the newer rules; the original approval boundaries below are historical.
 
