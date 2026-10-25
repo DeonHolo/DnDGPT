@@ -6,6 +6,8 @@ Skills open Full rules. A dependent upgrade opens its parent ability's Upgrades 
 
 Filtering and showing more results happen in the browser. Typing makes no server or model requests. Search uses player-facing fields from the current dashboard snapshot; it does not search other campaigns or GM-only records.
 
+Maintainers: after editing a dashboard module, run `python -m scripts.build_dashboard_scripts` from `dndgpt-app` and commit `app/dashboard_modules.min.js`. The hosted service needs no Node/npm dependency. CI checks the source hash and the dashboard's existing 1 MB resource limit.
+
 ## Gallery outage on 2026-10-25
 
 The public connection returned `503 storage_unavailable` even for health checks and campaign/rule reads. Safe provider diagnostics identified `401 api_key_invalid` from its injected storage credential. Internal Appwrite executions of the same code succeeded, so those earlier checks did not cover the failure.
