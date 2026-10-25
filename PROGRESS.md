@@ -1,5 +1,11 @@
 # Continuity and recovery release
 
+## Latest published follow-up — 2026-10-25
+
+Application **1.0.45**, implementation `86032ca0e71b52a40e58cf6076056190cb8e777b`: both games have saved campaign focus/dialogue preferences and an Objectives view. Sovereign Mixed defaults to 70% personal adventure / 30% strategy; Conquest can center warfare. Preferences-only changes preserve pause/time/build. Finite hunts, conquest aftermath and delegated upkeep reuse existing quest/living-campaign records and the normal batched save. Character/start/level-up choices remain direct under the newer rules; the original approval boundaries below are historical.
+
+Final CI: 641 passed. In-app simulated-host checks: 46 passed. Hosted disposable checks: 16 hosting + 15 recovery passed. Native rules returned matching source hashes. Existing player campaigns were not changed; no ZIP upload. Details: `docs/CAMPAIGN_FOCUS_RELEASE_2026_10_25.md`. Reusable Personalization prompt: `docs/INTELLIGENT_UI_PROMPT.txt` (4,575 characters).
+
 Approved 2026-10-21. Baseline: `6dec766` on `main`.
 
 ## Scope and acceptance
