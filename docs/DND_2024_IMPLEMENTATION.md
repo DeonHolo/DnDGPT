@@ -38,6 +38,8 @@ Load relevant sections, cache source entries, batch character/party updates into
 
 ## Verification and remaining limits
 
+- **Published 1.1.1:** checked implementation `d53b070fc8c7cc20f06c65a360c78d594b62b125`; [main CI 41458180141](https://github.com/DeonHolo/DnDGPT/actions/runs/41458180141) passes all **697 tests**, hosted-runtime installation and packaging. Public health reports 1.1.1 with D&D as default. Every one of the fifteen live backgrounds matches its local source hash and native dimensions; cache headers are preserved, and anonymous campaign/MCP requests return 401. The published site serves the free-starter/scenic copy. Native MCP returns the complete 5,750-character D&D hardener with matching SHA-256 `68bf35ea1dcf3908ed448a77ca3bac736d68c814c520b8804171881319ceebfa`. Browser/source/live reports and the starter screenshot are in the ignored local `dndgpt-app/test-results` directory. The widget is 255,579 bytes before production-origin URLs are added.
+
 - Follow-up 1.1.1 passes **46 focused checks and 13 in-app browser checks**. The source reader fetched all ten official chapters in 0.902 seconds in a local real-network check; a second section read from memory took 0.000042 seconds. The UI test confirms that Play Frozen Sick submits its actual action, needs no upload, and keeps private GM content hidden. These timings exclude the model and hosted storage.
 - Six packaging checks pass after including every catalogue artwork, nested D&D reference file, attribution and upstream notice in the optional source bundle. Runtime campaign data stays excluded. The user's hosted connection updates directly; no ZIP upload is part of play.
 
