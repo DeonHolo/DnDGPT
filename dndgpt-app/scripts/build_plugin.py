@@ -70,9 +70,12 @@ def build(plugin, output=None):
     for folder, suffixes in (("app", {".py", ".html", ".css", ".js"}), ("rules", {".txt", ".json"}),
                              ("scripts", {".py"}), ("tests", {".py", ".html"})):
         sources.extend(p for p in (APP / folder).iterdir() if p.is_file() and p.suffix in suffixes)
-    sources.extend((APP / "app/assets").glob("*.avif"))
+    from app.scenes import SCENES
+    sources.extend(APP / "app/assets" / scene["asset"] for scene in SCENES if scene.get("asset"))
     sources.extend((APP / "app/assets/layouts").glob("*.svg"))
     sources.extend(p for p in (APP / "rules/sovereign").glob("*") if p.suffix in {".txt", ".json"})
+    sources.extend(p for p in (APP / "rules/dnd2024").iterdir() if p.suffix in {".txt", ".json", ".md"})
+    sources.append(APP / "third_party/dnd-mcp/NOTICE.md")
     browser_report = APP / "test-results/browser.json"
     if browser_report.exists():
         sources.append(browser_report)

@@ -39,6 +39,7 @@ Load relevant sections, cache source entries, batch character/party updates into
 ## Verification and remaining limits
 
 - Follow-up 1.1.1 passes **46 focused checks and 13 in-app browser checks**. The source reader fetched all ten official chapters in 0.902 seconds in a local real-network check; a second section read from memory took 0.000042 seconds. The UI test confirms that Play Frozen Sick submits its actual action, needs no upload, and keeps private GM content hidden. These timings exclude the model and hosted storage.
+- Six packaging checks pass after including every catalogue artwork, nested D&D reference file, attribution and upstream notice in the optional source bundle. Runtime campaign data stays excluded. The user's hosted connection updates directly; no ZIP upload is part of play.
 
 - The first complete passing CI run for the D&D implementation is [41392781209](https://github.com/DeonHolo/DnDGPT/actions/runs/41392781209), before the wallpaper follow-up. It covers source synchronization, an isolated hosted installation, the full Python suite and portable packaging.
 - The wallpaper follow-up passes 37 focused D&D and scene tests, including owner isolation, separate game preferences, reference lookup, private adventure sources, reusable copies, arithmetic, import/export and real MCP transport. After separating original-resolution artwork, the widget HTML is 256,348 bytes, below 1,048,576 bytes. Additional checks exercise exact source bytes, original dimensions, caching, first-party CSP and denial of uncatalogued/private paths.
