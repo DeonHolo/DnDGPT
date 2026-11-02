@@ -13,7 +13,7 @@ from dataclasses import asdict
 from .rules import ATTRIBUTES, EQUIPMENT_SLOTS, Dice, TurnBudget, award_xp, derived, integer
 from .storage import Store, canonical
 from .version import APP_VERSION, RULES_VERSION
-from .scenes import SCENE_IDS
+from .scenes import SCENE_IDS, scene_ids_for_game
 from . import combat, gear
 from . import records
 
@@ -578,7 +578,7 @@ class Engine:
 
     def set_view_preferences(self, owner, preferences):
         keys = {"panels", "details", "hud_hidden"}
-        if type(preferences) is not dict or not keys <= set(preferences) <= keys | {"equipment_tab", "skills_tab", "world_tab", "combat_tab", "scene", "layout", "ambient_motion"}:
+        if type(preferences) is not dict or not keys <= set(preferences) <= keys | {"equipment_tab", "skills_tab", "world_tab", "combat_tab", "scene", "game_scenes", "layout", "ambient_motion"}:
             fail(422, "invalid_preferences", "Preferences require panels, details and hud_hidden; display choices are optional")
         if "equipment_tab" in preferences and preferences["equipment_tab"] not in ("equipment", "inventory"):
             fail(422, "invalid_preferences", "equipment_tab must be equipment or inventory")
@@ -591,6 +591,12 @@ class Engine:
         if "scene" in preferences and (not isinstance(preferences["scene"], str) or
                                        preferences["scene"] not in SCENE_IDS):
             fail(422, "invalid_preferences", "Unknown reading atmosphere")
+        if "game_scenes" in preferences:
+            choices = preferences["game_scenes"]
+            if (type(choices) is not dict or not set(choices) <= {"dnd-2024", "age-of-convergence", "sovereign-system"}
+                    or any(type(scene) is not str or scene not in scene_ids_for_game(game)
+                           for game, scene in choices.items())):
+                fail(422, "invalid_preferences", "Choose an available reading atmosphere for each game")
         if type(preferences["hud_hidden"]) is not bool:
             fail(422, "invalid_preferences", "hud_hidden must be boolean")
         if "layout" in preferences and (not isinstance(preferences["layout"], str) or

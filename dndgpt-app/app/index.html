@@ -81,7 +81,7 @@ meter::-webkit-meter-optimum-value{border-radius:2px;background:currentColor}met
 .journal-entry{position:relative;margin-left:5px;padding:0 0 24px 20px;border-left:1px solid var(--line)}.journal-entry::before{content:"";position:absolute;top:8px;left:-4px;width:7px;height:7px;background:var(--gold);transform:rotate(45deg)}
 .journal-entry h3{font:600 1rem/1.4 Georgia,serif}.journal-entry .entry-meta{margin-bottom:8px}.journal-entry:last-child{padding-bottom:4px}
 .ability-flavor{font:italic 1rem/1.65 Georgia,"Times New Roman",serif;color:var(--muted);margin:10px 0 20px}.character-story{margin:22px 0;padding:18px 0;border-block:1px solid var(--line)}.character-story h3{font-size:1.15rem}.character-story p{font:400 1rem/1.75 Georgia,"Times New Roman",serif}.pov-note{margin:14px 0 0;padding:12px 16px;border-left:2px solid var(--gold);background:var(--soft)}.pov-note .pov-label{font-size:.67rem;font-weight:600;line-height:1.4;letter-spacing:.08em;color:var(--gold)}.pov-note p{font:italic 1rem/1.65 Georgia,"Times New Roman",serif;margin:6px 0}
-.scene-controls{display:grid;gap:7px}.scene-controls label{font-size:.82rem;color:var(--muted)}#sceneSelect{width:100%;min-height:44px}#artCredit{margin:0;line-height:1.6}#artCredit a{color:var(--gold)}
+.scene-controls{display:grid;gap:7px}.scene-controls label{font-size:.82rem;color:var(--muted)}#sceneSelect{width:100%;min-height:44px}#artCredit{margin:0;line-height:1.6}#artCredit a{color:var(--gold)}.artwork-notice{display:block;margin-top:6px;font-size:.78rem}
 html[data-artwork="true"] .masthead{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:14px 16px}
 html[data-artwork="true"] .toolbar{background:var(--paper);border-radius:4px;padding:8px 12px}
 html[data-artwork="true"] #notice:not(:empty){background:var(--paper);border-radius:4px;padding:6px 10px;width:fit-content}
@@ -421,7 +421,7 @@ function persistPreferences(){
     skills_tab:skillTab,
     world_tab:worldTab,
     combat_tab:combatTab,
-    scene, layout, ambient_motion:ambientMotion
+    scene, game_scenes:preferences.game_scenes||{}, layout, ambient_motion:ambientMotion
   };
   try{window.openai?.setWidgetState?.({game_id:currentGame,campaign_id:state?.id||lastSelected,modelContent:selectedGameContext(),view_preferences:preferences,campaign_deletion:deletionStarted?deletion:null})}catch{}
   clearTimeout(savingTimer);
@@ -437,7 +437,7 @@ function restorePreferences(){
   selectSkillTab(preferences.skills_tab,false);
   selectWorldTab(preferences.world_tab,false);
   selectCombatTab(preferences.combat_tab,false);
-  selectScene(preferences.scene||scene,false);
+  selectScene(preferences.game_scenes?.[currentGame]||preferences.scene||scene,false);
   $("hud").hidden=preferences.hud_hidden;
   selectLayout(preferences.layout||"original",false);
   setAmbientMotion(preferences.ambient_motion!==false,false);
@@ -495,7 +495,8 @@ function renderChoices(){
 }
 function format(value){return typeof value==="string"?value:JSON.stringify(value,null,2)}
 function selectScene(value,save=true){
-  const selected=sceneCatalog.find(option=>option.id===value)||sceneCatalog[0];scene=selected.id;
+  const selected=sceneCatalog.find(option=>option.id===value&&(!option.game_id||option.game_id===currentGame))||sceneCatalog[0];scene=selected.id;
+  preferences.game_scenes={...(preferences.game_scenes||{}),[currentGame]:scene};
   document.documentElement.dataset.scene=scene;
   document.documentElement.dataset.artwork=String(Boolean(selected.artist));
   $("sceneSelect").value=scene;
@@ -505,10 +506,19 @@ function selectScene(value,save=true){
     work.href=selected.source;license.href=selected.license_url;
     for(const link of [work,license]){link.target="_blank";link.rel="noopener noreferrer"}
     credit.append("Artwork: ",work," — "+selected.artist+" · ",license,". Resized for the dashboard.");
+    if(selected.notice)credit.append(element("span",selected.notice,"artwork-notice"));
   }else credit.textContent=scene==="classic"?"Classic dark green, without background artwork.":"Plain charcoal, without background artwork.";
   if(save)persistPreferences();
 }
-$("sceneSelect").replaceChildren(...sceneCatalog.map(option=>{const node=element("option",option.name);node.value=option.id;return node}));
+function renderSceneOptions(gameId){
+  const general=element("optgroup"),dnd=element("optgroup");general.label="Reading atmospheres";dnd.label="D&D wallpapers";
+  for(const option of sceneCatalog){
+    if(option.game_id&&option.game_id!==gameId)continue;
+    const node=element("option",option.name);node.value=option.id;(option.game_id?dnd:general).append(node);
+  }
+  $("sceneSelect").replaceChildren(general,...(dnd.children.length?[dnd]:[]));
+}
+renderSceneOptions("dnd-2024");
 $("sceneSelect").onchange=event=>selectScene(event.target.value);
 function updateLayoutRail(){
   $("layoutRail").hidden=!["reclaimed","ember"].includes(layout)||$("hud").hidden;

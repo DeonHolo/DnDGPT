@@ -25,6 +25,7 @@ function activateGame(id){
   if(!gameNames[id])return;
   const changed=currentGame!==id;currentGame=id;
   document.documentElement.dataset.game=id;$("gameSelect").value=id;
+  renderSceneOptions(id);selectScene(preferences.game_scenes?.[id]||preferences.scene||scene,false);
   setDndNavigation(id==="dnd-2024");
   document.querySelector(".identity h1").textContent=id==="sovereign-system"?"Sovereign System":"DnDGPT";
   sovereignNav.hidden=id!=="sovereign-system";

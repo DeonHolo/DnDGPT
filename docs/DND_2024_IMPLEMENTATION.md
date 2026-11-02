@@ -24,6 +24,8 @@ The ui-ux-pro-max design-system search produced generic marketing patterns; thos
 
 Later user refinements: the D&D feature inspector keeps Overview and Full rules, with a conditional Level progression tab populated from actual source level changes. Spells retain At Higher Levels text. The redundant action composer and Send to chat button are removed from every game's dashboard; the conversation remains the gameplay input.
 
+The Reading atmosphere dropdown groups 33 shared choices separately from three official D&D artworks: Silver Dragon Jubilee, The Frozen North and Ravenloft — Lord Soth. The latter group is visible only in D&D mode. Each game remembers its own selection through the existing preferences save, without an additional gameplay call. Official artwork keeps its source, artist and Wizards copyright notice. Background encodings were reduced to keep the self-contained widget below ChatGPT's 1 MiB resource limit; original copies are kept outside the repository.
+
 ## Resource boundaries
 
 Bundle the public SRD with its required attribution. Open5e data is filtered to the selected source and cached with provenance. The upstream MCP package declares MIT but omits a standalone LICENSE file; verify the notice before vendoring code. Published commercial adventures require an accessible authorised source before a playable pack can be prepared. A catalogue entry alone must not claim to contain a full adventure.
@@ -31,3 +33,13 @@ Bundle the public SRD with its required attribution. Open5e data is filtered to 
 ## Latency
 
 Load relevant sections, cache source entries, batch character/party updates into one transaction, and reuse the successful save response. No per-companion model calls or repeated whole-book reads. Report measured checks rather than a promised percentage speedup.
+
+## Verification and remaining limits
+
+- The first complete passing CI run for the D&D implementation is [41392781209](https://github.com/DeonHolo/DnDGPT/actions/runs/41392781209), before the wallpaper follow-up. It covers source synchronization, an isolated hosted installation, the full Python suite and portable packaging.
+- The wallpaper follow-up passes 37 focused D&D and scene tests, including owner isolation, separate game preferences, reference lookup, private adventure sources, reusable copies, arithmetic, import/export and real MCP transport. The embedded widget is 1,028,207 bytes after rebuilding, below 1,048,576 bytes.
+- The in-app browser passed 12 checks before the wallpaper additions, including 375/768/1200px widths in all four layouts, companion sheets, search, library, game separation and read-only browsing. A thirteenth check now exercises official wallpaper grouping, copyright, availability and per-game selection. Record its actual browser result before claiming it passed.
+- An 80-iteration local four-character normalization check had a median CPU time of 0.55 ms and a maximum of 1.09 ms. This excludes model generation, network and persistence; it is not a gameplay-turn latency measurement.
+- Heroes of the Borderlands is a source-required catalogue entry. Its commercial adventure text is not bundled. An authorised prepared pack must be supplied before running that published module. Original adventures can be prepared as private outlines, using the included Forgotten Realms source links for setting context.
+- The server validates sheet structure, shared calculations, ownership, versions and state transitions. The GM still adjudicates legal choices, components, timing and situational rules. End-to-end model quickplay, long-campaign play and the physical Android app have not been measured here.
+- No production player campaign was edited or advanced during implementation or testing. Tests use disposable local records and hosted-storage test doubles.

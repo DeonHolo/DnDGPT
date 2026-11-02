@@ -2,6 +2,10 @@
 
 CC_BY = "https://creativecommons.org/licenses/by/4.0/"
 CC0 = "https://creativecommons.org/publicdomain/zero/1.0/"
+FAN_CONTENT_POLICY = "https://company.wizards.com/en/legal/fancontentpolicy"
+WIZARDS_NOTICE = ("DnDGPT is unofficial Fan Content permitted under the Fan Content Policy. "
+                  "Not approved/endorsed by Wizards. Portions of the materials used are property "
+                  "of Wizards of the Coast. ©Wizards of the Coast LLC.")
 
 
 def artwork(id, name, asset, artist, title, source, license, license_url,
@@ -9,6 +13,12 @@ def artwork(id, name, asset, artist, title, source, license, license_url,
     return dict(id=id, name=name, asset=asset, artist=artist, title=title,
                 source=source, license=license, license_url=license_url,
                 palette=palette, opacity=opacity)
+
+
+def dnd_wallpaper(id, name, artist, title, source, palette):
+    return {**artwork(id, name, id + ".avif", artist, title, source,
+                      "© Wizards of the Coast", FAN_CONTENT_POLICY, palette, .62),
+            "game_id": "dnd-2024", "notice": WIZARDS_NOTICE}
 
 
 SCENES = (
@@ -200,8 +210,31 @@ SCENES = (
         "https://heartpunchstudio.itch.io/hand-painted-nature-backgrounds-pack",
         "CC0", CC0, "slate", 0.65,
     ),
+    dnd_wallpaper(
+        "dnd-silver-dragon", "Silver Dragon Jubilee", "Campbell White",
+        "D&D 50th Anniversary",
+        "https://www.dndbeyond.com/posts/1660-dungeons-dragons-turns-50-see-how-were-celebrating",
+        "copper",
+    ),
+    dnd_wallpaper(
+        "dnd-frozen-north", "The Frozen North", "Wizards of the Coast",
+        "D&D Holiday Wallpaper — Abominable Yeti",
+        "https://www.dndbeyond.com/resources/1868-download-this-special-d-d-holiday-wallpaper",
+        "slate",
+    ),
+    dnd_wallpaper(
+        "dnd-ravenloft", "Ravenloft — Lord Soth", "Max Dunbar",
+        "Dungeon Masters: Campaign 1 Finale",
+        "https://www.dndbeyond.com/posts/2189-celebrate-dungeon-masters-campaign-1-finale-with-a",
+        "violet",
+    ),
 )
 SCENE_IDS = frozenset(scene["id"] for scene in SCENES)
+
+
+def scene_ids_for_game(game_id):
+    return frozenset(scene["id"] for scene in SCENES
+                     if not scene.get("game_id") or scene["game_id"] == game_id)
 
 # Opaque reading surfaces keep text legible even in the brighter artwork options.
 PALETTES = {

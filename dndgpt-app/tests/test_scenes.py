@@ -4,7 +4,7 @@ from html.parser import HTMLParser
 import pytest
 
 from app.presentation import HERE, dashboard_html
-from app.scenes import SCENES, SCENE_IDS
+from app.scenes import SCENES, SCENE_IDS, scene_ids_for_game
 from app.engine import EngineError
 
 
@@ -32,18 +32,44 @@ def test_every_background_is_embedded_with_attribution_and_a_bounded_resource():
     parser = Catalog()
     parser.feed(html)
     catalog = json.loads(parser.content)
-    assert len(SCENES) == len(SCENE_IDS) == len(catalog) == 33
+    assert len(SCENES) == len(SCENE_IDS) == len(catalog) == 36
     assert catalog[0]["id"] == "classic"
     assert catalog[0]["name"] == "Classic"
     assert catalog[1]["id"] == "quiet"
     assert 'data-scene="classic"' in html
     assert len(html.encode()) < 1024 * 1024
     artworks = [scene for scene in SCENES if scene.get("asset")]
-    assert html.count('data:image/avif;base64,') == len(artworks) == 31
+    assert html.count('data:image/avif;base64,') == len(artworks) == 34
     for scene in artworks:
         assert (HERE / "assets" / scene["asset"]).is_file()
         entry = next(item for item in catalog if item["id"] == scene["id"])
         assert all(entry.get(key) for key in ("artist", "title", "source", "license", "license_url"))
+
+
+def test_official_wallpapers_are_available_only_for_dnd_and_keep_copyright():
+    official = [scene for scene in SCENES if scene.get("game_id")]
+    assert len(official) == 3
+    for scene in official:
+        assert scene["id"] in scene_ids_for_game("dnd-2024")
+        for game in ("age-of-convergence", "sovereign-system"):
+            assert scene["id"] not in scene_ids_for_game(game)
+        assert scene["license"] == "© Wizards of the Coast"
+        assert "Not approved/endorsed" in scene["notice"]
+        assert scene["source"].startswith("https://www.dndbeyond.com/")
+
+
+def test_per_game_atmospheres_remember_choices_and_reject_cross_game_art(engine):
+    prefs = {"panels": [], "details": [], "hud_hidden": False,
+             "scene": "dnd-silver-dragon",
+             "game_scenes": {"dnd-2024": "dnd-silver-dragon", "sovereign-system": "glowwood"}}
+    engine.set_view_preferences("owner-a", prefs)
+    assert engine.get_view_preferences("owner-a") == prefs
+    assert "game_scenes" not in engine.get_view_preferences("owner-b")
+    for invalid in ([], {"unknown": "classic"}, {"sovereign-system": "dnd-silver-dragon"},
+                    {"dnd-2024": []}):
+        with pytest.raises(EngineError):
+            engine.set_view_preferences("owner-a", {**prefs, "game_scenes": invalid})
+        assert engine.get_view_preferences("owner-a") == prefs
 
 
 def test_new_scenes_round_trip_per_owner_without_changing_a_campaign(engine, state):

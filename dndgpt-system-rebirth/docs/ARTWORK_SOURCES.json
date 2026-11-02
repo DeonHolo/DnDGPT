@@ -94,8 +94,8 @@
     "license_url": "https://creativecommons.org/licenses/by/4.0/",
     "palette": "slate",
     "opacity": 0.72,
-    "sha256": "7b89cc8cc96813d045f72b276708ca8350ee00fa6f1f7e7af1fac75685ed8c79",
-    "bytes": 33739
+    "sha256": "dba98f7ac45c771013140f15375545091b2effe7b56ebcaa0b3d24dd26504458",
+    "bytes": 16848
   },
   {
     "id": "rendezvous",
@@ -270,8 +270,8 @@
     "license": "CC0",
     "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
     "opacity": 0.65,
-    "sha256": "806b802b75c6a08278e7132455c2c45ffcaf5a784eeebf446b4cd58fb05e88c1",
-    "bytes": 39054
+    "sha256": "9140df234e94482204c9515419c7b0a1471bbe45501103a5e8d89bf92cf74f7b",
+    "bytes": 23576
   },
   {
     "id": "ancient-gate",
@@ -345,8 +345,8 @@
     "license": "CC0",
     "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
     "opacity": 0.65,
-    "sha256": "d0d81d73743122b0b42381b9832aefd7ffa10c8772eb37b99cc1d5235372e698",
-    "bytes": 27409
+    "sha256": "139e8065b73dd187aa5e4485e0c1d935c736ec72269e3db11d17250b472c01df",
+    "bytes": 12170
   },
   {
     "id": "glowwood",
@@ -375,8 +375,8 @@
     "license": "CC0",
     "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
     "opacity": 0.65,
-    "sha256": "7aab58d59b56bb5ab5400bd41c77778f0b2718d8048a9c6eb7d4b3683fa2e2f5",
-    "bytes": 27230
+    "sha256": "0629fb51cef67174225c7e3063158c1c3f9d1c5543a41eeb36600aafbdcfc63d",
+    "bytes": 14551
   },
   {
     "id": "moonlit-trail",
@@ -452,5 +452,62 @@
     "asset": "dndgpt-app/app/assets/winter-hollow.avif",
     "sha256": "70a8ae5601480bf3f7fbdc0b9a955f72e09ef86d51f1a8b33c1af5333ef24ca5",
     "bytes": 6054
+  },
+  {
+    "id": "dnd-silver-dragon",
+    "name": "Silver Dragon Jubilee",
+    "asset": "dndgpt-app/app/assets/dnd-silver-dragon.avif",
+    "artist": "Campbell White",
+    "title": "D&D 50th Anniversary",
+    "source": "https://www.dndbeyond.com/posts/1660-dungeons-dragons-turns-50-see-how-were-celebrating",
+    "license": "© Wizards of the Coast",
+    "license_url": "https://company.wizards.com/en/legal/fancontentpolicy",
+    "palette": "copper",
+    "opacity": 0.62,
+    "game_id": "dnd-2024",
+    "notice": "DnDGPT is unofficial Fan Content permitted under the Fan Content Policy. Not approved/endorsed by Wizards. Portions of the materials used are property of Wizards of the Coast. ©Wizards of the Coast LLC.",
+    "bytes": 25889,
+    "sha256": "ace8d47773e1a4e5a3e8a9efd372f4f2f2ab8466528933593d3a8b58dd40e051",
+    "downloaded_from": "https://media.dndbeyond.com/compendium-images/marketing/50th-anniversary-desktop-wallpapers.zip",
+    "original_sha256": "9b6ac20b8d0a9b69c8049468918794c177252cfe662edda244709c163774c7ed",
+    "changes": "Resized proportionally and encoded as AVIF; original framing retained."
+  },
+  {
+    "id": "dnd-frozen-north",
+    "name": "The Frozen North",
+    "asset": "dndgpt-app/app/assets/dnd-frozen-north.avif",
+    "artist": "Wizards of the Coast",
+    "title": "D&D Holiday Wallpaper — Abominable Yeti",
+    "source": "https://www.dndbeyond.com/resources/1868-download-this-special-d-d-holiday-wallpaper",
+    "license": "© Wizards of the Coast",
+    "license_url": "https://company.wizards.com/en/legal/fancontentpolicy",
+    "palette": "slate",
+    "opacity": 0.62,
+    "game_id": "dnd-2024",
+    "notice": "DnDGPT is unofficial Fan Content permitted under the Fan Content Policy. Not approved/endorsed by Wizards. Portions of the materials used are property of Wizards of the Coast. ©Wizards of the Coast LLC.",
+    "bytes": 18586,
+    "sha256": "7888a470a91ed97a815c51923b019acfc80d5d404ec74d0d45109cb5085af29c",
+    "downloaded_from": "https://media.dndbeyond.com/compendium-images/marketing/dnd-holiday-haul-wallpaper.zip",
+    "original_sha256": "a40865f850445fc8da01beda7f52f6794e9d2d75984a5a0fae6b3467491b0adf",
+    "changes": "Resized proportionally and encoded as AVIF; original framing retained."
+  },
+  {
+    "id": "dnd-ravenloft",
+    "name": "Ravenloft — Lord Soth",
+    "asset": "dndgpt-app/app/assets/dnd-ravenloft.avif",
+    "artist": "Max Dunbar",
+    "title": "Dungeon Masters: Campaign 1 Finale",
+    "source": "https://www.dndbeyond.com/posts/2189-celebrate-dungeon-masters-campaign-1-finale-with-a",
+    "license": "© Wizards of the Coast",
+    "license_url": "https://company.wizards.com/en/legal/fancontentpolicy",
+    "palette": "violet",
+    "opacity": 0.62,
+    "game_id": "dnd-2024",
+    "notice": "DnDGPT is unofficial Fan Content permitted under the Fan Content Policy. Not approved/endorsed by Wizards. Portions of the materials used are property of Wizards of the Coast. ©Wizards of the Coast LLC.",
+    "bytes": 17834,
+    "sha256": "46bc5b7c077d084151e731fe8da4a27988780da5f549dba7f775fc8b4e5cab84",
+    "downloaded_from": "https://www.dndbeyond.com/attachments/12/923/article-dm-key-art.jpg",
+    "original_sha256": "01eb118d78f302a2f3cd378550f52552e09aebf400f2d6f62b4f2909df64fcc6",
+    "changes": "Resized proportionally and encoded as AVIF; original framing retained."
   }
 ]

@@ -144,7 +144,7 @@ The standalone dashboard preview uses disposable sample data and the default Cla
 
 ![ChatGPT's native Intelligent UI event cards beside the saved DnDGPT campaign dashboard with the Glowwood atmosphere](docs/images/chatgpt-side-by-side.png)
 
-Your conversation and campaign, side by side. Choose from **33 reading atmospheres**, including Classic, Quiet Ink and credited fantasy artwork. Interface details may vary.
+Your conversation and campaign, side by side. Choose from **36 reading atmospheres**: 33 shared backgrounds and three official D&D artworks available only in D&D mode. The Reading atmosphere dropdown separates D&D wallpapers from the shared choices and remembers a background for each game. Interface details may vary.
 
 ChatGPT creates the in-chat **Intelligent UI**: the choice cards, icons, colors and arrangement. DnDGPT's rules guide its presentation, so campaigns may share a style, but the generated interface will not look identical every time. Ask ChatGPT to change the layout, make the choices easier to read or adjust its use of color. The saved campaign dashboard shown beside the conversation is DnDGPT's separate interface.
 

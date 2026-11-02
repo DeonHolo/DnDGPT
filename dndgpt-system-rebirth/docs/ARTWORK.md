@@ -47,3 +47,17 @@ The two historical paintings are public-domain reproductions credited on their W
 Images were resized and encoded as AVIF, with the first frame used for Dusk Mountains. The viewport may crop them to fit; no generative image processing was used. Every selected artwork shows its title, artist, source and license in the UI. All images are embedded in the dashboard, so opening a campaign sends no image request to an art host.
 
 [ARTWORK_SOURCES.json](ARTWORK_SOURCES.json) records each local asset, source file, license, byte count and SHA-256. [app/scenes.py](../dndgpt-app/app/scenes.py) defines the selectable catalog.
+
+## Official D&D wallpaper group
+
+Available only in D&D 2024 mode, separated from the shared reading atmospheres. Each image links to the official source in the dashboard. Full framing is retained; images are proportionally resized and AVIF-encoded for the embedded dashboard. Source hashes and download URLs are recorded in ARTWORK_SOURCES.json.
+
+| Dashboard name | Artwork and credit | Official source |
+| --- | --- | --- |
+| Silver Dragon Jubilee | D&D 50th Anniversary — Campbell White | [D&D Beyond](https://www.dndbeyond.com/posts/1660-dungeons-dragons-turns-50-see-how-were-celebrating) |
+| The Frozen North | D&D Holiday Wallpaper — Abominable Yeti — Wizards of the Coast | [D&D Beyond](https://www.dndbeyond.com/resources/1868-download-this-special-d-d-holiday-wallpaper) |
+| Ravenloft — Lord Soth | Dungeon Masters: Campaign 1 Finale — Max Dunbar | [D&D Beyond](https://www.dndbeyond.com/posts/2189-celebrate-dungeon-masters-campaign-1-finale-with-a) |
+
+These promotional images remain © Wizards of the Coast LLC and are used under the [Fan Content Policy](https://company.wizards.com/en/legal/fancontentpolicy). They are separate from the SRD reference license and are not CC0 or CC BY artwork.
+
+DnDGPT is unofficial Fan Content permitted under the Fan Content Policy. Not approved/endorsed by Wizards. Portions of the materials used are property of Wizards of the Coast. ©Wizards of the Coast LLC.
