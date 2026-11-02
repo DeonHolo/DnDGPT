@@ -37,5 +37,5 @@ def background(digest: str, filename: str, request: Request):
                "X-Content-Type-Options": "nosniff", "Referrer-Policy": "no-referrer"}
     if request.headers.get("if-none-match") == headers["ETag"]:
         return Response(status_code=304, headers=headers)
-    mime = {".avif": "image/avif", ".webp": "image/webp", ".jpg": "image/jpeg"}[row["path"].suffix]
+    mime = {".avif": "image/avif", ".webp": "image/webp", ".jpg": "image/jpeg", ".png": "image/png"}[row["path"].suffix]
     return FileResponse(row["path"], media_type=mime, headers=headers)

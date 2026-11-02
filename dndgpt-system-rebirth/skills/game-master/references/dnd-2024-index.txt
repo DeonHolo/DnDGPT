@@ -8,7 +8,7 @@ Reuse cached sections and successful save results. Each sheet and campaign keeps
 
 creation | Quickplay and character creation | 3027 characters
 party | Solo, companions and reusable sheets | 1156 characters
-adventure | Published and original adventure packs | 2312 characters
+adventure | Published and original adventure packs | 3071 characters
 play | Turns, continuity and pacing | 1718 characters
 combat | Combat, equipment and resources | 2216 characters
 advancement | Class progression | 915 characters

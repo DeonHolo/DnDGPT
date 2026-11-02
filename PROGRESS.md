@@ -1,5 +1,13 @@
 # Continuity and recovery release
 
+## D&D 2024 and ready-to-play starter — 2026-11-02
+
+Runtime **1.1.1** adds the free official **Frozen Sick** starter as the default for new D&D campaigns, with automatic source retrieval and no player upload or adventure-pack preparation. Original Forgotten Realms adventures remain available. The source is cached in server memory, kept out of the dashboard and player exports, and identified as a 2024 rules adaptation. The fifteen D&D wallpaper choices now use text-free scenic originals, with native widths of 1,920–4,000 pixels. Their group stays first and D&D-only.
+
+The D&D release also adds reusable character snapshots, independent campaign/party sheets, Solo/Party play, full companion sheets, SRD 5.2.1 references and an official-sheet-inspired dashboard. Age of Convergence and Sovereign System keep separate saves and rules. The redundant action composer is removed. README instructions now match the ordinary chat start and D&D equipment rules.
+
+Local follow-up verification: **46 focused tests + 13 in-app browser checks passed**, including all four layouts at 375/768/1200px, original artwork dimensions/bytes, private sources, reusable sheets, ordinary starts and game separation. A real source check retrieved all ten chapters in 0.902 seconds; a subsequent cached section lookup took 0.000042 seconds. These are source-reader timings, not model-turn timings. The earlier 1.1.0 CI passed 691 tests; final 1.1.1 CI and live verification are recorded in the release notes. No production player campaign was edited and no ZIP uploaded. Implementation: `docs/DND_2024_IMPLEMENTATION.md`.
+
 ## Latest published follow-up — proactive story — 2026-10-26
 
 Runtime **1.0.50**, checked commit `6065f4d45925ca0b9f0dd0f18969768b1bb5ea62`: both games require GM-initiated world developments and genuinely different pursuits. Minor obstacles conclude or close in the reply resolving the second approach; renamed menus do not reset the count. Random no-event results preserve ordinary story development without rerolls or substitute incidents. Rules stay cached and changes use the normal save.

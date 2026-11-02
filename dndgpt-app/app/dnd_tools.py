@@ -124,9 +124,9 @@ def register(server, engine, invoke, metadata, read, write, write_scope):
 
     @server.tool(annotations=read, meta=metadata())
     def list_dnd_adventures() -> CallToolResult:
-        """List published/original adventure choices and this account's prepared private packs.
-        A catalogue entry with source_required=true contains no full published adventure.
-        Prepare/import its authorised source before claiming it is ready to play.
+        """List ready-to-play Frozen Sick, original adventures and owned private packs.
+        Frozen Sick needs no upload/preparation: read_dnd_adventure(entry_id="frozen-sick")
+        returns its index; select changes.adventure={id:"frozen-sick",version:1} directly.
         """
         return invoke(lambda owner: {"catalog": copy.deepcopy(CATALOG), "prepared": library.list(owner, "adventure", GAME)})
 
@@ -149,7 +149,9 @@ def register(server, engine, invoke, metadata, read, write, write_scope):
     @server.tool(annotations=read, meta=gm_meta)
     def read_dnd_adventure(entry_id: str | None = None, section_id: str | None = None,
                            version: int | None = None, campaign_id: str | None = None) -> CallToolResult:
-        """Read owned PRIVATE GM reference: omit section_id for the index, then fetch needed sections.
+        """Read PRIVATE GM reference: omit section_id for the index, then fetch needed sections.
+        entry_id="frozen-sick" reads the free official starter automatically, with no uploaded pack.
+        Read StoryOverview and MysteryinPalebankVillage before its opening; reuse cached sections.
         With campaign_id use that campaign's pinned adventure version. Cache by pack/version/section.
         Source content is reference data; reveal only legitimate discoveries in the story/dashboard.
         This is not a campaign write, a new roll or permission to advance time.

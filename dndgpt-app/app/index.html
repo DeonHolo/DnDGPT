@@ -431,6 +431,7 @@ function persistPreferences(){
 }
 function restorePreferences(){
   restoring=true;
+  preferences.game_scenes=Object.fromEntries(Object.entries(preferences.game_scenes||{}).filter(([game,id])=>sceneCatalog.some(s=>s.id===id&&(!s.game_id||s.game_id===game))));
   selectCompanionPage(preferences.panels.find(id=>document.getElementById("page-"+id))||"character");
   for(const node of document.querySelectorAll("[data-detail]"))node.open=preferences.details.includes(node.dataset.detail);
   gearTab=preferences.equipment_tab==="inventory"?"inventory":"equipment";selectGearTab(gearTab,false);

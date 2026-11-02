@@ -3,12 +3,9 @@ import copy
 from urllib.parse import urlsplit
 
 from .engine import fail
+from .published_starter import STARTER, STARTER_ID, read_starter, starter_entry
 
-CATALOG = [{"id": "heroes-of-the-borderlands", "title": "Heroes of the Borderlands",
-            "adventure_type": "published", "recommended": True, "source_required": True,
-            "source_url": "https://www.dndbeyond.com/sources/dnd/hotb",
-            "summary": "Explore a frontier keep, nearby wilderness and the Caves of Chaos.",
-            "availability": "Add an authorised adventure pack to your private library to play."},
+CATALOG = [STARTER,
            {"id": "original-forgotten-realms", "title": "An original Forgotten Realms adventure",
             "adventure_type": "original", "recommended": False, "source_required": False,
             "setting": "Forgotten Realms", "summary": "Your GM prepares a new adventure grounded in official setting references."}]
@@ -59,6 +56,8 @@ def validate_adventure(value):
 
 
 def read_section(library, owner, entry_id, section_id=None, version=None):
+    if entry_id == STARTER_ID:
+        return read_starter(section_id, version)
     entry = library.get(owner, entry_id, version)
     if entry["kind"] != "adventure":
         fail(422, "adventure_required", "Choose a saved adventure pack")
@@ -72,4 +71,11 @@ def read_section(library, owner, entry_id, section_id=None, version=None):
         fail(404, "not_found", "Adventure section not found")
     return {"adventure_id": entry_id, "version": entry["version"], "section": copy.deepcopy(section),
             "visibility": "GM reference; reveal only what the party discovers"}
+
+
+def adventure_entry(library, db, owner, entry_id, version=None):
+    """Built-in public metadata or an owner-checked private pack; never network in a write."""
+    if entry_id == STARTER_ID:
+        return starter_entry(version)
+    return library._get(db, owner, entry_id, version)
 

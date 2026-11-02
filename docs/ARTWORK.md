@@ -48,30 +48,28 @@ Shared images were resized and encoded as AVIF, with the first frame used for Du
 
 [ARTWORK_SOURCES.json](ARTWORK_SOURCES.json) records each local asset, source file, license, byte count and SHA-256. [app/scenes.py](../dndgpt-app/app/scenes.py) defines the selectable catalog.
 
-## Official D&D wallpaper group
+## D&D scenery
 
-Available only in D&D 2024 mode, separated from the shared reading atmospheres. Each image links to the official source in the dashboard. The original published JPEG files are preserved byte for byte: Silver Dragon Jubilee at 3840 × 2140, The Frozen North at 1920 × 1080, and Ravenloft at 8000 × 4695. Full framing and source image quality are retained. These files load separately from the compact MCP resource. Source hashes and download URLs are recorded in ARTWORK_SOURCES.json.
+The D&D-only group comes first and contains 15 text-free scenic views: the Dalelands, Calimport, Baldur’s Gate, the Moonshae Isles and a haunted Ravenloft bastion. These include a full panorama and the artists’ own detail views, rather than fifteen different locations. Native widths range from 1,920 to 4,000 pixels; the original bytes are served separately and cached. No book titles, promotional title strips or resized thumbnails are used. Shared atmospheres remain available in all three games.
 
-| Dashboard name | Artwork and credit | Official source |
+| View | Artist / source | Native resolution |
 | --- | --- | --- |
-| Silver Dragon Jubilee | D&D 50th Anniversary — Campbell White | [D&D Beyond](https://www.dndbeyond.com/posts/1660-dungeons-dragons-turns-50-see-how-were-celebrating) |
-| The Frozen North | D&D Holiday Wallpaper — Abominable Yeti — Wizards of the Coast | [D&D Beyond](https://www.dndbeyond.com/resources/1868-download-this-special-d-d-holiday-wallpaper) |
-| Ravenloft — Lord Soth | Dungeon Masters: Campaign 1 Finale — Max Dunbar | [D&D Beyond](https://www.dndbeyond.com/posts/2189-celebrate-dungeon-masters-campaign-1-finale-with-a) |
-| Radiant Citadel | Journeys through the Radiant Citadel — Wizards of the Coast | [Official gallery (archived)](https://web.archive.org/web/20250417181851/https://dnd.wizards.com/media-gallery) |
-| The Wild Beyond the Witchlight | The Wild Beyond the Witchlight — Wizards of the Coast | [Official gallery (archived)](https://web.archive.org/web/20250417181851/https://dnd.wizards.com/media-gallery) |
-| Spelljammer | Spelljammer: Adventures in Space — Wizards of the Coast | [Official gallery (archived)](https://web.archive.org/web/20250417181851/https://dnd.wizards.com/media-gallery) |
-| Curse of Strahd | Curse of Strahd — Wizards of the Coast | [Official gallery (archived)](https://web.archive.org/web/20250417181851/https://dnd.wizards.com/media-gallery) |
-| Candlekeep Mysteries | Candlekeep Mysteries — Wizards of the Coast | [Official gallery (archived)](https://web.archive.org/web/20250417181851/https://dnd.wizards.com/media-gallery) |
-| Eberron | Eberron: Rising from the Last War — Wizards of the Coast | [Official gallery (archived)](https://web.archive.org/web/20250417181851/https://dnd.wizards.com/media-gallery) |
-| Icewind Dale | Icewind Dale: Rime of the Frostmaiden — Wizards of the Coast | [Official gallery (archived)](https://web.archive.org/web/20250417181851/https://dnd.wizards.com/media-gallery) |
-| Ghosts of Saltmarsh | Ghosts of Saltmarsh — Wizards of the Coast | [Official gallery (archived)](https://web.archive.org/web/20250417181851/https://dnd.wizards.com/media-gallery) |
-| Storm King's Thunder | Storm King's Thunder — Wizards of the Coast | [Official gallery (archived)](https://web.archive.org/web/20250417181851/https://dnd.wizards.com/media-gallery) |
-| Tyranny of Dragons | Tyranny of Dragons — Wizards of the Coast | [Official gallery (archived)](https://web.archive.org/web/20250417181851/https://dnd.wizards.com/media-gallery) |
-| Mythic Odysseys of Theros | Mythic Odysseys of Theros — Wizards of the Coast | [Official gallery (archived)](https://web.archive.org/web/20250417181851/https://dnd.wizards.com/media-gallery) |
-| The Yawning Portal | Tales from the Yawning Portal — Wizards of the Coast | [Official gallery (archived)](https://web.archive.org/web/20250417181851/https://dnd.wizards.com/media-gallery) |
+| The Dalelands | [Maihope](https://www.dndbeyond.com/posts/2101-art-of-the-forgotten-realms-the-dalelands) | 4000 × 1403 |
+| Calimport — High Terraces | [Maihope](https://maihope.artstation.com/projects/y4LK2R) | 2166 × 2166 |
+| Calimport — Genie Palaces | [Maihope](https://maihope.artstation.com/projects/y4LK2R) | 2166 × 2166 |
+| Calimport — Desert Skyline | [Maihope](https://maihope.artstation.com/projects/y4LK2R) | 2166 × 2166 |
+| Moonshae — Tree Village | [Maihope](https://maihope.artstation.com/projects/x3QEeY) | 2157 × 2157 |
+| Moonshae — Moonlit Isles | [Maihope](https://maihope.artstation.com/projects/x3QEeY) | 2157 × 2157 |
+| Moonshae — Moonlit Coast | [Maihope](https://maihope.artstation.com/projects/x3QEeY) | 2157 × 2157 |
+| Dalelands — Green Valley | [Maihope](https://maihope.artstation.com/projects/8BY5QE) | 2173 × 2173 |
+| Baldur’s Gate — Harbor | [Maihope](https://maihope.artstation.com/projects/mAkBE1) | 2181 × 2181 |
+| Baldur’s Gate — City | [Maihope](https://maihope.artstation.com/projects/mAkBE1) | 2181 × 2181 |
+| Baldur’s Gate — Heights | [Maihope](https://maihope.artstation.com/projects/mAkBE1) | 2181 × 2181 |
+| Haunted Bastion | [Erel Maatita](https://erelmaatita.artstation.com/projects/vzJ9Dx) | 1920 × 1242 |
+| Moonshae Waterfalls | [Katerina Ladon](https://www.dndbeyond.com/posts/2108-art-of-the-forgotten-realms-moonshae-isles) | 2182 × 3000 |
+| Dalelands — Forest Village | [Maihope](https://maihope.artstation.com/projects/8BY5QE) | 2173 × 2173 |
+| Dalelands — Elven Ruins | [Maihope](https://maihope.artstation.com/projects/8BY5QE) | 2173 × 2173 |
 
-The 12 additional wallpapers retain their original 2560 × 1600 JPEG files. They come from Wizards’ official media gallery; its archived page records the original publisher CDN download links.
-
-These promotional images remain © Wizards of the Coast LLC and are used under the [Fan Content Policy](https://company.wizards.com/en/legal/fancontentpolicy). They are separate from the SRD reference license and are not CC0 or CC BY artwork.
+These official D&D illustrations retain their copyright and are used under the [Wizards Fan Content Policy](https://company.wizards.com/en/legal/fancontentpolicy). In-product credits link to the artist or official publisher page. The machine-readable manifest records each download URL, dimensions and byte hash.
 
 DnDGPT is unofficial Fan Content permitted under the Fan Content Policy. Not approved/endorsed by Wizards. Portions of the materials used are property of Wizards of the Coast. ©Wizards of the Coast LLC.

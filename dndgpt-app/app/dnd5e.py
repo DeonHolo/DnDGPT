@@ -307,7 +307,8 @@ class DndGame:
                      "party_mode": "party", "level_up_freeze": False, "equipment": {}, "funds": {}, "world": {},
                      "creation": {}, "advancement": {}, "rarity_candidates": {}, "last_event": None,
                      "fictional_time_seconds": 0, "current_location": "Character creation", "opening_preview": "", "notes": "",
-                     "adventure": {}, "continuity": {}, "campaign_preferences": {"focus": "mixed", "dialogue": "normal"},
+                     "adventure": {"id": "frozen-sick", "version": 1, "title": "Frozen Sick", "setting": "Wildemount (Exandria)"},
+                     "continuity": {}, "campaign_preferences": {"focus": "mixed", "dialogue": "normal"},
                      "character": {"name": name.strip(), "class_name": "Unassigned", "level": 1, "attributes": dict.fromkeys(ATTRIBUTES, 10),
                                    "hp": 0, "hp_max": 1, "xp": 0, "xp_total": 0, "xp_next": 1000, "scene_counter": 0},
                      **{key: [] for key in ("abilities", "conditions", "summons", "enemies", "inventory", "supplies", "quest_log", "world_log", "generation_ledger")}}
@@ -406,7 +407,8 @@ class DndGame:
                     fail(422, "invalid_adventure_progress", "Save the adventure reference and public progress, keeping GM text in Library")
                 old_ref = projected["adventure"] if ref.get("id", projected["adventure"].get("id")) == projected["adventure"].get("id") else {}
                 ref = merge_world(old_ref, ref)
-                entry = Library(self.engine)._get(db, owner, ref.get("id"), ref.get("version"))
+                from .adventure_library import adventure_entry
+                entry = adventure_entry(Library(self.engine), db, owner, ref.get("id"), ref.get("version"))
                 if entry["kind"] != "adventure":
                     fail(422, "adventure_required", "Select an adventure from your private library")
                 ref.update(version=entry["version"], title=entry["content"]["title"], setting=entry["content"]["setting"])
@@ -453,7 +455,8 @@ class DndGame:
                     fail(422, "incomplete_dnd_start", "Save the party, adventure reference and opening scene together before starting")
                 if any(not s["story_summary"].strip() or not s["inventory"] for s in projected["party"]):
                     fail(422, "incomplete_dnd_start", "Complete each character's story and starting equipment")
-                adventure = Library(self.engine)._get(db, owner, projected["adventure"]["id"], projected["adventure"]["version"])["content"]
+                from .adventure_library import adventure_entry
+                adventure = adventure_entry(Library(self.engine), db, owner, projected["adventure"]["id"], projected["adventure"]["version"])["content"]
                 start, end = adventure.get("starting_level", 1), adventure.get("ending_level", 20)
                 if any(not start <= s["level"] <= end for s in projected["party"]):
                     fail(422, "adventure_level_mismatch", f"This adventure supports character levels {start}–{end}; choose an appropriate sheet or revise the adventure")

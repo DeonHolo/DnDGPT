@@ -51,20 +51,21 @@ def test_every_background_is_linked_with_attribution_and_a_compact_resource():
 
 def test_original_resolution_wallpapers_are_public_cached_and_byte_exact(web):
     from PIL import Image
-    expected = {"dnd-silver-dragon.jpg": (3840, 2140),
-                "dnd-frozen-north.jpg": (1920, 1080), "dnd-ravenloft.jpg": (8000, 4695)}
-    expected.update({scene["asset"]: (2560, 1600) for scene in SCENES
-                     if scene.get("game_id") and scene["asset"] not in expected})
+    manifest = json.loads((HERE.parents[1] / "docs/ARTWORK_SOURCES.json").read_text(encoding="utf-8"))
+    expected = {scene["asset"].split("/")[-1]: (scene["width"], scene["height"])
+                for scene in manifest if scene.get("game_id")}
+    assert expected["dnd-dalelands.png"] == (4000, 1403)
     for asset, size in expected.items():
         row = artwork_files()[asset]
         with Image.open(row["path"]) as image:
             assert image.size == size
+            assert image.width >= 1920 and image.height >= 1080
         path = artwork_url(asset)
         response = web.get(path, headers={"Authorization": ""})
         assert response.status_code == 200
         assert response.content == row["path"].read_bytes()
         assert hashlib.sha256(response.content).hexdigest() == row["digest"]
-        assert response.headers["content-type"] == "image/jpeg"
+        assert response.headers["content-type"] == {".png": "image/png", ".jpg": "image/jpeg", ".webp": "image/webp"}[row["path"].suffix]
         assert response.headers["cache-control"] == "public, max-age=31536000, immutable"
         assert web.get(path, headers={"If-None-Match": response.headers["etag"]}).status_code == 304
         assert web.get(path.replace(row["digest"], "0" * 64)).status_code == 404
@@ -93,17 +94,17 @@ def test_official_wallpapers_are_available_only_for_dnd_and_keep_copyright():
             assert scene["id"] not in scene_ids_for_game(game)
         assert scene["license"] == "© Wizards of the Coast"
         assert "Not approved/endorsed" in scene["notice"]
-        assert scene["source"].startswith(("https://www.dndbeyond.com/", "https://web.archive.org/"))
+        assert scene["source"].startswith(("https://www.dndbeyond.com/", "https://maihope.artstation.com/", "https://erelmaatita.artstation.com/"))
 
 
 def test_per_game_atmospheres_remember_choices_and_reject_cross_game_art(engine):
     prefs = {"panels": [], "details": [], "hud_hidden": False,
-             "scene": "dnd-silver-dragon",
-             "game_scenes": {"dnd-2024": "dnd-silver-dragon", "sovereign-system": "glowwood"}}
+             "scene": "dnd-dalelands",
+             "game_scenes": {"dnd-2024": "dnd-dalelands", "sovereign-system": "glowwood"}}
     engine.set_view_preferences("owner-a", prefs)
     assert engine.get_view_preferences("owner-a") == prefs
     assert "game_scenes" not in engine.get_view_preferences("owner-b")
-    for invalid in ([], {"unknown": "classic"}, {"sovereign-system": "dnd-silver-dragon"},
+    for invalid in ([], {"unknown": "classic"}, {"sovereign-system": "dnd-dalelands"},
                     {"dnd-2024": []}):
         with pytest.raises(EngineError):
             engine.set_view_preferences("owner-a", {**prefs, "game_scenes": invalid})

@@ -6,7 +6,6 @@ FAN_CONTENT_POLICY = "https://company.wizards.com/en/legal/fancontentpolicy"
 WIZARDS_NOTICE = ("DnDGPT is unofficial Fan Content permitted under the Fan Content Policy. "
                   "Not approved/endorsed by Wizards. Portions of the materials used are property "
                   "of Wizards of the Coast. ©Wizards of the Coast LLC.")
-OFFICIAL_GALLERY = "https://web.archive.org/web/20250417181851/https://dnd.wizards.com/media-gallery"
 
 
 def artwork(id, name, asset, artist, title, source, license, license_url,
@@ -16,14 +15,10 @@ def artwork(id, name, asset, artist, title, source, license, license_url,
                 palette=palette, opacity=opacity)
 
 
-def dnd_wallpaper(id, name, artist, title, source, palette):
-    return {**artwork(id, name, id + ".jpg", artist, title, source,
+def dnd_wallpaper(id, name, artist, title, source, palette, asset=None):
+    return {**artwork(id, name, asset or id + ".jpg", artist, title, source,
                       "© Wizards of the Coast", FAN_CONTENT_POLICY, palette, .62),
             "game_id": "dnd-2024", "notice": WIZARDS_NOTICE}
-
-
-def gallery_wallpaper(id, name, title, palette):
-    return dnd_wallpaper(id, name, "Wizards of the Coast", title, OFFICIAL_GALLERY, palette)
 
 
 SCENES = (
@@ -215,36 +210,21 @@ SCENES = (
         "https://heartpunchstudio.itch.io/hand-painted-nature-backgrounds-pack",
         "CC0", CC0, "slate", 0.65,
     ),
-    dnd_wallpaper(
-        "dnd-silver-dragon", "Silver Dragon Jubilee", "Campbell White",
-        "D&D 50th Anniversary",
-        "https://www.dndbeyond.com/posts/1660-dungeons-dragons-turns-50-see-how-were-celebrating",
-        "copper",
-    ),
-    dnd_wallpaper(
-        "dnd-frozen-north", "The Frozen North", "Wizards of the Coast",
-        "D&D Holiday Wallpaper — Abominable Yeti",
-        "https://www.dndbeyond.com/resources/1868-download-this-special-d-d-holiday-wallpaper",
-        "slate",
-    ),
-    dnd_wallpaper(
-        "dnd-ravenloft", "Ravenloft — Lord Soth", "Max Dunbar",
-        "Dungeon Masters: Campaign 1 Finale",
-        "https://www.dndbeyond.com/posts/2189-celebrate-dungeon-masters-campaign-1-finale-with-a",
-        "violet",
-    ),
-    gallery_wallpaper("dnd-radiant-citadel", "Radiant Citadel", "Journeys through the Radiant Citadel", "violet"),
-    gallery_wallpaper("dnd-witchlight", "The Wild Beyond the Witchlight", "The Wild Beyond the Witchlight", "violet"),
-    gallery_wallpaper("dnd-spelljammer", "Spelljammer", "Spelljammer: Adventures in Space", "slate"),
-    gallery_wallpaper("dnd-curse-strahd", "Curse of Strahd", "Curse of Strahd", "violet"),
-    gallery_wallpaper("dnd-candlekeep", "Candlekeep Mysteries", "Candlekeep Mysteries", "copper"),
-    gallery_wallpaper("dnd-eberron", "Eberron", "Eberron: Rising from the Last War", "slate"),
-    gallery_wallpaper("dnd-icewind-dale", "Icewind Dale", "Icewind Dale: Rime of the Frostmaiden", "slate"),
-    gallery_wallpaper("dnd-saltmarsh", "Ghosts of Saltmarsh", "Ghosts of Saltmarsh", "slate"),
-    gallery_wallpaper("dnd-storm-king", "Storm King's Thunder", "Storm King's Thunder", "slate"),
-    gallery_wallpaper("dnd-tyranny-dragons", "Tyranny of Dragons", "Tyranny of Dragons", "copper"),
-    gallery_wallpaper("dnd-theros", "Mythic Odysseys of Theros", "Mythic Odysseys of Theros", "forest"),
-    gallery_wallpaper("dnd-yawning-portal", "The Yawning Portal", "Tales from the Yawning Portal", "copper"),
+    dnd_wallpaper("dnd-dalelands", "The Dalelands", "Maihope", "Forgotten Realms — The Dalelands", "https://www.dndbeyond.com/posts/2101-art-of-the-forgotten-realms-the-dalelands", "forest", "dnd-dalelands.png"),
+    dnd_wallpaper("dnd-calimport-harbor", "Calimport — High Terraces", "Maihope", "Forgotten Realms — Calimshan", "https://maihope.artstation.com/projects/y4LK2R", "copper", "dnd-calimport-harbor.webp"),
+    dnd_wallpaper("dnd-calimport-palaces", "Calimport — Genie Palaces", "Maihope", "Forgotten Realms — Calimshan", "https://maihope.artstation.com/projects/y4LK2R", "copper", "dnd-calimport-palaces.webp"),
+    dnd_wallpaper("dnd-calimport-city", "Calimport — Desert Skyline", "Maihope", "Forgotten Realms — Calimshan", "https://maihope.artstation.com/projects/y4LK2R", "copper", "dnd-calimport-city.webp"),
+    dnd_wallpaper("dnd-moonshae-forest", "Moonshae — Tree Village", "Maihope", "Forgotten Realms — Moonshae Isles", "https://maihope.artstation.com/projects/x3QEeY", "forest", "dnd-moonshae-forest.webp"),
+    dnd_wallpaper("dnd-moonshae-coast", "Moonshae — Moonlit Isles", "Maihope", "Forgotten Realms — Moonshae Isles", "https://maihope.artstation.com/projects/x3QEeY", "slate", "dnd-moonshae-coast.webp"),
+    dnd_wallpaper("dnd-moonshae-mountains", "Moonshae — Moonlit Coast", "Maihope", "Forgotten Realms — Moonshae Isles", "https://maihope.artstation.com/projects/x3QEeY", "forest", "dnd-moonshae-mountains.webp"),
+    dnd_wallpaper("dnd-dalelands-forest", "Dalelands — Green Valley", "Maihope", "Forgotten Realms — The Dalelands", "https://maihope.artstation.com/projects/8BY5QE", "forest", "dnd-dalelands-forest.webp"),
+    dnd_wallpaper("dnd-baldurs-harbor", "Baldur’s Gate — Harbor", "Maihope", "Forgotten Realms — Baldur’s Gate", "https://maihope.artstation.com/projects/mAkBE1", "slate", "dnd-baldurs-harbor.webp"),
+    dnd_wallpaper("dnd-baldurs-city", "Baldur’s Gate — City", "Maihope", "Forgotten Realms — Baldur’s Gate", "https://maihope.artstation.com/projects/mAkBE1", "slate", "dnd-baldurs-city.webp"),
+    dnd_wallpaper("dnd-baldurs-heights", "Baldur’s Gate — Heights", "Maihope", "Forgotten Realms — Baldur’s Gate", "https://maihope.artstation.com/projects/mAkBE1", "slate", "dnd-baldurs-heights.webp"),
+    dnd_wallpaper("dnd-haunted-bastion", "Haunted Bastion", "Erel Maatita", "Ravenloft: The Horrors Within", "https://erelmaatita.artstation.com/projects/vzJ9Dx", "violet", "dnd-haunted-bastion.webp"),
+    dnd_wallpaper("dnd-moonshae-falls", "Moonshae Waterfalls", "Katerina Ladon", "Forgotten Realms: Adventures in Faerûn", "https://www.dndbeyond.com/posts/2108-art-of-the-forgotten-realms-moonshae-isles", "forest", "dnd-moonshae-falls.jpg"),
+    dnd_wallpaper("dnd-dalelands-village", "Dalelands — Forest Village", "Maihope", "Forgotten Realms — The Dalelands", "https://maihope.artstation.com/projects/8BY5QE", "forest", "dnd-dalelands-village.webp"),
+    dnd_wallpaper("dnd-dalelands-ruins", "Dalelands — Elven Ruins", "Maihope", "Forgotten Realms — The Dalelands", "https://maihope.artstation.com/projects/8BY5QE", "forest", "dnd-dalelands-ruins.webp"),
 )
 SCENE_IDS = frozenset(scene["id"] for scene in SCENES)
 

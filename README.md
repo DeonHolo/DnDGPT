@@ -22,7 +22,7 @@ DnDGPT is an **MCP app for ChatGPT**: a hosted MCP server connects your conversa
 
 The **Character Library** keeps reusable, versioned sheets for future adventures. Each campaign gets independent party copies, so one run's damage, equipment or level-ups do not alter another run. Export a sheet as JSON or save a current party member back into your library.
 
-Choose a prepared published adventure or ask for an original adventure in an established D&D setting. Original adventures default to the **Forgotten Realms**, grounded in official setting references. The **Adventure Library** keeps GM source sections separate from player-visible progress. *Heroes of the Borderlands* is the recommended published starter; its catalogue entry links to the source, and a playable pack must be prepared from an authorised copy before use. The commercial module is not bundled.
+Start with **Frozen Sick**, a free official adventure for levels 1–3 in Wildemount, or ask for an original adventure in the **Forgotten Realms**. The GM reads the published starter from its [official D&D Beyond source](https://www.dndbeyond.com/sources/dnd/wa/frozen-sick) automatically and runs it with the installed 2024 rules. Choose it and play—no book purchase, upload or adventure preparation. Original adventures use official setting references. The **Adventure Library** keeps GM source sections separate from player-visible progress; private adventure packs and other published books are optional.
 
 ### Three games, one connection
 
@@ -86,17 +86,19 @@ Read the [Privacy Policy](https://deonholo.github.io/DnDGPT/privacy.html) and [T
 
 ### 4. Start a campaign
 
-Click **Try in chat** and use regular **Chat** mode. DnDGPT provides the complete standard rulebook and Rule Hardener directly. You do not need to download or attach them for standard play.
+Click **Try in chat** and use regular **Chat** mode. DnDGPT provides the selected game’s rules and execution checklist directly. You do not need to download or attach them.
 
 Send this to begin:
 
-> Be my DnDGPT GM. Read the complete Rule Hardener and rule index, then load the relevant rulebook sections for each stage. Reuse current rules already in context. Begin character creation and open my campaign dashboard. Save our progress as we play. After my final creation choices, write Your story, equip the class-budgeted starting outfit and open the first scene. Apply my level-up choices directly and continue when they are resolved.
+> Be my DnDGPT GM using D&D 2024. Read its execution checklist and rule index, then retrieve the rules needed for our choices. Generate a complete Quickplay character draft for Frozen Sick and open my dashboard. Include my story, starting equipment and full sheet. Let me request revisions or say “let’s go.” Save our progress as we play.
+
+For a different game, name **Age of Convergence** or **Sovereign System** instead. For a new D&D story, ask for an **original Forgotten Realms adventure** instead of Frozen Sick.
 
 After a saved choice, you can say **“Open my campaign dashboard.”** Updates appear when ChatGPT saves the result; narration alone does not update it.
 
 **Managing saves:** Use the **Saved game** selector at the top of the dashboard. Under **View options → Campaign brief, history & portable saves**, read the resume brief, compare earlier versions, preview a correction or download a campaign file. Restoring a file creates a separate paused copy. Reading history never replaces your current save. See [continuity and recovery](docs/CONTINUITY_AND_RECOVERY.md).
 
-**People and places:** Both games can keep rival observations, relationships, promises, known routes and lasting quest consequences in the same saved turn. Open **World & Campaign Log → People & places** to inspect them and choose your pace. Sovereign System also shows active fronts and expeditions. The GM records these from what happened; older chat details do not appear automatically. [Living campaigns](docs/LIVING_CAMPAIGNS.md).
+**People and places:** All three games can keep rival observations, relationships, promises, known routes and lasting quest consequences in the same saved turn. Open **World & Campaign Log → People & places** to inspect them and choose your pace. Sovereign System also shows active fronts and expeditions. The GM records these from what happened; older chat details do not appear automatically. [Living campaigns](docs/LIVING_CAMPAIGNS.md).
 
 To remove a campaign, select it and click **Delete Campaign**. Review what will be removed or retained, type its name, then choose **Delete permanently**. This cannot be undone. If a large history needs several cleanup batches, use **Continue cleanup** to finish the same deletion.
 
@@ -107,11 +109,11 @@ To remove a campaign, select it and click **Delete Campaign**. Review what will 
 ## FAQ
 
 - **I'm already connected. How do I start?** Click **Try in chat**, or type **@** in a normal ChatGPT message and select **DnDGPT** from the plugin picker. Then use the starting prompt above to begin a campaign or ask the GM to open one you've already saved.
-- **Do I need to download the rules?** The complete rulebook and Rule Hardener are included and available through your connection. You can start playing without attaching files or installing an extra writing plugin. If you'd like to read them yourself, open the [rulebook](https://raw.githubusercontent.com/DeonHolo/DnDGPT/main/dndgpt-app/rules/rulebook-v1.0.txt) or [Rule Hardener](https://raw.githubusercontent.com/DeonHolo/DnDGPT/main/dndgpt-app/rules/rule-hardener.txt).
+- **Do I need to download the rules or an adventure?** No. The connection supplies the selected game’s rules. D&D uses the bundled official SRD 5.2.1 and source-scoped references; Frozen Sick is read automatically from its free official source. You can also ask for an original Forgotten Realms adventure. The two homebrew games use their own included books.
 - **How do I get dashboard and rule updates?** Hosted updates are available through the **DnDGPT** connection you added during setup. You can keep your saved campaigns; an open dashboard or ongoing chat may need refreshing to pick up changes.
 - **How do I refresh my dashboard and rules?** Open **Plugin settings → DnDGPT → Refresh tools** under **Manage app**. Close the dashboard and reload ChatGPT. In your campaign chat, ask: **“Read the latest complete rulebook and Rule Hardener, then reopen my saved campaign dashboard.”** The dashboard's **Refresh saved state** button reloads campaign progress; **Refresh tools** updates the connected tool catalog. If you separately added a developer connection named **DnDGPT Cloud Dashboard**, refresh that entry instead. The normal setup does not require a second plugin.
 - **Will an update change my character?** Your saved character and progress stay as recorded. To use new character-building rules with an existing character, ask the GM to review the changes with you while preserving your earned progress and current resources.
-- **What does Reach mean?** **Engaged** means within melee reach. **Near** means reachable with one normal move along a clear route. **Far** needs extra movement or a suitable ranged ability. **Distant** needs longer travel or special movement. The GM still checks obstacles and each power's limits.
+- **What does Reach mean in the homebrew games?** **Engaged** means within melee reach. **Near** means reachable with one normal move along a clear route. **Far** needs extra movement or a suitable ranged ability. **Distant** needs longer travel or special movement. The GM still checks obstacles and each power's limits.
 - **Can I use my own rulebook?** Attach your complete rulebook and tell the GM to use it instead of the standard rules. The dashboard can show information in its existing sections; custom mechanics may need to stay in the chat.
 - **Why is my dashboard empty?** Select your campaign under **Saved game**. If character details are missing, ask the GM to save your current character choices and reopen that campaign. If it still appears empty, try the refresh steps above.
 - **Where are my saves?** The hosted campaign data lives in Appwrite. Auth0 handles sign-in and access to your account. Google sign-in does not save campaigns to Google Drive. See [how saves work](docs/CAMPAIGN_STORAGE.md), including the different approach used by Questforge.
@@ -124,17 +126,17 @@ For other approaches to AI campaigns and MCP games, see [related projects](docs/
 
 - **A saved character sheet.** Resource meters, progression, conditions and saved character choices.
 - **Details when you need them.** Select an ability in a compact list, then use Overview or Full rules in its inspector. Damage, HP, DEF, duration and actual costs or cooldowns stay visible; empty costs and internal bookkeeping stay out of the way. World articles use an index; the campaign log is a searchable timeline.
-- **Choose your layout and atmosphere.** Open **View options** for two selectors side by side. **Dashboard layout** switches between Original, Reclaimed Codex, The Orrery and Ember Ledger without losing your chapter, selected ability or unsent action. **Reading atmosphere** offers **33 choices**: Classic, Quiet Ink, and 31 [credited paintings and fantasy illustrations](docs/ARTWORK.md). The background and layout are independent, and your choices are saved for your account. Reclaimed Codex uses opaque vellum for reading; the other layouts use dark panels. Ambient motion can be turned off and respects reduced-motion settings.
-- **Inspect earned upgrades.** Select an ability, then open **Upgrades** for what its saved Evolutions, Background Imprints and other upgrades add or change. **Overview** gives the short description; **Full rules** holds the combined ability. Upgrades appear after the GM records them on that ability.
-- **Delete campaigns from the dashboard.** Select a saved game and use **Delete campaign…** to review and permanently remove it, with a separate confirmation.
+- **Choose your layout and atmosphere.** Open **View options** for two selectors side by side. **Dashboard layout** switches between Original, Reclaimed Codex, The Orrery and Ember Ledger without losing your chapter or selected ability. **Reading atmosphere** offers 33 shared choices plus 15 high-resolution D&D scenic views. The D&D group appears first and is exclusive to that game; [artwork credits and sources](docs/ARTWORK.md) are included. The background and layout are independent, and your choices are saved for your account. Reclaimed Codex uses opaque vellum for reading; the other layouts use dark panels. Ambient motion can be turned off and respects reduced-motion settings.
+- **Inspect features and growth.** D&D features use Overview, Full rules and a conditional Level progression tab; spells include At Higher Levels. In Age of Convergence and Sovereign System, select an ability, then open **Upgrades** for what its saved Evolutions, Background Imprints and other upgrades add or change. **Overview** gives the short description; **Full rules** holds the combined ability. Upgrades appear after the GM records them on that ability.
+- **Delete campaigns from the dashboard.** Select a saved game and use **Delete Campaign** to review and permanently remove it, with a separate confirmation.
 - **Durable campaign records.** Account ownership, partial updates, version checks and event history.
 - **Continuity and recovery.** A compact saved brief keeps recent intent, outcomes, pending decisions and NPC commitments available. Readable history and approved corrections help review mistakes; portable snapshots restore as separate paused campaigns. These records still depend on what the GM actually saves.
-- **Cinematic positioning.** New standard characters use DEX. Skills show descriptive reach and readable mechanics, while the GM keeps precise movement and targeting checks behind the scenes. Moving, taking cover and spending your Action to Dash still matter.
+- **Cinematic positioning in the homebrew games.** Characters use DEX. Skills show descriptive reach and readable mechanics, while the GM keeps precise movement and targeting checks behind the scenes. Moving, taking cover and spending your Action to Dash still matter.
 - **Real rolls, stable receipts.** Reusable Python dice, checks and rarity tools; retrying the same action returns the saved result.
-- **The rules are included.** The complete custom rulebook and originality hardener ship with the GM skill and are readable through the hosted connection. ChatGPT handles narration and most adjudication.
-- **Variety starts with the class design.** The GM checks different play styles, recent motifs and naming patterns before presenting a board. The [creativity and writing guidance](docs/CREATIVITY_ENGINE.md) is included; players need no extra writing plugin.
-- **Class-native Utility.** Epic and Legendary classes start with one Utility; Unique starts with two distinct Utilities. These inherit the class rarity. Independently acquired Utilities use the normal rarity procedure and the same creativity/flavor checks as other skills; Utility can have Active or Passive activation outside combat.
-- **Explicit session control.** Character confirmation and starting the adventure are separate approvals. Browsing panels does not advance play.
+- **The rules are included.** D&D 2024 uses official SRD references and its operational checklist. Age of Convergence and Sovereign System retain their custom books. ChatGPT handles narration and most adjudication.
+- **Homebrew class variety.** The GM checks different play styles, recent motifs and naming patterns before presenting a board. The [creativity and writing guidance](docs/CREATIVITY_ENGINE.md) is included; players need no extra writing plugin.
+- **Homebrew class-native Utility.** Epic and Legendary classes start with one Utility; Unique starts with two distinct Utilities. These inherit the class rarity. Independently acquired Utilities use the normal rarity procedure and the same creativity/flavor checks as other skills; Utility can have Active or Passive activation outside combat.
+- **Start through ordinary chat.** Review or revise the character draft, then say “let’s go.” Character creation, starting and selected level-ups have no extra approval screen. Browsing panels does not advance play.
 
 **Classic · current dashboard**
 
@@ -144,7 +146,7 @@ The standalone dashboard preview uses disposable sample data and the default Cla
 
 ![ChatGPT's native Intelligent UI event cards beside the saved DnDGPT campaign dashboard with the Glowwood atmosphere](docs/images/chatgpt-side-by-side.png)
 
-Your conversation and campaign, side by side. Choose from **48 reading atmospheres**: 33 shared backgrounds and 15 official D&D artworks available only in D&D mode. The Reading atmosphere dropdown separates D&D wallpapers from the shared choices and remembers a background for each game. Interface details may vary.
+Your conversation and campaign, side by side. Choose from **48 reading atmospheres**: 33 shared backgrounds and 15 text-free scenic D&D views available only in D&D mode. The Reading atmosphere dropdown separates D&D wallpapers from the shared choices and remembers a background for each game. Interface details may vary.
 
 ChatGPT creates the in-chat **Intelligent UI**: the choice cards, icons, colors and arrangement. DnDGPT's rules guide its presentation, so campaigns may share a style, but the generated interface will not look identical every time. Ask ChatGPT to change the layout, make the choices easier to read or adjust its use of color. The saved campaign dashboard shown beside the conversation is DnDGPT's separate interface.
 
