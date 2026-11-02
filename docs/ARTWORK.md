@@ -57,6 +57,20 @@ Available only in D&D 2024 mode, separated from the shared reading atmospheres. 
 | Silver Dragon Jubilee | D&D 50th Anniversary — Campbell White | [D&D Beyond](https://www.dndbeyond.com/posts/1660-dungeons-dragons-turns-50-see-how-were-celebrating) |
 | The Frozen North | D&D Holiday Wallpaper — Abominable Yeti — Wizards of the Coast | [D&D Beyond](https://www.dndbeyond.com/resources/1868-download-this-special-d-d-holiday-wallpaper) |
 | Ravenloft — Lord Soth | Dungeon Masters: Campaign 1 Finale — Max Dunbar | [D&D Beyond](https://www.dndbeyond.com/posts/2189-celebrate-dungeon-masters-campaign-1-finale-with-a) |
+| Radiant Citadel | Journeys through the Radiant Citadel — Wizards of the Coast | [Official gallery (archived)](https://web.archive.org/web/20250417181851/https://dnd.wizards.com/media-gallery) |
+| The Wild Beyond the Witchlight | The Wild Beyond the Witchlight — Wizards of the Coast | [Official gallery (archived)](https://web.archive.org/web/20250417181851/https://dnd.wizards.com/media-gallery) |
+| Spelljammer | Spelljammer: Adventures in Space — Wizards of the Coast | [Official gallery (archived)](https://web.archive.org/web/20250417181851/https://dnd.wizards.com/media-gallery) |
+| Curse of Strahd | Curse of Strahd — Wizards of the Coast | [Official gallery (archived)](https://web.archive.org/web/20250417181851/https://dnd.wizards.com/media-gallery) |
+| Candlekeep Mysteries | Candlekeep Mysteries — Wizards of the Coast | [Official gallery (archived)](https://web.archive.org/web/20250417181851/https://dnd.wizards.com/media-gallery) |
+| Eberron | Eberron: Rising from the Last War — Wizards of the Coast | [Official gallery (archived)](https://web.archive.org/web/20250417181851/https://dnd.wizards.com/media-gallery) |
+| Icewind Dale | Icewind Dale: Rime of the Frostmaiden — Wizards of the Coast | [Official gallery (archived)](https://web.archive.org/web/20250417181851/https://dnd.wizards.com/media-gallery) |
+| Ghosts of Saltmarsh | Ghosts of Saltmarsh — Wizards of the Coast | [Official gallery (archived)](https://web.archive.org/web/20250417181851/https://dnd.wizards.com/media-gallery) |
+| Storm King's Thunder | Storm King's Thunder — Wizards of the Coast | [Official gallery (archived)](https://web.archive.org/web/20250417181851/https://dnd.wizards.com/media-gallery) |
+| Tyranny of Dragons | Tyranny of Dragons — Wizards of the Coast | [Official gallery (archived)](https://web.archive.org/web/20250417181851/https://dnd.wizards.com/media-gallery) |
+| Mythic Odysseys of Theros | Mythic Odysseys of Theros — Wizards of the Coast | [Official gallery (archived)](https://web.archive.org/web/20250417181851/https://dnd.wizards.com/media-gallery) |
+| The Yawning Portal | Tales from the Yawning Portal — Wizards of the Coast | [Official gallery (archived)](https://web.archive.org/web/20250417181851/https://dnd.wizards.com/media-gallery) |
+
+The 12 additional wallpapers retain their original 2560 × 1600 JPEG files. They come from Wizards’ official media gallery; its archived page records the original publisher CDN download links.
 
 These promotional images remain © Wizards of the Coast LLC and are used under the [Fan Content Policy](https://company.wizards.com/en/legal/fancontentpolicy). They are separate from the SRD reference license and are not CC0 or CC BY artwork.
 

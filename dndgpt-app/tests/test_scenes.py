@@ -33,7 +33,7 @@ def test_every_background_is_linked_with_attribution_and_a_compact_resource():
     parser = Catalog()
     parser.feed(html)
     catalog = json.loads(parser.content)
-    assert len(SCENES) == len(SCENE_IDS) == len(catalog) == 36
+    assert len(SCENES) == len(SCENE_IDS) == len(catalog) == 48
     assert catalog[0]["id"] == "classic"
     assert catalog[0]["name"] == "Classic"
     assert catalog[1]["id"] == "quiet"
@@ -41,7 +41,7 @@ def test_every_background_is_linked_with_attribution_and_a_compact_resource():
     assert len(html.encode()) < 300_000
     artworks = [scene for scene in SCENES if scene.get("asset")]
     assert 'data:image/avif;base64,' not in html
-    assert len(artworks) == 34
+    assert len(artworks) == 46
     for scene in artworks:
         assert (HERE / "assets" / scene["asset"]).is_file()
         assert artwork_url(scene["asset"]) in html
@@ -53,6 +53,8 @@ def test_original_resolution_wallpapers_are_public_cached_and_byte_exact(web):
     from PIL import Image
     expected = {"dnd-silver-dragon.jpg": (3840, 2140),
                 "dnd-frozen-north.jpg": (1920, 1080), "dnd-ravenloft.jpg": (8000, 4695)}
+    expected.update({scene["asset"]: (2560, 1600) for scene in SCENES
+                     if scene.get("game_id") and scene["asset"] not in expected})
     for asset, size in expected.items():
         row = artwork_files()[asset]
         with Image.open(row["path"]) as image:
@@ -84,14 +86,14 @@ def test_background_urls_are_scoped_to_the_configured_server_origin():
 
 def test_official_wallpapers_are_available_only_for_dnd_and_keep_copyright():
     official = [scene for scene in SCENES if scene.get("game_id")]
-    assert len(official) == 3
+    assert len(official) == 15
     for scene in official:
         assert scene["id"] in scene_ids_for_game("dnd-2024")
         for game in ("age-of-convergence", "sovereign-system"):
             assert scene["id"] not in scene_ids_for_game(game)
         assert scene["license"] == "© Wizards of the Coast"
         assert "Not approved/endorsed" in scene["notice"]
-        assert scene["source"].startswith("https://www.dndbeyond.com/")
+        assert scene["source"].startswith(("https://www.dndbeyond.com/", "https://web.archive.org/"))
 
 
 def test_per_game_atmospheres_remember_choices_and_reject_cross_game_art(engine):

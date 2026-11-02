@@ -516,7 +516,7 @@ function renderSceneOptions(gameId){
     if(option.game_id&&option.game_id!==gameId)continue;
     const node=element("option",option.name);node.value=option.id;(option.game_id?dnd:general).append(node);
   }
-  $("sceneSelect").replaceChildren(general,...(dnd.children.length?[dnd]:[]));
+  $("sceneSelect").replaceChildren(...(dnd.children.length?[dnd]:[]),general);
 }
 renderSceneOptions("dnd-2024");
 $("sceneSelect").onchange=event=>selectScene(event.target.value);

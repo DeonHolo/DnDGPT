@@ -6,6 +6,7 @@ FAN_CONTENT_POLICY = "https://company.wizards.com/en/legal/fancontentpolicy"
 WIZARDS_NOTICE = ("DnDGPT is unofficial Fan Content permitted under the Fan Content Policy. "
                   "Not approved/endorsed by Wizards. Portions of the materials used are property "
                   "of Wizards of the Coast. ©Wizards of the Coast LLC.")
+OFFICIAL_GALLERY = "https://web.archive.org/web/20250417181851/https://dnd.wizards.com/media-gallery"
 
 
 def artwork(id, name, asset, artist, title, source, license, license_url,
@@ -19,6 +20,10 @@ def dnd_wallpaper(id, name, artist, title, source, palette):
     return {**artwork(id, name, id + ".jpg", artist, title, source,
                       "© Wizards of the Coast", FAN_CONTENT_POLICY, palette, .62),
             "game_id": "dnd-2024", "notice": WIZARDS_NOTICE}
+
+
+def gallery_wallpaper(id, name, title, palette):
+    return dnd_wallpaper(id, name, "Wizards of the Coast", title, OFFICIAL_GALLERY, palette)
 
 
 SCENES = (
@@ -228,6 +233,18 @@ SCENES = (
         "https://www.dndbeyond.com/posts/2189-celebrate-dungeon-masters-campaign-1-finale-with-a",
         "violet",
     ),
+    gallery_wallpaper("dnd-radiant-citadel", "Radiant Citadel", "Journeys through the Radiant Citadel", "violet"),
+    gallery_wallpaper("dnd-witchlight", "The Wild Beyond the Witchlight", "The Wild Beyond the Witchlight", "violet"),
+    gallery_wallpaper("dnd-spelljammer", "Spelljammer", "Spelljammer: Adventures in Space", "slate"),
+    gallery_wallpaper("dnd-curse-strahd", "Curse of Strahd", "Curse of Strahd", "violet"),
+    gallery_wallpaper("dnd-candlekeep", "Candlekeep Mysteries", "Candlekeep Mysteries", "copper"),
+    gallery_wallpaper("dnd-eberron", "Eberron", "Eberron: Rising from the Last War", "slate"),
+    gallery_wallpaper("dnd-icewind-dale", "Icewind Dale", "Icewind Dale: Rime of the Frostmaiden", "slate"),
+    gallery_wallpaper("dnd-saltmarsh", "Ghosts of Saltmarsh", "Ghosts of Saltmarsh", "slate"),
+    gallery_wallpaper("dnd-storm-king", "Storm King's Thunder", "Storm King's Thunder", "slate"),
+    gallery_wallpaper("dnd-tyranny-dragons", "Tyranny of Dragons", "Tyranny of Dragons", "copper"),
+    gallery_wallpaper("dnd-theros", "Mythic Odysseys of Theros", "Mythic Odysseys of Theros", "forest"),
+    gallery_wallpaper("dnd-yawning-portal", "The Yawning Portal", "Tales from the Yawning Portal", "copper"),
 )
 SCENE_IDS = frozenset(scene["id"] for scene in SCENES)
 
