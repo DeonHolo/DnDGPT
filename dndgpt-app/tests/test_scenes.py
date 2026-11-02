@@ -4,6 +4,7 @@ from html.parser import HTMLParser
 import pytest
 
 from app.presentation import HERE, dashboard_html
+from app.artwork import artwork_url, artwork_files
 from app.scenes import SCENES, SCENE_IDS, scene_ids_for_game
 from app.engine import EngineError
 
@@ -27,7 +28,7 @@ class Catalog(HTMLParser):
             self.in_catalog = False
 
 
-def test_every_background_is_embedded_with_attribution_and_a_bounded_resource():
+def test_every_background_is_linked_with_attribution_and_a_compact_resource():
     html = dashboard_html()
     parser = Catalog()
     parser.feed(html)
@@ -37,13 +38,48 @@ def test_every_background_is_embedded_with_attribution_and_a_bounded_resource():
     assert catalog[0]["name"] == "Classic"
     assert catalog[1]["id"] == "quiet"
     assert 'data-scene="classic"' in html
-    assert len(html.encode()) < 1024 * 1024
+    assert len(html.encode()) < 300_000
     artworks = [scene for scene in SCENES if scene.get("asset")]
-    assert html.count('data:image/avif;base64,') == len(artworks) == 34
+    assert 'data:image/avif;base64,' not in html
+    assert len(artworks) == 34
     for scene in artworks:
         assert (HERE / "assets" / scene["asset"]).is_file()
+        assert artwork_url(scene["asset"]) in html
         entry = next(item for item in catalog if item["id"] == scene["id"])
         assert all(entry.get(key) for key in ("artist", "title", "source", "license", "license_url"))
+
+
+def test_original_resolution_wallpapers_are_public_cached_and_byte_exact(web):
+    from PIL import Image
+    expected = {"dnd-silver-dragon.jpg": (3840, 2140),
+                "dnd-frozen-north.jpg": (1920, 1080), "dnd-ravenloft.jpg": (8000, 4695)}
+    for asset, size in expected.items():
+        row = artwork_files()[asset]
+        with Image.open(row["path"]) as image:
+            assert image.size == size
+        path = artwork_url(asset)
+        response = web.get(path, headers={"Authorization": ""})
+        assert response.status_code == 200
+        assert response.content == row["path"].read_bytes()
+        assert hashlib.sha256(response.content).hexdigest() == row["digest"]
+        assert response.headers["content-type"] == "image/jpeg"
+        assert response.headers["cache-control"] == "public, max-age=31536000, immutable"
+        assert web.get(path, headers={"If-None-Match": response.headers["etag"]}).status_code == 304
+        assert web.get(path.replace(row["digest"], "0" * 64)).status_code == 404
+
+
+def test_artwork_route_never_serves_private_or_uncatalogued_files(web):
+    for path in ("/assets/backgrounds/abc/auth.py", "/assets/backgrounds/abc/campaigns.sqlite3",
+                 "/assets/backgrounds/abc/..%2Fauth.py", "/assets/backgrounds/abc/layouts/ivy.svg"):
+        assert web.get(path).status_code == 404
+    assert web.get("/api/campaigns", headers={"Authorization": ""}).status_code == 401
+
+
+def test_background_urls_are_scoped_to_the_configured_server_origin():
+    html = dashboard_html("https://host.example.test")
+    for asset in artwork_files():
+        assert artwork_url(asset, "https://host.example.test") in html
+    assert 'src="https://www.dndbeyond.com' not in html
 
 
 def test_official_wallpapers_are_available_only_for_dnd_and_keep_copyright():

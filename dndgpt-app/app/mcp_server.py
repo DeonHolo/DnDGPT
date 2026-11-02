@@ -63,7 +63,9 @@ def rules_page(document, offset, section=None, game_id=AGE):
 
 
 def build_mcp(engine, config, verifier, creation_repository=None):
-    html = load_dashboard_html()
+    parsed = urlsplit(config.resource_url)
+    origin = f"{parsed.scheme}://{parsed.netloc}"
+    html = load_dashboard_html(origin)
     digest = hashlib.sha256(html.encode()).hexdigest()[:12]
     resource_uri = f"ui://dndgpt/dashboard-v1.0-{digest}.html"
     legacy_uri = f"ui://dndgpt/dashboard-compat-{digest}.html"
@@ -72,8 +74,6 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         from .creation_view import html as creation_view
         creation_html = creation_view()
         creation_uri = "ui://dndgpt/creation-v1.0-" + hashlib.sha256(creation_html.encode()).hexdigest()[:12] + ".html"
-    parsed = urlsplit(config.resource_url)
-    origin = f"{parsed.scheme}://{parsed.netloc}"
     server = FastMCP(
         "DnDGPT", stateless_http=True, json_response=True,
         instructions="DnDGPT supports D&D 2024 (default for new campaigns), Age of Convergence and Sovereign System through one connection. Existing saves select their own game. Read only that game's hardener/index and relevant rules. For D&D use lookup_dnd_reference/list_dnd_options, complete legal Quickplay party drafts, independent reusable character-library sheets and private adventure packs. Ordinary chat starts and player-selected advancement need no dashboard approval. Batch party and scene changes in save_chat_update; reuse current successful responses. Keep full HUD in the dashboard and story presentation in chat. Never mix the homebrew rarity/LCK/MP/evolutions into standard D&D. A published adventure catalogue entry needs its actual source before play.",
@@ -483,12 +483,12 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         """
         return invoke(lambda owner: engine.dashboard(owner, campaign_id, game_id))
 
-    ui_meta = {"ui": {"prefersBorder": True, "csp": {"connectDomains": [], "resourceDomains": []}},
+    ui_meta = {"ui": {"prefersBorder": True, "csp": {"connectDomains": [], "resourceDomains": [origin]}},
                "openai/ui": {"availableDisplayModes": ["inline", "fullscreen", "pip"],
                              "preferredDisplayMode": "inline"},
-               "openai/widgetDescription": "Seven core RPG chapters plus a saved-image Gallery; action choices send chat follow-ups.",
+               "openai/widgetDescription": "Saved campaign chapters, game-specific character sheets, Gallery and D&D character/adventure libraries.",
                "openai/widgetPrefersBorder": True,
-               "openai/widgetCSP": {"connect_domains": [], "resource_domains": []}}
+               "openai/widgetCSP": {"connect_domains": [], "resource_domains": [origin]}}
 
     @server.resource(resource_uri, mime_type=MIME_TYPE, meta=ui_meta)
     def dashboard_html() -> str:

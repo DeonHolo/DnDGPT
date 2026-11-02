@@ -99,6 +99,8 @@ def create_app(db_path=None, auth_config=None, token_verifier=None, *, enable_cr
     app.state.engine, app.state.mcp, app.state.resource_uri = engine, mcp, resource_uri
     app.state.auth_config = config
     app.state.creation_repository = creation_repository
+    from .artwork import router as artwork_router
+    app.include_router(artwork_router)
 
     @app.exception_handler(EngineError)
     async def engine_error(request, error):
@@ -110,7 +112,8 @@ def create_app(db_path=None, auth_config=None, token_verifier=None, *, enable_cr
         if request.url.path.startswith("/mcp") and not config.configured:
             return JSONResponse(status_code=503, content={"detail": "OAuth is not configured"})
         response = await call_next(request)
-        response.headers["Cache-Control"] = "no-store"
+        if not (request.url.path.startswith("/assets/backgrounds/") and response.status_code in (200, 304)):
+            response.headers["Cache-Control"] = "no-store"
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["Referrer-Policy"] = "no-referrer"
         return response

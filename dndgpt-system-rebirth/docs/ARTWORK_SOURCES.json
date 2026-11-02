@@ -94,8 +94,8 @@
     "license_url": "https://creativecommons.org/licenses/by/4.0/",
     "palette": "slate",
     "opacity": 0.72,
-    "sha256": "dba98f7ac45c771013140f15375545091b2effe7b56ebcaa0b3d24dd26504458",
-    "bytes": 16848
+    "sha256": "2866691ceec8be536f488f14dae045a946ce5ab8f0af420719a03e73b6a37f88",
+    "bytes": 37030
   },
   {
     "id": "rendezvous",
@@ -108,8 +108,8 @@
     "license_url": "https://creativecommons.org/licenses/by/4.0/",
     "palette": "violet",
     "opacity": 0.62,
-    "sha256": "9289aaf6c005f7e98e8101fa75c52a0fb6ecc6962d14745b39b4ba752e006e15",
-    "bytes": 25668
+    "sha256": "e62e625cb260d3388e0d41bf2861bc3b9a80e3d3b4a3f83049fd3720179b33fe",
+    "bytes": 29446
   },
   {
     "id": "dragonfire",
@@ -150,8 +150,8 @@
     "license_url": "https://creativecommons.org/licenses/by/4.0/",
     "palette": "violet",
     "opacity": 0.72,
-    "sha256": "993d8460154dcf07d663ac04f0f4444b21e88c02fe8bd93d9fa13ab04b7ed3ad",
-    "bytes": 26545
+    "sha256": "1d5d3838cfbf1dcb6374d4636459cf3b5c7b240dc60d45f2e9d5533016fff259",
+    "bytes": 30183
   },
   {
     "id": "mooncap-cavern",
@@ -180,8 +180,8 @@
     "license": "CC0",
     "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
     "opacity": 0.65,
-    "sha256": "b7c13cdc73bb5088d80d258c13c1b71a1df2f22bb9c768e2104b6f4b9bf2bd9e",
-    "bytes": 23381
+    "sha256": "b088b16e7b8b92ecef0eb1882fe3068e9c3393999cee8edb0e8cfe2812e4ac57",
+    "bytes": 25893
   },
   {
     "id": "root-cellar",
@@ -270,8 +270,8 @@
     "license": "CC0",
     "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
     "opacity": 0.65,
-    "sha256": "9140df234e94482204c9515419c7b0a1471bbe45501103a5e8d89bf92cf74f7b",
-    "bytes": 23576
+    "sha256": "ef9ae14320330489a8875b579cc773bbfe06eec3010896d105b5005b6987b6c4",
+    "bytes": 42113
   },
   {
     "id": "ancient-gate",
@@ -315,8 +315,8 @@
     "license": "CC0",
     "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
     "opacity": 0.65,
-    "sha256": "312453b0784a0cae4fd0710a3510a10827ab626dac0a492021252456ec05e4cb",
-    "bytes": 24978
+    "sha256": "1af808e0371bc7138938718ffa2172e8a586eab45311f36c0cd8a80ea4ad4fe8",
+    "bytes": 28909
   },
   {
     "id": "moonlit-meadow",
@@ -330,8 +330,8 @@
     "license": "CC0",
     "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
     "opacity": 0.65,
-    "sha256": "5d5bb269b38c1b657f5530468ba4fde9ef498292121f9aeba7c42d4120f106d5",
-    "bytes": 18815
+    "sha256": "44e1b7b90a435382f913353d2039d5a679197f1a0945f3b8d423f87133676d49",
+    "bytes": 21776
   },
   {
     "id": "sunset-hills",
@@ -345,8 +345,8 @@
     "license": "CC0",
     "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
     "opacity": 0.65,
-    "sha256": "139e8065b73dd187aa5e4485e0c1d935c736ec72269e3db11d17250b472c01df",
-    "bytes": 12170
+    "sha256": "e15f77e39ead241845b15c9b6bd0fce37947d5fa0d1815bcc9c2e1923af361ae",
+    "bytes": 30190
   },
   {
     "id": "glowwood",
@@ -360,8 +360,8 @@
     "license": "CC0",
     "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
     "opacity": 0.65,
-    "sha256": "f6ef2e299b524e12d3d813ad3537a111a1b72176153f6ab45285d449460a1288",
-    "bytes": 23035
+    "sha256": "3b63358c29a4ff38dc63ee6bdbb78251c6a3f6e05b555d77513cc472e499b76e",
+    "bytes": 26816
   },
   {
     "id": "mountain-dawn",
@@ -375,8 +375,8 @@
     "license": "CC0",
     "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
     "opacity": 0.65,
-    "sha256": "0629fb51cef67174225c7e3063158c1c3f9d1c5543a41eeb36600aafbdcfc63d",
-    "bytes": 14551
+    "sha256": "3f1067612da7da9a7c838abf6e0ac2612503c0d37ed52459b8db8fe45d2fb861",
+    "bytes": 30876
   },
   {
     "id": "moonlit-trail",
@@ -456,7 +456,7 @@
   {
     "id": "dnd-silver-dragon",
     "name": "Silver Dragon Jubilee",
-    "asset": "dndgpt-app/app/assets/dnd-silver-dragon.avif",
+    "asset": "dndgpt-app/app/assets/dnd-silver-dragon.jpg",
     "artist": "Campbell White",
     "title": "D&D 50th Anniversary",
     "source": "https://www.dndbeyond.com/posts/1660-dungeons-dragons-turns-50-see-how-were-celebrating",
@@ -466,16 +466,18 @@
     "opacity": 0.62,
     "game_id": "dnd-2024",
     "notice": "DnDGPT is unofficial Fan Content permitted under the Fan Content Policy. Not approved/endorsed by Wizards. Portions of the materials used are property of Wizards of the Coast. ©Wizards of the Coast LLC.",
-    "bytes": 25889,
-    "sha256": "ace8d47773e1a4e5a3e8a9efd372f4f2f2ab8466528933593d3a8b58dd40e051",
+    "bytes": 6499584,
+    "sha256": "43ce2763ceeefed68bea47d1b58893d55760c077be8630f0a23a0f12394fa2b1",
     "downloaded_from": "https://media.dndbeyond.com/compendium-images/marketing/50th-anniversary-desktop-wallpapers.zip",
-    "original_sha256": "9b6ac20b8d0a9b69c8049468918794c177252cfe662edda244709c163774c7ed",
-    "changes": "Resized proportionally and encoded as AVIF; original framing retained."
+    "original_sha256": "43ce2763ceeefed68bea47d1b58893d55760c077be8630f0a23a0f12394fa2b1",
+    "changes": "Original published JPEG; no resizing or recompression.",
+    "width": 3840,
+    "height": 2140
   },
   {
     "id": "dnd-frozen-north",
     "name": "The Frozen North",
-    "asset": "dndgpt-app/app/assets/dnd-frozen-north.avif",
+    "asset": "dndgpt-app/app/assets/dnd-frozen-north.jpg",
     "artist": "Wizards of the Coast",
     "title": "D&D Holiday Wallpaper — Abominable Yeti",
     "source": "https://www.dndbeyond.com/resources/1868-download-this-special-d-d-holiday-wallpaper",
@@ -485,16 +487,18 @@
     "opacity": 0.62,
     "game_id": "dnd-2024",
     "notice": "DnDGPT is unofficial Fan Content permitted under the Fan Content Policy. Not approved/endorsed by Wizards. Portions of the materials used are property of Wizards of the Coast. ©Wizards of the Coast LLC.",
-    "bytes": 18586,
-    "sha256": "7888a470a91ed97a815c51923b019acfc80d5d404ec74d0d45109cb5085af29c",
+    "bytes": 2200021,
+    "sha256": "a40865f850445fc8da01beda7f52f6794e9d2d75984a5a0fae6b3467491b0adf",
     "downloaded_from": "https://media.dndbeyond.com/compendium-images/marketing/dnd-holiday-haul-wallpaper.zip",
     "original_sha256": "a40865f850445fc8da01beda7f52f6794e9d2d75984a5a0fae6b3467491b0adf",
-    "changes": "Resized proportionally and encoded as AVIF; original framing retained."
+    "changes": "Original published JPEG; no resizing or recompression.",
+    "width": 1920,
+    "height": 1080
   },
   {
     "id": "dnd-ravenloft",
     "name": "Ravenloft — Lord Soth",
-    "asset": "dndgpt-app/app/assets/dnd-ravenloft.avif",
+    "asset": "dndgpt-app/app/assets/dnd-ravenloft.jpg",
     "artist": "Max Dunbar",
     "title": "Dungeon Masters: Campaign 1 Finale",
     "source": "https://www.dndbeyond.com/posts/2189-celebrate-dungeon-masters-campaign-1-finale-with-a",
@@ -504,10 +508,12 @@
     "opacity": 0.62,
     "game_id": "dnd-2024",
     "notice": "DnDGPT is unofficial Fan Content permitted under the Fan Content Policy. Not approved/endorsed by Wizards. Portions of the materials used are property of Wizards of the Coast. ©Wizards of the Coast LLC.",
-    "bytes": 17834,
-    "sha256": "46bc5b7c077d084151e731fe8da4a27988780da5f549dba7f775fc8b4e5cab84",
-    "downloaded_from": "https://www.dndbeyond.com/attachments/12/923/article-dm-key-art.jpg",
-    "original_sha256": "01eb118d78f302a2f3cd378550f52552e09aebf400f2d6f62b4f2909df64fcc6",
-    "changes": "Resized proportionally and encoded as AVIF; original framing retained."
+    "bytes": 3491173,
+    "sha256": "ab93c1d8554e45da240b155a8d54e83fca3eedf1d7feb63830a82554144aae65",
+    "downloaded_from": "https://cdn.media.amplience.net/i/wizardsprod/Ravenloft_Campaign_Finale_Key_Art",
+    "original_sha256": "ab93c1d8554e45da240b155a8d54e83fca3eedf1d7feb63830a82554144aae65",
+    "changes": "Original published JPEG; no resizing or recompression.",
+    "width": 8000,
+    "height": 4695
   }
 ]

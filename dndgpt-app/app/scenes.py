@@ -16,7 +16,7 @@ def artwork(id, name, asset, artist, title, source, license, license_url,
 
 
 def dnd_wallpaper(id, name, artist, title, source, palette):
-    return {**artwork(id, name, id + ".avif", artist, title, source,
+    return {**artwork(id, name, id + ".jpg", artist, title, source,
                       "© Wizards of the Coast", FAN_CONTENT_POLICY, palette, .62),
             "game_id": "dnd-2024", "notice": WIZARDS_NOTICE}
 

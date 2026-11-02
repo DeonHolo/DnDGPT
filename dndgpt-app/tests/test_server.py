@@ -108,7 +108,10 @@ def test_mcp_initialization_tools_and_ui_resource(web):
             assert "resourceUri" not in item["_meta"]["ui"]
     resource = rpc(web, "resources/read", {"uri": render["_meta"]["ui"]["resourceUri"]})["contents"][0]
     assert resource["mimeType"] == "text/html;profile=mcp-app"
-    assert resource["_meta"]["ui"]["csp"] == {"connectDomains": [], "resourceDomains": []}
+    assert resource["_meta"]["ui"]["csp"] == {"connectDomains": [], "resourceDomains": ["https://dndgpt.example.test"]}
+    assert resource["_meta"]["openai/widgetCSP"] == {
+        "connect_domains": [], "resource_domains": ["https://dndgpt.example.test"]}
+    assert "https://dndgpt.example.test/assets/backgrounds/" in resource["text"]
     assert resource["_meta"]["openai/ui"] == {
         "availableDisplayModes": ["inline", "fullscreen", "pip"], "preferredDisplayMode": "inline"}
     compatibility = rpc(web, "resources/read", {"uri": render["_meta"]["openai/outputTemplate"]})["contents"][0]

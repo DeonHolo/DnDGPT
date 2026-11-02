@@ -162,6 +162,11 @@ def test_widget():
     return HTMLResponse(dashboard_html())
 
 
+# Identical public-art route to production; all player state stays in disposable fixtures.
+from app.artwork import router as artwork_router
+app.include_router(artwork_router)
+
+
 @app.get("/test-player-view")
 def test_player_view():
     return FileResponse(HERE / "player_view.html")

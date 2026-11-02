@@ -505,7 +505,7 @@ function selectScene(value,save=true){
     const work=element("a",selected.title),license=element("a",selected.license);
     work.href=selected.source;license.href=selected.license_url;
     for(const link of [work,license]){link.target="_blank";link.rel="noopener noreferrer"}
-    credit.append("Artwork: ",work," — "+selected.artist+" · ",license,". Resized for the dashboard.");
+    credit.append("Artwork: ",work," — "+selected.artist+" · ",license,".");
     if(selected.notice)credit.append(element("span",selected.notice,"artwork-notice"));
   }else credit.textContent=scene==="classic"?"Classic dark green, without background artwork.":"Plain charcoal, without background artwork.";
   if(save)persistPreferences();

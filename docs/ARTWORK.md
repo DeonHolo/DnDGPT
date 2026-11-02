@@ -44,13 +44,13 @@ Wind Shrine uses Crisisworks’ background for [Spirit of the Wind](https://evil
 
 The two historical paintings are public-domain reproductions credited on their Wikimedia Commons pages. Modern artwork retains the artists’ licenses; these assets are excluded from the software’s MIT license. [CC0](https://creativecommons.org/publicdomain/zero/1.0/) and [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) terms apply as listed. The full CC BY text is included in [LICENSES/CC-BY-4.0.txt](../LICENSES/CC-BY-4.0.txt).
 
-Images were resized and encoded as AVIF, with the first frame used for Dusk Mountains. The viewport may crop them to fit; no generative image processing was used. Every selected artwork shows its title, artist, source and license in the UI. All images are embedded in the dashboard, so opening a campaign sends no image request to an art host.
+Shared images were resized and encoded as AVIF, with the first frame used for Dusk Mountains. The viewport may crop them to fit; no generative image processing was used. Every selected artwork shows its title, artist, source and license in the UI. Only the selected background is loaded from the DnDGPT server, using an immutable URL and browser caching. Opening a campaign sends no image request to an external art host. Public artwork is served separately from authenticated campaign data.
 
 [ARTWORK_SOURCES.json](ARTWORK_SOURCES.json) records each local asset, source file, license, byte count and SHA-256. [app/scenes.py](../dndgpt-app/app/scenes.py) defines the selectable catalog.
 
 ## Official D&D wallpaper group
 
-Available only in D&D 2024 mode, separated from the shared reading atmospheres. Each image links to the official source in the dashboard. Full framing is retained; images are proportionally resized and AVIF-encoded for the embedded dashboard. Source hashes and download URLs are recorded in ARTWORK_SOURCES.json.
+Available only in D&D 2024 mode, separated from the shared reading atmospheres. Each image links to the official source in the dashboard. The original published JPEG files are preserved byte for byte: Silver Dragon Jubilee at 3840 × 2140, The Frozen North at 1920 × 1080, and Ravenloft at 8000 × 4695. Full framing and source image quality are retained. These files load separately from the compact MCP resource. Source hashes and download URLs are recorded in ARTWORK_SOURCES.json.
 
 | Dashboard name | Artwork and credit | Official source |
 | --- | --- | --- |
