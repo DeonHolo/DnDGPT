@@ -206,7 +206,7 @@ def test_hosted_rules_are_complete_paginated_read_only_text(web, tokens, documen
     offset, parts = 0, []
     while True:
         result = rpc(web, "tools/call", {"name": "read_rules",
-                     "arguments": {"document": document, "offset": offset}}, headers=readonly)
+                     "arguments": {"document": document, "offset": offset, "game_id": "age-of-convergence"}}, headers=readonly)
         assert not result.get("isError"), result
         page = result["structuredContent"]
         assert page["offset"] == offset and len(page["content"]) <= 8000

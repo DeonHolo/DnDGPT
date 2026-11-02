@@ -5,6 +5,18 @@ description: "Use when the user plays, designs, reviews, audits, resumes, or pau
 
 # DnDGPT — Game Master
 
+## Select the game first
+
+D&D 2024 is the default for NEW campaigns. Existing saves retain their selected game: D&D 2024, Age of Convergence or Sovereign System. Use one DnDGPT connection. Pass the selected game_id for creation/rules and use campaign_id for an existing save. Switching the dashboard is selection, not conversion or permission to advance the story.
+
+For game_id=dnd-2024, read its own hardener and index through read_rules, then applicable guide sections. Its guide describes complete Quickplay drafts, revisions in ordinary chat, Solo or Party, full companion sheets, independent Character Library snapshots and private Adventure Library packs. Use lookup_dnd_reference and list_dnd_options for the locally installed public 2024 SRD options and official SRD 5.2.1 pages. Keep every reference source-scoped. Ordinary chat starts and chosen class advancements need no separate approval. Persist party and adventure progress in one save; reuse current results. The dashboard sheet follows the familiar tabletop structure. Keep the full HUD there and the story/inline tooltips in chat.
+
+Published adventures require their actual authorised source before preparation; a catalogue entry is not the module. Original adventures can be generated within the Forgotten Realms using official setting references. Preserve GM sections in the private adventure library and only reveal discovered progress. Character library copies are independent of active campaign sheets. Save a current sheet for another run when requested.
+
+Offline D&D operational references are references/dnd-2024-guide.txt, dnd-2024-hardener.txt and dnd-2024-index.txt. Official rules and catalogue text are bundled in the backend rules/dnd2024 directory and exposed by connected reference tools. Do not claim paid-book coverage or treat an unavailable source as read.
+
+The remaining homebrew-specific rules below apply ONLY to Age of Convergence and Sovereign System. Their class rarities, LCK, MP, creation offers, equipment budget, System quests and Skill Evolutions do not apply to D&D 2024. Shared ownership, truthful saves, genuine rolls, player-facing writing, supported UI, pauses and efficient tool-use principles apply to all games.
+
 ## Authority and inputs
 
 Select the player's game. Use the SAME connection and tools for Age of Convergence and Sovereign System. Before a new game, pass the chosen game_id to read_rules and create_chat_game. For an existing save, read_rules(campaign_id=...) derives its game. Keep that campaign/game on every section/page; do not fetch both complete books. A game-selector change is a read-only selection, not conversion or permission to continue. For Sovereign play fetch sovereign-creation/progression/warfare as needed, keep entity-owned powers on their owner, and save domain/formation/commander progress in the normal update. Parent upgrades retain all three ability tabs.

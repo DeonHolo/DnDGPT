@@ -319,6 +319,9 @@ class ChatGame:
         self.engine, self.store = engine, engine.store
 
     def create(self, owner, name, action_id, disposable=False, game_id="age-of-convergence"):
+        if game_id == "dnd-2024":
+            from .dnd5e import DndGame
+            return DndGame(self.engine).create(owner, name, action_id, disposable)
         from .game_profiles import validate_game, SOVEREIGN, VERSION
         try:
             validate_game(game_id)
@@ -388,13 +391,21 @@ class ChatGame:
             if type(nested_start) is not bool or begin_adventure and not nested_start:
                 fail(422, "invalid_chat_update", "Use a consistent boolean begin_adventure")
             begin_adventure = begin_adventure or nested_start
-        validate_changes(changes, allow_empty=begin_adventure)
+        # Both rule profiles share JSON bounds before hashing an idempotent request.
+        if type(changes) is not dict:
+            fail(422, "invalid_chat_update", "changes must be an object")
+        bounded_json(changes)
         request = canonical({"expected_version": expected_version, "summary": summary, "changes": changes})
         if begin_adventure:
             request = canonical({"expected_version": expected_version, "summary": summary,
                                  "changes": changes, "begin_adventure": True})
         with self.store.transaction() as db:
             state = self.engine._get(db, owner, campaign_id)
+            if state.get("game_id") == "dnd-2024":
+                from .dnd5e import DndGame
+                return DndGame(self.engine).update(owner, campaign_id, action_id, expected_version,
+                    summary, changes, begin_adventure, _db=db, _state=state)
+            validate_changes(changes, allow_empty=begin_adventure)
             if state.get("mode") != "chat":
                 fail(422, "chat_mode_required", "Existing campaigns cannot be converted or changed by this tool")
             prior = records.get(db, "chat_updates_v1", {"campaign_id": campaign_id, "action_id": action_id})

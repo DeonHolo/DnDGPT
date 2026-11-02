@@ -44,6 +44,13 @@ function refreshDashboardSearch(){
     const title=nav.querySelector(".nav-label")?.textContent||$("title-"+id)?.textContent||fieldLabel(id);
     add(title,"Panel",id==="character"||id==="health"?searchableText(root):title,()=>{selectCompanionPage(id);return root});
   }
+  if(currentGame==="dnd-2024")for(const member of state.party||[]){
+    const open=(page,feature)=>{dndSelectedMember=member.id;if(feature){dndFeatureId=feature.id;dndFeatureTab="rules"}renderDndPanels(state);selectCompanionPage(page);return $(page)};
+    add(member.name,"Party · Character sheet",[member.class_name,member.species,member.background,member.story_summary].join(" "),()=>open("character"));
+    for(const feature of member.features||[])add(feature.name,member.name+" · Features",feature.description||feature.summary,()=>open("skills",feature));
+    for(const spell of member.spells||[])add(spell.name,member.name+" · Spellcasting",spell.description,()=>{open("skills");const node=[...$("skills").querySelectorAll("details")].find(d=>d.querySelector("summary")?.textContent.startsWith(spell.name+" ·"));if(node)node.open=true;return node||$("skills")});
+    for(const item of member.inventory||[])add(item.name,member.name+" · Equipment",[item.description,item.effects,item.name].filter(Boolean).join(" "),()=>{open("equipment");const node=[...$("equipment").querySelectorAll("details")].find(d=>d.querySelector("summary")?.textContent.startsWith(item.name+" ·"));if(node)node.open=true;return node||$("equipment")});
+  }
   for(const ability of state.abilities||[]){
     if(ability.known_to_player===false)continue;
     const foundation=isSovereignFoundation(ability)&&currentGame==="sovereign-system";

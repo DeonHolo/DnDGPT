@@ -197,10 +197,8 @@ document.getElementById("run").onclick=async()=>{
   assert((await snapshot()).campaign.version===before.campaign.version,"Click changed campaign");
   doc.getElementById("developmentTools").open=false;doc.getElementById("viewSettings").open=false;
  });
- await test("Custom ordered actions retain the player's text",async()=>{
-  const input=doc.getElementById("custom"),count=messages.length;input.value="Inspect the door, then wait for my decision.";
-  doc.getElementById("send").click();await until(()=>messages.length===count+1);
-  assert(messages.at(-1).endsWith(input.value),"Custom text changed");
+ await test("Gameplay composer stays in the conversation",async()=>{
+  assert(!doc.getElementById("customForm")&&!doc.getElementById("custom")&&!doc.getElementById("send"),"Redundant dashboard action composer is present");
  });
  await test("HUD can hide and show without changing state",async()=>{
   doc.getElementById("hideHud").click();assert(doc.getElementById("hud").hidden,"HUD did not hide");

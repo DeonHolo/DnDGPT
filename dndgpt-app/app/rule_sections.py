@@ -36,6 +36,9 @@ GAME_SECTIONS = {"sovereign-creation": "Sovereign creation and inherited rules",
 
 
 def sections(text):
+    if text.startswith("# DnDGPT D&D 2024"):
+        from .dnd_reference import guidance_sections
+        return guidance_sections(text)
     chapters = list(re.finditer(r"^# (\d+[A-Z]?)\. (.+)$", text, re.M))
     result = {}
     for index, match in enumerate(chapters):
@@ -63,6 +66,14 @@ def sections(text):
 
 def index_text(text):
     entries = sections(text)
+    if text.startswith("# DnDGPT D&D 2024"):
+        lines = ["# DnDGPT D&D 2024 guide index", "",
+                 "Selected game: dnd-2024. Read its compact hardener once, then relevant guide sections.",
+                 "Use read_rules(document='rulebook', section=KEY, game_id='dnd-2024') or the campaign_id.",
+                 "Use lookup_dnd_reference(kind='rules') for the complete official SRD 5.2.1 and kind-specific lookups for installed options.",
+                 "Quickplay: creation and party. Adventure preparation: adventure. Turns: play and combat. Level ups: advancement.",
+                 "Reuse cached sections and successful save results. Each sheet and campaign keeps its game and source version.", ""]
+        return "\n".join(lines + [f"{key} | {item['title']} | {item['end']-item['start']} characters" for key, item in entries.items()]) + "\n"
     lines = ["# DnDGPT rule index", "",
              "Load the compact hardener first. Fetch relevant amendments and chapters before using their rules.",
              "Use read_rules(document='rulebook', section=KEY, offset=0); follow next_offset with the SAME section.",

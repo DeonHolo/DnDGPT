@@ -11,6 +11,7 @@ AREAS = {"character", "current_location", "fictional_time_seconds", "paused", "p
          "level_up_freeze", "abilities", "conditions", "summons", "inventory", "equipment",
          "quest_log", "continuity", "funds", "supplies", "name", "world", "world_log",
          "notes", "opening_preview", "creation", "advancement", "generation_ledger"}
+AREAS |= {"party", "party_mode", "adventure"}
 
 
 def visible(value):
@@ -45,6 +46,9 @@ def changes_between(before, after, limit=100, text_limit=1200):
 
     for key in sorted(AREAS):
         left, right = visible(before.get(key)), visible(after.get(key))
+        if key == "party":
+            left = {row.get("name", "Character"): row for row in left or []}
+            right = {row.get("name", "Character"): row for row in right or []}
         if before.get(key) != after.get(key) and left == right:
             withheld.append(key)
         walk(left, right, [key])

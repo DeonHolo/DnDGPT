@@ -20,6 +20,7 @@ STATE_FIELDS = {"id", "name", "version", "mode", "rules_version", "rules_profile
                 "notes", "fictional_time_seconds", "world", "creation", "advancement", "funds",
                 "rarity_candidates", "last_event", "continuity", "restored_from"} | COLLECTIONS
 STATE_FIELDS |= {"sovereignty", "quest_settlements", "reward_credits", "event_tracking", "campaign_life", "campaign_preferences"}
+STATE_FIELDS |= {"party", "hero_id", "party_mode", "adventure"}
 
 
 def digest(value):
@@ -47,7 +48,7 @@ def validate_archive(archive):
             or not secrets.compare_digest(digest(source), checksum)):
         fail(422, "archive_checksum", "Campaign export is damaged or its checksum does not match")
     required = (STATE_FIELDS - {"continuity", "restored_from", "rules_profile", "game_id", "game_rules_version", "sovereignty",
-                               "quest_settlements", "reward_credits", "event_tracking", "campaign_life", "campaign_preferences"})
+                               "quest_settlements", "reward_credits", "event_tracking", "campaign_life", "campaign_preferences", "party", "hero_id", "party_mode", "adventure"})
     if not required <= source.keys() or source["mode"] != "chat":
         fail(422, "invalid_archive", "Only complete chat-led campaign snapshots can be restored")
     if type(source["phase"]) is not str or source["phase"] not in {"character_draft", "ready", "adventure"}:
@@ -72,6 +73,27 @@ def validate_archive(archive):
         if (type(roll) is not dict or type(roll.get("enhanced")) is not bool or
                 roll.get("final_rarity") not in ("COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY", "UNIQUE")):
             fail(422, "invalid_archive", "Invalid recorded rarity")
+    if source.get("game_id") == "dnd-2024":
+        from .dnd5e import normalize_sheet, character_summary
+        projected = copy.deepcopy(source)
+        party = source.get("party")
+        if type(party) is not list or len(party) > 8:
+            fail(422, "invalid_archive", "The saved D&D party is invalid")
+        if type(source.get("character")) is not dict or source["phase"] == "adventure" and not party:
+            fail(422, "invalid_archive", "An active D&D adventure needs its party and character record")
+        if type(source.get("adventure", {})) is not dict:
+            fail(422, "invalid_archive", "The saved adventure reference must be an object")
+        projected["party"] = [normalize_sheet(s) for s in party]
+        ids = [s["id"] for s in projected["party"]]
+        if len(set(ids)) != len(ids) or party and source.get("hero_id") not in ids:
+            fail(422, "invalid_archive", "The saved D&D party needs distinct members and its hero")
+        if source.get("party_mode") not in {"solo", "party"} or source.get("party_mode") == "solo" and len(party) > 1:
+            fail(422, "invalid_archive", "The saved party mode is invalid")
+        if party:
+            projected["character"] = character_summary(next(s for s in projected["party"] if s["id"] == source["hero_id"]))
+        if source["phase"] != "adventure" and source["fictional_time_seconds"] != 0:
+            fail(422, "invalid_archive", "An unstarted adventure cannot have elapsed gameplay time")
+        return projected
     character = source["character"]
     required_character = {"name", "class_name", "rarity", "attributes", "level", "xp", "xp_next", "scene_counter",
                           "attribute_points", "skill_points", "talent_points", "hp", "hp_max", "mp", "mp_max", "def"}

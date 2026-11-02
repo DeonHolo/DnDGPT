@@ -33,7 +33,6 @@ h1,h2,h3{font-family:Georgia,"Times New Roman",serif;font-weight:500;margin:0 0 
 #syncStatus{font-size:.72rem;color:var(--muted);margin:12px 0 0}#syncStatus[data-state="stale"]{color:var(--warning)}
 #connection{margin:10px 0 16px}#session{min-width:0;flex:1}.session-picker{font-size:.82rem}
 #choices{margin:16px 0 10px}#choices button{flex:1;text-align:left}
-#customForm{display:flex;gap:8px}#custom{flex:1;min-width:0;font-size:.85rem}
 #notice{min-height:1.4em;margin:8px 0;color:var(--warning);font-size:.85rem}#notice:empty{display:none}
 #fallback{width:100%;margin:8px 0}
 #status{position:relative;margin:16px 0 10px;padding:18px 20px;border:1px solid var(--line);border-top:2px solid var(--gold);border-radius:6px;background:var(--paper);box-shadow:0 8px 28px var(--shadow)}
@@ -109,7 +108,7 @@ pre{font:.78rem/1.6 var(--font-mono,ui-monospace,monospace);white-space:pre-wrap
 .development-tools #choices{margin:0}.development-tools #newSandbox{justify-self:start}.connection-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .session-picker{margin:18px 0 14px}.session-picker select{flex:1;min-width:150px}.danger{color:#f1b4a8;border-color:#a56559}.danger:disabled{opacity:.5}
 dialog{color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;width:min(560px,calc(100% - 32px));max-height:calc(100dvh - 32px);overflow:auto;padding:24px;box-sizing:border-box}dialog::backdrop{background:rgb(0 0 0 / .78)}dialog h2{font-size:1.5rem;margin-top:0}dialog li{margin:8px 0}dialog input{width:100%;box-sizing:border-box}dialog .row{margin-top:18px}dialog .row button{flex:1}#deleteStatus{min-height:1.5em}#deleteStatus:empty{display:none}.upgrade-list{display:grid;gap:20px}.upgrade-list .source-note{margin:0}
-#diagnostics #connection{margin:0}#mode{display:inline-block}#customForm{margin:12px 0}
+#diagnostics #connection{margin:0}#mode{display:inline-block}
 .gear-tabs{display:flex;gap:8px;border-bottom:1px solid var(--line);margin:0 0 18px;padding-bottom:12px}
 .gear-tabs [role="tab"]{flex:1;background:var(--paper)}
 .gear-tabs [aria-selected="true"]{color:var(--gold);border-color:var(--gold);background:var(--gold-wash);box-shadow:inset 0 -2px var(--gold)}
@@ -148,7 +147,7 @@ dialog{color:var(--ink);background:var(--paper);border:1px solid var(--line);bor
 @media(min-width:620px){.codex-layout{grid-template-columns:200px minmax(0,1fr);gap:18px}.section-nav{grid-template-columns:1fr;gap:6px}.section-link{min-height:66px;padding:11px 12px}.section-link:last-child{grid-column:auto}.nav-title{font-size:.8rem}.companion-page{min-height:498px;padding:24px}.nav-icon{width:20px;height:20px}}
 @media(min-width:980px){.codex-layout{grid-template-columns:240px minmax(0,1fr);gap:24px}.nav-index{display:block}.section-link{min-height:72px}.nav-title{font-size:.83rem}.companion-page{padding:30px}}
 @media(max-width:400px){body{padding:14px}h1{font-size:1.4rem}.crest{width:32px;height:38px}.masthead{gap:10px}.masthead .badge{font-size:.7rem;padding:4px 7px}.section-link{gap:7px;padding:10px;min-height:82px}.nav-icon{width:18px;height:18px}.nav-title{font-size:.8rem}.companion-page{padding:18px}h2{font-size:1.4rem}.toolbar-label{flex-basis:100%}}
-@media(max-width:480px){#choices{gap:8px}#choices button{flex:1 1 100%}#resources{gap:10px}.resource-label{font-size:.7rem;flex-wrap:wrap}#customForm{flex-wrap:wrap}#custom{flex-basis:100%}.toolbar button{flex:1}#status{padding:14px}.stat-grid{gap:6px}.record-grid{gap:8px}}
+@media(max-width:480px){#choices{gap:8px}#choices button{flex:1 1 100%}#resources{gap:10px}.resource-label{font-size:.7rem;flex-wrap:wrap}.toolbar button{flex:1}#status{padding:14px}.stat-grid{gap:6px}.record-grid{gap:8px}}
 @media(prefers-reduced-motion:reduce){button{transition:none}}
 /* dashboard layouts */
 /* campaign tools styles */
@@ -165,7 +164,7 @@ dialog{color:var(--ink);background:var(--paper);border:1px solid var(--line);bor
 <aside id="layoutRail" class="layout-rail" hidden><div class="rail-brand" aria-hidden="true">DnDGPT<span>Your campaign record</span></div><div id="layoutEmblem" class="layout-emblem" aria-hidden="true"></div></aside>
 <div class="dashboard-surface">
 <header class="masthead row"><svg class="crest" viewBox="0 0 48 52" fill="none" aria-hidden="true"><path d="m24 2 21 12v24L24 50 3 38V14L24 2Z" stroke="currentColor" stroke-width="1.5"/><path d="m24 2-10 18 10 18 10-18L24 2ZM3 14l11 6L3 38l21 0 21 0-11-18 11-6M24 38v12" stroke="currentColor" stroke-width="1"/><text x="24" y="28" text-anchor="middle" fill="currentColor" font-family="Georgia,serif" font-size="11">20</text></svg><div class="identity"><p class="eyebrow">Campaign dashboard</p><h1>DnDGPT</h1></div></header>
-<div class="row game-picker"><label for="gameSelect">Game</label><span class="select-field"><select id="gameSelect"><option value="age-of-convergence">Age of Convergence</option><option value="sovereign-system">Sovereign System</option></select></span><button id="newGame" type="button">New campaign</button></div>
+<div class="row game-picker"><label for="gameSelect">Game</label><span class="select-field"><select id="gameSelect"><option value="dnd-2024">D&amp;D 2024</option><option value="age-of-convergence">Age of Convergence</option><option value="sovereign-system">Sovereign System</option></select></span><button id="newGame" type="button">New campaign</button></div>
 <div class="row session-picker"><label for="session">Saved game</label><span class="select-field session-field"><select id="session"><option value="">Select a saved game</option></select></span><button id="deleteCampaign" class="danger" type="button" disabled>Delete Campaign</button></div>
 <!-- dashboard search -->
 <details id="viewSettings" class="view-options"><summary>View options</summary>
@@ -192,7 +191,6 @@ dialog{color:var(--ink);background:var(--paper);border:1px solid var(--line);bor
 <label for="deleteName">Type the campaign name to confirm</label><input id="deleteName" autocomplete="off" spellcheck="false">
 <p id="deleteStatus" role="status" aria-live="polite"></p><div class="row"><button id="cancelDelete" type="button" autofocus>Keep campaign</button><button id="confirmDelete" class="danger" type="button" disabled>Delete permanently</button></div>
 </dialog>
-<form id="customForm"><label class="sr-only" for="custom">Custom action or ordered actions</label><input id="custom" placeholder="Type an action or ordered sequence…" maxlength="3000"><button id="send" type="submit">Send to chat</button></form>
 <p id="notice" role="status" aria-live="polite"></p>
 <textarea id="fallback" aria-label="Prompt to copy into chat" rows="3" readonly hidden></textarea>
 <section id="approval" aria-label="Review proposed action" hidden>
@@ -449,7 +447,7 @@ function restorePreferences(){
 }
 async function callTool(name,args={}){
   const requestEpoch=gameEpoch;
-  const checksState=["get_campaign","render_dashboard","execute_confirmed_action","import_campaign","save_chat_update"].includes(name);
+  const checksState=["get_campaign","render_dashboard","execute_confirmed_action","import_campaign","save_chat_update","add_dnd_characters"].includes(name);
   let result;
   try{
   if(standard&&hostCapabilities.serverTools)result=await rpc("tools/call",{name,arguments:args});
@@ -1000,6 +998,7 @@ function renderCampaign(next){
   const c=next.character,gear=gearRecords(next);
   $("stateVersion").textContent="State version "+next.version+" · Rules "+next.rules_version;
   $("lastEvent").textContent=next.last_event?format(next.last_event):"No recorded events.";
+  if(next.game_id==="dnd-2024"){renderDndPanels(next);return}
   $("hero").textContent=c.name+" · Level "+c.level+" · "+c.class_name;
   renderResources(c);
   $("characterPreview").textContent="Level "+c.level+" · XP "+c.xp+" / "+c.xp_next;
@@ -1214,7 +1213,6 @@ window.addEventListener("openai:set_globals",event=>{
   applyHostContext({theme:globals.theme||hostContext.theme,displayMode:globals.displayMode||hostContext.displayMode,maxHeight:globals.maxHeight??hostContext.maxHeight,safeAreaInsets:globals.safeAreaInsets||hostContext.safeAreaInsets});
   if(window.openai?.callTool&&!standard)startSavedConnection();
 });
-$("customForm").onsubmit=event=>{event.preventDefault();const text=$("custom").value.trim();if(text)sendPrompt(text)};
 $("hideHud").onclick=()=>{$("hud").hidden=!$("hud").hidden;$("hideHud").textContent=$("hud").hidden?"Show codex":"Hide codex";updateLayoutRail();persistPreferences()};
 $("refresh").onclick=()=>refresh().catch(error=>notice(error.message));
 $("session").onchange=()=>{updateSyncStatus();const id=$("session").value;if(id)callTool("get_campaign",{campaign_id:id}).then(()=>persistPreferences()).catch(error=>notice(error.message))};

@@ -74,7 +74,10 @@ def public_state(state):
     from .game_profiles import game_id, VERSION
     result["game_id"] = game_id(state)
     result["game_rules_version"] = state.get("game_rules_version", VERSION)
-    if state.get("mode") == "chat":
+    if result["game_id"] == "dnd-2024":
+        from .dnd5e import public_dnd_state
+        public_dnd_state(result)
+    elif state.get("mode") == "chat":
         from .standard_rules import class_kit_check, uses_standard_rules
         result["rules_check"] = {"current_profile": uses_standard_rules(state), **class_kit_check(state)}
         if result["game_id"] == "sovereign-system":
@@ -525,9 +528,9 @@ class Engine:
                     "raw_rolls_included": show_rolls}
 
     def dashboard(self, owner, campaign_id=None, game_id=None):
-        from .game_profiles import AGE, GAMES, validate_game, game_id as saved_game
+        from .game_profiles import DEFAULT_GAME, GAMES, validate_game, game_id as saved_game
         context = self.campaign_context(owner, campaign_id) if campaign_id else {"campaign": None, "_meta": {}}
-        selected = saved_game(context["campaign"]) if campaign_id else game_id or AGE
+        selected = saved_game(context["campaign"]) if campaign_id else game_id or DEFAULT_GAME
         try:
             validate_game(selected)
         except ValueError as error:

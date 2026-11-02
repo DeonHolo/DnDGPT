@@ -21,6 +21,7 @@ function showSaveChanges(root,report){
 
 function updateSaveTools(){
   const chat=state?.mode==="chat";
+  $("correctionDisclosure").hidden=state?.game_id==="dnd-2024";
   for(const id of ["downloadCampaign","loadHistory","correctionPreview"])$(id).disabled=!chat||busy||deleting||syncIssue;
   if(saveToolsCampaign!==state?.id){
     saveToolsCampaign=state?.id;historyPage=null;$("historyList").replaceChildren();$("historyChanges").replaceChildren();

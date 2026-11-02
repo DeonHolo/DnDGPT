@@ -5,7 +5,7 @@ from .test_server import rpc, tool
 
 
 def prepared_chat(web):
-    created = tool(web, "create_chat_game", {"name": "Disposable approval recovery", "action_id": "recovery-create", "disposable": True})
+    created = tool(web, "create_chat_game", {"name": "Disposable approval recovery", "action_id": "recovery-create", "disposable": True, "game_id": "age-of-convergence"})
     state = created["structuredContent"]["campaign"]
     saved = tool(web, "save_chat_update", {"campaign_id": state["id"], "action_id": "recovery-prepare", "expected_version": 1,
                  "summary": "Prepare test character", "changes": {"character": {"name": "Test Scribe", "class_name": "Door Scribe"},

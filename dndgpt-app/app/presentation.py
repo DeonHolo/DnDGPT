@@ -39,7 +39,7 @@ def dashboard_html():
             .replace("/* campaign tools styles */", (HERE / "campaign_tools.css").read_text(encoding="utf-8"))
             .replace("/* journal media styles */", (HERE / "journal_media.css").read_text(encoding="utf-8"))
             .replace("/* journal media script */", "")
-            .replace("/* sovereign styles */", (HERE / "sovereignty.css").read_text(encoding="utf-8"))
+            .replace("/* sovereign styles */", (HERE / "sovereignty.css").read_text(encoding="utf-8") + "\n" + (HERE / "dnd_sheet.css").read_text(encoding="utf-8"))
             .replace("/* sovereign script */", "")
             .replace("/* campaign life styles */", (HERE / "campaign_life.css").read_text(encoding="utf-8") + "\n" + (HERE / "campaign_focus.css").read_text(encoding="utf-8"))
             .replace("/* campaign life script */", "")

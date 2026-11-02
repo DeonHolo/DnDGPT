@@ -120,6 +120,42 @@ def test_host():
     return FileResponse(HERE / "host.html")
 
 
+@app.get("/test-dnd")
+def test_dnd():
+    return FileResponse(HERE / "dnd2024.html")
+
+
+@app.post("/test-dnd-fixture")
+def dnd_fixture():
+    from .test_dnd2024 import sheet, adventure
+    from app.chat_game import ChatGame
+    from app.library import Library
+    stamp = str(time.time_ns())
+    engine = INNER.state.engine
+    library = Library(engine)
+    entry = library.save(OWNER, "browser-character-"+stamp, "character", sheet("Mira", "Fighter", 3))["entry"]
+    pack = library.save(OWNER, "browser-adventure-"+stamp, "adventure", adventure())["entry"]
+    game = ChatGame(engine)
+    state = game.create(OWNER, "The Broken Waystone · disposable test", "browser-dnd-"+stamp, True, "dnd-2024")
+    fighter = sheet("Mira", "Fighter", 3); fighter["classes"][0]["subclass"] = "Champion"
+    wizard = sheet("Iria", "Wizard", 3); wizard.update(role="companion", controller="gm")
+    state = game.update(OWNER, state["id"], "browser-prepare-"+stamp, 1, "Prepare the test party", {
+        "party": [fighter, wizard], "hero_id": fighter["id"], "party_mode": "party",
+        "adventure": {"id": pack["id"], "version": 1, "current_section": "arrival"},
+        "opening_preview": "The party arrives at the broken waystone.", "current_location": "The old road, Sword Coast"}, True)["campaign"]
+    return {"campaign": state, "entry": library.summary(entry)}
+
+
+@app.post("/test-dnd-record")
+async def record_dnd(request: Request):
+    result = await request.json()
+    result["environment"] = "In-app browser, local simulated MCP host, authenticated transport and disposable SQLite campaigns; not native ChatGPT or an Android app"
+    output = HERE.parent / "test-results/dnd2024-browser.json"
+    output.parent.mkdir(exist_ok=True)
+    output.write_text(json.dumps(result, indent=2)+"\n", encoding="utf-8")
+    return {"recorded": True}
+
+
 @app.get("/test-widget")
 def test_widget():
     from app.presentation import dashboard_html

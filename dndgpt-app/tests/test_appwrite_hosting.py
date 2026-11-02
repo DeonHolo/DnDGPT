@@ -18,6 +18,20 @@ from app.campaign_lifecycle import CampaignLifecycle
 from app.recovery_probe import check_recovery
 
 
+def test_dnd_library_party_and_private_reference_on_hosted_storage(hosted):
+    from .test_dnd2024 import prepared
+    from app.library import Library
+    _, _, engine, _ = hosted
+    game, state, pack, changes = prepared(engine)
+    result = game.update('owner-a', state['id'], 'hosted-dnd-prepare', 1, 'Prepared D&D party', changes, True)
+    assert result['campaign']['game_id'] == 'dnd-2024'
+    assert len(result['campaign']['party']) == 2 and not result['campaign']['paused']
+    assert game.update('owner-a', state['id'], 'hosted-dnd-prepare', 1, 'Prepared D&D party', changes, True) == result
+    assert Library(engine).get('owner-a', pack['id'])['content']['sections']
+    assert 'PRIVATE_TEST_SECRET' not in json.dumps(engine.get_campaign('owner-a', state['id']))
+    assert Library(engine).list('owner-b') == []
+
+
 def test_portable_recovery_and_overhead_against_hosted_store_contract(hosted):
     _, _, engine, game = hosted
     state = game.create('owner-recovery-fixture', 'Recovery fixture', 'create-recovery-probe', True)
@@ -424,12 +438,12 @@ def test_signed_http_and_mcp_use_hosted_owner_records(hosted, config, verifier, 
     with TestClient(application, base_url='https://dndgpt.example.test', headers=headers) as client:
         assert client.get('/api/campaigns', headers={'Authorization': ''}).status_code == 401
         created = client.post('/api/chat-games', json={'name': 'Hosted HTTP fixture',
-                              'action_id': 'hosted-http-create', 'disposable': True})
+                              'action_id': 'hosted-http-create', 'disposable': True, "game_id": "age-of-convergence"})
         assert created.status_code == 200
         campaign_id = created.json()['campaign']['id']
         other = {'Authorization': 'Bearer ' + tokens(subject='user-b')}
         assert client.get('/api/campaigns/' + campaign_id, headers=other).status_code == 404
-        assert client.post('/api/chat-games', json={'name': 'Denied', 'action_id': 'denied-read-only'},
+        assert client.post('/api/chat-games', json={'name': 'Denied', 'action_id': 'denied-read-only', "game_id": "age-of-convergence"},
                            headers={'Authorization': 'Bearer ' + tokens(scopes='campaign:read')}).status_code == 403
         response = client.post('/mcp', headers={'Accept': 'application/json, text/event-stream'},
                                 json={'jsonrpc': '2.0', 'id': 1, 'method': 'tools/call',

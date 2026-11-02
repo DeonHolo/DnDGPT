@@ -32,7 +32,7 @@ class Proposal(BaseModel):
 
 class CreateChatGame(CreateSandbox):
     disposable: bool = False
-    game_id: str = "age-of-convergence"
+    game_id: str = "dnd-2024"
 
 
 class ChatUpdate(BaseModel):
@@ -144,7 +144,9 @@ def create_app(db_path=None, auth_config=None, token_verifier=None, *, enable_cr
 
     @app.get("/api/health")
     def health():
+        from .game_profiles import DEFAULT_GAME, GAMES
         return {"status": "ok", "version": APP_VERSION, "rules_version": RULES_VERSION,
+                "default_game_id": DEFAULT_GAME, "games": list(GAMES),
                 "engine": "incremental sandbox", "persistent_db": True,
                 "oauth_configured": config.configured, "chatgpt_integration": False,
                 "live_client_verification": "pending", "model_api_calls": False,
@@ -162,7 +164,7 @@ def create_app(db_path=None, auth_config=None, token_verifier=None, *, enable_cr
                 "bearer_methods_supported": ["header"], "resource_name": "DnDGPT"}
 
     @app.get("/api/campaigns")
-    def list_campaigns(game_id: str = "age-of-convergence", token=Depends(authenticated)):
+    def list_campaigns(game_id: str = "dnd-2024", token=Depends(authenticated)):
         return {"campaigns": engine.list_campaigns(owner_id(token), game_id)}
 
     @app.post("/api/campaigns")

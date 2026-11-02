@@ -89,7 +89,7 @@ def test_legacy_defaults_are_read_only_and_portable(engine):
 
 
 def test_preference_changes_keep_owner_version_and_history_guards(web):
-    state = tool(web, "create_chat_game", {"name": "Focus fixture", "action_id": "focus-create", "disposable": True})["structuredContent"]["campaign"]
+    state = tool(web, "create_chat_game", {"name": "Focus fixture", "action_id": "focus-create", "disposable": True, "game_id": "age-of-convergence"})["structuredContent"]["campaign"]
     args = {"campaign_id": state["id"], "action_id": "focus-choice", "expected_version": state["version"],
             "summary": "Choose a hunting campaign", "changes": {"campaign_preferences": {"focus": "hunt-explore", "dialogue": "minimal"}}}
     result = tool(web, "save_chat_update", args)

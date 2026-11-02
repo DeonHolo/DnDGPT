@@ -2,7 +2,7 @@
 import argparse
 from pathlib import Path
 from app.rule_sections import index_text
-from app.game_profiles import SOVEREIGN, rule_source
+from app.game_profiles import SOVEREIGN, DND, rule_source
 
 APP = Path(__file__).resolve().parents[1]
 REFERENCES = APP.parent / "dndgpt-system-rebirth/skills/game-master/references"
@@ -25,6 +25,14 @@ def sync(check=False):
         raise SystemExit("Bundled rule index differs from canonical source; run python -m scripts.sync_plugin_rules")
     if not check:
         index_path.write_bytes(index)
+    for document, filename in (("rulebook", "dnd-2024-guide.txt"), ("hardener", "dnd-2024-hardener.txt"), ("index", "dnd-2024-index.txt")):
+        source = rule_source(DND, "rulebook" if document == "index" else document)["content"]
+        data = (index_text(source) if document == "index" else source).encode("utf-8")
+        target = REFERENCES / filename
+        if check and (not target.exists() or target.read_bytes() != data):
+            raise SystemExit("Bundled D&D guide differs; run python -m scripts.sync_plugin_rules")
+        if not check:
+            target.write_bytes(data)
     for document, filename in (("rulebook", "sovereign-system-v1.0.txt"), ("hardener", "sovereign-hardener.txt"),
                                ("index", "sovereign-rule-index.txt")):
         source = rule_source(SOVEREIGN, "rulebook" if document == "index" else document)["content"]

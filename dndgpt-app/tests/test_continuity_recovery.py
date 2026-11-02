@@ -178,7 +178,7 @@ def test_malformed_checksum_rejected_as_validation_error(engine, draft, checksum
 
 
 def test_transport_resume_turn_view_portability_and_read_scope(web, tokens):
-    created = web.post("/api/chat-games", json={"name": "Transport fixture", "action_id": "create-recovery-http", "disposable": True}).json()["campaign"]
+    created = web.post("/api/chat-games", json={"name": "Transport fixture", "action_id": "create-recovery-http", "disposable": True, "game_id": "age-of-convergence"}).json()["campaign"]
     cid = created["id"]
     compact = tool(web, "get_campaign", {"campaign_id": cid, "view": "resume"})
     assert compact["structuredContent"]["campaign"]["resume_brief"]["paused"]

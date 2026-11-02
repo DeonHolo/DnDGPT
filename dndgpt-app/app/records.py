@@ -3,6 +3,9 @@ import re
 
 
 KEYS = {
+    "library_entries_v1": ("id",),
+    "library_versions_v1": ("id", "owner", "version"),
+    "library_actions_v1": ("owner", "action_id"),
     "campaigns_v1": ("id",),
     "proposals_v1": ("campaign_id", "action_id"),
     "events_v1": ("campaign_id", "number"),

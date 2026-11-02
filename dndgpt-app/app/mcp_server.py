@@ -20,7 +20,7 @@ from .standard_rules import rules_guidance
 from .presentation import dashboard_html as load_dashboard_html
 from .rule_sections import sections as rule_sections, index_text as rule_index
 from .gallery import Gallery, GalleryFile
-from .game_profiles import AGE, VERSION as GAME_RULES_VERSION, GAMES, game_id as saved_game, rule_source, validate_game
+from .game_profiles import AGE, DND, DEFAULT_GAME, VERSION as GAME_RULES_VERSION, GAMES, game_id as saved_game, rule_source, validate_game, rules_version
 
 HTML_PATH = Path(__file__).with_name("index.html")
 MIME_TYPE = "text/html;profile=mcp-app"
@@ -53,13 +53,13 @@ def rules_page(document, offset, section=None, game_id=AGE):
             end = boundary + 1
     return {"document": document, "offset": offset,
             "next_offset": end if end < len(text) else None, "total_characters": len(text),
-            "game_id": game_id, "game_rules_version": GAME_RULES_VERSION,
+            "game_id": game_id, "game_rules_version": rules_version(game_id),
             "source_sha256": source["source_sha256"], "base_sha256": source["base_sha256"], "section": section,
             "scope": "section" if section is not None else "index" if document == "index" else "document",
             "source_characters": source_length, "content": text[offset:end],
             "standard_play": {**{key: value for key, value in rules_guidance().items() if key in
                                   {"resources", "attributes", "starting_hp", "starting_mp"}}, "game_id": game_id}
-                             if offset == 0 and document == "hardener" else {}}
+                             if offset == 0 and document == "hardener" and game_id != DND else {}}
 
 
 def build_mcp(engine, config, verifier, creation_repository=None):
@@ -76,6 +76,7 @@ def build_mcp(engine, config, verifier, creation_repository=None):
     origin = f"{parsed.scheme}://{parsed.netloc}"
     server = FastMCP(
         "DnDGPT", stateless_http=True, json_response=True,
+        instructions="DnDGPT supports D&D 2024 (default for new campaigns), Age of Convergence and Sovereign System through one connection. Existing saves select their own game. Read only that game's hardener/index and relevant rules. For D&D use lookup_dnd_reference/list_dnd_options, complete legal Quickplay party drafts, independent reusable character-library sheets and private adventure packs. Ordinary chat starts and player-selected advancement need no dashboard approval. Batch party and scene changes in save_chat_update; reuse current successful responses. Keep full HUD in the dashboard and story presentation in chat. Never mix the homebrew rarity/LCK/MP/evolutions into standard D&D. A published adventure catalogue entry needs its actual source before play.",
         token_verifier=verifier if config.configured else None,
         auth=AuthSettings(issuer_url=config.issuer, resource_server_url=config.resource_url,
                           required_scopes=[READ_SCOPE]) if config.configured else None,
@@ -114,6 +115,9 @@ def build_mcp(engine, config, verifier, creation_repository=None):
     write = ToolAnnotations(readOnlyHint=False, destructiveHint=False, openWorldHint=False,
                             idempotentHint=True)
 
+    from .dnd_tools import register as register_dnd_tools
+    register_dnd_tools(server, engine, invoke, metadata, read, write, WRITE_SCOPE)
+
     from .game_random import GameRandom
     game_random = GameRandom(engine.store, engine.dice, engine)
     from .chat_game import ChatGame
@@ -148,11 +152,12 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         A player's explicit custom rulebook takes precedence for that campaign.
         Reading rules never creates a campaign, rolls dice, resumes play or changes saves.
         For an existing campaign pass campaign_id: its saved game selects the book automatically.
-        Before creation choose game_id=age-of-convergence or sovereign-system. Do not fetch both.
+        Before creation choose dnd-2024 (default), age-of-convergence or sovereign-system. Fetch only that book.
+        D&D 2024 uses its own operational guide and lookup_dnd_reference for official SRD pages/options.
         Keep campaign_id/game_id with every section/page and cache by game plus source_sha256.
         """
         def read_selected(owner):
-            selected = saved_game(engine.get_campaign(owner, campaign_id)) if campaign_id else game_id or AGE
+            selected = saved_game(engine.get_campaign(owner, campaign_id)) if campaign_id else game_id or DEFAULT_GAME
             if campaign_id and game_id is not None and game_id != selected:
                 raise EngineError(409, "game_mismatch", "Read the rulebook belonging to this campaign's game")
             return rules_page(document, offset, section, selected)
@@ -160,7 +165,7 @@ def build_mcp(engine, config, verifier, creation_repository=None):
 
     @server.tool(annotations=write, meta=metadata(WRITE_SCOPE))
     def create_chat_game(name: str, action_id: str, disposable: bool = False,
-                         game_id: Literal["age-of-convergence", "sovereign-system"] = AGE) -> CallToolResult:
+                         game_id: Literal["dnd-2024", "age-of-convergence", "sovereign-system"] = DEFAULT_GAME) -> CallToolResult:
         """Create a FRESH chat-led character draft only on explicit new-game/test authorization.
         This does not roll, import, confirm a character, or start an adventure. Use disposable=true
         for tests. ChatGPT follows the complete rulebook and saves its choices through save_chat_update.
@@ -168,13 +173,17 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         Select the player's requested game; it is fixed for this save. Read that game's rules.
         """
         return invoke(lambda owner: {"campaign": chat_game.create(owner, name, action_id, disposable, game_id),
-                                     "game_id": game_id, "standard_play": {**rules_guidance(), "game_id": game_id}}, True)
+                                      "game_id": game_id, "standard_play": {"game_id": DND, "rules_version": "5.2.1", "attributes": ["STR","DEX","CON","INT","WIS","CHA"], "sheet_guide": "Read section=creation and use list_dnd_options once for a complete Quickplay draft"} if game_id == DND else {**rules_guidance(), "game_id": game_id}}, True)
 
     @server.tool(annotations=write, meta=metadata(WRITE_SCOPE))
     def save_chat_update(campaign_id: str, action_id: str, expected_version: int,
                          summary: str, changes: dict, result_view: Literal["full", "turn"] = "full",
                          begin_adventure: bool = False) -> CallToolResult:
         """Save ONE batched GM update to a fresh chat-led game; ChatGPT adjudicates the rules.
+        D&D 2024 uses party=[complete sheets] or party_upsert=[{id,...changed fields}], party_remove,
+        hero_id, party_mode=solo|party and adventure={id,version,current_section,visited,completed,
+        public_notes,status}. Its class features, spells and gear live inside each sheet. Read its
+        creation/party/adventure guide once. No homebrew HP/MP, rarity-kit or evolution requirements.
         Use the latest successfully returned version already in context; read again if missing,
         uncertain or conflicted. Use full for story/history; turn only when the needed context is present.
         The successful save already verifies the commit; do not read again just to verify it.
@@ -325,7 +334,7 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         register_creation_tools(server, creation_repository, invoke, metadata, read, write, creation_uri)
 
     @server.tool(annotations=read, meta=metadata())
-    def list_campaigns(game_id: Literal["age-of-convergence", "sovereign-system"] = AGE) -> CallToolResult:
+    def list_campaigns(game_id: Literal["dnd-2024", "age-of-convergence", "sovereign-system"] = DEFAULT_GAME) -> CallToolResult:
         """List this authenticated account's stored sandboxes. Does not start or resume a game."""
         return invoke(lambda owner: {"game_id": game_id, "games": list(GAMES), "campaigns": engine.list_campaigns(owner, game_id)})
 
@@ -465,7 +474,7 @@ def build_mcp(engine, config, verifier, creation_repository=None):
 
     @server.tool(title="Campaign dashboard", annotations=read, meta=render_meta)
     def render_dashboard(campaign_id: str | None = None,
-                         game_id: Literal["age-of-convergence", "sovereign-system"] | None = None) -> CallToolResult:
+                         game_id: Literal["dnd-2024", "age-of-convergence", "sovereign-system"] | None = None) -> CallToolResult:
         """Use when the player asks to open/show the campaign dashboard on desktop or mobile.
         Call again when it is closed, missing or outdated, even for the same campaign.
         get_campaign refreshes saved data but cannot open an absent UI. Return this component.

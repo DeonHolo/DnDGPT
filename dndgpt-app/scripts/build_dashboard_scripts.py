@@ -5,7 +5,7 @@ from pathlib import Path
 import shutil
 import subprocess
 
-SOURCES = ("combat_roster.js", "campaign_tools.js", "journal_media.js", "sovereignty.js", "campaign_life.js",
+SOURCES = ("combat_roster.js", "campaign_tools.js", "journal_media.js", "dnd_sheet.js", "sovereignty.js", "campaign_life.js",
            "campaign_focus.js", "dashboard_search.js")
 
 def dashboard_source(root):

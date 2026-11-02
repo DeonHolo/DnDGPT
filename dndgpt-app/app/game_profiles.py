@@ -7,8 +7,11 @@ from pathlib import Path
 
 AGE = "age-of-convergence"
 SOVEREIGN = "sovereign-system"
+DND = "dnd-2024"
+DEFAULT_GAME = DND
 VERSION = "1.0"
-GAMES = ({"id": AGE, "name": "Age of Convergence", "rules_version": VERSION},
+GAMES = ({"id": DND, "name": "D&D 2024", "rules_version": "5.2.1"},
+         {"id": AGE, "name": "Age of Convergence", "rules_version": VERSION},
          {"id": SOVEREIGN, "name": "Sovereign System", "rules_version": VERSION})
 RULES = Path(__file__).resolve().parent.parent / "rules"
 
@@ -17,9 +20,13 @@ def game_id(state):
     return state.get("game_id", AGE)
 
 
-def validate_game(value, version=VERSION):
-    if type(value) is not str or value not in {row["id"] for row in GAMES} or version != VERSION:
-        raise ValueError("Choose age-of-convergence or sovereign-system, rules version 1.0")
+def rules_version(value):
+    return "5.2.1" if value == DND else VERSION
+
+
+def validate_game(value, version=None):
+    if type(value) is not str or value not in {row["id"] for row in GAMES} or version is not None and version != rules_version(value):
+        raise ValueError("Choose dnd-2024 (SRD 5.2.1), age-of-convergence or sovereign-system (1.0)")
     return value
 
 
@@ -38,11 +45,14 @@ def compose(base, operations):
     return result, audit
 
 
-@lru_cache(maxsize=4)
+@lru_cache(maxsize=8)
 def rule_source(selected=AGE, document="rulebook"):
     validate_game(selected)
     if document not in {"rulebook", "hardener"}:
         raise ValueError("Choose rulebook or hardener")
+    if selected == DND:
+        from .dnd_reference import rules_source
+        return rules_source(document)
     path = RULES / ("rulebook-v1.0.txt" if document == "rulebook" else "rule-hardener.txt")
     data = path.read_bytes()
     if selected == AGE:

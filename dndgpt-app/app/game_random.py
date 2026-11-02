@@ -104,7 +104,9 @@ class GameRandom:
             fail(422, 'invalid_roll_request', str(error))
         with self.store.transaction() as db:
             if campaign_id is not None:
-                self.engine._get(db, owner, campaign_id)
+                bound_state = self.engine._get(db, owner, campaign_id)
+                if bound_state.get('game_id') == 'dnd-2024' and any(row['kind'] in {'rarity', 'outfitting', 'world_event'} for row in rolls):
+                    fail(422, 'wrong_game_roll', 'D&D uses its selected adventure and official rules; use dice/check for its rolls')
             prior = records.get(db, 'game_rolls_v1', {'owner': owner, 'action_id': action_id})
             if prior:
                 previous = json.loads(prior['result'])

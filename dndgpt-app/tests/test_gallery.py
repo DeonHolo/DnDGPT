@@ -83,7 +83,7 @@ def test_file_tool_schema_and_widget_only_image_bytes(web):
     assert set(schema["required"]) == {"download_url", "file_id"}
     assert set(schema["properties"]) == {"download_url", "file_id", "mime_type", "file_name"}
     assert entry["_meta"]["openai/fileParams"] == ["image"]
-    state = tool(web, "create_chat_game", {"name": "Image transport fixture", "action_id": "gallery-create", "disposable": True})["structuredContent"]["campaign"]
+    state = tool(web, "create_chat_game", {"name": "Image transport fixture", "action_id": "gallery-create", "disposable": True, "game_id": "age-of-convergence"})["structuredContent"]["campaign"]
     saved = tool(web, "upload_gallery_image", {"campaign_id": state["id"], "action_id": "gallery-upload", "title": "Fixture", "image_data": base64.b64encode(picture()).decode()})
     assert not saved.get("isError"), saved
     image = tool(web, "get_gallery_image", {"campaign_id": state["id"], "image_id": saved["structuredContent"]["gallery_entry"]["id"]})

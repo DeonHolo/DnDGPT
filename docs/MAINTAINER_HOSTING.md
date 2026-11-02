@@ -25,12 +25,13 @@ python -m pytest tests/test_sources.py tests/test_plugin_package.py -q
 
 The synchronization command copies bytes from backend source to the plugin; it does not rewrite rule integrity history. Record the amendment and update `rules/integrity.json` through the revision process. CI and the package builder reject mismatched copies instead of shipping a stale fallback.
 
-## Two release steps
+## Runtime updates and optional packages
 
-1. Push the tested revision to `main` and verify Appwrite's deployment and hosted document hashes.
-2. For bundled rule, skill, metadata or icon changes, bump the package version and update the existing plugin through Plugin Creator's authenticated `update_plugin` workflow, preserving its identity and App binding. Read back the uploaded files. The CI portable ZIP is an alternative upload input for a separate portable/public integration; do not replace an existing personal App binding casually.
+The working DnDGPT connection points directly at the hosted MCP server. Backend rules, tool instructions and dashboard changes ship through the existing Git deployment. Players using that connection do not upload a new ZIP for each release.
 
-The current private plugin is not Git-synced. An Appwrite deployment does not publish its ZIP. [OpenAI's publishing documentation](https://developers.openai.com/plugins/deploy/submission) separates automatic hosted-MCP checks from metadata/skill ZIP updates. The available Plugin Creator tool can publish an authorized account update from this session; it is not a GitHub Actions action or a supported publishing credential for CI. No documented external CI publication API was established during this review. Do not export a ChatGPT session token into GitHub secrets to imitate one.
+The repository also builds an optional portable plugin package. Its metadata and bundled offline instructions are a separate distribution artifact; updating that artifact is not required for the direct connection to receive a new hosted build. Preserve the existing connection identity, OAuth setup and logo.
+
+D&D 2024 adds an independent operational guide, public SRD page text and a source-scoped reference snapshot in rules/dnd2024. Shared homebrew books remain the sources for Age of Convergence and Sovereign System. sync_plugin_rules also synchronizes the D&D operational guide and index. Library records use the same private generic Appwrite record table and need no new client permissions.
 
 Appwrite MCP and Git deployment keep their existing connections. Storage normally uses the Function's scoped `x-appwrite-key`; after public requests began receiving an invalid injected key on 2026-10-25, production uses `DNDGPT_APPWRITE_STORAGE_KEY` as a secret function variable limited to `tables.read`, `rows.read`, `rows.write`. Keep it out of source and client output. An Appwrite key cannot publish ChatGPT plugin metadata or skills. Verify public HTTP/MCP requests after deployment, in addition to the private probe.
 

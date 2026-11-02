@@ -18,15 +18,19 @@
 
 DnDGPT is an **MCP app for ChatGPT**: a hosted MCP server connects your conversation to a saved campaign dashboard and supplies the GM rules. The optional installable bundle also includes offline rule copies.
 
-I built it as a **5e Hack and homebrew fantasy RPG**, around what I enjoy in fantasy games. Its standalone, D&D-inspired d20 rules replace major parts of standard 5e: five attributes including Luck, HP/MP resources, rarity-based original class kits and a custom progression system. Existing 5e characters, spells and monsters need conversion. See [the rules comparison](docs/SYSTEM_IDENTITY.md).
+**New campaigns default to D&D 2024**, using the public official SRD 5.2.1. Play one hero or a party with GM-run companions. Quickplay prepares complete character-sheet drafts in one reply; request revisions or say “let's go” to begin. The sheet follows the familiar tabletop structure, with six abilities, saving throws, skills, HP, Armor Class, Hit Dice, class features and spellcasting.
 
-**ChatGPT creates your classes, abilities and adventure.** The rulebook supplies the Age of Convergence lore, game rules and a uniqueness gate that checks proposed powers for different mechanics, useful choices and a clear identity. Classes and abilities are generated for your campaign rather than picked from a fixed catalog. The gate guides ChatGPT; it cannot guarantee an original result every time.
+The **Character Library** keeps reusable, versioned sheets for future adventures. Each campaign gets independent party copies, so one run's damage, equipment or level-ups do not alter another run. Export a sheet as JSON or save a current party member back into your library.
 
-You can write your own class or ability, ask ChatGPT to revise an offer, or change the setting, tone, difficulty and way the GM responds. Tell the GM which standard rules you want to override and agree on the changes before playing. DnDGPT keeps the resulting character, abilities, companions and campaign progress together in a dashboard beside the conversation.
+Choose a prepared published adventure or ask for an original adventure in an established D&D setting. Original adventures default to the **Forgotten Realms**, grounded in official setting references. The **Adventure Library** keeps GM source sections separate from player-visible progress. *Heroes of the Borderlands* is the recommended published starter; its catalogue entry links to the source, and a playable pack must be prepared from an authorised copy before use. The commercial module is not bundled.
 
-### Two games, one connection
+### Three games, one connection
 
-Choose **Age of Convergence** or **Sovereign System** in the dashboard's Game selector. Each game shows its own saved campaigns and serves its own rules through the same DnDGPT connection. Switching the view leaves both campaigns untouched; a campaign keeps the game it was created for.
+Choose **D&D 2024**, **Age of Convergence** or **Sovereign System** in the dashboard. Each game shows its own campaigns and serves its own rules through the same DnDGPT connection. A campaign keeps the game it was created for. Existing homebrew saves keep their mechanics, including older saves without a game label.
+
+Age of Convergence remains the original **5e Hack and homebrew fantasy RPG**, with five attributes including Luck, HP/MP resources, generated rarity-based class kits and custom progression. ChatGPT creates its classes and abilities under the rulebook's uniqueness gate. These mechanics belong to that game rather than standard D&D. See [the rules comparison](docs/SYSTEM_IDENTITY.md).
+
+The backend bundles searchable official SRD text and a source-filtered Open5e reference snapshot. Relevant entries are retrieved through tools and reused; the entire book is not sent with every turn. The Python integration adapts the reference approach of [heffrey78/dnd-mcp](https://github.com/heffrey78/dnd-mcp) without requiring another player-installed connection. Public SRD options are a subset of the paid books. [Implementation and verification](docs/DND_2024_IMPLEMENTATION.md).
 
 Sovereign System adds a domain, autonomous commanders, army formations and independent strategic progression alongside personal adventures. Creation grants one free permanent Sovereign upgrade, and each gained character level grants another upgrade to the domain, general or army, with its history in Sovereignty. Temporary orders and combat buffs stay in the regular skill tree. Its rulebook is compiled from the shared manual with scoped replacements and added systems. [Game rules, progression and implementation details](docs/SOVEREIGN_SYSTEM.md).
 

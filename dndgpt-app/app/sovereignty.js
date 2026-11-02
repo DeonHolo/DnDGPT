@@ -1,8 +1,8 @@
-let currentGame=window.openai?.toolOutput?.game_id||window.openai?.widgetState?.game_id||"age-of-convergence",gameEpoch=0,gameSwitching=false,gameLocked=false;
+let currentGame=window.openai?.toolOutput?.game_id||window.openai?.widgetState?.game_id||"dnd-2024",gameEpoch=0,gameSwitching=false,gameLocked=false;
 let sovereignTab="domain";
 function isSovereignFoundation(a){return a.scope==="sovereign"&&["domain","general","army"].includes(a.sovereign_role)&&String(a.activation).toLowerCase()==="passive"&&!["parent_id","parent_ability_id","parent_skill_id"].some(k=>a[k])}
 function visibleSovereignOperation(next,op){return op.known!==false&&(next.sovereignty.commanders.find(c=>c.id===op.commander_id)?.side!=="enemy"||op.known===true)}
-const gameNames={"age-of-convergence":"Age of Convergence","sovereign-system":"Sovereign System"};
+const gameNames={"dnd-2024":"D&D 2024","age-of-convergence":"Age of Convergence","sovereign-system":"Sovereign System"};
 const gameSelections={};
 function sovereignCombatView(next){
   const allies=new Map((next.summons||[]).map(c=>[c.id,c]));
@@ -25,12 +25,14 @@ function activateGame(id){
   if(!gameNames[id])return;
   const changed=currentGame!==id;currentGame=id;
   document.documentElement.dataset.game=id;$("gameSelect").value=id;
+  setDndNavigation(id==="dnd-2024");
   document.querySelector(".identity h1").textContent=id==="sovereign-system"?"Sovereign System":"DnDGPT";
   sovereignNav.hidden=id!=="sovereign-system";
   $("nav-gallery").querySelector(".nav-index").textContent=id==="sovereign-system"?"09":"08";
   if(changed){campaigns=[];$("session").replaceChildren(element("option","Select a saved game"));$("session").firstElementChild.value="";if(id!=="sovereign-system"&&document.querySelector('#sectionNav [aria-current="page"]')===sovereignNav)selectCompanionPage("character")}
 }
 function clearGameSnapshot(){
+  resetDndLibraryPages();
   resetDashboardSearch();
   if(state)gameSelections[currentGame]=state.id;
   state=null;lastSelected=null;lastVerifiedAt=null;syncIssue=false;pending=null;dismissedProposal=null;

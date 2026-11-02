@@ -19,6 +19,15 @@ class Store:
         with self.transaction() as db:
             db.executescript("""
                 CREATE TABLE IF NOT EXISTS schema_version (version INTEGER PRIMARY KEY);
+                CREATE TABLE IF NOT EXISTS library_entries_v1 (
+                    id TEXT PRIMARY KEY, owner TEXT NOT NULL, version INTEGER NOT NULL, data TEXT NOT NULL);
+                CREATE INDEX IF NOT EXISTS library_owner ON library_entries_v1(owner);
+                CREATE TABLE IF NOT EXISTS library_versions_v1 (
+                    id TEXT NOT NULL, owner TEXT NOT NULL, version INTEGER NOT NULL, data TEXT NOT NULL,
+                    PRIMARY KEY(id,owner,version));
+                CREATE TABLE IF NOT EXISTS library_actions_v1 (
+                    owner TEXT NOT NULL, action_id TEXT NOT NULL, request TEXT NOT NULL, result TEXT NOT NULL,
+                    PRIMARY KEY(owner,action_id));
                 INSERT OR IGNORE INTO schema_version VALUES (1);
                 CREATE TABLE IF NOT EXISTS campaigns_v1 (
                     id TEXT PRIMARY KEY, owner TEXT NOT NULL,

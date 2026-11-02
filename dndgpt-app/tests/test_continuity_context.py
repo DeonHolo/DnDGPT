@@ -76,7 +76,7 @@ def test_nested_world_edits_keep_other_facts_and_approved_correction_can_remove_
 
 def test_mcp_full_snapshot_is_not_accidentally_counted_as_model_visible_context(web):
     created = tool(web, "create_chat_game", {"name": "Disposable visibility fixture",
-                   "action_id": "create-visibility-fixture", "disposable": True})
+                   "action_id": "create-visibility-fixture", "disposable": True, "game_id": "age-of-convergence"})
     state = created["structuredContent"]["campaign"]
     saved = tool(web, "save_chat_update", {"campaign_id": state["id"], "action_id": "seed-visibility-fixture",
         "expected_version": state["version"], "summary": "Synthetic old promise",
@@ -99,7 +99,7 @@ def test_mcp_full_snapshot_is_not_accidentally_counted_as_model_visible_context(
 
 def test_full_is_still_default_and_unrecorded_facts_are_not_invented(web):
     created = tool(web, "create_chat_game", {"name": "Disposable unknown-fact fixture",
-                   "action_id": "create-unknown-fixture", "disposable": True})
+                   "action_id": "create-unknown-fixture", "disposable": True, "game_id": "age-of-convergence"})
     state = created["structuredContent"]["campaign"]
     result = tool(web, "get_campaign", {"campaign_id": state["id"]})
     assert result["structuredContent"]["campaign"] == state

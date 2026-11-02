@@ -54,7 +54,7 @@ def test_indexed_read_works_through_authenticated_mcp_and_does_not_write(web):
     before = web.get("/api/campaigns").json()
     for section, heading in (("story", "Where this place met Earth"), ("utility", "Utility usefulness and creative application"),
                              ("enemy-tactics", "Enemy identity, adaptive tactics and visible voice")):
-        result = tool(web, "read_rules", {"document": "rulebook", "section": section})
+        result = tool(web, "read_rules", {"document": "rulebook", "section": section, "game_id": "age-of-convergence"})
         assert not result.get("isError"), result
         assert heading in result["structuredContent"]["content"]
     assert web.get("/api/campaigns").json() == before

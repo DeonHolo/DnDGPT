@@ -235,7 +235,7 @@ def test_legacy_engine_commands_cannot_bypass_chat_gates(game, engine, draft):
 
 
 def test_http_save_routes_scopes_and_recovery(web, tokens):
-    created = web.post("/api/chat-games", json={"name": "HTTP disposable test", "action_id": "http-chat-create", "disposable": True})
+    created = web.post("/api/chat-games", json={"name": "HTTP disposable test", "action_id": "http-chat-create", "disposable": True, "game_id": "age-of-convergence"})
     assert created.status_code == 200
     state = created.json()["campaign"]
     path = f"/api/campaigns/{state['id']}"
@@ -252,7 +252,7 @@ def test_http_save_routes_scopes_and_recovery(web, tokens):
 def test_mcp_chat_tools_real_transport_scope_and_hidden_manual_pause_token(web, tokens):
     definitions = {item["name"]: item for item in rpc(web, "tools/list")["tools"]}
     assert {"create_chat_game", "save_chat_update", "get_chat_version", "roll_game_random", "get_game_roll"} <= definitions.keys()
-    created = tool(web, "create_chat_game", {"name": "MCP disposable test", "action_id": "mcp-chat-create", "disposable": True})
+    created = tool(web, "create_chat_game", {"name": "MCP disposable test", "action_id": "mcp-chat-create", "disposable": True, "game_id": "age-of-convergence"})
     state = created["structuredContent"]["campaign"]
     args = {"campaign_id": state["id"], "action_id": "mcp-chat-update", "expected_version": 1,
             "summary": "Prepare character", "changes": {"character": {"class_name": "Copper Scribe"}}}
