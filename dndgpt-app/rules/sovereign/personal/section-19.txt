@@ -11,4 +11,3 @@ Batch spend_personal_upgrades=[{ability_id,upgrade_id},...] with the actual pare
 No automatic personal skill drops or Talent acquisitions occur. Convert an offered personal power reward to an upgrade of a real parent while preserving the promised reward's value and player choice. Equipment and genuinely independent General/Army acquisitions remain available on their own tracks. Only a player's explicit request for an additional personal power permits personal_power_exception={ability_ids:[...],reason:the actual player request}. An ordinary GM loot choice is not that request. A rebuild/consolidation of older owned powers uses the existing reviewed correction flow; never silently remove history.
 
 ---
-

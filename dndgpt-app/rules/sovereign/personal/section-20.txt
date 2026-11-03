@@ -5,4 +5,3 @@ At character levels 4, 8, 12 and so on, preserve the free milestone reward as ON
 The server adds the extra personal selection when crossing each fourth-level milestone. Record the chosen nested child as a major refinement with source=Milestone and its actual source grade; spend it through spend_personal_upgrades alongside other selected personal refinements in the normal level-up save. Keep the five milestone directions in the same advancement reply, with compact effects and expandable details. Preserve previous children, identity and the recognizable current kit. Banking is optional and never assumed.
 
 ---
-

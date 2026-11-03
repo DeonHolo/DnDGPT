@@ -15,7 +15,7 @@ def compose_personal_rules(text, document):
             old = text[selection["start"]:selection["end"]]
             if hashlib.sha256(old.encode()).hexdigest() != entry["source_sha256"]:
                 raise ValueError("Sovereign personal rules source changed: " + entry["section"])
-            new = (root / entry["file"]).read_text(encoding="utf-8")
+            new = (root / entry["file"]).read_text(encoding="utf-8").rstrip() + ("\n" if selection["end"] == len(text) else "\n\n")
         else:
             old, new = entry["old"], entry["new"]
         text, edits = compose(text, [{"id": "personal-" + entry.get("section", entry.get("id", "")),

@@ -9,4 +9,3 @@ Sovereignty owns the actual Domain, commander and formation cards, with distinct
 Show available personal upgrades as one count, separate from permanent Sovereign growth. No new resource currency appears. Keep touch targets, keyboard navigation, visible selection/focus, unclipped narrow-screen content and all existing layouts. Browsing and searching change no campaign, resources or fictional time.
 
 ---
-

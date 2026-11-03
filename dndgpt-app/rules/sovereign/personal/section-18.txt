@@ -7,4 +7,3 @@ Resolve the triggering action and its real consequences, apply the shared Vital 
 The server grants personal and Sovereign allowances from actual level gains, including legitimate multi-level gains. Do not manually add skill_points/talent_points or personal ledger totals. Clock, cooldown, condition and summon timers remain frozen until selections/banking resolve. No new player micro-turn is required for each track.
 
 ---
-

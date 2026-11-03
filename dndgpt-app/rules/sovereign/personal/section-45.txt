@@ -5,4 +5,3 @@ Run a personal-adventure sovereign fantasy with an exceptional compact kit and f
 Preserve player agency, independent entity nature, existing owned effects and actual resources. New personal development improves the established kit; source rarity and nested history remain intact. Permanent Sovereign upgrades change real owned capabilities and never become temporary commands. Keep normal gameplay in one batched save and cached rules, with no per-turn whole-book reads. Present names and changed effects plainly, keep the full HUD in the dashboard and use a truthful fallback when supported interaction is unavailable.
 
 ---
-

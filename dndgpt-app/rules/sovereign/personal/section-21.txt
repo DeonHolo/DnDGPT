@@ -5,4 +5,3 @@ Sovereign System has no ongoing Talent Point acquisition web. Its two personal s
 Existing campaigns keep every actually owned talent and its nested history. On the next ordinary authorized save, banked old Skill Points and Talent Points carry over once as personal upgrade selections; no previously spent points or past levels are awarded again. Reading a save never migrates it. Extra standalone personal powers remain an explicit player-requested exception, not a level-up or random reward default.
 
 ---
-

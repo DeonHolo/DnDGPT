@@ -12,4 +12,3 @@ At creation use the existing explicit UNIQUE override for eligible offers while 
 Draw and equip the class-budgeted starting outfit once. Save the named character, complete powers, persistent foundation owners, story and opening together with changes.begin_adventure=true. Honor a requested draft/pause; final choices need no character/start approval. No fictional time advances during unfinished creation.
 
 ---
-

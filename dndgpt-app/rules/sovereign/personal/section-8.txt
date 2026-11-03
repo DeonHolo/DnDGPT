@@ -11,4 +11,3 @@ Rarity controls ambition and strength under Section 5. Every tier must be usable
 Prepare the Domain, General and Army as three separate UNIQUE passive foundation records and real owner records in Sovereignty. Those records are permanent foundations, not personal power slots or casts. General-owned and formation-owned abilities stay with those owners. Routine command is part of the real authority, rather than another purchased skill. Existing player powers, items and earned history remain preserved.
 
 ---
-
