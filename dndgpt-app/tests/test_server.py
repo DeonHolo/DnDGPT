@@ -104,7 +104,7 @@ def test_mcp_initialization_tools_and_ui_resource(web):
     assert by_name["execute_confirmed_action"]["_meta"]["ui"]["visibility"] == ["app"]
     for name, item in by_name.items():
         assert item["securitySchemes"][0]["type"] == "oauth2"
-        if name in {"render_dashboard", "read_rules", "create_chat_game", "list_campaigns", "get_campaign"}:
+        if name == "render_dashboard":
             assert item["_meta"]["ui"]["resourceUri"] == render["_meta"]["ui"]["resourceUri"]
             assert item["_meta"]["openai/outputTemplate"] == render["_meta"]["openai/outputTemplate"]
         else:

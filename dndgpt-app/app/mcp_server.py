@@ -87,15 +87,11 @@ def build_mcp(engine, config, verifier, creation_repository=None):
 
     server._mcp_server.version = APP_VERSION
 
-    def metadata(scope=READ_SCOPE, app_only=False, dashboard=False):
+    def metadata(scope=READ_SCOPE, app_only=False):
         scopes = [READ_SCOPE, WRITE_SCOPE] if scope == WRITE_SCOPE else [READ_SCOPE]
         result = {"securitySchemes": [{"type": "oauth2", "scopes": scopes}],
                 "ui": {"visibility": ["app"] if app_only else ["model", "app"]},
                 "openai/widgetAccessible": True}
-        if dashboard:
-            result["ui"]["resourceUri"] = resource_uri
-            result["openai/outputTemplate"] = legacy_uri
-            result["openai/ui"] = {"entrypoints": [{"type": "thread"}, {"type": "global"}]}
         return result
 
     def invoke(operation, write=False):
@@ -141,7 +137,7 @@ def build_mcp(engine, config, verifier, creation_repository=None):
                       "_meta": {**result.get("_meta", {}), "campaign_snapshot": result["campaign"]}}
         return result
 
-    @server.tool(annotations=read, meta=metadata(dashboard=True))
+    @server.tool(annotations=read, meta=metadata())
     def read_rules(document: Literal["rulebook", "hardener", "index"] = "rulebook",
                    offset: int = 0, section: str | None = None,
                    campaign_id: str | None = None, game_id: str | None = None) -> CallToolResult:
@@ -158,7 +154,7 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         Reading rules never creates a campaign, rolls dice, resumes play or changes saves.
         For an existing campaign pass campaign_id: its saved game selects the book automatically.
         No mode is implicit. Without game_id/campaign_id return the three-mode introduction and
-        open the dashboard; ask the player to choose. With a choice fetch only that book.
+        ask the player to choose. Open once through render_dashboard if not already open. With a choice fetch only that book.
         D&D 2024 uses its own operational guide and lookup_dnd_reference for official SRD pages/options.
         Keep campaign_id/game_id with every section/page and cache by game plus source_sha256.
         """
@@ -171,7 +167,7 @@ def build_mcp(engine, config, verifier, creation_repository=None):
             return rules_page(document, offset, section, selected)
         return invoke(read_selected)
 
-    @server.tool(annotations=write, meta=metadata(WRITE_SCOPE, dashboard=True))
+    @server.tool(annotations=write, meta=metadata(WRITE_SCOPE))
     def create_chat_game(name: str, action_id: str, disposable: bool = False,
                          game_id: Literal["dnd-2024", "age-of-convergence", "sovereign-system"] | None = None) -> CallToolResult:
         """Create a FRESH chat-led character draft only on explicit new-game/test authorization.
@@ -350,10 +346,10 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         from .creation_tools import register_creation_tools
         register_creation_tools(server, creation_repository, invoke, metadata, read, write, creation_uri)
 
-    @server.tool(annotations=read, meta=metadata(dashboard=True))
+    @server.tool(annotations=read, meta=metadata())
     def list_campaigns(game_id: Literal["dnd-2024", "age-of-convergence", "sovereign-system"] | None = None) -> CallToolResult:
-        """List saves in the requested mode. Without a mode introduce all three and open the
-        dashboard picker first. Never select a mode or resume play implicitly."""
+        """List saves in the requested mode. Without a mode introduce all three and ask for a choice.
+        This tool never opens or reopens the dashboard. Never select a mode or resume play implicitly."""
         if game_id is None:
             return invoke(lambda owner: engine.dashboard(owner))
         return invoke(lambda owner: {"game_id": game_id, "games": list(GAMES), "campaigns": engine.list_campaigns(owner, game_id)})
@@ -383,7 +379,7 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         return invoke(lambda owner: campaign_lifecycle.delete(
             owner, campaign_id, expected_version, confirmation_token, confirm_permanent), True)
 
-    @server.tool(annotations=read, meta=metadata(dashboard=True))
+    @server.tool(annotations=read, meta=metadata())
     def get_campaign(campaign_id: str, view: Literal["full", "turn", "resume"] = "full") -> CallToolResult:
         """Read committed state without mutation, time advancement or raw rarity rolls.
         Use full for story/history decisions unless the relevant saved context is already present.
@@ -495,12 +491,12 @@ def build_mcp(engine, config, verifier, creation_repository=None):
     @server.tool(title="Campaign dashboard", annotations=read, meta=render_meta)
     def render_dashboard(campaign_id: str | None = None,
                          game_id: Literal["dnd-2024", "age-of-convergence", "sovereign-system"] | None = None) -> CallToolResult:
-        """FIRST DnDGPT call on invocation: automatically open this dashboard on desktop/mobile.
+        """Open ONCE on first DnDGPT use in a chat, on desktop/mobile. Do NOT call each turn.
         Pass game_id only when the player named a mode, or campaign_id for a specified save.
         With neither, introduce all three modes and ask the player to choose. No automatic mode,
         campaign creation, rules loading or gameplay. Explicit modes/saves skip the question.
         Call again when it is closed, missing or outdated, even for the same campaign.
-        Common entry tools also carry this dashboard resource as a fallback. Return this component.
+        This is the dashboard-opening tool. Other tools update data without opening another component.
         Reuse the mounted dashboard during ongoing play; do not render again each turn.
         Includes core chapters, Gallery and the selected game's panels. Read-only: never starts play.
         Once visibly mounted, normal saves/data calls update it without routine per-turn renders.

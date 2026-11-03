@@ -1,5 +1,7 @@
 # Choose a game before loading its rules
 
+Update: 1.1.5 removes the extra dashboard resource bindings described below. Only render_dashboard opens a component; ordinary calls update it. See DASHBOARD_OPEN_ONCE_2026_11_03.md.
+
 Runtime 1.1.4 adds a neutral DnDGPT entry. Calling the connection without a named mode or specifically targeted save returns a short introduction to D&D 2024, Age of Convergence and Sovereign System. ChatGPT asks which the player wants. The dashboard presents the same three choices. An explicit mode or a named saved campaign opens directly.
 
 ## Delivery

@@ -61,11 +61,41 @@ def test_first_entry_dashboard_bindings_and_instructions_do_not_reopen_every_tur
     assert "ask which they want before reading a book" in initialized["instructions"]
     definitions = {t["name"]: t for t in rpc(web, "tools/list")["tools"]}
     entry = definitions["render_dashboard"]["_meta"]
-    for name in ("read_rules", "create_chat_game", "list_campaigns", "get_campaign"):
+    assert entry["ui"]["resourceUri"] and entry["openai/outputTemplate"]
+    for name in ("read_rules", "create_chat_game", "list_campaigns", "get_campaign",
+                 "save_chat_update", "roll_game_random", "lookup_dnd_reference"):
         meta = definitions[name]["_meta"]
-        assert meta["ui"]["resourceUri"] == entry["ui"]["resourceUri"]
-        assert meta["openai/outputTemplate"] == entry["openai/outputTemplate"]
-    for name in ("save_chat_update", "roll_game_random", "lookup_dnd_reference"):
-        assert "resourceUri" not in definitions[name]["_meta"]["ui"]
+        assert "resourceUri" not in meta["ui"], name
+        assert "openai/outputTemplate" not in meta, name
+        assert "openai/ui" not in meta, name
     assert "game_id" not in definitions["create_chat_game"]["inputSchema"]["required"]
     assert web.get("/api/health").json()["default_game_id"] is None
+
+
+def test_open_once_then_reads_and_saves_deliver_updated_state_without_mounting(web):
+    definitions = {t["name"]: t for t in rpc(web, "tools/list")["tools"]}
+    opened = []
+
+    def call(name, args):
+        result = tool(web, name, args)
+        assert not result.get("isError"), result
+        meta = definitions[name]["_meta"]
+        if meta.get("ui", {}).get("resourceUri") or meta.get("openai/outputTemplate"):
+            opened.append(name)
+        return result
+
+    call("render_dashboard", {})
+    state = call("create_chat_game", {"name": "Open once", "action_id": "open-once-create",
+                                       "game_id": "age-of-convergence", "disposable": True})["structuredContent"]["campaign"]
+    for turn in range(2):
+        call("read_rules", {"document": "index", "campaign_id": state["id"]})
+        call("get_campaign", {"campaign_id": state["id"]})
+        updated = call("save_chat_update", {"campaign_id": state["id"], "action_id": "open-once-"+str(turn),
+                     "expected_version": state["version"], "summary": "Draft view update",
+                     "changes": {"character": {"name": "Updated hero "+str(turn)}}})
+        state = updated["structuredContent"]["campaign"]
+        assert state["character"]["name"] == "Updated hero "+str(turn)
+        visible = call("get_campaign", {"campaign_id": state["id"], "view": "turn"})
+        assert visible["_meta"]["campaign_snapshot"]["version"] == state["version"]
+        assert visible["_meta"]["campaign_snapshot"]["character"]["name"] == state["character"]["name"]
+    assert opened == ["render_dashboard"]

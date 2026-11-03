@@ -1,5 +1,7 @@
 # Continuity and recovery release
 
+Runtime 1.1.5 fixes repeated dashboard mounting: only render_dashboard opens a component, once on first use or when reopening is requested/needed. Rules, campaign reads, creation and saves update data without opening another view. The mode chooser stays. See docs/DASHBOARD_OPEN_ONCE_2026_11_03.md.
+
 ## Sovereign core powers — 2026-11-03
 
 Published **1.1.4** from `20f1ec9224ac144ae4e159642734d157d5958e0f`. Release and main CI passed all 733 tests, rule synchronization, isolated hosted runtime and packaging. The in-app browser passed 6 launch, 8 Sovereign and 14 D&D checks. Public health and the full dashboard byte match verified the hosted build at 2026-11-03 04:51 UTC; the site is updated. Verification used disposable local saves and public endpoints, with no live campaign changes or ZIP upload.
