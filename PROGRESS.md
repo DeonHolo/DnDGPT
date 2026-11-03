@@ -1,8 +1,10 @@
 # Continuity and recovery release
 
-## Sovereign embodied redesign — 2026-11-04 (in progress)
+## Sovereign embodied redesign — 2026-11-04
 
 Approved audit implementation: consistent effective Sovereign rules; mobile/bound/distributed bodies, normal creation rarity/Luck with explicit-only overrides, body equipment and finite tactical defense scenes. New saves default to two personal/two permanent Sovereign developments; selected developments batch together. Explicit future growth-rate changes work through chat without dashboard approval or editing earned balances. Preserve existing campaigns and other games. Work and verification: docs/SOVEREIGN_EMBODIED_2026_11_04.md.
+
+Published **1.2.0**, checked implementation `da5f0f2546d398c5ce081279e6d2d9e02708c592`. Isolated release and main CI passed all **772 tests**, rule synchronization, hosted import and packaging; the focused Windows follow-up passed 39 cases. The in-app browser passed 13 responsive/local-host checks across all four layouts. Public health, application dashboard source, OAuth denial and site copy are verified; connected MCP serves matching native rule hashes. No player campaign was opened or changed and no ZIP uploaded. Full evidence and its limits are recorded in the design document.
 
 Runtime 1.1.6 refreshes shared scenery: 21 native-resolution Andreas Rocha landscapes replace the older mixed-quality collection; all 15 D&D wallpapers are available in every mode. Glowwood and the website tree stay byte-identical. There are 39 choices, with per-game preferences and source credits. See docs/SCENERY_REFRESH_2026_11_03.md.
 

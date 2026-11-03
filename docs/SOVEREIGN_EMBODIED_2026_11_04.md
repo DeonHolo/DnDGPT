@@ -20,9 +20,9 @@ User approved the full rulebook audit recommendations. Implement a consistent So
 - [x] Implement initial body, scene, growth and multi-development backend support.
 - [x] Replace stale inherited Sovereign instructions and synchronize rule/index/reference copies.
 - [x] Add body/territory/defense dashboard views and body-appropriate gear labels.
-- [x] Exercise new progression, immutable objectives and legacy future-rate changes (34 new tests pass). The independent transport retry/atomic-failure case also passes outside the Windows sandbox.
-- [x] Run responsive browser verification: 13/13 pass, all four layouts at 375/768/1100px; direct phone/desktop inspection also passed. Full CI follow-up is pending.
-- [ ] Publish through established Git/Appwrite flow and verify release, if checks pass.
+- [x] Exercise new progression, immutable objectives and legacy future-rate changes. All 39 focused cases pass, including actual batched saves, idempotent retries, paused changes and portable restore.
+- [x] Run responsive browser verification: 13/13 pass, all four layouts at 375/768/1100px; direct phone/desktop inspection also passed.
+- [x] Publish through established Git/Appwrite flow and verify release.
 
 The pre-existing change to docs/CONTINUITY_TESTS.md is outside this work and must not be staged or overwritten.
 
@@ -33,3 +33,13 @@ The first browser pass passed 12/13 checks, including every layout at 375/768/11
 The ui-ux-pro-max disclosure search returned an unrelated heading result and no match on its narrower retry. General accessibility, responsive layout, 44px controls and progressive disclosure guidance are used as fallback; no database match is claimed.
 
 The first isolated Linux release CI passed 767/769 tests, rules synchronization and the hosted-runtime import. Both failures were old fixtures mixing a new campaign marker/starting allowance with legacy prepared data. The cached-start fixture now supplies an actual body, preserves the new two-pick allowance and explicitly banks its unused gift. The legacy battle fixture persists its legacy creation profile as well as its army state. No runtime validation was weakened. Three additional local end-to-end save, paused-rate and portable-restore checks passed.
+
+## Published verification
+
+Runtime **1.2.0**, implementation `da5f0f2546d398c5ce081279e6d2d9e02708c592`. The [isolated release workflow](https://github.com/DeonHolo/DnDGPT/actions/runs/41724672920) and [main workflow](https://github.com/DeonHolo/DnDGPT/actions/runs/41725133774) passed all **772 tests**, rule synchronization, isolated hosted import and portable packaging. The focused Windows run passed 39 cases; its 457.70 seconds are local test execution, not a measurement of a gameplay turn. The website's Pages deployment also succeeded.
+
+At **2026-11-03 21:54 UTC** (4 November in Singapore), public health reported 1.2.0. The served application dashboard matches the tested source after removing exactly one hosting-injected Cloudflare analytics script for comparison. The response and application hashes are separately recorded; no other source is excluded. OAuth metadata is correct, and anonymous campaign/MCP requests remain 401. The public website contains the updated mode description. Evidence: local `dndgpt-app/test-results/sovereign-embodied-public-1.2.0.json`.
+
+The actual connected DnDGPT MCP returned the complete one-page hardener (7,825 characters), index (7,219) and body chapter (2,641), with matching tested source hashes. Book/index source: `20ac46c9cf1950f46abd2da03beae0ddf144829e4a209a2f9aec9270f39d0103`; hardener: `e12a11d94fe1051a6d0b765dccd0e6efe21da702050e509acacb0b8c7b998735`. Evidence: local `sovereign-embodied-native-1.2.0.json` and `sovereign-browser.json` under the same results directory.
+
+No real campaign was opened, edited or migrated for verification. No plugin ZIP was uploaded. Browser checks used disposable local saves and a simulated host; they do not certify ChatGPT's live generated story UI. No model-turn speed or creative-quality result is claimed.
