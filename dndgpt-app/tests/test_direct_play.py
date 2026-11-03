@@ -151,6 +151,12 @@ def test_sovereign_starting_gift_and_cached_start_work_together_without_approval
     from .test_sovereign import fixture_state
     _, _, _, args = prepare(web, "sovereign-system", "UNIQUE")
     strategy = fixture_state(engine)["sovereignty"]
+    strategy["ascension_earned"] = 2  # Match the new campaign's actual starting award.
+    from .test_sovereign_embodied import body
+    anatomy = body("mobile")
+    anatomy.update(form="Fixture boundary warden", movement="Walks using the recorded ordinary movement.",
+                   equipment_slots={slot: slot for slot in EQUIPMENT_SLOTS})
+    args["changes"]["creation"]["sovereign_body"] = anatomy
     parents = [{"id": role, "name": role.title(), "scope": "sovereign", "sovereign_role": role,
                 "activation": "Passive", "rarity": "UNIQUE", "mechanics": "The existing permanent foundation.",
                 "flavor_text": "The realm remembers."} for role in ("domain", "general", "army")]
@@ -169,6 +175,7 @@ def test_sovereign_starting_gift_and_cached_start_work_together_without_approval
     start = {"campaign_id": before["id"], "action_id": "sovereign-cached-start", "expected_version": before["version"],
              "summary": "Apply the chosen free starting evolution and open the saved first scene",
              "changes": {"begin_adventure": True, "upsert": {"abilities": [parent]},
+                          "creation": {"banked_sovereign": 1, "banking_reason": "The fixture player explicitly banks the second gift."},
                          "spend_sovereign_evolution": {"ability_id": "domain", "evolution_id": "starting-gift"},
                          "sovereignty": {"domain": {"capabilities": [*strategy["domain"]["capabilities"], cap]}}}}
     result = tool(web, "save_chat_update", start)
@@ -182,7 +189,7 @@ def test_sovereign_starting_gift_and_cached_start_work_together_without_approval
     leveled = tool(web, "save_chat_update", {"campaign_id": after["id"], "action_id": "sovereign-level-two",
                    "expected_version": after["version"], "summary": "Fixture Level 2 progression",
                    "changes": {"character": {"level": 2}}})["structuredContent"]["campaign"]
-    assert leveled["sovereignty"]["ascension_earned"] - len(leveled["sovereignty"]["ascension_spent"]) == 1
+    assert leveled["sovereignty"]["ascension_earned"] - len(leveled["sovereignty"]["ascension_spent"]) == 3
 
 
 def test_outfit_context_is_validated_before_any_other_roll(engine):

@@ -306,6 +306,7 @@ def seed_playing(engine):
     with engine.store.transaction() as db:
         raw = engine._get(db, "owner-a", prepared["id"])
         raw.update(phase="adventure", paused=False, version=2, sovereignty=prepared["sovereignty"])
+        raw["creation"] = prepared["creation"]  # Persist the legacy fixture's actual ruleset too.
         engine._append(db, raw, {"kind": "test_fixture_seed"})
         records.update(db, "campaigns_v1", {"id": raw["id"]}, {"version": 2, "data": canonical(raw)})
         snapshot(db, raw)

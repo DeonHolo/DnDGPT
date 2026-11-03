@@ -10,7 +10,7 @@ from app.rules import RARITIES
 from app.sovereign_play import PROFILE, growth
 from app.sovereignty import complete_sovereign
 from .test_personal_powers import core_powers, upgrade_request
-from .test_sovereign import fixture_state, foundation_request, orders
+from .test_sovereign import fixture_state, orders
 
 
 def body(mode="bound"):
@@ -114,19 +114,19 @@ def test_custom_starting_counts_configure_once_without_changing_other_creation_f
 
 
 def two_developments(state):
-    request = foundation_request(state, "domain")
-    state["sovereignty"]["ascension_earned"] = 2
-    parent = request["upsert"]["abilities"][0]
-    child = copy.deepcopy(parent["upgrades"][0])
-    child.update(id="second-upgrade", name="A second real development")
-    child["sovereign_changes"][0]["capability_id"] = "second-capability"
-    parent["upgrades"].append(child)
-    cap = copy.deepcopy(request["sovereignty"]["domain"]["capabilities"][-1])
-    cap.update(id="second-capability", name="Second lasting capability", source_evolution_id="second-upgrade")
-    request["sovereignty"]["domain"]["capabilities"].append(cap)
-    request["spend_sovereign_evolution"] = [request["spend_sovereign_evolution"],
-                                           {"ability_id": "domain", "evolution_id": "second-upgrade"}]
-    return request
+    parent = copy.deepcopy(next(row for row in state["abilities"] if row["id"] == "domain"))
+    domain = copy.deepcopy(state["sovereignty"]["domain"])
+    for identity, cap_id in (("domain-upgrade", "domain-capability"), ("second-upgrade", "second-capability")):
+        parent["upgrades"].append({"id": identity, "name": "Development "+identity, "rarity": "RARE",
+                                   "change_display": "Gain a concrete standing defense.",
+                                   "sovereign_changes": [{"target_id": domain["id"], "capability_id": cap_id}]})
+        domain["capabilities"].append({"id": cap_id, "name": "Capability "+identity,
+                                       "description": "A lasting actual owner capability.", "activation": "Passive",
+                                       "duration": "Permanent", "source_evolution_id": identity})
+    parent["mechanics"] += " Both actual standing defenses are integrated."
+    return {"upsert": {"abilities": [parent]}, "sovereignty": {"domain": domain},
+            "spend_sovereign_evolution": [{"ability_id": "domain", "evolution_id": identity}
+                                          for identity in ("domain-upgrade", "second-upgrade")]}
 
 
 def test_two_developments_on_one_foundation_save_together_and_keep_history(engine):
@@ -134,7 +134,7 @@ def test_two_developments_on_one_foundation_save_together_and_keep_history(engin
     request = two_developments(state)
     after = apply_changes(state, request)
     assert after["sovereignty"]["ascension_spent"] == ["domain-upgrade", "second-upgrade"]
-    assert len(after["abilities"][0]["upgrades"]) == 2
+    assert len(next(row for row in after["abilities"] if row["id"] == "domain")["upgrades"]) == 2
     assert len(after["sovereignty"]["domain"]["capabilities"]) == 3
     with pytest.raises(EngineError):
         apply_changes(after, request)
@@ -146,6 +146,8 @@ def test_permanent_development_can_unlock_actual_active_owner_technique(engine):
     request = two_developments(state)
     cap = request["sovereignty"]["domain"]["capabilities"][-1]
     cap.update(activation="Action", permanent_unlock=True, mechanics="Spend the recorded action and 8 MP to fire the installed lance.")
+    assert apply_changes(state, request)["sovereignty"]["ascension_spent"]
+    cap["cooldown_remaining"] = 2  # Use recovery is distinct from the lifetime of the acquired technique.
     assert apply_changes(state, request)["sovereignty"]["ascension_spent"]
     cap["remaining_rounds"] = 3
     with pytest.raises(EngineError, match="lasting foundation"):
@@ -228,3 +230,62 @@ def test_effective_book_has_no_retired_acquisition_boards_or_automatic_unique():
     for phrase in ("five fresh talents", "+1 Skill Point", "four-level 3+2 Breakthrough", "exactly three Class Breakthrough offers"):
         assert phrase not in book
     assert rule_source(AGE)["source_sha256"] == "94ec7b0882418a00fc6140c09fa725984be02aaa3d70f9cf7664fcb55399a529"
+
+
+def prepared_campaign(engine):
+    game = ChatGame(engine)
+    created = game.create("owner-a", "Portable bound core", "embodied-portable-create", True, SOVEREIGN)
+    prepared = embodied_state(engine)
+    patch = {key: prepared[key] for key in ("character", "creation", "sovereignty")}
+    patch["upsert"] = {"abilities": prepared["abilities"]}
+    current = game.update("owner-a", created["id"], "embodied-portable-seed", 1,
+                          "Prepare a rare bound character and actual defenses", patch)["campaign"]
+    return game, current
+
+
+def test_real_save_batches_two_developments_with_retry_owner_and_version_guards(engine):
+    game, state = prepared_campaign(engine)
+    patch = two_developments(state)
+    first = game.update("owner-a", state["id"], "embodied-two-picks", state["version"], "Choose both developments", patch)
+    assert first["campaign"]["sovereignty"]["ascension_spent"] == ["domain-upgrade", "second-upgrade"]
+    assert game.update("owner-a", state["id"], "embodied-two-picks", state["version"], "Choose both developments", patch) == first
+    with pytest.raises(EngineError):
+        game.update("owner-b", state["id"], "embodied-other-owner", first["campaign"]["version"], "Unauthorized", patch)
+    with pytest.raises(EngineError):
+        game.update("owner-a", state["id"], "embodied-stale", state["version"], "Stale selection", patch)
+    assert engine.get_campaign("owner-a", state["id"])["version"] == first["campaign"]["version"]
+
+
+def test_real_paused_growth_change_needs_no_proposal_and_keeps_earned_state(engine):
+    from app import records
+    from app.storage import canonical
+    game, state = prepared_campaign(engine)
+    # A deliberately paused/frozen local fixture, without advancing its fictional clock.
+    with engine.store.transaction() as db:
+        raw = engine._get(db, "owner-a", state["id"])
+        raw.update(phase="adventure", paused=True, level_up_freeze=True)
+        records.update(db, "campaigns_v1", {"id": state["id"]}, {"data": canonical(raw)})
+    request = {"creation": {"sovereign_growth": {"sovereign_per_level": 3},
+                            "sovereign_growth_reason": "The player explicitly asks for three future selections per level."}}
+    result = game.update("owner-a", state["id"], "embodied-future-rate", state["version"], "Change future growth", request)
+    after = result["campaign"]
+    assert "proposal" not in result and after["version"] == state["version"] + 1
+    assert after["paused"] and after["level_up_freeze"] and after["fictional_time_seconds"] == 0
+    assert after["sovereignty"] == raw["sovereignty"] and after["character"] == raw["character"]
+    assert growth(after)["sovereign_per_level"] == 3
+
+
+def test_bound_body_scene_and_both_developments_survive_portable_restore(engine):
+    from app.campaign_archive import CampaignArchive
+    game, state = prepared_campaign(engine)
+    state = game.update("owner-a", state["id"], "embodied-portable-picks", state["version"],
+                        "Apply both actual developments", two_developments(state))["campaign"]
+    archive = CampaignArchive(engine)
+    restored = archive.restore("owner-a", archive.export("owner-a", state["id"])["archive"],
+                               "embodied-restore", True)["campaign"]
+    assert restored["id"] != state["id"] and restored["paused"]
+    assert restored["creation"] == state["creation"]
+    assert restored["sovereignty"] == state["sovereignty"]
+    assert restored["abilities"] == state["abilities"]
+    assert restored["character"] == state["character"]
+    assert engine.get_campaign("owner-a", state["id"])["version"] == state["version"]

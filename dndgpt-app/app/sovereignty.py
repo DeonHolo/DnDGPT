@@ -119,7 +119,9 @@ def foundation_evolution(before, state, base, parent, evolution_id):
                 and (capability.get("activation") == "Passive" or
                      capability.get("permanent_unlock") is True and text(capability.get("activation"), 80))
                 and capability.get("duration") == "Permanent"
-                and not {"expires_at", "remaining_rounds", "cooldown_remaining"}.intersection(capability),
+                and not {"expires_at", "remaining_rounds"}.intersection(capability)
+                and ("cooldown_remaining" not in capability or
+                     capability.get("permanent_unlock") is True and integer(capability["cooldown_remaining"])),
                 "Apply a lasting foundation capability in the same save; an active use needs permanent_unlock=true")
 
 
