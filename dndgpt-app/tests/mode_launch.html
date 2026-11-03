@@ -21,6 +21,8 @@ document.getElementById('run').onclick=async()=>{
   for(const layout of ['original','reclaimed','orrery','ember'])for(const width of [375,768,1100]){
    frame.style.width=width+'px';const select=d.getElementById('layoutSelect');select.value=layout;select.dispatchEvent(new w.Event('change'));await wait(60);
    assert(d.documentElement.scrollWidth<=width+2,layout+' overflow at '+width);
+   assert(d.getElementById('layoutRail').hidden,'A campaign rail appeared before choosing a mode');
+   assert(d.getElementById('modePicker').getBoundingClientRect().width>width*.75,layout+' picker lost available width');
    for(const button of d.querySelectorAll('[data-choose-game]'))assert(button.getBoundingClientRect().height>=44,layout+' small choice target');
   }
   frame.style.width='1100px';d.getElementById('layoutSelect').value='original';d.getElementById('layoutSelect').dispatchEvent(new w.Event('change'));
@@ -37,11 +39,14 @@ document.getElementById('run').onclick=async()=>{
   assert(w.openai.widgetState.modelContent.game_id==='sovereign-system','Choice was not shared with model context');
  });
  await test('A new unspecified invocation clears the old mode and named modes bypass the question',async()=>{
+  d.getElementById('layoutSelect').value='ember';d.getElementById('layoutSelect').dispatchEvent(new w.Event('change'));
   await w.callTool('render_dashboard',{game_id:null});assert(!d.getElementById('modePicker').hidden&&d.getElementById('gameSelect').value==='','Old mode stuck');
+  assert(d.getElementById('layoutRail').hidden,'Old chapter rail remained after returning to the picker');
   for(const game of ['dnd-2024','age-of-convergence','sovereign-system']){
    await w.callTool('render_dashboard',{game_id:game});assert(d.getElementById('modePicker').hidden&&d.getElementById('gameSelect').value===game,'Explicit '+game+' did not bypass the question');
   }
   await w.callTool('render_dashboard',{game_id:null});
+  d.getElementById('layoutSelect').value='original';d.getElementById('layoutSelect').dispatchEvent(new w.Event('change'));
  });
  await test('Browsing and choosing a mode preserve saved state and fictional time',async()=>{
   const after=await(await fetch('/test-state')).json();assert(JSON.stringify(after.campaign)===JSON.stringify(before.campaign),'Saved campaign changed');assert(JSON.stringify(after.audit)===JSON.stringify(before.audit),'Campaign action history changed');

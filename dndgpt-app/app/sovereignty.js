@@ -26,6 +26,7 @@ function activateGame(id){
   const changed=currentGame!==id;currentGame=id;
   document.documentElement.dataset.game=id||"";$("gameSelect").value=id||"";
   $("modePicker").hidden=Boolean(id);document.querySelector(".session-picker").hidden=!id;$("status").hidden=!id;$("overviewToolbar").hidden=!id;$("hud").hidden=!id||preferences.hud_hidden;$("hideHud").disabled=!id;$("newGame").disabled=!id||busy||deleting||deletionStarted;
+  updateLayoutRail();
   renderSceneOptions(id);selectScene(preferences.game_scenes?.[id]||preferences.scene||scene,false);
   setDndNavigation(id==="dnd-2024");
   if(id==="sovereign-system"){$("title-skills").textContent="Personal Powers";$("nav-skills").querySelector(".nav-title").textContent="Personal Powers"}
