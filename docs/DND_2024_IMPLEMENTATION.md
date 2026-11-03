@@ -2,6 +2,16 @@
 
 Approved direction: revised 2024 D&D, SRD 5.2.1; default for new campaigns. Existing Age of Convergence and Sovereign System saves retain their mechanics and identity, including legacy saves without a game ID.
 
+## Current follow-up — adventure choice and explained creation
+
+Runtime 1.1.2 removes the automatically selected adventure from new campaigns. Seven source-verified published adventures cover a classic Forgotten Realms dungeon, Innistrad gothic horror and siege warfare, whimsical magic, an arctic mystery, Barovian folk horror, Strixhaven comedy and festival puzzles. Original adventures are always offered. Existing selected adventures keep their IDs.
+
+Guided creation uses two grouped replies: class and species together, then all remaining choices with recommended legal defaults. Quickplay stays one complete draft. Every choice gets a visible explanation of its use and benefit. list_dnd_options returns local class/species summaries, all eighteen skills' usual abilities and uses, background benefits and the grouped flow. Exact selected mechanics remain in the SRD references.
+
+Published PDF sources are fetched automatically from fixed author/publisher URLs. The reader caches bytes/text, exposes logical section ranges, batches up to three sections and can return actual page images. Army of the Damned has image-only monster statistics; the Sheep Chase PDF has broken font encoding. Visual pages preserve access to that material instead of inventing missing rules or passing unreadable text. PDFium calls use a shared mutex because the library is not thread-safe; downloads are locked per source so unrelated books do not block each other. The source bytes and extracted text are not committed or included in player exports. Dependencies include PDFium's own notices through pypdfium2.
+
+The follow-up passes **43 focused tests and 14 in-app browser checks**, including all four layouts at 375/768/1200px, the real Army selection message, choice explanations, selected-adventure status and unchanged fixture state. All seven public sources were fetched successfully from the real network (0.85–3.82 seconds each in this local run). Army monster page 67 was visually inspected and its image-only statistics are readable. A Wild Sheep Chase returns actual source images instead of its damaged text encoding. These are source-access, instruction-delivery and simulated-host checks; they are not an end-to-end model campaign or model latency measurement. Full CI and public release verification follow.
+
 ## Delivery plan
 
 - [x] Independent six-attribute character/party schema, character library and versioned campaign copies.
@@ -30,7 +40,7 @@ The earlier compressed preview and then branded wallpapers were rejected. They h
 
 ## Resource boundaries
 
-Bundle the public SRD with its required attribution. Open5e data is filtered to the selected source and cached with provenance. The upstream MCP package declares MIT but omits a standalone LICENSE file; verify the notice before vendoring code. Frozen Sick is the ready-to-play default, set in Wildemount, levels 1–3. New campaigns reference it directly without an owned pack. A fixed-URL, bounded HTTPS reader extracts only the official public adventure article and caches it in server memory. Chapter retrieval is model-only; source text is never placed in the dashboard, search or player export. The full adventure is not shipped in the repository. Original Forgotten Realms outlines and optional private packs remain available. Commercial sources are optional, not part of the normal setup.
+Bundle the public SRD with its required attribution. Open5e data is filtered to the selected source and cached with provenance. The upstream MCP package declares MIT but omits a standalone LICENSE file; verify the notice before vendoring code. Frozen Sick remains one of seven published choices. New campaigns start without an adventure selection; the player chooses a published source or an original adventure. Fixed-URL, bounded HTTPS readers retrieve the chosen author/publisher HTML or PDF source and cache it in server memory. Chapter retrieval is model-only; source text is never placed in the dashboard, search or player export. The full adventure is not shipped in the repository. Original Forgotten Realms outlines and optional private packs remain available. Commercial sources are optional, not part of the normal setup.
 
 ## Latency
 

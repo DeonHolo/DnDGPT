@@ -76,7 +76,7 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         creation_uri = "ui://dndgpt/creation-v1.0-" + hashlib.sha256(creation_html.encode()).hexdigest()[:12] + ".html"
     server = FastMCP(
         "DnDGPT", stateless_http=True, json_response=True,
-        instructions="DnDGPT supports D&D 2024 (default for new campaigns), Age of Convergence and Sovereign System through one connection. Existing saves select their own game. Read only that game's hardener/index and relevant rules. For D&D use lookup_dnd_reference/list_dnd_options, complete legal Quickplay party drafts, independent reusable character-library sheets and private adventure packs. Ordinary chat starts and player-selected advancement need no dashboard approval. Batch party and scene changes in save_chat_update; reuse current successful responses. Keep full HUD in the dashboard and story presentation in chat. Never mix the homebrew rarity/LCK/MP/evolutions into standard D&D. A published adventure catalogue entry needs its actual source before play.",
+        instructions="DnDGPT supports D&D 2024 (default game), Age of Convergence and Sovereign System through one connection. Existing saves select their own game. Read only that game's hardener/index and relevant sections. D&D has NO default adventure: offer diverse published choices plus an original adventure and let the player pick. Guided creation groups class+species in turn 1 and all remaining choices in turn 2, with visible explanations of what every option does. Quickplay remains one complete explained draft. Reuse list_dnd_options summaries and retrieve selected exact rules. Published HTML/PDF sources are read automatically and cached; inspect visual pages for image-only stats. Keep reusable library sheets independent from campaign copies. Ordinary chat starts and selected advancement need no extra approval. Batch party/scene changes in one save. Keep the full HUD in the dashboard. Never mix homebrew rarity/LCK/MP/evolutions into D&D.",
         token_verifier=verifier if config.configured else None,
         auth=AuthSettings(issuer_url=config.issuer, resource_server_url=config.resource_url,
                           required_scopes=[READ_SCOPE]) if config.configured else None,
@@ -173,7 +173,7 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         Select the player's requested game; it is fixed for this save. Read that game's rules.
         """
         return invoke(lambda owner: {"campaign": chat_game.create(owner, name, action_id, disposable, game_id),
-                                      "game_id": game_id, "standard_play": {"game_id": DND, "rules_version": "5.2.1", "attributes": ["STR","DEX","CON","INT","WIS","CHA"], "sheet_guide": "Read section=creation and use list_dnd_options once for a complete Quickplay draft"} if game_id == DND else {**rules_guidance(), "game_id": game_id}}, True)
+                                      "game_id": game_id, "standard_play": {"game_id": DND, "rules_version": "5.2.1", "attributes": ["STR","DEX","CON","INT","WIS","CHA"], "sheet_guide": "Read section=creation. Guided: class+species together, then all remaining choices with explanations. Quickplay: one explained draft. Use list_dnd_options once; offer published/original adventures without preselection."} if game_id == DND else {**rules_guidance(), "game_id": game_id}}, True)
 
     @server.tool(annotations=write, meta=metadata(WRITE_SCOPE))
     def save_chat_update(campaign_id: str, action_id: str, expected_version: int,

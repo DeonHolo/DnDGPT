@@ -1,0 +1,55 @@
+"""Compact creation explanations; exact selected mechanics come from SRD references."""
+
+CLASS_SUMMARIES = {
+    "Barbarian": "A tough front-line warrior. Rage strengthens close combat and helps you withstand weapon damage.",
+    "Bard": "A versatile performer and spellcaster. Bardic Inspiration helps allies succeed at important rolls.",
+    "Cleric": "A divine spellcaster with healing, protection and offensive magic; Divine Order shapes your training.",
+    "Druid": "A nature spellcaster with healing, control and animal-themed magic; Wild Shape arrives at level 2.",
+    "Fighter": "A flexible weapon specialist. Choose a Fighting Style, use Weapon Mastery and recover HP with Second Wind.",
+    "Monk": "A mobile martial artist who fights effectively unarmored and can follow an attack with an unarmed strike.",
+    "Paladin": "An armored warrior with spells and Lay On Hands healing; signature smiting develops as you level.",
+    "Ranger": "A weapon-using wilderness hunter with spells, Weapon Mastery and Hunter's Mark for pursuing a target.",
+    "Rogue": "A precise attacker and skilled specialist. Sneak Attack adds damage when its conditions apply; Expertise improves chosen skills.",
+    "Sorcerer": "An innate spellcaster. Innate Sorcery improves your spell attacks and spell save DC for a limited time.",
+    "Warlock": "A pact spellcaster with customizable Eldritch Invocations and Pact Magic slots that recover on a Short Rest.",
+    "Wizard": "A spellbook-based caster with broad magical options, ritual casting and limited spell-slot recovery through Arcane Recovery.",
+}
+SPECIES_SUMMARIES = {
+    "Dragonborn": "Dragon ancestry gives you an elemental breath weapon, matching damage resistance and Darkvision; flight arrives later.",
+    "Dwarf": "A resilient explorer with extra HP, poison resilience, Darkvision and a stone-sensing trait.",
+    "Elf": "An alert, magically inclined explorer with Darkvision, Trance and a choice of elven lineage.",
+    "Gnome": "A small magical tinkerer or forest dweller with Darkvision and protection on mental saving throws.",
+    "Goliath": "A giant-descended adventurer. Choose a giant ancestry for a distinctive power and carry heavier loads.",
+    "Halfling": "A small, nimble adventurer with luck that rerolls natural 1s on D20 Tests, courage and ways to move through larger creatures.",
+    "Human": "A flexible adventurer with an additional skill, an Origin feat and Heroic Inspiration after a Long Rest.",
+    "Orc": "A resilient adventurer with Darkvision, a burst of movement through Adrenaline Rush and Relentless Endurance.",
+    "Tiefling": "A magically marked adventurer whose fiendish legacy grants spells and damage resistance, alongside Darkvision.",
+}
+SKILL_USES = {
+    "Acrobatics": "Balance, tumble and keep your footing in difficult situations.",
+    "Animal Handling": "Calm, guide or understand an animal's behavior.",
+    "Arcana": "Recall knowledge of magic, magical traditions and other planes.",
+    "Athletics": "Climb, swim and perform difficult physical feats.",
+    "Deception": "Conceal the truth through convincing words or behavior.",
+    "History": "Recall past events, cultures, rulers and historic places.",
+    "Insight": "Read intentions, notice suspicious behavior and judge what someone means.",
+    "Intimidation": "Influence someone through threats or an imposing presence.",
+    "Investigation": "Examine clues and work out how pieces of evidence fit together.",
+    "Medicine": "Diagnose injuries or illness and attempt to stabilize a dying creature.",
+    "Nature": "Recall knowledge of terrain, plants, animals and natural cycles.",
+    "Perception": "Notice sights, sounds and other signs in your surroundings.",
+    "Performance": "Entertain through music, acting, storytelling or another performance.",
+    "Persuasion": "Make a reasonable appeal, negotiate or win cooperation.",
+    "Religion": "Recall knowledge of deities, religious practices and sacred symbols.",
+    "Sleight of Hand": "Conceal or manipulate small objects with careful, quick hand movements.",
+    "Stealth": "Move quietly and conceal yourself from observation.",
+    "Survival": "Track, navigate wilderness, find food and recognize environmental hazards.",
+}
+CREATION_FLOW = {
+    "guided_turns": 2,
+    "turn_1": "Choose class and species (race) together; offer adventure selection alongside them if needed.",
+    "turn_2": "Show background, name, ability scores, skills, feats, spells and equipment together with legal recommended defaults and explanations. Accept the player's combined edits or start in one reply.",
+    "quickplay": "One complete explained character draft; include adventure choices when none is selected.",
+    "explanations": "Every offered option needs its actual benefit or use, not just a name. Explain selected powers' effects and costs, skills' usual ability and proficiency, and present-level versus later features.",
+    "start": "The player may combine remaining selections, adventure choice and let's go. No extra confirmation.",
+}

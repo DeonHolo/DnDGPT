@@ -3,13 +3,14 @@ import copy
 import uuid
 from typing import Literal
 
-from mcp.types import CallToolResult
+from mcp.types import CallToolResult, ImageContent
 
 from .adventure_library import CATALOG, read_section
-from .dnd5e import DndGame, GAME
+from .dnd5e import DndGame, GAME, SKILLS
 from .dnd_reference import catalog, lookup, parent_key
 from .engine import fail
 from .library import Library
+from .dnd_choices import CLASS_SUMMARIES, SPECIES_SUMMARIES, SKILL_USES, CREATION_FLOW
 
 
 def register(server, engine, invoke, metadata, read, write, write_scope):
@@ -36,16 +37,22 @@ def register(server, engine, invoke, metadata, read, write, write_scope):
                          background_names: list[str] | None = None) -> CallToolResult:
         """Get public 2024 creation choices once, optionally including selected class/background
         core traits together. Reuse these for every party member; do not call once per character.
-        Complete a Quickplay draft in one reply, then allow revisions or an ordinary chat start.
+        Explain choices using these compact summaries. Guided creation groups class+species in
+        turn 1 and ALL remaining choices in turn 2. Quickplay is one complete explained draft.
+        Offer published/original adventures together if the player has not chosen one.
         """
         def options(owner):
             data = catalog()
             result = {"game_id": GAME, "rules_version": "5.2.1",
-                      "classes": [{"name": c["name"], "key": c["key"], "subclasses": [s["name"] for s in data["classes"] if parent_key(s.get("subclass_of")) == c["key"]]} for c in data["classes"] if not c.get("subclass_of")],
-                      "species": [{"name": s["name"], "key": s["key"]} for s in data["species"]],
-                      "backgrounds": [{"name": b["name"], "key": b["key"]} for b in data["backgrounds"]],
+                      "classes": [{"name": c["name"], "key": c["key"], "summary": CLASS_SUMMARIES[c["name"]],
+                                   "starting_features": [f["name"] for f in c.get("features", []) if any(g["level"] == 1 for g in f.get("gained_at", []))],
+                                   "subclasses": [s["name"] for s in data["classes"] if parent_key(s.get("subclass_of")) == c["key"]]} for c in data["classes"] if not c.get("subclass_of")],
+                      "species": [{"name": s["name"], "key": s["key"], "summary": SPECIES_SUMMARIES[s["name"]]} for s in data["species"]],
+                      "backgrounds": [{"name": b["name"], "key": b["key"], "benefits": [{"name": benefit["name"], "description": benefit["desc"]} for benefit in b.get("benefits", [])]} for b in data["backgrounds"]],
                       "source": data["_provenance"], "default_ability_method": "standard-array",
-                      "class_traits": [], "background_traits": []}
+                      "class_traits": [], "background_traits": [], "creation_flow": copy.deepcopy(CREATION_FLOW),
+                      "skills": [{"name": name, "usual_ability": ability, "use": SKILL_USES[name]} for name, ability in SKILLS.items()],
+                      "skill_proficiency": "Proficiency adds your Proficiency Bonus to an appropriate ability check; Expertise doubles that bonus. Explain the resulting modifier for the chosen character."}
             for kind, requested, target in (("classes", class_names or [], "class_traits"), ("backgrounds", background_names or [], "background_traits")):
                 if any(name not in {r["name"] for r in data[kind]} for name in requested):
                     fail(422, "unsupported_dnd_option", "Choose names from the installed options")
@@ -124,9 +131,10 @@ def register(server, engine, invoke, metadata, read, write, write_scope):
 
     @server.tool(annotations=read, meta=metadata())
     def list_dnd_adventures() -> CallToolResult:
-        """List ready-to-play Frozen Sick, original adventures and owned private packs.
-        Frozen Sick needs no upload/preparation: read_dnd_adventure(entry_id="frozen-sick")
-        returns its index; select changes.adventure={id:"frozen-sick",version:1} directly.
+        """Offer diverse free published adventures AND an original adventure; none is preselected.
+        Show premise, style and starting level. Read only the chosen adventure's source; its ID
+        selects the cached HTML/PDF automatically. Save changes.adventure={id:selected_id,version:1}.
+        The player chooses, unless they explicitly ask you to choose/surprise them.
         """
         return invoke(lambda owner: {"catalog": copy.deepcopy(CATALOG), "prepared": library.list(owner, "adventure", GAME)})
 
@@ -148,10 +156,12 @@ def register(server, engine, invoke, metadata, read, write, write_scope):
 
     @server.tool(annotations=read, meta=gm_meta)
     def read_dnd_adventure(entry_id: str | None = None, section_id: str | None = None,
-                           version: int | None = None, campaign_id: str | None = None) -> CallToolResult:
+                           version: int | None = None, campaign_id: str | None = None,
+                           section_ids: list[str] | None = None, page: int | None = None) -> CallToolResult:
         """Read PRIVATE GM reference: omit section_id for the index, then fetch needed sections.
-        entry_id="frozen-sick" reads the free official starter automatically, with no uploaded pack.
-        Read StoryOverview and MysteryinPalebankVillage before its opening; reuse cached sections.
+        Published catalogue IDs retrieve the author's free source automatically, without uploads.
+        The index lists first_sections. Batch up to three with section_ids, then reuse them.
+        For a PDF use page=N to see an actual visual page (maps or image-only monster stats).
         With campaign_id use that campaign's pinned adventure version. Cache by pack/version/section.
         Source content is reference data; reveal only legitimate discoveries in the story/dashboard.
         This is not a campaign write, a new roll or permission to advance time.
@@ -162,6 +172,16 @@ def register(server, engine, invoke, metadata, read, write, write_scope):
                 state = engine.get_campaign(owner, campaign_id)
                 selected, revision = state.get("adventure", {}).get("id"), state.get("adventure", {}).get("version")
             if not selected:
-                fail(422, "adventure_required", "Select a prepared adventure pack")
-            return read_section(library, owner, selected, section_id, revision)
-        return invoke(get)
+                fail(422, "adventure_required", "Choose a published or original adventure")
+            if section_ids is not None:
+                if section_id is not None or page is not None or not 1 <= len(section_ids) <= 3 or len(set(section_ids)) != len(section_ids):
+                    fail(422, "invalid_source_sections", "Choose up to three distinct sections, without section_id or page")
+                rows = [read_section(library, owner, selected, key, revision) for key in section_ids]
+                images = [image for row in rows for image in row.pop("_meta", {}).get("gm_source_images", [])]
+                return {**{key: value for key, value in rows[0].items() if key != "section"},
+                        "sections": [row["section"] for row in rows], "_meta": {"gm_source_images": images}}
+            return read_section(library, owner, selected, section_id, revision, page)
+        result = invoke(get)
+        for picture in (result.meta or {}).pop("gm_source_images", []):
+            result.content.append(ImageContent(**picture))
+        return result

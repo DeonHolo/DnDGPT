@@ -18,11 +18,24 @@
 
 DnDGPT is an **MCP app for ChatGPT**: a hosted MCP server connects your conversation to a saved campaign dashboard and supplies the GM rules. The optional installable bundle also includes offline rule copies.
 
-**New campaigns default to D&D 2024**, using the public official SRD 5.2.1. Play one hero or a party with GM-run companions. Quickplay prepares complete character-sheet drafts in one reply; request revisions or say “let's go” to begin. The sheet follows the familiar tabletop structure, with six abilities, saving throws, skills, HP, Armor Class, Hit Dice, class features and spellcasting.
+**New campaigns default to D&D 2024**, using the public official SRD 5.2.1. Play one hero or a party with GM-run companions. Guided creation groups class and species/race in the first turn, then background, abilities, skills, name, equipment and other choices in the second. Every offered choice explains what it does. Quickplay still prepares a complete explained draft in one reply; request revisions or say “let's go” to begin. The sheet follows the familiar tabletop structure, with six abilities, saving throws, skills, HP, Armor Class, Hit Dice, class features and spellcasting.
 
 The **Character Library** keeps reusable, versioned sheets for future adventures. Each campaign gets independent party copies, so one run's damage, equipment or level-ups do not alter another run. Export a sheet as JSON or save a current party member back into your library.
 
-Start with **Frozen Sick**, a free official adventure for levels 1–3 in Wildemount, or ask for an original adventure in the **Forgotten Realms**. The GM reads the published starter from its [official D&D Beyond source](https://www.dndbeyond.com/sources/dnd/wa/frozen-sick) automatically and runs it with the installed 2024 rules. Choose it and play—no book purchase, upload or adventure preparation. Original adventures use official setting references. The **Adventure Library** keeps GM source sections separate from player-visible progress; private adventure packs and other published books are optional.
+**Choose your adventure; none is preselected.** ChatGPT offers several free published adventures and an original adventure suited to your interests. The Adventure Library shows each one's premise, setting, style and starting level. Sources are read automatically from their publishers or authors, including PDF page images for maps and image-only statistics. You do not need to upload or prepare a pack.
+
+| Adventure | Style | Levels |
+| --- | --- | --- |
+| [Army of the Damned](https://www.reddit.com/r/DnDBehindTheScreen/comments/471cs8/an_update_to_my_free_5e_adventure_army_of_the/) | Innistrad gothic horror, undead siege, campaign | 1–5 |
+| [Dues for the Dead](https://media.wizards.com/2014/downloads/dnd/DDEX14_DuesfortheDead.pdf) | Forgotten Realms crypt exploration | 1–4 |
+| [A Wild Sheep Chase](https://winghornpress.com/adventures/a-wild-sheep-chase/) | Whimsical magic and a wizard's feud | 4–5 |
+| [Frozen Sick](https://www.dndbeyond.com/sources/dnd/wa/frozen-sick) | Arctic mystery and exploration | 1–3 |
+| [The Haunted Cornfield](https://www.dndbeyond.com/posts/334-halloween-encounters-the-haunted-cornfield) | Barovian folk horror | 1 |
+| [No Tears Over Spilled Coffee](https://www.dndbeyond.com/posts/1118-free-d-d-adventure-work-at-strixhavens-firejolt) | Strixhaven café comedy and teamwork | 1 |
+| [The Great Jigow Scavenger Hunt](https://www.dndbeyond.com/posts/1194-free-d-d-adventure-retrieve-stolen-festival) | Festival riddles and town exploration | 3 |
+| Original adventure | Your preferred theme in an established D&D setting | Chosen for your party |
+
+These published 5e adventures are run with the installed 2024 rules; they include official releases and credited community adventures. Original adventures default to the Forgotten Realms. GM source material stays separate from player-visible progress.
 
 ### Three games, one connection
 
@@ -90,9 +103,9 @@ Click **Try in chat** and use regular **Chat** mode. DnDGPT provides the selecte
 
 Send this to begin:
 
-> Be my DnDGPT GM using D&D 2024. Read its execution checklist and rule index, then retrieve the rules needed for our choices. Generate a complete Quickplay character draft for Frozen Sick and open my dashboard. Include my story, starting equipment and full sheet. Let me request revisions or say “let’s go.” Save our progress as we play.
+> Be my DnDGPT GM using D&D 2024. Offer me a choice of published adventures and an original adventure. Guide character creation in two turns: class and species together, then the remaining choices together. Explain what each option does and suggest legal defaults. Open my dashboard and save our progress.
 
-For a different game, name **Age of Convergence** or **Sovereign System** instead. For a new D&D story, ask for an **original Forgotten Realms adventure** instead of Frozen Sick.
+For a different game, name **Age of Convergence** or **Sovereign System** instead. You can ask for **Quickplay** or a saved character instead of guided creation.
 
 After a saved choice, you can say **“Open my campaign dashboard.”** Updates appear when ChatGPT saves the result; narration alone does not update it.
 
@@ -109,7 +122,7 @@ To remove a campaign, select it and click **Delete Campaign**. Review what will 
 ## FAQ
 
 - **I'm already connected. How do I start?** Click **Try in chat**, or type **@** in a normal ChatGPT message and select **DnDGPT** from the plugin picker. Then use the starting prompt above to begin a campaign or ask the GM to open one you've already saved.
-- **Do I need to download the rules or an adventure?** No. The connection supplies the selected game’s rules. D&D uses the bundled official SRD 5.2.1 and source-scoped references; Frozen Sick is read automatically from its free official source. You can also ask for an original Forgotten Realms adventure. The two homebrew games use their own included books.
+- **Do I need to download the rules or an adventure?** No. The connection supplies the selected game’s rules. D&D uses the bundled official SRD 5.2.1 and source-scoped references; the selected published adventure is read automatically from its free source. You can also ask for an original Forgotten Realms adventure. The two homebrew games use their own included books.
 - **How do I get dashboard and rule updates?** Hosted updates are available through the **DnDGPT** connection you added during setup. You can keep your saved campaigns; an open dashboard or ongoing chat may need refreshing to pick up changes.
 - **How do I refresh my dashboard and rules?** Open **Plugin settings → DnDGPT → Refresh tools** under **Manage app**. Close the dashboard and reload ChatGPT. In your campaign chat, ask: **“Read the latest complete rulebook and Rule Hardener, then reopen my saved campaign dashboard.”** The dashboard's **Refresh saved state** button reloads campaign progress; **Refresh tools** updates the connected tool catalog. If you separately added a developer connection named **DnDGPT Cloud Dashboard**, refresh that entry instead. The normal setup does not require a second plugin.
 - **Will an update change my character?** Your saved character and progress stay as recorded. To use new character-building rules with an existing character, ask the GM to review the changes with you while preserving your earned progress and current resources.

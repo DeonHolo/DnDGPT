@@ -1,0 +1,98 @@
+"""Source-verified free adventures. Metadata only; copyrighted books are not bundled."""
+
+FROZEN_CHAPTERS = (
+    ("FrozenSick", "Starting points"), ("StoryOverview", "Story overview"),
+    ("MysteryinPalebankVillage", "Mystery in Palebank Village"), ("CroakerCave", "Croaker Cave"),
+    ("JollyDwarf", "Jolly Dwarf"), ("TravelingtoEiselcross", "Traveling to Eiselcross"),
+    ("Syrinlya", "Syrinlya"), ("IntotheWilds", "Into the wilds"),
+    ("Salsvault", "Salsvault"), ("ConcludingtheAdventure", "Concluding the adventure"),
+)
+
+
+def adventure(id, title, setting, levels, style, summary, source, credit, chapters,
+              first_sections, *, format="One-shot", download=None, pages=None, visual_sections=()):
+    return {"id": id, "title": title, "setting": setting, "starting_level": levels[0],
+            "ending_level": levels[1], "style": style, "summary": summary, "source_url": source,
+            "credit": credit, "format": format, "adventure_type": "published", "version": 1,
+            "recommended": False, "ready_to_play": True, "source_required": False,
+            "availability": "Free published adventure. Its source is read automatically after you choose it.",
+            "rules": "2024 rules adaptation of a published 5e adventure",
+            "_chapters": chapters, "_first_sections": first_sections, "_download": download,
+            "_pages": pages, "_visual_sections": visual_sections}
+
+
+BOOKS = (
+    adventure("army-of-the-damned", "Army of the Damned", "Innistrad", (1, 5),
+        "Gothic horror · undead siege · longer campaign",
+        "Defend a threatened town and investigate the dark forces gathering across Innistrad.",
+        "https://www.reddit.com/r/DnDBehindTheScreen/comments/471cs8/an_update_to_my_free_5e_adventure_army_of_the/",
+        "Tomer Abramovici / SpiketailDrake; fan-made adventure in Wizards' Innistrad setting",
+        (("introduction", "Setting and adventure overview"), ("chapter-1", "Into Stensia"),
+         ("shadowgrange", "Shadowgrange"), ("alchemy-shop", "The alchemy shop"),
+         ("siege-preparation", "Preparing for the siege"), ("siege", "Night of the Dead"),
+         ("chapter-4", "Journey to Mauer Estate"), ("estate-approach", "Approaching Mauer Estate"),
+         ("estate", "Inside Mauer Estate"), ("ending", "Finale and aftermath"),
+         ("special-items", "Special items"), ("monsters", "Monster index and statistics"), ("handouts", "Handouts")),
+        ("introduction", "chapter-1"), format="Campaign",
+        download="https://drive.usercontent.google.com/download?id=1je6ECfvYcu7Epf_SRz7-0a0Cci5_cfrV&export=download",
+        pages=((1,7),(8,14),(15,21),(22,24),(25,28),(29,37),(38,46),(47,50),(51,58),(59,62),(63,65),(66,73),(74,74)),
+        visual_sections=("monsters", "special-items", "handouts")),
+    adventure("dues-for-the-dead", "Dues for the Dead", "Forgotten Realms — Phlan", (1, 4),
+        "Classic dungeon · crypt exploration · undead",
+        "Explore the catacombs beneath a city's graveyard and uncover what has disturbed its dead.",
+        "https://media.wizards.com/2014/downloads/dnd/DDEX14_DuesfortheDead.pdf",
+        "Steve Winter / Wizards of the Coast, DDEX1-4",
+        (("introduction", "Overview and hook"), ("graveyard", "The graveyard"),
+         ("catacombs-entry", "Entering the catacombs"), ("catacombs", "Deeper catacombs"),
+         ("ending", "Conclusion and rewards"), ("monsters", "Monster statistics"), ("maps", "Maps")),
+        ("introduction", "graveyard"),
+        download="https://media.wizards.com/2014/downloads/dnd/DDEX14_DuesfortheDead.pdf",
+        pages=((1,6),(7,8),(9,12),(13,18),(19,20),(21,23),(24,25)), visual_sections=("monsters", "maps")),
+    adventure("a-wild-sheep-chase", "A Wild Sheep Chase", "Setting-neutral — Forgotten Realms by default", (4, 5),
+        "Whimsical fantasy · transformed creatures · magical trouble",
+        "A talking sheep draws your party into a wizard's feud and a chase through unstable magic.",
+        "https://winghornpress.com/adventures/a-wild-sheep-chase/",
+        "Richard Jansen-Parkes / Winghorn Press",
+        (("opening", "Premise and opening encounters"), ("chase", "The chase and tower"), ("finale", "Finale and statistics")),
+        ("opening",), download="https://winghornpress.com/wp-content/uploads/2018/02/the_wild_sheep_chase_v2.pdf",
+        pages=((1,2),(3,4),(5,6)), visual_sections=("opening", "chase", "finale")),
+    adventure("frozen-sick", "Frozen Sick", "Wildemount (Exandria)", (1, 3),
+        "Mystery · frozen wilderness · exploration",
+        "Investigate a deadly illness in a northern village, then cross the frozen wilderness to find a cure.",
+        "https://www.dndbeyond.com/sources/dnd/wa/frozen-sick",
+        "Wizards of the Coast / D&D Beyond, Explorer's Guide to Wildemount",
+        FROZEN_CHAPTERS, ("StoryOverview", "MysteryinPalebankVillage"), format="Short campaign"),
+    adventure("the-haunted-cornfield", "The Haunted Cornfield", "Ravenloft — Barovia", (1, 1),
+        "Folk horror · haunted farm · investigation",
+        "Follow a local legend into a haunted farm and discover the truth behind its scarecrow.",
+        "https://www.dndbeyond.com/posts/334-halloween-encounters-the-haunted-cornfield",
+        "James Haeck / D&D Beyond",
+        (("the-legend-of-the-cornfield", "The legend"), ("adventure-start", "The farm and cornfield"), ("conclusion", "Conclusion")),
+        ("the-legend-of-the-cornfield", "adventure-start")),
+    adventure("no-tears-over-spilled-coffee", "No Tears Over Spilled Coffee", "Strixhaven (Arcavios)", (1, 1),
+        "Campus comedy · teamwork · lighthearted magic",
+        "Keep a magical university café running when a first day at work becomes an adventure.",
+        "https://www.dndbeyond.com/posts/1118-free-d-d-adventure-work-at-strixhavens-firejolt",
+        "Michael Galvis / D&D Beyond",
+        (("adventure-summary", "Overview"), ("character-creation", "Characters and café jobs"),
+         ("adventure-start", "Opening"), ("firejolt-cafe", "The café"), ("clean-up-clean-up", "Opening preparations"),
+         ("the-morning-rush", "Morning rush"), ("an-impossible-drink-order", "A difficult order"), ("closing-time", "Conclusion")),
+        ("adventure-summary", "character-creation", "adventure-start")),
+    adventure("the-great-jigow-scavenger-hunt", "The Great Jigow Scavenger Hunt", "Wildemount — Jigow", (3, 3),
+        "Festival adventure · riddles · town exploration",
+        "Recover stolen festival supplies by following riddles through an orc-and-goblin town.",
+        "https://www.dndbeyond.com/posts/1194-free-d-d-adventure-retrieve-stolen-festival",
+        "Michael Galvis / D&D Beyond; published homebrew prelude to Call of the Netherdeep",
+        tuple((key, title) for key, title in (
+            ("adventure-summary", "Overview"), ("character-creation", "Characters"), ("adventure-start", "Opening"),
+            ("j1-the-unbroken-tusk", "The Unbroken Tusk"), ("j5-rice-paddies", "Rice paddies"),
+            ("j6-horizonback-tortoise-paddock", "Tortoise paddock"), ("j4-beefslab-butchers", "Beefslab Butchers"),
+            ("j3-ifolon-river", "Ifolon River"), ("j2-an-unfinished-maze", "The maze"), ("j9-helter-skelter", "Helter-Skelter"),
+            ("j8-temple-of-the-luxon", "Temple of the Luxon"), ("j7-staging-area", "Staging area"), ("conclusion", "Conclusion"))),
+        ("adventure-summary", "character-creation", "adventure-start")),
+)
+ADVENTURES = {book["id"]: book for book in BOOKS}
+
+
+def public_catalog():
+    return [{key: value for key, value in book.items() if not key.startswith("_")} for book in BOOKS]

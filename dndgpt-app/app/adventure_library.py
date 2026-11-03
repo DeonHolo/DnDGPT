@@ -3,12 +3,12 @@ import copy
 from urllib.parse import urlsplit
 
 from .engine import fail
-from .published_starter import STARTER, STARTER_ID, read_starter, starter_entry
+from .published_starter import read_starter, starter_entry
+from .published_catalog import ADVENTURES, public_catalog
 
-CATALOG = [STARTER,
-           {"id": "original-forgotten-realms", "title": "An original Forgotten Realms adventure",
+CATALOG = [{"id": "original-forgotten-realms", "title": "Let ChatGPT create an original adventure",
             "adventure_type": "original", "recommended": False, "source_required": False,
-            "setting": "Forgotten Realms", "summary": "Your GM prepares a new adventure grounded in official setting references."}]
+            "setting": "Forgotten Realms", "summary": "Choose a theme and tone, or ask your GM to pitch a new adventure in an established D&D setting."}, *public_catalog()]
 
 SETTING_RESOURCES = {
     "setting": "Forgotten Realms", "default_region": "Sword Coast",
@@ -55,9 +55,11 @@ def validate_adventure(value):
     return result
 
 
-def read_section(library, owner, entry_id, section_id=None, version=None):
-    if entry_id == STARTER_ID:
-        return read_starter(section_id, version)
+def read_section(library, owner, entry_id, section_id=None, version=None, page=None):
+    if entry_id in ADVENTURES:
+        return read_starter(section_id, version, entry_id, page)
+    if page is not None:
+        fail(422, "invalid_source_page", "Visual pages belong to published PDF adventures")
     entry = library.get(owner, entry_id, version)
     if entry["kind"] != "adventure":
         fail(422, "adventure_required", "Choose a saved adventure pack")
@@ -75,7 +77,7 @@ def read_section(library, owner, entry_id, section_id=None, version=None):
 
 def adventure_entry(library, db, owner, entry_id, version=None):
     """Built-in public metadata or an owner-checked private pack; never network in a write."""
-    if entry_id == STARTER_ID:
-        return starter_entry(version)
+    if entry_id in ADVENTURES:
+        return starter_entry(version, entry_id)
     return library._get(db, owner, entry_id, version)
 

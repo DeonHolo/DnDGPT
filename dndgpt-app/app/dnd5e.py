@@ -307,7 +307,7 @@ class DndGame:
                      "party_mode": "party", "level_up_freeze": False, "equipment": {}, "funds": {}, "world": {},
                      "creation": {}, "advancement": {}, "rarity_candidates": {}, "last_event": None,
                      "fictional_time_seconds": 0, "current_location": "Character creation", "opening_preview": "", "notes": "",
-                     "adventure": {"id": "frozen-sick", "version": 1, "title": "Frozen Sick", "setting": "Wildemount (Exandria)"},
+                     "adventure": {},
                      "continuity": {}, "campaign_preferences": {"focus": "mixed", "dialogue": "normal"},
                      "character": {"name": name.strip(), "class_name": "Unassigned", "level": 1, "attributes": dict.fromkeys(ATTRIBUTES, 10),
                                    "hp": 0, "hp_max": 1, "xp": 0, "xp_total": 0, "xp_next": 1000, "scene_counter": 0},
