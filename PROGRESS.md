@@ -2,9 +2,11 @@
 
 ## Sovereign core powers — 2026-11-03
 
-The same candidate adds a neutral entry: open the dashboard first, introduce all three modes and ask when none was named. An explicit mode or targeted save opens directly. Early rules/list/create calls also provide the chooser; a missing mode creates nothing. Stale widget preferences no longer choose a game. See docs/MODE_SELECTION_2026_11_03.md.
+Published **1.1.4** from `20f1ec9224ac144ae4e159642734d157d5958e0f`. Release and main CI passed all 733 tests, rule synchronization, isolated hosted runtime and packaging. The in-app browser passed 6 launch, 8 Sovereign and 14 D&D checks. Public health and the full dashboard byte match verified the hosted build at 2026-11-03 04:51 UTC; the site is updated. Verification used disposable local saves and public endpoints, with no live campaign changes or ZIP upload.
 
-Candidate runtime **1.1.4** replaces Sovereign personal skill acquisition with a compact four-power kit and integrated growth. Creation chooses two refinements instead of new standalone Signatures; levels grant two personal upgrades plus the separate guaranteed permanent Sovereign upgrade. The named power list keeps Overview, Full rules and Upgrades without activation categories. Legacy powers/history remain, and actual banked points carry once on the next ordinary save. Age of Convergence and D&D retain their mechanics. Verification: `docs/SOVEREIGN_CORE_POWERS_2026_11_03.md`.
+The release adds a neutral entry: open the dashboard first, introduce all three modes and ask when none was named. An explicit mode or targeted save opens directly. Early rules/list/create calls also provide the chooser; a missing mode creates nothing. Stale widget preferences no longer choose a game. See docs/MODE_SELECTION_2026_11_03.md.
+
+Runtime **1.1.4** replaces Sovereign personal skill acquisition with a compact four-power kit and integrated growth. Creation chooses two refinements instead of new standalone Signatures; levels grant two personal upgrades plus the separate guaranteed permanent Sovereign upgrade. The named power list keeps Overview, Full rules and Upgrades without activation categories. Legacy powers/history remain, and actual banked points carry once on the next ordinary save. Age of Convergence and D&D retain their mechanics. Verification: `docs/SOVEREIGN_CORE_POWERS_2026_11_03.md`.
 
 
 ## Adventure-first setup — 2026-11-03
