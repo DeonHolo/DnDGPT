@@ -69,7 +69,7 @@ def test_legacy_and_custom_characters_keep_their_recorded_rules(engine):
 
 def test_scene_preferences_round_trip_without_changing_campaign(engine):
     state = ChatGame(engine).create("owner-a", "Scene test", "scene-create", True)
-    preferences = {"panels": ["skills"], "details": [], "hud_hidden": False, "scene": "moonkeep"}
+    preferences = {"panels": ["skills"], "details": [], "hud_hidden": False, "scene": "scenic-icy-peaks"}
     engine.set_view_preferences("owner-a", preferences)
     assert engine.get_view_preferences("owner-a") == preferences
     assert engine.get_campaign("owner-a", state["id"])["character"] == state["character"]

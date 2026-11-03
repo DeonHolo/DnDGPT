@@ -1,75 +1,47 @@
 # Dashboard artwork
 
-The dropdown offers **33 atmospheres**: **Classic**, **Quiet Ink**, and **31 human-made artworks**. Classic is the default dark green surface. Quiet Ink, immediately underneath it, is plain charcoal. Open **View options → Reading atmosphere** to switch; the preference is saved for your account and changes no game state.
+**39 choices in every game mode:** 15 D&D wallpapers (first group), 21 new fantasy landscapes, the preserved Glowwood and two plain themes. Each game remembers its own selection. Retired atmospheres fall back to Classic; campaign data is unchanged.
 
-The twenty new selections show character-free fantasy environments: castles, caves, shrines, forests and other landscapes. Modern farms, industrial buildings and modern cityscapes were excluded after visual review. Earlier illustration choices remain available.
+The 21 new landscapes replace the older mixed-resolution collection. They use the artist’s published original WebP bytes, 2,500–3,840 pixels wide and 1,137–1,920 pixels tall. No thumbnails, upscaling, recompression, signature removal or embedded image payloads. Files load separately through content-hashed immutable URLs. Existing D&D original-resolution files are retained. Glowwood and the website copy are unchanged.
 
-| Atmosphere | Artist and original work | Source and license |
-| --- | --- | --- |
-| Classic | Plain dark green | No image |
-| Quiet Ink | Plain charcoal | No image |
-| Oakwood | Caspar David Friedrich, *The Abbey in the Oakwood* | [Source](https://commons.wikimedia.org/wiki/File:Caspar_David_Friedrich_-_Abtei_im_Eichwald_-_Google_Art_Project.jpg) · [Public domain](https://creativecommons.org/publicdomain/mark/1.0/) |
-| Silent Isle | Arnold Böcklin, *Isle of the Dead, third version* | [Source](https://commons.wikimedia.org/wiki/File:Arnold_B%C3%B6cklin_-_Die_Toteninsel_III_(Alte_Nationalgalerie,_Berlin).jpg) · [Public domain](https://creativecommons.org/publicdomain/mark/1.0/) |
-| Swamp at Sunset | JAP, *Sunset in the Swamp* | [Source](https://opengameart.org/content/oil-painting-landscapes) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| Frostpeak | JAP, *Cold Mountain* | [Source](https://opengameart.org/content/oil-painting-landscapes) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| Desert Skies | JAP, *Clouds in the Desert* | [Source](https://opengameart.org/content/oil-painting-landscapes) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| Wizard's Tower | JAP, *Wizard Tower* | [Source](https://opengameart.org/content/oil-painting-landscapes) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| Azure Valley | David Revoy, *Fantasy Landscape* | [Source](https://www.davidrevoy.com/article201/fantasy-landscape) · [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
-| The Rendezvous | David Revoy, *The rendezvous* | [Source](https://www.davidrevoy.com/article638/illustration-the-rendezvous) · [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
-| Dragonfire | David Revoy, *Confront the Dragon* | [Source](https://www.davidrevoy.com/article935/confront-the-dragon) · [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
-| The Dragon's Road | David Revoy, *Introduce the Dragon to the Outside World* | [Source](https://www.davidrevoy.com/article937/introduce-the-dragon-to-the-outside-world) · [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
-| Adventurers | Albert Weand & Offirmo, *Adventurers* | [Source](https://www.offirmo.net/open-source/adventurers-fantasy-illustration/) · [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
-| Mooncap Cavern | olracadejup / ulfus, *Mixed Fantasy Backgrounds: d15* | [Source](https://opengameart.org/content/mixed-fantasy-backgrounds) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| Sky Citadel | olracadejup / ulfus, *Mixed Fantasy Backgrounds: d20* | [Source](https://opengameart.org/content/mixed-fantasy-backgrounds) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| Root Cellar | olracadejup / ulfus, *Mixed Fantasy Backgrounds: d23* | [Source](https://opengameart.org/content/mixed-fantasy-backgrounds) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| Floating Sanctuary | Eon Cire, *Floating island city* | [Source](https://opengameart.org/content/concept-art-studies-bundle-1) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| Stone Cove | Eon Cire, *Island cove* | [Source](https://opengameart.org/content/concept-art-studies-bundle-1) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| Mountain Shrine | Eon Cire, *Monkey mountain shrine* | [Source](https://opengameart.org/content/concept-art-studies-bundle-1) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| Violet Peaks | titi_son, *Fantasy Background* | [Source](https://opengameart.org/content/fantasy-background) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| Forgotten Shrine | zonked, *Broken Statue Shrine* | [Source](https://opengameart.org/content/broken-statue-shrine) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| Ancient Gate | zonked, *Ancient Abandoned Teleporter* | [Source](https://opengameart.org/content/ancient-abandoned-teleporter) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| Misty Ramparts | Kutejnikov, *Background with ruins* | [Source](https://opengameart.org/content/background-with-ruins) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| Lavender Dusk | heartpunch!, *lavenderfield_dusk.png* | [Source](https://heartpunchstudio.itch.io/hand-painted-nature-backgrounds-pack) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| Moonlit Meadow | heartpunch!, *flowermeadow_nightmoon.png* | [Source](https://heartpunchstudio.itch.io/hand-painted-nature-backgrounds-pack) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| Sunset Hills | heartpunch!, *hillside_sunset.png* | [Source](https://heartpunchstudio.itch.io/hand-painted-nature-backgrounds-pack) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| Glowwood | heartpunch!, *clearing_greenlights.png* | [Source](https://heartpunchstudio.itch.io/hand-painted-nature-backgrounds-pack) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| Mountain Dawn | heartpunch!, *mountainpath_sunrise.png* | [Source](https://heartpunchstudio.itch.io/hand-painted-nature-backgrounds-pack) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| Moonlit Trail | heartpunch!, *foresstpath_moonnight.png* | [Source](https://heartpunchstudio.itch.io/hand-painted-nature-backgrounds-pack) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| Wind Shrine | Crisisworks, *Asian Mountain Forest BG* | [Source](https://opengameart.org/content/asian-mountain-forest-bg) · [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
-| Hillfort | Drummyfish, *Fantasy Concept 3* | [Source](https://opengameart.org/content/fantasy-concept-3) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| Dusk Mountains | ansimuz / Luis Zuno, *Mountain at Dusk Background* | [Source](https://opengameart.org/content/mountain-at-dusk-background) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| Winter Hollow | dlsxjvb1, *Dark winter background* | [Source](https://opengameart.org/content/dark-winter-background) · [CC0](https://creativecommons.org/publicdomain/zero/1.0/) |
+Art is credited to its artist and linked to the original source in the dashboard. Copyright labels are attribution, not claims of open licensing, permission or endorsement. The new scenery is by Andreas Rocha; D&D works retain Wizards credits and notices. Tiny environmental scale details may appear, but the selections prioritize scenery over characters.
 
-Wind Shrine uses Crisisworks’ background for [Spirit of the Wind](https://evilartbunny.itch.io/spirit-of-the-wind). Mixed Fantasy Backgrounds was commissioned and released by ulfus; the source filenames credit olracadejup. The heartpunch! scenes come from the artist’s hand-painted nature pack. Source titles and download filenames are retained for traceability.
-
-The two historical paintings are public-domain reproductions credited on their Wikimedia Commons pages. Modern artwork retains the artists’ licenses; these assets are excluded from the software’s MIT license. [CC0](https://creativecommons.org/publicdomain/zero/1.0/) and [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) terms apply as listed. The full CC BY text is included in [LICENSES/CC-BY-4.0.txt](../LICENSES/CC-BY-4.0.txt).
-
-Shared images were resized and encoded as AVIF, with the first frame used for Dusk Mountains. The viewport may crop them to fit; no generative image processing was used. Every selected artwork shows its title, artist, source and license in the UI. Only the selected background is loaded from the DnDGPT server, using an immutable URL and browser caching. Opening a campaign sends no image request to an external art host. Public artwork is served separately from authenticated campaign data.
-
-[ARTWORK_SOURCES.json](ARTWORK_SOURCES.json) records each local asset, source file, license, byte count and SHA-256. [app/scenes.py](../dndgpt-app/app/scenes.py) defines the selectable catalog.
-
-## D&D scenery
-
-The D&D-only group comes first and contains 15 text-free scenic views: the Dalelands, Calimport, Baldur’s Gate, the Moonshae Isles and a haunted Ravenloft bastion. These include a full panorama and the artists’ own detail views, rather than fifteen different locations. Native widths range from 1,920 to 4,000 pixels; the original bytes are served separately and cached. No book titles, promotional title strips or resized thumbnails are used. Shared atmospheres remain available in all three games.
-
-| View | Artist / source | Native resolution |
-| --- | --- | --- |
-| The Dalelands | [Maihope](https://www.dndbeyond.com/posts/2101-art-of-the-forgotten-realms-the-dalelands) | 4000 × 1403 |
-| Calimport — High Terraces | [Maihope](https://maihope.artstation.com/projects/y4LK2R) | 2166 × 2166 |
-| Calimport — Genie Palaces | [Maihope](https://maihope.artstation.com/projects/y4LK2R) | 2166 × 2166 |
-| Calimport — Desert Skyline | [Maihope](https://maihope.artstation.com/projects/y4LK2R) | 2166 × 2166 |
-| Moonshae — Tree Village | [Maihope](https://maihope.artstation.com/projects/x3QEeY) | 2157 × 2157 |
-| Moonshae — Moonlit Isles | [Maihope](https://maihope.artstation.com/projects/x3QEeY) | 2157 × 2157 |
-| Moonshae — Moonlit Coast | [Maihope](https://maihope.artstation.com/projects/x3QEeY) | 2157 × 2157 |
-| Dalelands — Green Valley | [Maihope](https://maihope.artstation.com/projects/8BY5QE) | 2173 × 2173 |
-| Baldur’s Gate — Harbor | [Maihope](https://maihope.artstation.com/projects/mAkBE1) | 2181 × 2181 |
-| Baldur’s Gate — City | [Maihope](https://maihope.artstation.com/projects/mAkBE1) | 2181 × 2181 |
-| Baldur’s Gate — Heights | [Maihope](https://maihope.artstation.com/projects/mAkBE1) | 2181 × 2181 |
-| Haunted Bastion | [Erel Maatita](https://erelmaatita.artstation.com/projects/vzJ9Dx) | 1920 × 1242 |
-| Moonshae Waterfalls | [Katerina Ladon](https://www.dndbeyond.com/posts/2108-art-of-the-forgotten-realms-moonshae-isles) | 2182 × 3000 |
-| Dalelands — Forest Village | [Maihope](https://maihope.artstation.com/projects/8BY5QE) | 2173 × 2173 |
-| Dalelands — Elven Ruins | [Maihope](https://maihope.artstation.com/projects/8BY5QE) | 2173 × 2173 |
-
-These official D&D illustrations retain their copyright and are used under the [Wizards Fan Content Policy](https://company.wizards.com/en/legal/fancontentpolicy). In-product credits link to the artist or official publisher page. The machine-readable manifest records each download URL, dimensions and byte hash.
-
-DnDGPT is unofficial Fan Content permitted under the Fan Content Policy. Not approved/endorsed by Wizards. Portions of the materials used are property of Wizards of the Coast. ©Wizards of the Coast LLC.
+| Background | Artist | Published size | Source |
+| --- | --- | --- | --- |
+| Valley of Echoes | Andreas Rocha | 3000 × 1500 | [Original work](https://andreasrocha.com/projects/DYxZVO) |
+| Crescent Moon Castle | Andreas Rocha | 3000 × 1500 | [Original work](https://andreasrocha.com/projects/x3gd31) |
+| The Cottage | Andreas Rocha | 2500 × 1250 | [Original work](https://andreasrocha.com/projects/oJLzzm) |
+| The Dark Watchtower | Andreas Rocha | 2500 × 1250 | [Original work](https://andreasrocha.com/projects/rldQYL) |
+| Solitary Lighthouse II | Andreas Rocha | 2500 × 1250 | [Original work](https://andreasrocha.com/projects/V2a955) |
+| The Roaring Waterfall | Andreas Rocha | 2500 × 1250 | [Original work](https://andreasrocha.com/projects/YGrZDY) |
+| Icy Peaks | Andreas Rocha | 2500 × 1437 | [Original work](https://andreasrocha.com/projects/zx5vDd) |
+| Port City | Andreas Rocha | 2500 × 1250 | [Original work](https://andreasrocha.com/projects/LRqNRr) |
+| Tangled Roots | Andreas Rocha | 3840 × 1920 | [Original work](https://andreasrocha.com/projects/PXr9O8) |
+| The Wisdom Tree II | Andreas Rocha | 2500 × 1250 | [Original work](https://andreasrocha.com/projects/5vx03z) |
+| Castle on a Hill | Andreas Rocha | 2500 × 1250 | [Original work](https://andreasrocha.com/projects/5vXnQO) |
+| The Clearing | Andreas Rocha | 2500 × 1250 | [Original work](https://andreasrocha.com/projects/RnkAVD) |
+| Gateway | Andreas Rocha | 2500 × 1250 | [Original work](https://andreasrocha.com/projects/nEmJ0X) |
+| Unexplored | Andreas Rocha | 2500 × 1250 | [Original work](https://andreasrocha.com/projects/DAbb6R) |
+| Pine Castle | Andreas Rocha | 2500 × 1250 | [Original work](https://andreasrocha.com/projects/yJX5zn) |
+| Towers of Treason | Andreas Rocha | 2500 × 1250 | [Original work](https://andreasrocha.com/projects/4X8ZDn) |
+| Sweeping Spires | Andreas Rocha | 2500 × 1250 | [Original work](https://andreasrocha.com/projects/v2akkv) |
+| Coastal Settlement | Andreas Rocha | 2500 × 1238 | [Original work](https://andreasrocha.com/projects/8e0X6O) |
+| Tall Fortress | Andreas Rocha | 2500 × 1170 | [Original work](https://andreasrocha.com/projects/Kr0BoW) |
+| Coastal Rocks | Andreas Rocha | 2500 × 1255 | [Original work](https://andreasrocha.com/projects/v23RO3) |
+| Waterfall Outpost | Andreas Rocha | 2500 × 1137 | [Original work](https://andreasrocha.com/projects/R3J1qD) |
+| Glowwood | heartpunch! | — × — | [Original work](https://heartpunchstudio.itch.io/hand-painted-nature-backgrounds-pack) |
+| The Dalelands | Maihope | 4000 × 1403 | [Original work](https://www.dndbeyond.com/posts/2101-art-of-the-forgotten-realms-the-dalelands) |
+| Calimport — High Terraces | Maihope | 2166 × 2166 | [Original work](https://maihope.artstation.com/projects/y4LK2R) |
+| Calimport — Genie Palaces | Maihope | 2166 × 2166 | [Original work](https://maihope.artstation.com/projects/y4LK2R) |
+| Calimport — Desert Skyline | Maihope | 2166 × 2166 | [Original work](https://maihope.artstation.com/projects/y4LK2R) |
+| Moonshae — Tree Village | Maihope | 2157 × 2157 | [Original work](https://maihope.artstation.com/projects/x3QEeY) |
+| Moonshae — Moonlit Isles | Maihope | 2157 × 2157 | [Original work](https://maihope.artstation.com/projects/x3QEeY) |
+| Moonshae — Moonlit Coast | Maihope | 2157 × 2157 | [Original work](https://maihope.artstation.com/projects/x3QEeY) |
+| Dalelands — Green Valley | Maihope | 2173 × 2173 | [Original work](https://maihope.artstation.com/projects/8BY5QE) |
+| Baldur’s Gate — Harbor | Maihope | 2181 × 2181 | [Original work](https://maihope.artstation.com/projects/mAkBE1) |
+| Baldur’s Gate — City | Maihope | 2181 × 2181 | [Original work](https://maihope.artstation.com/projects/mAkBE1) |
+| Baldur’s Gate — Heights | Maihope | 2181 × 2181 | [Original work](https://maihope.artstation.com/projects/mAkBE1) |
+| Haunted Bastion | Erel Maatita | 1920 × 1242 | [Original work](https://erelmaatita.artstation.com/projects/vzJ9Dx) |
+| Moonshae Waterfalls | Katerina Ladon | 2182 × 3000 | [Original work](https://www.dndbeyond.com/posts/2108-art-of-the-forgotten-realms-moonshae-isles) |
+| Dalelands — Forest Village | Maihope | 2173 × 2173 | [Original work](https://maihope.artstation.com/projects/8BY5QE) |
+| Dalelands — Elven Ruins | Maihope | 2173 × 2173 | [Original work](https://maihope.artstation.com/projects/8BY5QE) |

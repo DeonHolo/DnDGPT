@@ -439,7 +439,7 @@ function persistPreferences(){
 }
 function restorePreferences(){
   restoring=true;
-  preferences.game_scenes=Object.fromEntries(Object.entries(preferences.game_scenes||{}).filter(([game,id])=>sceneCatalog.some(s=>s.id===id&&(!s.game_id||s.game_id===game))));
+  preferences.game_scenes=Object.fromEntries(Object.entries(preferences.game_scenes||{}).filter(([game,id])=>sceneCatalog.some(s=>s.id===id)));
   selectCompanionPage(preferences.panels.find(id=>document.getElementById("page-"+id))||"character");
   for(const node of document.querySelectorAll("[data-detail]"))node.open=preferences.details.includes(node.dataset.detail);
   gearTab=preferences.equipment_tab==="inventory"?"inventory":"equipment";selectGearTab(gearTab,false);
@@ -504,7 +504,7 @@ function renderChoices(){
 }
 function format(value){return typeof value==="string"?value:JSON.stringify(value,null,2)}
 function selectScene(value,save=true){
-  const selected=sceneCatalog.find(option=>option.id===value&&(!option.game_id||option.game_id===currentGame))||sceneCatalog[0];scene=selected.id;
+  const selected=sceneCatalog.find(option=>option.id===value)||sceneCatalog[0];scene=selected.id;
   preferences.game_scenes={...(preferences.game_scenes||{}),[currentGame]:scene};
   document.documentElement.dataset.scene=scene;
   document.documentElement.dataset.artwork=String(Boolean(selected.artist));
@@ -520,12 +520,9 @@ function selectScene(value,save=true){
   if(save)persistPreferences();
 }
 function renderSceneOptions(gameId){
-  const general=element("optgroup"),dnd=element("optgroup");general.label="Reading atmospheres";dnd.label="D&D wallpapers";
-  for(const option of sceneCatalog){
-    if(option.game_id&&option.game_id!==gameId)continue;
-    const node=element("option",option.name);node.value=option.id;(option.game_id?dnd:general).append(node);
-  }
-  $("sceneSelect").replaceChildren(...(dnd.children.length?[dnd]:[]),general);
+  const groups=[['dnd','D&D wallpapers'],['fantasy','Fantasy landscapes'],['reading','Reading atmospheres']].map(([key,label])=>{const node=element('optgroup');node.label=label;return {key,node}});
+  for(const option of sceneCatalog){const node=element('option',option.name);node.value=option.id;groups.find(group=>group.key===(option.collection||'reading')).node.append(node)}
+  $('sceneSelect').replaceChildren(...groups.filter(group=>group.node.children.length).map(group=>group.node));
 }
 renderSceneOptions("dnd-2024");
 $("sceneSelect").onchange=event=>selectScene(event.target.value);

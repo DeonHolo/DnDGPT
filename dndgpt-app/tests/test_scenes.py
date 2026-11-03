@@ -33,7 +33,7 @@ def test_every_background_is_linked_with_attribution_and_a_compact_resource():
     parser = Catalog()
     parser.feed(html)
     catalog = json.loads(parser.content)
-    assert len(SCENES) == len(SCENE_IDS) == len(catalog) == 48
+    assert len(SCENES) == len(SCENE_IDS) == len(catalog) == 39
     assert catalog[0]["id"] == "classic"
     assert catalog[0]["name"] == "Classic"
     assert catalog[1]["id"] == "quiet"
@@ -41,7 +41,7 @@ def test_every_background_is_linked_with_attribution_and_a_compact_resource():
     assert len(html.encode()) < 300_000
     artworks = [scene for scene in SCENES if scene.get("asset")]
     assert 'data:image/avif;base64,' not in html
-    assert len(artworks) == 46
+    assert len(artworks) == 37
     for scene in artworks:
         assert (HERE / "assets" / scene["asset"]).is_file()
         assert artwork_url(scene["asset"]) in html
@@ -53,7 +53,7 @@ def test_original_resolution_wallpapers_are_public_cached_and_byte_exact(web):
     from PIL import Image
     manifest = json.loads((HERE.parents[1] / "docs/ARTWORK_SOURCES.json").read_text(encoding="utf-8"))
     expected = {scene["asset"].split("/")[-1]: (scene["width"], scene["height"])
-                for scene in manifest if scene.get("game_id")}
+                for scene in manifest if scene.get("collection") == "dnd"}
     assert expected["dnd-dalelands.png"] == (4000, 1403)
     for asset, size in expected.items():
         row = artwork_files()[asset]
@@ -85,26 +85,26 @@ def test_background_urls_are_scoped_to_the_configured_server_origin():
     assert 'src="https://www.dndbeyond.com' not in html
 
 
-def test_official_wallpapers_are_available_only_for_dnd_and_keep_copyright():
-    official = [scene for scene in SCENES if scene.get("game_id")]
+def test_official_wallpapers_are_shared_in_every_mode_and_keep_copyright():
+    official = [scene for scene in SCENES if scene.get("collection") == "dnd"]
     assert len(official) == 15
     for scene in official:
         assert scene["id"] in scene_ids_for_game("dnd-2024")
         for game in ("age-of-convergence", "sovereign-system"):
-            assert scene["id"] not in scene_ids_for_game(game)
+            assert scene["id"] in scene_ids_for_game(game)
         assert scene["license"] == "© Wizards of the Coast"
         assert "Not approved/endorsed" in scene["notice"]
         assert scene["source"].startswith(("https://www.dndbeyond.com/", "https://maihope.artstation.com/", "https://erelmaatita.artstation.com/"))
 
 
-def test_per_game_atmospheres_remember_choices_and_reject_cross_game_art(engine):
+def test_per_game_atmospheres_remember_independent_shared_art_choices(engine):
     prefs = {"panels": [], "details": [], "hud_hidden": False,
              "scene": "dnd-dalelands",
              "game_scenes": {"dnd-2024": "dnd-dalelands", "sovereign-system": "glowwood"}}
     engine.set_view_preferences("owner-a", prefs)
     assert engine.get_view_preferences("owner-a") == prefs
     assert "game_scenes" not in engine.get_view_preferences("owner-b")
-    for invalid in ([], {"unknown": "classic"}, {"sovereign-system": "dnd-dalelands"},
+    for invalid in ([], {"unknown": "classic"}, {"sovereign-system": "unknown"},
                     {"dnd-2024": []}):
         with pytest.raises(EngineError):
             engine.set_view_preferences("owner-a", {**prefs, "game_scenes": invalid})
@@ -135,6 +135,24 @@ def test_packaged_art_matches_the_credited_sources_and_readme_count():
             assert entry[key] == scene[key]
     readme = (root / "README.md").read_text(encoding="utf-8")
     assert f"**{len(SCENES)} reading atmospheres**" in readme
+
+
+def test_refreshed_landscapes_are_native_resolution_and_glowwood_is_preserved():
+    from PIL import Image
+    entries = json.loads((HERE.parents[1] / "docs/ARTWORK_SOURCES.json").read_text(encoding="utf-8"))
+    landscapes = [s for s in SCENES if s.get("collection") == "fantasy"]
+    assert len(landscapes) == 21
+    for scene in landscapes:
+        entry = next(r for r in entries if r["id"] == scene["id"])
+        with Image.open(HERE / "assets" / scene["asset"]) as image:
+            assert image.size == (entry["width"], entry["height"])
+            assert image.width >= 2500 and image.height >= 1100
+        assert entry["artist"] == "Andreas Rocha" and entry["source"].startswith("https://andreasrocha.com/")
+        for game in ("dnd-2024", "age-of-convergence", "sovereign-system"):
+            assert scene["id"] in scene_ids_for_game(game)
+    glow = next(r for r in entries if r["id"] == "glowwood")
+    assert (HERE / "assets/glowwood.avif").read_bytes() == (HERE.parents[1] / "docs/images/glowwood.avif").read_bytes()
+    assert hashlib.sha256((HERE / "assets/glowwood.avif").read_bytes()).hexdigest() == glow["sha256"]
 
 
 @pytest.mark.parametrize("scene", [None, [], {}, 1, True, "unknown"])

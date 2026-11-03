@@ -212,7 +212,7 @@ document.getElementById('run').onclick=async()=>{
  await test('Ember frames every chapter and the character status with inset content',async()=>{
   for(const width of [375,700,1100]){
    frame.style.width=width+'px';await wait(35);w.selectLayout('ember',false);
-   for(const scene of ['classic','glowwood','moonlit-trail']){
+   for(const scene of ['classic','glowwood','scenic-tangled-roots']){
     w.selectScene(scene,false);
     for(const id of ['character','skills','health','summons','equipment','quests','world']){
      d.getElementById('nav-'+id).click();
