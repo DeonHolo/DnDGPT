@@ -2,11 +2,11 @@
 
 ## Adventure choice and explained creation — 2026-11-03
 
-Candidate runtime **1.1.2** replaces the automatic Frozen Sick selection with seven published choices and an original-adventure option. Army of the Damned, Dues for the Dead, A Wild Sheep Chase, Frozen Sick, The Haunted Cornfield, No Tears Over Spilled Coffee and The Great Jigow Scavenger Hunt have fixed author/publisher sources. No uploads or pack preparation are needed. Existing selected adventures keep their IDs. PDFs can supply real visual pages for maps and image-only statistics.
+Published runtime **1.1.2** replaces the automatic Frozen Sick selection with seven published choices and an original-adventure option. Army of the Damned, Dues for the Dead, A Wild Sheep Chase, Frozen Sick, The Haunted Cornfield, No Tears Over Spilled Coffee and The Great Jigow Scavenger Hunt have fixed author/publisher sources. No uploads or pack preparation are needed. Existing selected adventures keep their IDs. PDFs can supply real visual pages for maps and image-only statistics.
 
 Guided creation groups class + species into one reply and the remaining choices into the next. Quickplay stays one complete draft. The rules, tool descriptions and local option data require visible explanations of skills and other choices, with legal recommendations and ordinary chat edits/start.
 
-Verification so far: **43 focused tests + 14 in-app browser checks passed**; all seven real public sources are accessible. Source reading is cached and batched. Public release and full CI verification are pending. No production player campaign was edited. Details: `docs/DND_2024_IMPLEMENTATION.md`.
+Verification: **708 full CI tests + 14 in-app browser checks passed**, checked implementation `6a12c0ca94fbf1beff8f218668e56e7f8d40bd6f`; [passing main pipeline](https://github.com/DeonHolo/DnDGPT/actions/runs/41564216669). Production health reports 1.1.2. The connected native MCP reads all seven real sources, serves matching one-page creation/checklist hashes, returns twelve class/nine species/eighteen skill explanations, and delivers the Sheep Chase PDF images. The public site has the new flow; anonymous campaign/MCP access remains 401. Source reading is cached and batched. No production player campaign was edited and no ZIP uploaded. Details: `docs/DND_2024_IMPLEMENTATION.md`.
 
 ## D&D 2024 and ready-to-play starter — 2026-11-02
 
