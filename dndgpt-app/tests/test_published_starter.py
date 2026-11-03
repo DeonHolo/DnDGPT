@@ -173,6 +173,8 @@ def test_creation_options_explain_skills_classes_species_and_two_turn_flow(web):
     assert not options.get("isError"), options
     data = options["structuredContent"]
     assert data["creation_flow"]["guided_turns"] == 2
+    assert data["creation_flow"]["adventure_first"] is True
+    assert "wait for the player's choice" in data["creation_flow"]["before_creation"]
     assert all(c["summary"] and c["starting_features"] for c in data["classes"])
     assert all(s["summary"] for s in data["species"])
     assert all(b["benefits"] for b in data["backgrounds"])
@@ -182,3 +184,5 @@ def test_creation_options_explain_skills_classes_species_and_two_turn_flow(web):
     guide = tool(web, "read_rules", {"game_id":"dnd-2024","document":"hardener"})["structuredContent"]["content"]
     assert "TWO grouped turns" in guide and "No default adventure" in guide
     assert "Explain every choice visibly" in guide
+    assert "Adventure FIRST" in guide
+    assert "BEFORE character-building choices" in guide

@@ -18,7 +18,7 @@
 
 DnDGPT is an **MCP app for ChatGPT**: a hosted MCP server connects your conversation to a saved campaign dashboard and supplies the GM rules. The optional installable bundle also includes offline rule copies.
 
-**New campaigns default to D&D 2024**, using the public official SRD 5.2.1. Play one hero or a party with GM-run companions. Guided creation groups class and species/race in the first turn, then background, abilities, skills, name, equipment and other choices in the second. Every offered choice explains what it does. Quickplay still prepares a complete explained draft in one reply; request revisions or say “let's go” to begin. The sheet follows the familiar tabletop structure, with six abilities, saving throws, skills, HP, Armor Class, Hit Dice, class features and spellcasting.
+**New campaigns default to D&D 2024**, using the public official SRD 5.2.1. Play one hero or a party with GM-run companions. Choose the adventure first so you can plan your character around its setting, tone and starting level. Guided character creation then groups class and species/race in one turn, followed by background, abilities, skills, name, equipment and other choices together in the next. Every offered choice explains what it does. After adventure selection, Quickplay prepares a complete explained character draft in one reply; request revisions or say “let's go” to begin. The sheet follows the familiar tabletop structure, with six abilities, saving throws, skills, HP, Armor Class, Hit Dice, class features and spellcasting.
 
 The **Character Library** keeps reusable, versioned sheets for future adventures. Each campaign gets independent party copies, so one run's damage, equipment or level-ups do not alter another run. Export a sheet as JSON or save a current party member back into your library.
 
@@ -103,7 +103,7 @@ Click **Try in chat** and use regular **Chat** mode. DnDGPT provides the selecte
 
 Send this to begin:
 
-> Be my DnDGPT GM using D&D 2024. Offer me a choice of published adventures and an original adventure. Guide character creation in two turns: class and species together, then the remaining choices together. Explain what each option does and suggest legal defaults. Open my dashboard and save our progress.
+> Be my DnDGPT GM using D&D 2024. Help me choose a published adventure or an original premise first. Once I choose, tailor character creation to its setting, tone and starting level in two turns: class and species together, then the remaining choices together. Explain what each option does and suggest legal defaults. Open my dashboard and save our progress.
 
 For a different game, name **Age of Convergence** or **Sovereign System** instead. You can ask for **Quickplay** or a saved character instead of guided creation.
 

@@ -2,7 +2,11 @@
 
 Approved direction: revised 2024 D&D, SRD 5.2.1; default for new campaigns. Existing Age of Convergence and Sovereign System saves retain their mechanics and identity, including legacy saves without a game ID.
 
-## Current follow-up — adventure choice and explained creation
+## Adventure-first setup — 1.1.3
+
+Adventure selection comes before campaign character creation. Offer published adventures and an original premise, show the setting, tone and starting level, and wait for the player's choice unless already supplied or delegated. Then use two grouped character turns, or one Quickplay character draft, tailored to that adventure. Preserve existing player preferences and independent library-only character generation. No new approval or persistence gate is added. The updated checklist is 6,328 characters and the creation section is 6,231 characters; both fit one read.
+
+## Adventure choice and explained creation — 1.1.2
 
 Runtime 1.1.2 removes the automatically selected adventure from new campaigns. Seven source-verified published adventures cover a classic Forgotten Realms dungeon, Innistrad gothic horror and siege warfare, whimsical magic, an arctic mystery, Barovian folk horror, Strixhaven comedy and festival puzzles. Original adventures are always offered. Existing selected adventures keep their IDs.
 

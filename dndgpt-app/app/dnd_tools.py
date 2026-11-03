@@ -37,9 +37,10 @@ def register(server, engine, invoke, metadata, read, write, write_scope):
                          background_names: list[str] | None = None) -> CallToolResult:
         """Get public 2024 creation choices once, optionally including selected class/background
         core traits together. Reuse these for every party member; do not call once per character.
-        Explain choices using these compact summaries. Guided creation groups class+species in
-        turn 1 and ALL remaining choices in turn 2. Quickplay is one complete explained draft.
-        Offer published/original adventures together if the player has not chosen one.
+        Select the adventure FIRST, before campaign character-building choices. Then explain
+        these options for its setting, tone and starting level: class+species in character
+        turn 1, ALL remaining choices in turn 2. Quickplay is one explained draft after selection.
+        Standalone Character Library drafts do not require an adventure.
         """
         def options(owner):
             data = catalog()
@@ -134,7 +135,8 @@ def register(server, engine, invoke, metadata, read, write, write_scope):
         """Offer diverse free published adventures AND an original adventure; none is preselected.
         Show premise, style and starting level. Read only the chosen adventure's source; its ID
         selects the cached HTML/PDF automatically. Save changes.adventure={id:selected_id,version:1}.
-        The player chooses, unless they explicitly ask you to choose/surprise them.
+        Choose the adventure BEFORE character creation, so the player can plan around it.
+        Wait for their choice unless already supplied or delegated to you.
         """
         return invoke(lambda owner: {"catalog": copy.deepcopy(CATALOG), "prepared": library.list(owner, "adventure", GAME)})
 

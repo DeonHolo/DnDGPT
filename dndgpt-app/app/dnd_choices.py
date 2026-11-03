@@ -47,9 +47,11 @@ SKILL_USES = {
 }
 CREATION_FLOW = {
     "guided_turns": 2,
-    "turn_1": "Choose class and species (race) together; offer adventure selection alongside them if needed.",
+    "adventure_first": True,
+    "before_creation": "Choose a published adventure or an original premise FIRST. Show its setting, tone and starting level, then wait for the player's choice unless they already chose or delegated it. Build the character around that adventure.",
+    "turn_1": "After adventure selection, choose class and species (race) together, tailored to its setting, tone and starting level.",
     "turn_2": "Show background, name, ability scores, skills, feats, spells and equipment together with legal recommended defaults and explanations. Accept the player's combined edits or start in one reply.",
-    "quickplay": "One complete explained character draft; include adventure choices when none is selected.",
+    "quickplay": "After adventure selection, one complete explained character draft suited to it. Standalone Character Library drafts do not need an adventure.",
     "explanations": "Every offered option needs its actual benefit or use, not just a name. Explain selected powers' effects and costs, skills' usual ability and proficiency, and present-level versus later features.",
-    "start": "The player may combine remaining selections, adventure choice and let's go. No extra confirmation.",
+    "start": "The player may combine remaining character selections and let's go. Reuse an adventure already chosen; no extra confirmation.",
 }

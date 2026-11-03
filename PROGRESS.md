@@ -1,5 +1,9 @@
 # Continuity and recovery release
 
+## Adventure-first setup — 2026-11-03
+
+Runtime **1.1.3** puts adventure selection before campaign character creation. The player sees each premise, setting, tone and starting level first, then builds for that adventure in two character turns: class + species, followed by the remaining choices together. Quickplay follows adventure selection; an existing choice or delegated choice avoids a redundant selection step. Standalone Character Library drafts remain available without an adventure. Rules, MCP guidance, dashboard prompts and public setup copy agree on this order. The checklist and creation section each remain a single tool page.
+
 ## Adventure choice and explained creation — 2026-11-03
 
 Published runtime **1.1.2** replaces the automatic Frozen Sick selection with seven published choices and an original-adventure option. Army of the Damned, Dues for the Dead, A Wild Sheep Chase, Frozen Sick, The Haunted Cornfield, No Tears Over Spilled Coffee and The Great Jigow Scavenger Hunt have fixed author/publisher sources. No uploads or pack preparation are needed. Existing selected adventures keep their IDs. PDFs can supply real visual pages for maps and image-only statistics.

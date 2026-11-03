@@ -6,9 +6,9 @@ Use lookup_dnd_reference(kind='rules') for the complete official SRD 5.2.1 and k
 Quickplay: creation and party. Adventure preparation: adventure. Turns: play and combat. Level ups: advancement.
 Reuse cached sections and successful save results. Each sheet and campaign keeps its game and source version.
 
-creation | Quickplay and character creation | 5618 characters
+creation | Quickplay and character creation | 6231 characters
 party | Solo, companions and reusable sheets | 1156 characters
-adventure | Published and original adventure packs | 4223 characters
+adventure | Published and original adventure packs | 4267 characters
 play | Turns, continuity and pacing | 1718 characters
 combat | Combat, equipment and resources | 2216 characters
 advancement | Class progression | 915 characters
