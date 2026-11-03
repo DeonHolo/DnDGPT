@@ -1,0 +1,190 @@
+{
+  "rulebook": [
+    {
+      "section": "7",
+      "source_sha256": "77033bfff853f847cd932cd337a213c081fccd4e3fe60e8f9a6ee73fb08457f0"
+    },
+    {
+      "section": "8",
+      "source_sha256": "d8374f27da1a912095296cde57675af4a4008b1ef63c689172ecde514a1637d7"
+    },
+    {
+      "section": "9",
+      "source_sha256": "3293f6e85428d71a0281b49e3502f7529f1025962f5e18fff98f86e33fdd34c1"
+    },
+    {
+      "section": "12",
+      "source_sha256": "b9b6676e191d912797950277e1239164f21fc2a49f0e041a94033868fbef4b64"
+    },
+    {
+      "section": "18",
+      "source_sha256": "d201604bbc548c8ef8c4a941ae1413cdf9f5edd447f99e222d2e322603a889ed"
+    },
+    {
+      "section": "19",
+      "source_sha256": "c8848868b478ac05db9c60aa53bfab6fcfab505d21253e685baa5f1c8357f174"
+    },
+    {
+      "section": "21",
+      "source_sha256": "5371f9dfe83cf1f0a49e1bc2e7bc2d0e92d190e6b89f9b5366980c587c1ef80f"
+    },
+    {
+      "section": "23",
+      "source_sha256": "52ce550157ce8ac8a9bf726092f7ecc970cfa99a077804227874dc6f64f10b1d"
+    },
+    {
+      "section": "31",
+      "source_sha256": "df9df9613c0c3f01b189bcd30f441c07e8afb86c575b7ddb6d61df85eff63ef1"
+    },
+    {
+      "section": "34",
+      "source_sha256": "8c8e7d8adbcb0ee2e4fa7eaa4a5c71d96aad93eeea5dd8cae25a3a9c9b44d8a1"
+    },
+    {
+      "section": "36",
+      "source_sha256": "8364576973740c7d30b864e9100efdeca72d2aeb75eb558c7980c344a8fed6b7"
+    },
+    {
+      "section": "37",
+      "source_sha256": "a84aa25f10187837ffc345373d47566c6f45f6f56ed09c771269389aace42de6"
+    },
+    {
+      "section": "38",
+      "source_sha256": "20001f86b209fdba2c05c13a61c8e048bc352b932031b7147208b581a3715ce1"
+    },
+    {
+      "section": "40",
+      "source_sha256": "bf3f5a3013fced7c2564aeb44aecc7a3f8ece28db9e7ce1f87c182d09a8e7995"
+    },
+    {
+      "section": "41",
+      "source_sha256": "2e6b0c47f2546d3be5fb2f4def18ec0522d8b0240e1678fa2ac80c591336d052"
+    },
+    {
+      "section": "42",
+      "source_sha256": "4c30cf34cfa6959382b9deb2b77b1b93299c5c3969bd5c4bf8e257c55ebb1d60"
+    },
+    {
+      "section": "43",
+      "source_sha256": "623b528c20e40e724b6ea09208c1f7a4798552f3e7c72662a7485127b4e3d2df"
+    },
+    {
+      "section": "44",
+      "source_sha256": "743344c2d7456a752fad05f4bb9c3ea2a8b7e3ae009be101a244e11d008880d4"
+    },
+    {
+      "section": "45",
+      "source_sha256": "1b409f197fd14ba373c2a23c676298dac7304e6fd8db4323219d3487964cfa00"
+    },
+    {
+      "section": "46",
+      "source_sha256": "7ec684283ed9d29e66a81478f086ff6064f461bcf5ae3a7fc83523f74294757a"
+    },
+    {
+      "section": "campaign-focus",
+      "source_sha256": "7d93b3c10116106e62a01a6e2b2c8ff695d0dcc64872fc8cc0bf69a1796e98c7"
+    },
+    {
+      "section": "creation-order",
+      "source_sha256": "ec9a6859a394ab38140b769db8d55ce9bf0dfa8a78789adeb48b8272cc8266e4"
+    },
+    {
+      "section": "ancestry",
+      "source_sha256": "1505ec5e8d337ddc5f262192ed32ac63c3c59f5132e42da538c7193070fe24f2"
+    },
+    {
+      "section": "generation",
+      "source_sha256": "243c527b8d65314051aae0c8dd213ab0e95aba9de202287b2f5c2d504a77f848"
+    },
+    {
+      "section": "class-craft",
+      "source_sha256": "f302e031b05ea666c3af2cc1476429d9635d35495b8594baaff124b37fa27d35"
+    },
+    {
+      "section": "world-preview",
+      "source_sha256": "2ba00cae7a27a4f4e39c1a56ed2a5198cdfb8fec197914584a73634455ed8022"
+    },
+    {
+      "section": "utility",
+      "source_sha256": "19436de94551bdbda660a20f4a68a4631c59280f9ab43b840cde7b47612a13c8"
+    },
+    {
+      "section": "4",
+      "source_sha256": "f4a5bf8474784e026f499fe336d4e04274b4542efa0eec6de9835eff6b3222d7"
+    },
+    {
+      "section": "5",
+      "source_sha256": "154ab6752739c1912519be41fa85e8ce1c1a5f8251f918b22bc54ba58fa5b025"
+    },
+    {
+      "section": "33",
+      "source_sha256": "f86e725b4d789a080492d8469533b28f4b18bc73dd80a34722774886a3f5a5e9"
+    },
+    {
+      "section": "14",
+      "source_sha256": "2e40357ebf6d8b7a2aa1562fb45aa664ce1c4b59209af8a862804922af7b4f42"
+    },
+    {
+      "section": "16",
+      "source_sha256": "c6e86586681fcd01413d0aacc6e8f8dfdb0bee76b52fcca9270659eb2de0f682"
+    },
+    {
+      "section": "24",
+      "source_sha256": "fd9640bcf30f313029081aba27dd54ab2a14dbd22da97f6bc65b04b3e6b51688"
+    },
+    {
+      "section": "27",
+      "source_sha256": "b43f91a46e246ec3a03850c1acee742bb4c3c2985167603b199137ad480e8b5e"
+    },
+    {
+      "section": "29",
+      "source_sha256": "1709deaf7cb9aab0dd6fc4af960e3c35f0400e237510a313170b920a3a8bbda1"
+    },
+    {
+      "section": "story",
+      "source_sha256": "fdb9435fe0b427fae989bf0fe445178304832c75381805003bf37cb4923a85e4"
+    },
+    {
+      "section": "10",
+      "source_sha256": "e6e611058c48b1528b3d6eff364d0ae243568b2cfdc1a98750accfba2b8a3081"
+    },
+    {
+      "section": "11",
+      "source_sha256": "26d5681061acbaa0a9f445b412685131f3a4f5192a250af350a4d70454f83f07"
+    },
+    {
+      "section": "20",
+      "source_sha256": "b09fbe6f559f4dcf5874b54fcb927d4a32f590c9d5d683f43b96b62005e7a77e"
+    },
+    {
+      "section": "starting-gear",
+      "source_sha256": "e9ca16cae5900647c1e32555df9aea8c27036343b94dfb58536d3d67c466617e"
+    },
+    {
+      "section": "reach",
+      "source_sha256": "dd2c222df239009d19adf6cc0ae1cc9a6bd691173cdc478859cd7492cb0ce57d"
+    },
+    {
+      "section": "quest-journal",
+      "source_sha256": "59f7413b1b961809211505a08f09f072b5026053b5a7b4743c550e71f90f99b2"
+    }
+  ],
+  "hardener_sha256": "3db185c13f6d9cfb8a7ad209530cc77234fa71ecb938218675531f3f8e9e2a34",
+  "preface": [
+    {
+      "id": "embodied-tagline",
+      "old": "**RARITY AWAKENING \u00b7 HARD-BOUND RARITY POWER CONTRACT \u00b7 FIVE INTEGRATED SKILL EVOLUTIONS PER LEVEL \u00b7 FIVE TALENTS PER LEVEL \u00b7 HYBRID BREAKTHROUGHS (3 CLASS + 2 GRAND SIGNATURES) \u00b7 LAYERED CANON \u00b7 HEROIC TACTICAL HYBRID \u00b7 LIVING-WORLD QUESTS \u00b7 INTELLIGENT STORY UI \u00b7 SEVEN-CHAPTER CAMPAIGN DASHBOARD**",
+      "new": "FOUR CORE POWERS \u00b7 MOBILE, BOUND OR DISTRIBUTED \u00b7 DOMAIN, COMMANDER AND FORCES \u00b7 NORMAL RARITY / PLAYER-REQUESTED OVERRIDES"
+    },
+    {
+      "id": "embodied-background",
+      "old": "**V1.0 Background redesign amendment \u2014 narrow scope and precedence:** Section 11 supersedes older compulsory occupations, +2 specialty/\u22121 weakness, and independent Defining Edge/Signature Edge models. For NEW characters, each of exactly five independently rarity-rolled Background offers supplies Identity + ONE integrated passive Imprint on ONE actually owned starting Class ability, ONE of TWO selected Signature powers (whether Action, Free Action, Reaction or Passive), OR an actual effect of the selected Title (only if Title is not NONE) + World Footprint. All source powers must already be chosen and locked before Background generation. An Imprint never creates its own Action, Free Action, Reaction, cost, cooldown, charge, spell button, extra Talent or second upgrade. Keep the original activation, provenance and parent-owned upgrade nesting, the four-level 3+2 Breakthrough system and all unrelated V1.0 rules. Legacy Background abilities do not change without separately authorized migration.",
+      "new": "**Sovereign Background:** Five normally rarity-rolled offers provide identity, one nested imprint on an owned core power and an optional world connection. Preserve parent mechanics, rarity and history; the imprint is not another standalone power. Chapter 11 governs. No retired Signature/Talent/3+2 acquisition model applies."
+    },
+    {
+      "id": "embodied-precedence",
+      "old": "V4.1 changes that *do* have priority over older wording: (a) a mandatory tier-by-tier **Rarity Power Contract** and mechanical certification for every rarity-bearing system; (b) **Hybrid Breakthroughs**, exactly three Class Breakthrough offers plus two Grand Signatures at every four-level milestone, replacing the old independently rarity-rolled milestone-skill board; (c) exactly **one of the three Class Breakthroughs** meaningfully integrating the selected Background, while both remaining Class Breakthroughs and both Grand Signatures remain class-centered; (d) enforceable class-archetype and title/name diversity, explicitly reducing overused 'Sovereign' and near-synonymous ruler archetypes; (e) more careful class-rarity-aware elite/boss threat preparation without secret health inflation; (f) the seven-chapter dashboard with categorized abilities and parent-owned upgrades, scoped to the dashboard by Chapters 33 and 38.",
+      "new": "Sovereign's effective chapters and saved play profile govern current creation, four-power growth, body, Domain and presentation. Shared honest rarity, independent Luck, real resources/actions, committed opposition, world continuity and finite consequences remain. Older edition acquisition checklists are historical and do not create additional boards."
+    }
+  ]
+}

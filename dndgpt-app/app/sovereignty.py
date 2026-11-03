@@ -87,6 +87,9 @@ def foundation_evolution(before, state, base, parent, evolution_id):
             "Update the foundation's combined Full rules")
     child = next((r for key in ("upgrades", "evolutions") for r in parent.get(key, [])
                   if r.get("id") == evolution_id), {})
+    require(text(child.get("name"), 160) and any(text(child.get(k)) for k in
+            ("change_display", "changes", "description", "mechanics", "mechanics_display")),
+            "Name the development and describe its actual improvement")
     effects = child.get("sovereign_changes")
     require(type(effects) is list and 1 <= len(effects) <= 100,
             "Record the permanent sovereign_changes with target_id and capability_id")
@@ -113,16 +116,18 @@ def foundation_evolution(before, state, base, parent, evolution_id):
         require(capability != previous.get(capability_id) and text(capability.get("name"), 160)
                 and any(text(capability.get(k)) for k in ("description", "mechanics", "mechanics_display"))
                 and capability.get("source_evolution_id") == evolution_id
-                and capability.get("activation") == "Passive" and capability.get("duration") == "Permanent"
+                and (capability.get("activation") == "Passive" or
+                     capability.get("permanent_unlock") is True and text(capability.get("activation"), 80))
+                and capability.get("duration") == "Permanent"
                 and not {"expires_at", "remaining_rounds", "cooldown_remaining"}.intersection(capability),
-                "Apply a permanent passive foundation improvement in the same save; temporary commands use regular skills")
+                "Apply a lasting foundation capability in the same save; an active use needs permanent_unlock=true")
 
 
-def initial():
+def initial(starting=1):
     return {"domain": {"id": "domain", "name": "Unestablished domain", "level": 1,
                        "capabilities": [], "next_milestone": None},
             "commanders": [], "formations": [], "operations": [], "fronts": [],
-            "developments": [], "award_ledger": {STARTING_EVOLUTION: starting_evolution_receipt()}, "ascension_earned": 1,
+            "developments": [], "award_ledger": {STARTING_EVOLUTION: starting_evolution_receipt()}, "ascension_earned": starting,
             "ascension_spent": [], "battle_reports": []}
 
 
@@ -195,14 +200,20 @@ def validate(s):
             len(set(s["ascension_spent"])) == len(s["ascension_spent"]) <= s["ascension_earned"], "Invalid progression ledger")
 
 
-def award(s, entry):
+def award(s, entry, state=None):
     require(type(entry) is dict and set(entry) == {"id", "kind", "target_id", "amount", "reason"} and
             text(entry["id"], 128) and text(entry["reason"]) and integer(entry["amount"], 1, 1000), "Invalid progression award")
-    require(one_of(entry["kind"], {"commander", "formation"}), "Award a commander or formation")
+    require(one_of(entry["kind"], {"commander", "formation", "character"}), "Award the sovereign, a commander or formation")
     old = s["award_ledger"].get(entry["id"])
     signature = hashlib.sha256(canonical(entry).encode()).hexdigest()
     if old is not None:
         require(old == signature, "An achievement ID already has a different reward")
+        return
+    if entry["kind"] == "character":
+        require(state is not None and entry["target_id"] == state["id"], "Award the actual campaign's sovereign")
+        from .sovereign_play import award_character
+        award_character(state, entry["amount"])
+        s["award_ledger"][entry["id"]] = signature
         return
     group = "commanders" if entry["kind"] == "commander" else "formations"
     target = next((r for r in s[group] if r["id"] == entry["target_id"]), None)
@@ -238,7 +249,7 @@ def develop(s, request):
 
 
 def battle(s, request, dice):
-    require(dice is not None and type(request) is dict and set(request) <= {"front_id", "phase_id", "orders", "phases"}
+    require(dice is not None and type(request) is dict and set(request) <= {"front_id", "phase_id", "orders", "phases", "resolution"}
             and text(request.get("phase_id"), 64) and integer(request.get("phases", 1), 1, 3), "Invalid battle phase")
     require("phase:" + request["phase_id"] not in s["award_ledger"], "This battle phase is already recorded")
     front = next((r for r in s["fronts"] if r["id"] == request.get("front_id")), None)
@@ -365,37 +376,43 @@ def apply_sovereignty(before, state, changes, correction=False, dice=None):
     for op in s["operations"]:
         if op["status"] in {"completed", "failed"}:
             require(state["fictional_time_seconds"] >= op["due_at"] and text(op.get("outcome")), "Resolve operations with elapsed fictional time and a recorded outcome")
-    gained = max(0, state["character"]["level"] - before["character"]["level"])
     reconcile_starting_evolution(before, s)
-    s["ascension_earned"] += gained
     if changes.get("sovereign_awards") or changes.get("sovereign_battle") or changes.get("sovereign_development"):
         require(before["phase"] == "adventure" and not before["paused"] and not before["level_up_freeze"], "Strategic advancement needs active adventure play")
     awards = changes.get("sovereign_awards", [])
     require(type(awards) is list and len(awards) <= 30, "Batch up to 30 earned strategic awards")
     for entry in awards:
         require(type(entry) is dict and not str(entry.get("id", "")).startswith(("phase:", "battle-", "creation:")), "System award IDs are reserved")
-        award(s, entry)
+        if entry.get("kind") == "character":
+            require(not {"level", "xp", "xp_total", "xp_next"}.intersection(changes.get("character", {})),
+                    "The achievement awards sovereign XP automatically; do not also add it manually")
+        award(s, entry, state)
+    from .sovereign_play import growth
+    gained = max(0, state["character"]["level"] - before["character"]["level"])
+    s["ascension_earned"] += growth(state)["sovereign_per_level"] * gained
+    if before["phase"] != "adventure":
+        s["ascension_earned"] += growth(state)["sovereign_start"] - growth(before)["sovereign_start"]
     if changes.get("sovereign_development") is not None:
         develop(s, changes["sovereign_development"])
-    spend = changes.get("spend_sovereign_evolution")
-    if spend is not None:
-        require(changes.get("spend_evolution_credit", {}).get("evolution_id") != spend.get("evolution_id")
-                if type(spend) is dict and type(changes.get("spend_evolution_credit", {})) is dict else False,
-                "An evolution uses one funding source")
-        require(s["ascension_earned"] > len(s["ascension_spent"]), "No permanent Sovereign upgrade is available yet")
-        base = next((r for r in before["abilities"] if r["id"] == spend.get("ability_id")), None) if type(spend) is dict else None
+    raw_spend = changes.get("spend_sovereign_evolution")
+    spends = [] if raw_spend is None else raw_spend if type(raw_spend) is list else [raw_spend]
+    require(len(spends) <= 20 and all(type(row) is dict and set(row) == {"ability_id", "evolution_id"}
+            and all(text(row[k], 128) for k in row) for row in spends), "Choose owned Sovereign developments")
+    ids = [row["evolution_id"] for row in spends]
+    require(len(set(ids)) == len(ids) and not set(ids).intersection(s["ascension_spent"]), "Apply each Sovereign development once")
+    require(s["ascension_earned"] - len(s["ascension_spent"]) >= len(spends), "No permanent Sovereign upgrade is available yet")
+    free = changes.get("spend_evolution_credit", {})
+    require(not set(ids).intersection({free.get("evolution_id")} if type(free) is dict else set()), "An evolution uses one funding source")
+    funded = {}
+    for spend in spends:
+        base = next((r for r in before["abilities"] if r["id"] == spend["ability_id"]), None)
         require(base is not None and is_foundation(base), "Evolve an owned Domain, General or Army foundation")
         parent = next((r for r in state["abilities"] if r["id"] == base["id"]), None)
         require(parent is not None, "Retain the sovereign foundation")
-        # Reuse exactly the shared nested-upgrade/preservation validator with an isolated ledger.
-        from .quests import apply_quests
-        trial_before, trial = copy.deepcopy(before), copy.deepcopy(state)
-        trial_before["quest_log"], trial["quest_log"] = [], []
-        trial["reward_credits"] = {"earned": s["ascension_earned"], "spent": list(s["ascension_spent"])}
-        apply_quests(trial_before, trial, {"spend_evolution_credit": spend})
+        funded.setdefault(base["id"], set()).add(spend["evolution_id"])
         foundation_evolution(before, state, base, parent, spend["evolution_id"])
-        s["ascension_spent"] = trial["reward_credits"]["spent"]
-    if before["phase"] == "adventure":
+    s["ascension_spent"].extend(ids)
+    if before["phase"] == "adventure" or spends:
         previous = {r["id"]: r for r in before["abilities"]}
         current = {r["id"]: r for r in state["abilities"]}
         for base in previous.values():
@@ -407,12 +424,13 @@ def apply_sovereignty(before, state, changes, correction=False, dice=None):
             base = previous.get(parent["id"])
             if not base or not is_foundation(base):
                 continue
-            children = lambda a: {r["id"] for k in ("upgrades", "evolutions") for r in a.get(k, [])}
-            added = children(parent) - children(base)
-            if added:
-                require(type(spend) is dict and spend.get("ability_id") == base["id"]
-                        and added == {spend.get("evolution_id")},
-                        "Apply foundation upgrades through the permanent Sovereign progression choice")
+            children = lambda a: {r["id"]: r for k in ("upgrades", "evolutions") for r in a.get(k, [])}
+            old_children, current_children = children(base), children(parent)
+            require(parent.get("rarity") == base.get("rarity") and
+                    all(current_children.get(key) == row for key, row in old_children.items()),
+                    "Preserve foundation rarity and earned development history")
+            require(current_children.keys() - old_children.keys() == funded.get(base["id"], set()),
+                    "Apply foundation upgrades through the permanent Sovereign progression choice")
     # Preserve a real initial foundation; legacy combined prose is not an initial snapshot.
     previous = {row["id"]: row for row in before["abilities"]}
     for parent in state["abilities"]:
@@ -448,8 +466,10 @@ def sovereign_kit_check(state):
     if game_id(state) != SOVEREIGN:
         return {"required": False, "ready": True, "missing_roles": []}
     required = FOUNDATIONS
+    from .sovereign_play import embodied
+    rarity = state["character"].get("rarity") if embodied(state) else "UNIQUE"
     powers = [a for a in state.get("abilities", []) if is_foundation(a)]
-    roles = {a.get("sovereign_role") for a in powers if is_foundation(a) and a.get("rarity") == "UNIQUE" and
+    roles = {a.get("sovereign_role") for a in powers if is_foundation(a) and a.get("rarity") == rarity and
              text(a.get("name")) and text(a.get("activation")) and text(a.get("flavor_text")) and
              any(text(a.get(key)) for key in ("mechanics", "mechanics_display", "full_rules")) and
              not any(a.get(key) for key in ("parent_id", "parent_ability_id", "parent_skill_id"))}
@@ -460,13 +480,17 @@ def sovereign_kit_check(state):
 def complete_sovereign(state):
     if game_id(state) != SOVEREIGN:
         return
+    from .sovereign_play import complete_play
+    complete_play(state)
     s = state["sovereignty"]
     validate(s)
-    require(state["character"]["rarity"] == "UNIQUE" and text(s["domain"].get("description")) and
+    from .sovereign_play import embodied
+    from .rules import RARITIES
+    require(state["character"]["rarity"] in (RARITIES if embodied(state) else ("UNIQUE",)) and text(s["domain"].get("description")) and
             s["domain"].get("limits") and s["domain"]["capabilities"] and
             any(c.get("status", "active") == "active" for c in s["commanders"]) and
             any(f["side"] == "player" and f["strength"] > 0 and f.get("status", "active") == "active" for f in s["formations"]),
-            "Complete the Unique class, functional domain, major commander and forces")
+            "Complete the class, functional domain, major commander and forces")
     kit = sovereign_kit_check(state)
     require(kit["ready"], "Complete sovereign powers: missing "+", ".join(kit["missing_roles"])+
-            ". Save three UNIQUE standalone sovereign parents with role, activation, full rules and flavor.")
+             ". Save three standalone foundations at the class's actual rarity, with role, activation, full rules and flavor.")

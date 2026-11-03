@@ -197,18 +197,25 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         Character ancestry/ancestry_description retain the chosen race; missing race never means human.
         changes supports partial character (attributes merge), equipment
         Sovereign saves also merge sovereignty and accept sovereign_awards, sovereign_development,
-        spend_sovereign_evolution={ability_id,evolution_id}, and sovereign_battle={front_id,phase_id,
+        spend_sovereign_evolution=[{ability_id,evolution_id},...], and sovereign_battle={resolution:fast,front_id,phase_id,
         orders:[{id:formation_id,stance:attack|guard|withdraw,target_id?}],phases:1..3}.
         Read sovereign-progression/sovereign-warfare once before using these. Save handles progression,
         real formation rolls and their receipts atomically; never roll each unit separately.
         Sovereign personal kits have FOUR substantial powers, optionally a justified fifth.
         Read sovereign-personal: upgrades only, no activation-category acquisition boards.
         Save spend_personal_upgrades=[{ability_id,upgrade_id},...] with changed parent rules and
-        nested upgrades; two personal selections per gained level are granted automatically.
+        nested upgrades. New embodied campaigns grant two personal AND two permanent Sovereign
+        developments at creation/per level; use saved custom growth settings. Normal rarity/Luck
+        is the creation default; only an explicit player request overrides it. All class-native
+        powers/foundations inherit the chosen grade. Read sovereign-body/bound-dominion for actual
+        body, equipment labels, integrated territory and tactical scene saves. Future rate changes
+        use creation.sovereign_growth plus sovereign_growth_reason with the player's explicit request;
+        this needs no dashboard approval and changes no already-earned rewards. kind=character
+        sovereign_awards targets the campaign ID and awards sovereign XP once; do not also add it.
         Do not increment old skill_points/talent_points. Extra standalone personal powers require
         the player's explicit request and personal_power_exception={ability_ids:[...],reason}.
         {slot:inventory_id|null}, name/current_location/opening_preview/notes, fictional_time_seconds,
-        level_up_freeze, world (recursive object-field merge), creation/advancement/funds (replace), and collection
+        level_up_freeze, world (recursive object-field merge), creation (merges for Sovereign), advancement/funds (replace), and collection
         upsert/remove/replace dictionaries.
         Structured quests use quest_schema=1; read rulebook section=quest-journal before creating one.
         Completion/counter progress auto-settles system_reward once; do not also add its XP/funds/items.

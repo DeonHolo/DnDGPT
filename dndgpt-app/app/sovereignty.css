@@ -7,3 +7,4 @@
 .sovereign-upgrade h5{font-size:1rem;line-height:1.45;margin:0 0 6px}.sovereign-upgrade .sovereign-meta{margin:0 0 8px}
 .sovereign-upgrade p,.sovereign-effect p{line-height:1.7}.sovereign-core .group,.sovereign-earned .group{margin:0 0 12px}
 .actor-group{margin:0;padding-left:8px}.actor-group>summary{font-size:.8rem;padding:10px 4px}.actor-index .entry-meta{display:block;line-height:1.6}.actor-inspector .actor-card{border:0;padding:0}
+.sovereign-defenses{list-style:none;padding:0;margin:0}.sovereign-defenses>li{padding:10px 0;border-bottom:1px solid var(--line);min-width:0}.sovereign-defenses>li:last-child{border-bottom:0}.sovereign-defenses summary{min-height:44px;line-height:1.6;overflow-wrap:break-word}.sovereign-card[data-sovereign-scene] details{margin-block:12px}.sovereign-card[data-sovereign-scene] p{line-height:1.7}.sovereign-card[data-sovereign-scene] summary{min-height:44px;line-height:1.6}

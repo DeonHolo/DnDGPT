@@ -30,6 +30,8 @@ SUBSECTIONS = {
 }
 
 GAME_SECTIONS = {"sovereign-creation": "Sovereign creation and inherited rules",
+                 "sovereign-body": "Sovereign body and equipment",
+                 "bound-dominion": "Bound Dominion play",
                  "sovereign-personal": "Sovereign personal powers and development",
                  "sovereign-progression": "Sovereign ownership and progression",
                  "sovereign-warfare": "Sovereign warfare and consequences",
@@ -95,11 +97,11 @@ def index_text(text):
     if "sovereign-creation" in entries:
         lines.insert(2, "Selected game: sovereign-system. Keep game_id='sovereign-system' or the campaign_id on EVERY rules request/page. Begin with sovereign-creation; fetch sovereign-progression/warfare/dashboard when relevant.")
         lines = [line.replace("Class offers: creation-order, generation, utility, class-craft, reach, 5, 6, 7, 8. Read 9/10/11 for their creation stage.",
-                              "Class offers: sovereign-personal, sovereign-creation, 5-11. Four substantial personal powers; creation refinements and identity stay nested. No activation-category kit.")
+                              "Class/body offers: sovereign-creation, sovereign-body, sovereign-personal, 5-11. Eight candidates with normal rarity/Luck unless the player explicitly requests an override. Four core powers and class-grade foundations.")
                       .replace("Utility offers and revisions: utility, generation, class-craft and the applicable acquisition chapter.",
                                "Practical uses: sovereign-personal and utility. Develop broad applications inside owned powers.")
                       .replace("Advancement: 17, 18 and the applicable track in 19 through 22; interfaces 37/38. Chapter 19 includes standalone-passive eligibility and nested upgrade saves; 38 distinguishes base skills from dependent riders.",
-                               "Advancement: sovereign-personal, sovereign-progression, 18-22/37. Two personal upgrades per level, guaranteed permanent Sovereign growth; no Talent acquisition board.")
+                               "Advancement: sovereign-personal, sovereign-progression, 18-22/37. New embodied saves default to two personal/two Sovereign developments; read saved growth rates. Future changes use an explicit chat request, no extra approval. Bound play: bound-dominion/sovereign-warfare; tactical saves, finite objectives.")
                  for line in lines]
     for key in {**AMENDMENTS, **SUBSECTIONS}:
         item = entries[key]

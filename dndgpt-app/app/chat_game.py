@@ -160,7 +160,8 @@ def apply_changes(state, changes, *, correction=False, completing=False, event_r
         return projected
     for key in TEXT_FIELDS | OBJECT_FIELDS | {"fictional_time_seconds", "level_up_freeze"}:
         if key in changes:
-            if key in {"world", "sovereignty"} and not correction:
+            if (key in {"world", "sovereignty"} or key == "creation" and
+                    state.get("game_id") == "sovereign-system") and not correction:
                 projected[key] = merge_world(projected.get(key, {}), changes[key])
             else:
                 projected[key] = ({**projected.get(key, {}), **copy.deepcopy(changes[key])}
@@ -187,6 +188,12 @@ def apply_changes(state, changes, *, correction=False, completing=False, event_r
         projected[group] = list(records.values())
     for group, ids in changes.get("remove", {}).items():
         projected[group] = [row for row in projected[group] if row["id"] not in ids]
+    from .sovereign_play import apply_play
+    apply_play(state, projected, changes, correction)
+    if (not correction and state.get("phase") == "adventure" and set(changes) == {"creation"} and
+            set(changes["creation"]) <= {"sovereign_growth", "sovereign_growth_reason"}):
+        # An explicit future-rate preference changes neither earned rewards nor pause/time.
+        return projected
     from .quests import apply_quests
     from .world_events import apply_tracking
     apply_quests(state, projected, changes, correction)
@@ -366,8 +373,10 @@ class ChatGame:
             from .campaign_focus import DEFAULTS
             state["campaign_preferences"] = dict(DEFAULTS)
             if game_id == SOVEREIGN:
+                from .sovereign_play import PROFILE as sovereign_profile, GROWTH
+                state["creation"]["sovereign_ruleset"] = sovereign_profile
                 from .sovereignty import initial
-                state["sovereignty"] = initial()
+                state["sovereignty"] = initial(GROWTH["sovereign_start"])
                 from .personal_powers import initial as personal_initial
                 state["personal_powers"] = personal_initial()
             records.insert(db, "campaigns_v1", {"id": state["id"], "owner": owner, "version": 1, "data": canonical(state)})

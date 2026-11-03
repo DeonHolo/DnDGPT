@@ -1,5 +1,7 @@
 # Sovereign System implementation
 
+Current rules: see [Sovereign embodied play](SOVEREIGN_EMBODIED_2026_11_04.md). New campaigns use normal rarity, varied bodies and two personal/two Sovereign developments. The implementation notes below describe the original release and remain relevant to unconverted saves.
+
 Approved 24 October 2026. The original startup document is design material, not authorization to create or play a campaign. Its old separate character/start approvals and seven-chapter restriction are superseded by the user's current instructions.
 
 ## Current personal powers — 3 November 2026

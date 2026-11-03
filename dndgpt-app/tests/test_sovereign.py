@@ -15,6 +15,10 @@ from .test_server import tool
 
 def fixture_state(engine):
     s = ChatGame(engine).create("owner-a", "Sovereign fixture", "sovereign-create", True, SOVEREIGN)
+    # This suite preserves the already-published legacy rules and saved battle semantics.
+    # New body/growth contracts have their own end-to-end cases in test_sovereign_embodied.
+    s["creation"].pop("sovereign_ruleset", None)
+    s["sovereignty"]["ascension_earned"] = 1
     s.update(phase="adventure", paused=False)
     s["sovereignty"]["domain"].update(name="The wandering fortress", description="A functioning mobile fortress.",
                                     limits={"max_formations": 5, "max_strength": 1000},
@@ -47,9 +51,9 @@ def test_rules_are_composed_without_rewriting_shared_source():
     base = rule_source(AGE)
     s = rule_source(SOVEREIGN)
     creation = rules_page("rulebook", 0, "sovereign-creation", SOVEREIGN)["content"]
-    assert "Starting Sovereign Evolution on the personal-refinement/Title turn" in creation
-    assert "choose ONE free in addition to the personal-refinement and Title selections" in creation
-    assert "Level 2 upgrade available" in creation
+    assert "five permanent Sovereign developments choosing TWO" in creation
+    assert "Normal independent rarity/Luck applies to creation" in creation
+    assert "changes.begin_adventure=true" in creation
     text = s["content"]
     from app.game_profiles import RULES
     module = (RULES / "sovereign/system.txt").read_text(encoding="utf-8") + "\n\n"
@@ -63,7 +67,7 @@ def test_rules_are_composed_without_rewriting_shared_source():
     assert restored == base["content"]
     assert s["base_sha256"] == base["source_sha256"]
     assert hashlib.sha256(restored.encode()).hexdigest() == base["source_sha256"]
-    assert "four substantial powers" in text
+    assert "four core powers" in text.casefold()
     assert "Sovereign ownership and progression" not in base["content"]
     with pytest.raises(ValueError, match="anchor changed"):
         compose("Changed source", [{"id": "test", "old": "Missing", "new": "New"}])

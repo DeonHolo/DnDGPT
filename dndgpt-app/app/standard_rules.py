@@ -84,4 +84,8 @@ def rules_guidance(game="age-of-convergence"):
         guidance.update(class_kits="FOUR substantial personal powers, optionally a class-justified fifth. No activation-category quotas. Three passive sovereign foundations are separate.",
                         utility="Practical applications belong inside the actual core powers; ordinary orders use established authority.",
                         personal_progression="Read sovereign-personal once. Two starting refinements and two personal upgrades per gained level; spend_personal_upgrades=[{ability_id,upgrade_id}] with nested children and consolidated current rules. No new Talent acquisition. Keep old kits; actual banked Skill/Talent points carry once.")
+        guidance.update(sovereign_play="Read sovereign-body and bound-dominion. Mobile/bound/distributed bodies; actual primary attribute, equipment and practical functions. No biped/CHA default. Focal combat uses tactical saves; abstract phases require resolution=fast.",
+                        rarity="Normal independent rarity/Luck at creation. Only an explicit player request may override its scope. Powers and foundations inherit the actual class grade.",
+                        sovereign_progression="New embodied campaigns: two permanent developments at creation/per level; legacy keeps its recorded rate. Batch selected spend_sovereign_evolution entries in one save. Configure growth during creation; an explicit future-rate chat change records sovereign_growth_reason without dashboard approval.")
+        guidance["custom_rules"] = "Native rarity overrides use creation.rarity_override and growth uses creation.sovereign_growth; these do not need rules_source=custom. Reserve that flag for an explicit replacement rulebook."
     return guidance

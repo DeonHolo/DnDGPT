@@ -22,3 +22,27 @@ def compose_personal_rules(text, document):
                                       "old": old, "new": new}])
         audit.extend(edits)
     return text, audit
+
+
+def compose_embodied_rules(text, document):
+    from .game_profiles import RULES, compose
+    from .rule_sections import sections
+    root = RULES / "sovereign/embodied"
+    manifest = json.loads((root / "manifest.json").read_text(encoding="utf-8"))
+    if document == "hardener":
+        if hashlib.sha256(text.encode()).hexdigest() != manifest["hardener_sha256"]:
+            raise ValueError("Sovereign embodied hardener source changed")
+        return compose(text, [{"id": "embodied-hardener", "old": text,
+                               "new": (root / "hardener.txt").read_text(encoding="utf-8")}])
+    content = json.loads((root / "sections.json").read_text(encoding="utf-8"))
+    audit = []
+    for entry in manifest["rulebook"]:
+        selected = sections(text)[entry["section"]]
+        old = text[selected["start"]:selected["end"]]
+        if hashlib.sha256(old.encode()).hexdigest() != entry["source_sha256"]:
+            raise ValueError("Sovereign embodied source changed: " + entry["section"])
+        new = content[entry["section"]].rstrip() + ("\n" if selected["end"] == len(text) else "\n\n")
+        text, edits = compose(text, [{"id": "embodied-" + entry["section"], "old": old, "new": new}])
+        audit.extend(edits)
+    text, edits = compose(text, manifest["preface"])
+    return text, audit + edits

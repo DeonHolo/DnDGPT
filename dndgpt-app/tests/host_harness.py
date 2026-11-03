@@ -33,6 +33,7 @@ OWNER = None
 CAMPAIGN_ID = None
 AVAILABLE = True
 SOVEREIGN_ID = None
+EMBODIED_ID = None
 
 
 @asynccontextmanager
@@ -325,6 +326,38 @@ def sovereign_fixture():
 @app.get("/test-sovereign-state")
 def sovereign_state():
     return INNER.state.engine.get_campaign(OWNER, SOVEREIGN_ID)
+
+
+@app.post("/test-embodied-fixture")
+def embodied_fixture():
+    global EMBODIED_ID
+    if EMBODIED_ID is not None:
+        return {"id": EMBODIED_ID}
+    from .test_sovereign_embodied import embodied_state
+    from app.chat_game import ChatGame
+    from app import records
+    engine = INNER.state.engine
+    prepared = embodied_state(engine)
+    created = ChatGame(engine).create(OWNER, "Bound Dominion · disposable preview", "browser-embodied", True, "sovereign-system")
+    EMBODIED_ID = created["id"]
+    with engine.store.transaction() as db:
+        state = engine._get(db, OWNER, EMBODIED_ID)
+        for field in ("character", "creation", "sovereignty", "abilities", "equipment", "inventory", "personal_powers"):
+            state[field] = prepared[field]
+        state.update(phase="adventure", paused=False, current_location="The buried heart chamber")
+        state["character"].update(name="The buried heart", class_name="Living Citadel")
+        state["inventory"] = [{"id": "core-relic", "name": "Heartstone lens", "rarity": "RARE",
+                               "description": "A fitted relic for this disposable renderer fixture.", "effects": "A recorded lens effect."}]
+        state["equipment"]["Artifact"] = "core-relic"
+        state["version"] += 1
+        engine._append(db, state, {"kind": "test_fixture_seed", "result": "Disposable embodied UI data"})
+        records.update(db, "campaigns_v1", {"id": EMBODIED_ID}, {"version": state["version"], "data": canonical(state)})
+    return {"id": EMBODIED_ID}
+
+
+@app.get("/test-embodied-state")
+def embodied_state_view():
+    return INNER.state.engine.get_campaign(OWNER, EMBODIED_ID)
 
 
 @app.post("/test-sovereign-record")

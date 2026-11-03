@@ -29,7 +29,7 @@ function activateGame(id){
   updateLayoutRail();
   renderSceneOptions(id);selectScene(preferences.game_scenes?.[id]||preferences.scene||scene,false);
   setDndNavigation(id==="dnd-2024");
-  if(id==="sovereign-system"){$("title-skills").textContent="Personal Powers";$("nav-skills").querySelector(".nav-title").textContent="Personal Powers"}
+  if(id==="sovereign-system"){$("title-skills").textContent="Core Powers";$("nav-skills").querySelector(".nav-title").textContent="Core Powers"}
   document.querySelector(".identity h1").textContent=id==="sovereign-system"?"Sovereign System":"DnDGPT";
   sovereignNav.hidden=id!=="sovereign-system";
   $("nav-gallery").querySelector(".nav-index").textContent=id==="sovereign-system"?"09":"08";
@@ -150,6 +150,35 @@ function renderStartingSovereignKit(next){
 function sovereigntyCard(parent,title,meta,description){
   const card=element("section",undefined,"sovereign-card");card.append(element("h3",title));if(meta)paragraph(card,meta,"sovereign-meta");if(description)paragraph(card,description);parent.append(card);return card;
 }
+function renderSovereignBody(parent,next){
+  const body=next.creation?.sovereign_body;if(!body)return;
+  const modes={mobile:"Mobile sovereign",bound:"Bound core",distributed:"Distributed being"};
+  const card=sovereigntyCard(parent,body.form,modes[body.mode]||"Your body",body.description);card.dataset.sovereignScene="body";
+  if(body.mode==="bound")paragraph(card,"Core location · "+body.core_location,"sovereign-meta");
+  const detail=recordDetail(card,"How you act","sovereign-body-functions");
+  renderFacts(detail,[["Movement",body.movement],["Manipulation",body.manipulation],["Communication",body.communication],
+    ["Perception",body.perception],["Vulnerability",body.vulnerability],["Primary attribute",body.primary_attribute]]);
+}
+function renderSovereignScenes(parent,next){
+  const domain=next.sovereignty.domain,known=rows=>(rows||[]).filter(row=>row.known_to_player!==false);
+  const objectives=(root,rows)=>{const list=element("ul",undefined,"sovereign-objectives");
+    for(const row of rows||[]){const item=element("li",(row.status==="done"?"✓ ":row.status==="failed"?"× ":"○ ")+row.text);item.classList.toggle("done",row.status==="done");list.append(item)}root.append(list)};
+  const holdings=known(domain.holdings);
+  if(holdings.length){const card=sovereigntyCard(parent,"Your territory");card.dataset.sovereignScene="territory";
+    for(const holding of holdings){const detail=recordDetail(card,holding.name+" · "+playerStatus(holding.status),"holding-"+holding.id);paragraph(detail,holding.description);
+      if(holding.integration_basis)paragraph(detail,holding.integration_basis);objectives(detail,holding.integration_objectives)}}
+  const assets=known(domain.assets);
+  if(assets.length){const card=sovereigntyCard(parent,"Defenses & vital structures");card.dataset.sovereignScene="defenses";
+    const list=element("ul",undefined,"sovereign-defenses");for(const asset of assets){const row=element("li"),core=asset.character_core===true;
+      const hp=core?next.character.hp:asset.hp,max=core?next.character.hp_max:asset.hp_max,def=core?(next.character.defense??next.character.def):asset.defense;
+      const detail=recordDetail(row,asset.name+" · HP "+hp+" / "+max,"asset-"+asset.id);paragraph(detail,asset.description);
+      const zone=(domain.zones||[]).find(zone=>zone.id===asset.zone_id);paragraph(detail,[zone?.name,def===undefined?null:"DEF "+def].filter(Boolean).join(" · "),"sovereign-meta");list.append(row)}card.append(list)}
+  const encounters=known(domain.encounters),active=encounters.filter(row=>row.status==="active"),closed=encounters.filter(row=>row.status!=="active");
+  for(const encounter of active){const card=sovereigntyCard(parent,encounter.name,"Current encounter",encounter.situation);card.dataset.sovereignScene="encounter-"+encounter.id;
+    const done=encounter.objectives.filter(row=>row.status==="done").length;paragraph(card,done+" / "+encounter.objectives.length+" objectives complete","sovereign-meta");objectives(card,encounter.objectives)}
+  if(closed.length){const card=sovereigntyCard(parent,"Resolved encounters"),history=recordDetail(card,"Show past outcomes · "+closed.length,"sovereign-encounter-history");card.dataset.sovereignScene="encounter-history";
+    for(const encounter of closed){const detail=recordDetail(history,encounter.name+" · "+playerStatus(encounter.status),"encounter-"+encounter.id);paragraph(detail,encounter.outcome||encounter.situation);objectives(detail,encounter.objectives)}}
+}
 function renderSovereignty(next){
   const root=$("sovereignty");root.replaceChildren();sovereignSearchTargets.clear();
   if((next.game_id||"age-of-convergence")!=="sovereign-system")return;
@@ -164,10 +193,12 @@ function renderSovereignty(next){
     const select=()=>{sovereignTab=id;for(const b of tabs.children){const on=b===button;b.setAttribute("aria-selected",String(on));b.tabIndex=on?0:-1}for(const [key,node]of Object.entries(panels))node.hidden=key!==id};button.onclick=select;tabs.append(button);root.append(panel);
     button.onkeydown=event=>{if(!["ArrowRight","ArrowLeft","Home","End"].includes(event.key))return;event.preventDefault();const controls=[...tabs.children],index=controls.indexOf(button);const target=event.key==="Home"?0:event.key==="End"?controls.length-1:(index+(event.key==="ArrowRight"?1:-1)+controls.length)%controls.length;controls[target].click();controls[target].focus()};
   }
+  renderSovereignBody(panels.domain,next);
+  renderSovereignScenes(panels.domain,next);
   const domain=sovereigntyCard(panels.domain,s.domain.name,"Domain level "+s.domain.level,s.domain.description);
   if(s.domain.limits)paragraph(domain,"Force capacity · "+s.formations.filter(f=>f.side==="player"&&f.status!=="destroyed").reduce((sum,f)=>sum+f.strength,0)+" / "+s.domain.limits.max_strength+" strength · "+s.domain.limits.max_formations+" formations","sovereign-meta");
   sovereignRecords(domain,next,s.domain,"domain");
-  const credit=Math.max(0,s.ascension_earned-s.ascension_spent.length);if(credit)paragraph(domain,"Sovereign Evolutions available · "+credit,"pending");
+  const credit=Math.max(0,s.ascension_earned-s.ascension_spent.length);if(credit)paragraph(domain,"Permanent developments to choose · "+credit,"pending");
   const milestone=s.domain.next_milestone;
   if(milestone){
     const section=sovereigntyCard(panels.domain,milestone.title,"Next domain level · "+milestone.target_level);

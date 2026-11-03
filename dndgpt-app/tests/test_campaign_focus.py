@@ -116,6 +116,10 @@ def test_activity_completion_keeps_rewards_once_and_finishes(engine, game):
 def test_focus_rules_are_delivered_for_each_selected_game(game):
     page = rules_page("rulebook", 0, "campaign-focus", game_id=game)
     assert page["next_offset"] is None
-    assert "70/30" in page["content"] and "on-request" in page["content"]
-    assert "no compulsory negotiation" in page["content"]
+    assert "on-request" in page["content"]
+    if game == SOVEREIGN:
+        assert "without a numeric personal-roaming/strategy quota" in page["content"]
+        assert "Negotiation is optional" in page["content"]
+    else:
+        assert "70/30" in page["content"] and "no compulsory negotiation" in page["content"]
     assert rules_page("hardener", 0, game_id=game)["next_offset"] is None

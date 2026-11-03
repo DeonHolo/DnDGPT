@@ -1,5 +1,9 @@
 # Continuity and recovery release
 
+## Sovereign embodied redesign — 2026-11-04 (in progress)
+
+Approved audit implementation: consistent effective Sovereign rules; mobile/bound/distributed bodies, normal creation rarity/Luck with explicit-only overrides, body equipment and finite tactical defense scenes. New saves default to two personal/two permanent Sovereign developments; selected developments batch together. Explicit future growth-rate changes work through chat without dashboard approval or editing earned balances. Preserve existing campaigns and other games. Work and verification: docs/SOVEREIGN_EMBODIED_2026_11_04.md.
+
 Runtime 1.1.6 refreshes shared scenery: 21 native-resolution Andreas Rocha landscapes replace the older mixed-quality collection; all 15 D&D wallpapers are available in every mode. Glowwood and the website tree stay byte-identical. There are 39 choices, with per-game preferences and source credits. See docs/SCENERY_REFRESH_2026_11_03.md.
 
 Runtime 1.1.5 fixes repeated dashboard mounting: only render_dashboard opens a component, once on first use or when reopening is requested/needed. Rules, campaign reads, creation and saves update data without opening another view. The mode chooser stays. See docs/DASHBOARD_OPEN_ONCE_2026_11_03.md.

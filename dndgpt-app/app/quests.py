@@ -173,8 +173,13 @@ def apply_quests(before, state, changes, correction=False):
         owned = {row["id"] for row in old_rows}
         children = {row["id"] for row in new_rows}
         preserved = {row["id"]: row for row in new_rows if row["id"] in owned}
+        personal = changes.get("spend_personal_upgrades", [])
+        companion_picks = ({row.get("upgrade_id") for row in personal if type(row) is dict and
+                            row.get("ability_id") == spend["ability_id"]}
+                           if state.get("game_id") == "sovereign-system" and type(personal) is list else set())
+        require(spend["evolution_id"] not in companion_picks, "An upgrade uses one funding source")
         require(nonblank(spend["evolution_id"], 128) and spend["evolution_id"] not in owned and
-                spend["evolution_id"] not in credits["spent"] and children == owned | {spend["evolution_id"]} and
+                spend["evolution_id"] not in credits["spent"] and children == owned | {spend["evolution_id"]} | companion_picks and
                 len(new_rows) == len(children) and
                 all(preserved.get(row["id"]) == row for row in old_rows) and
                 parent.get("imprints", []) == base.get("imprints", []) and

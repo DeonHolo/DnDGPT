@@ -50,7 +50,7 @@ document.getElementById('run').onclick=async()=>{
  });
  await test('Named core powers retain details, search and readable selection in every layout',async()=>{
   d.getElementById('nav-skills').click();const panel=d.getElementById('skills');
-  assert(d.getElementById('nav-skills').innerText.includes('Personal Powers'),'Personal navigation label missing');
+  assert(d.getElementById('nav-skills').innerText.includes('Core Powers'),'Core power navigation label missing');
   assert(d.querySelectorAll('#personalPowersList [data-ability-id]').length===4,'Expected four personal powers');
   assert(!panel.querySelector('#skillTabs'),'Activation groups remained');
   for(const row of d.querySelectorAll('#personalPowersList [data-ability-id]')){
@@ -91,7 +91,52 @@ document.getElementById('run').onclick=async()=>{
   const after=await(await fetch('/test-sovereign-state')).json(),ageAfter=await(await fetch('/test-state')).json();
   assert(JSON.stringify(before)===JSON.stringify(after),'Sovereign save changed');assert(JSON.stringify(ageBefore.campaign)===JSON.stringify(ageAfter.campaign),'Age save changed');
  });
- frame.style.width='1100px';await w.switchGame('sovereign-system');d.getElementById('nav-sovereignty').click();d.getElementById('sovereign-tab-domain').click();w.selectLayout('ember',false);
+ const embodied=await(await fetch('/test-embodied-fixture',{method:'POST'})).json();
+ await w.switchGame('sovereign-system');await w.callTool('get_campaign',{campaign_id:embodied.id});
+ const embodiedBefore=await(await fetch('/test-embodied-state')).json();
+ await test('Bound body, territory, real defenses and finite objectives are readable',async()=>{
+  d.getElementById('nav-sovereignty').click();d.getElementById('sovereign-tab-domain').click();
+  const panel=d.getElementById('sovereign-panel-domain');
+  assert(panel.innerText.includes('Bound core')&&panel.innerText.includes('The buried heart chamber'),'Bound body missing');
+  panel.querySelector('[data-sovereign-scene=body] summary').click();
+  assert(panel.innerText.includes('Senses disturbances'),'Baseline perception missing');
+  assert(panel.innerText.includes('Your territory')&&panel.innerText.includes('Defenses & vital structures'),'Domain overview missing');
+  assert(panel.innerText.includes('Iron gate')&&panel.innerText.includes('30 / 30'),'Actual defense HP missing');
+  assert(panel.innerText.includes('Hold the gate')&&panel.innerText.includes('0 / 1 objectives complete'),'Finite encounter missing');
+  assert(!panel.innerText.includes('ascension_earned'),'Internal ledger leaked');
+ });
+ await test('Equipment locations fit the core without empty human body parts',async()=>{
+  d.getElementById('nav-equipment').click();d.getElementById('tab-equipment').click();
+  const panel=d.getElementById('gear-equipment');
+  assert(panel.textContent.includes('Heart relic')&&panel.textContent.includes('Heartstone lens'),'Installed relic missing');
+  assert(panel.innerText.includes('Crown socket')&&panel.innerText.includes('Core shell'),'Body-specific slots missing');
+  assert(!/\b(feet|legs|off-hand)\b/i.test(panel.textContent),'Human anatomy leaked');
+  assert(panel.querySelectorAll('.empty-slot').length===3,'Unmapped slots shown');
+ });
+ await test('Body, defenses and objectives fit every layout at phone, tablet and desktop widths',async()=>{
+  d.getElementById('nav-sovereignty').click();d.getElementById('sovereign-tab-domain').click();
+  for(const width of [375,768,1100]){frame.style.width=width+'px';for(const layout of ['original','reclaimed','orrery','ember']){
+   w.selectLayout(layout,false);await wait(80);
+   assert(d.documentElement.scrollWidth<=d.documentElement.clientWidth+1,'Embodied overflow '+layout+'/'+width);
+   for(const node of d.querySelectorAll('#sovereign-panel-domain .sovereign-card')){
+    const box=node.getBoundingClientRect(),style=w.getComputedStyle(node);
+    assert(box.width>100&&box.right<=d.documentElement.clientWidth+1&&node.scrollWidth<=node.clientWidth+1,'Card overflow '+layout+'/'+width);
+    for(const edge of ['Top','Right','Bottom','Left'])assert(parseFloat(style['border'+edge+'Width'])>=1,'Missing card border');
+    assert(parseFloat(style.paddingLeft)>=14,'Missing body card padding');
+   }
+  }}
+ });
+ await test('Dashboard search reveals body functions and preserves chapter keyboard navigation',async()=>{
+  const search=d.getElementById('dashboardSearch');search.value='Senses disturbances';search.dispatchEvent(new Event('input'));await wait(100);
+  const hit=[...d.querySelectorAll('#dashboardSearchList button')].find(b=>b.textContent.includes('Living dungeon heart'));assert(hit,'Body search missing');hit.click();
+  assert(d.querySelector('[data-sovereign-scene=body] details').open,'Search left matching functions hidden');
+  d.getElementById('dashboardSearchClear').click();const tab=d.getElementById('sovereign-tab-domain');tab.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));
+  assert(d.getElementById('sovereign-tab-commanders').getAttribute('aria-selected')==='true','Keyboard tabs failed');d.getElementById('sovereign-tab-domain').click();
+ });
+ await test('Embodied browsing preserves authoritative character, resources and scene',async()=>{
+  const after=await(await fetch('/test-embodied-state')).json();assert(JSON.stringify(after)===JSON.stringify(embodiedBefore),'Body browsing mutated the save');
+ });
+ frame.style.width='1100px';d.getElementById('nav-sovereignty').click();d.getElementById('sovereign-tab-domain').click();w.selectLayout('ember',false);
  document.getElementById('result').textContent=results.filter(r=>r.passed).length+'/'+results.length+' passed';
  await fetch('/test-sovereign-record',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({results,passed:results.every(r=>r.passed)})});
 };

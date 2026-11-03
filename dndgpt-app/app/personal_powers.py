@@ -23,12 +23,14 @@ def powers(state):
 
 
 def summary(state):
+    from .sovereign_play import growth
     ledger = state.get("personal_powers")
     legacy = not ledger or ledger.get("legacy", False)
     available = (max(0, ledger["earned"] - len(ledger["spent"])) if ledger else
                  sum(state["character"].get(k, 0) for k in ("skill_points", "talent_points")))
     return {"profile": PROFILE, "legacy_kit": legacy, "power_count": len(powers(state)),
-            "upgrades_available": available, "upgrades_per_level": 2, "starting_refinements": 2,
+            "upgrades_available": available, "upgrades_per_level": growth(state)["personal_per_level"],
+            "starting_refinements": growth(state)["personal_start"],
             "acquisition": "Upgrade owned powers; additional standalone powers require an explicit player request."}
 
 
@@ -98,7 +100,10 @@ def apply_personal_powers(before, state, changes, correction=False):
         state["character"][key] = 0
     gained = state["character"]["level"] - before["character"]["level"]
     require(gained >= 0, "Use a reviewed correction to lower character level")
-    ledger["earned"] += 2 * gained + max(0, state["character"]["level"] // 4 - before["character"]["level"] // 4)
+    from .sovereign_play import growth
+    ledger["earned"] += growth(state)["personal_per_level"] * gained + max(0, state["character"]["level"] // 4 - before["character"]["level"] // 4)
+    if before["phase"] != "adventure":
+        ledger["earned"] += growth(state)["personal_start"] - growth(before)["personal_start"]
 
     old, current = {p["id"]: p for p in powers(before)}, {p["id"]: p for p in powers(state)}
     exception = changes.get("personal_power_exception")
@@ -133,7 +138,9 @@ def apply_personal_powers(before, state, changes, correction=False):
     require(not identifiers.intersection({free.get("evolution_id")} if type(free) is dict else set()),
             "An upgrade uses one funding source")
     sovereign = changes.get("spend_sovereign_evolution", {})
-    require(not identifiers.intersection({sovereign.get("evolution_id")} if type(sovereign) is dict else set()),
+    sovereign_ids = ({row.get("evolution_id") for row in sovereign if type(row) is dict}
+                     if type(sovereign) is list else {sovereign.get("evolution_id")} if type(sovereign) is dict else set())
+    require(not identifiers.intersection(sovereign_ids),
             "Personal and Sovereign upgrades have separate funding")
     for key in old.keys() & current.keys():
         base, parent = old[key], current[key]

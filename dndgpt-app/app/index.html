@@ -170,7 +170,7 @@ dialog{color:var(--ink);background:var(--paper);border:1px solid var(--line);bor
 <section id="modePicker" class="mode-picker" aria-labelledby="modePickerTitle"><p class="eyebrow">Start here</p><h2 id="modePickerTitle">Which game would you like to play?</h2><p>Choose a mode for your DnDGPT request.</p><div class="mode-options">
 <button type="button" class="mode-choice" data-choose-game="dnd-2024"><strong>D&amp;D 2024</strong><span>Classic D&amp;D classes, species, spells and character sheets. Play a published adventure or an original D&amp;D story, solo or with a party.</span><span class="mode-action">Choose D&amp;D 2024 →</span></button>
 <button type="button" class="mode-choice" data-choose-game="age-of-convergence"><strong>Age of Convergence</strong><span>Earth meets other worlds in a power-fantasy RPG. Discover generated classes, flexible personal builds and rarity-ranked rewards.</span><span class="mode-action">Choose Age of Convergence →</span></button>
-<button type="button" class="mode-choice" data-choose-game="sovereign-system"><strong>Sovereign System</strong><span>Develop four core personal powers while growing your domain, autonomous generals and armies. Adventure personally or focus on conquest.</span><span class="mode-action">Choose Sovereign System →</span></button>
+<button type="button" class="mode-choice" data-choose-game="sovereign-system"><strong>Sovereign System</strong><span>Become a mobile monster, bound dungeon heart or distributed being. Develop four core powers, defend and expand your domain, and lead distinctive commanders and forces.</span><span class="mode-action">Choose Sovereign System →</span></button>
 </div></section>
 <div class="row session-picker"><label for="session">Saved game</label><span class="select-field session-field"><select id="session"><option value="">Select a saved game</option></select></span><button id="deleteCampaign" class="danger" type="button" disabled>Delete Campaign</button></div>
 <!-- dashboard search -->
@@ -979,12 +979,14 @@ function renderGear(next,gear){
   for(const [id,page]of [["equipment",equipment],["inventory",inventory]]){
     page.id="gear-"+id;page.dataset.gearPage=id;page.setAttribute("role","tabpanel");page.setAttribute("aria-labelledby","tab-"+id);page.tabIndex=0;root.append(page);
   }
-  paragraph(equipment,"Worn & wielded","page-lead");
-  if(!gear.equipped.length)paragraph(equipment,"No equipment worn or wielded.","muted");
-  gear.equipped.forEach(({item,slots},index)=>{paragraph(equipment,slots.join(" · "),"item-slot");renderItem(equipment,item,"equipment",index)});
-  if(gear.empty.length){
+  const body=next.game_id==="sovereign-system"?next.creation?.sovereign_body:null,labels=body?.equipment_slots;
+  const empty=gear.empty.filter(slot=>!labels||Object.hasOwn(labels,slot));
+  paragraph(equipment,body?"Equipped & installed":"Worn & wielded","page-lead");
+  if(!gear.equipped.length)paragraph(equipment,body?"No equipment installed or equipped.":"No equipment worn or wielded.","muted");
+  gear.equipped.forEach(({item,slots},index)=>{paragraph(equipment,slots.map(slot=>labels?.[slot]||slot).join(" · "),"item-slot");renderItem(equipment,item,"equipment",index)});
+  if(empty.length){
     equipment.append(element("h3","Empty slots","group"));const slots=element("div",undefined,"empty-slots");
-    for(const slot of gear.empty){const row=element("div",undefined,"empty-slot");row.append(element("strong",slot),element("span","Empty"));slots.append(row)}
+    for(const slot of empty){const row=element("div",undefined,"empty-slot");row.append(element("strong",labels?.[slot]||slot),element("span","Empty"));slots.append(row)}
     equipment.append(slots);
   }
   paragraph(inventory,"Carried items","page-lead");
@@ -997,7 +999,7 @@ function renderGear(next,gear){
     const item=typeof value==="object"?value:{name:String(value)};
     const row=element("li");renderItem(row,item,"supply",index);list.append(row);
   }inventory.append(list)}
-  paragraph(inventory,"Carrying capacity "+next.character.carry_capacity_kg+" kg. Total carried weight is not recorded.","chapter-note");
+  paragraph(inventory,body?.mode==="bound"?"Installed relics and domain storage follow their actual space and bulk.":"Carrying capacity "+next.character.carry_capacity_kg+" kg. Total carried weight is not recorded.","chapter-note");
   if(Object.keys(next.funds||{}).length){inventory.append(element("h3","Funds","group"));renderValue(inventory,next.funds)}
   paragraph(equipment,"Open an item to inspect it. Viewing details does not equip or use it.","chapter-note");
   selectGearTab(gearTab,false);

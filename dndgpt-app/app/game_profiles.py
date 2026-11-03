@@ -16,7 +16,7 @@ GAMES = ({"id": DND, "name": "D&D 2024", "rules_version": "5.2.1"},
 GAME_INTRODUCTIONS = {
     DND: "D&D's revised 2024 rules: classic classes, species, spells and character sheets. Choose a published adventure or an original D&D story, solo or with a party.",
     AGE: "A power-fantasy RPG where Earth meets other worlds. Discover generated classes and powers, rarity-ranked rewards and flexible personal builds.",
-    SOVEREIGN: "A sovereign power fantasy: develop four core personal powers while growing your domain, autonomous generals and armies. Adventure personally or focus on conquest.",
+    SOVEREIGN: "Become a mobile monster, bound dungeon heart or distributed being. Develop four core powers, defend and expand your domain, and lead distinctive commanders and forces.",
 }
 RULES = Path(__file__).resolve().parent.parent / "rules"
 
@@ -65,9 +65,11 @@ def rule_source(selected=AGE, document="rulebook"):
                 "base_sha256": hashlib.sha256(data).hexdigest(), "replacements": []}
     overlay = json.loads((RULES / "sovereign/overlay.json").read_text(encoding="utf-8"))
     text, audit = compose(data.decode("utf-8"), overlay[document])
-    from .sovereign_rules import compose_personal_rules
+    from .sovereign_rules import compose_personal_rules, compose_embodied_rules
     text, personal_audit = compose_personal_rules(text, document)
     audit.extend(personal_audit)
+    text, embodied_audit = compose_embodied_rules(text, document)
+    audit.extend(embodied_audit)
     module = (RULES / ("sovereign/system.txt" if document == "rulebook" else "sovereign/checklist.txt")).read_text(encoding="utf-8")
     if document == "rulebook":
         # The module remains in the preface, before the unchanged numbered chapters.
