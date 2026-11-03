@@ -1,4 +1,4 @@
-let currentGame=window.openai?.toolOutput?.game_id||window.openai?.widgetState?.game_id||"dnd-2024",gameEpoch=0,gameSwitching=false,gameLocked=false;
+let currentGame=window.openai?.toolOutput?.game_id||window.openai?.toolOutput?.campaign?.game_id||null,gameEpoch=0,gameSwitching=false,gameLocked=false;
 let sovereignTab="domain";
 function isSovereignFoundation(a){return a.scope==="sovereign"&&["domain","general","army"].includes(a.sovereign_role)&&String(a.activation).toLowerCase()==="passive"&&!["parent_id","parent_ability_id","parent_skill_id"].some(k=>a[k])}
 function visibleSovereignOperation(next,op){return op.known!==false&&(next.sovereignty.commanders.find(c=>c.id===op.commander_id)?.side!=="enemy"||op.known===true)}
@@ -10,7 +10,7 @@ function sovereignCombatView(next){
   return {...next,summons:[...allies.values()].filter(c=>activeActor(c)),enemies:(next.enemies||[]).filter(c=>activeActor(c,true))};
 }
 let lastGameContext="";
-function selectedGameContext(){return {game_id:currentGame,campaign_id:state?.id||null,selection_only:true,rules_request:state?{campaign_id:state.id}:{game_id:currentGame}}}
+function selectedGameContext(){return {game_id:currentGame,campaign_id:state?.id||null,mode_selection_required:!currentGame,selection_only:true,rules_request:state?{campaign_id:state.id}:currentGame?{game_id:currentGame}:null}}
 function publishGameContext(){
   const context=selectedGameContext(),key=JSON.stringify(context);if(key===lastGameContext)return;lastGameContext=key;
   if(standard)rpc("ui/update-model-context",{structuredContent:context}).catch(()=>{});
@@ -22,9 +22,10 @@ const crown=document.createElementNS("http://www.w3.org/2000/svg","svg");crown.s
 sovereignNav.onkeydown=event=>{if(!["ArrowRight","ArrowDown","ArrowLeft","ArrowUp","Home","End"].includes(event.key))return;event.preventDefault();const controls=[...document.querySelectorAll('#sectionNav [data-target]')].filter(b=>!b.hidden),index=controls.indexOf(sovereignNav),next=event.key==="Home"?0:event.key==="End"?controls.length-1:(index+(["ArrowRight","ArrowDown"].includes(event.key)?1:-1)+controls.length)%controls.length;controls[next].focus();controls[next].click()};
 
 function activateGame(id){
-  if(!gameNames[id])return;
+  if(id!==null&&!gameNames[id])return;
   const changed=currentGame!==id;currentGame=id;
-  document.documentElement.dataset.game=id;$("gameSelect").value=id;
+  document.documentElement.dataset.game=id||"";$("gameSelect").value=id||"";
+  $("modePicker").hidden=Boolean(id);document.querySelector(".session-picker").hidden=!id;$("status").hidden=!id;$("overviewToolbar").hidden=!id;$("hud").hidden=!id||preferences.hud_hidden;$("hideHud").disabled=!id;$("newGame").disabled=!id||busy||deleting||deletionStarted;
   renderSceneOptions(id);selectScene(preferences.game_scenes?.[id]||preferences.scene||scene,false);
   setDndNavigation(id==="dnd-2024");
   if(id==="sovereign-system"){$("title-skills").textContent="Personal Powers";$("nav-skills").querySelector(".nav-title").textContent="Personal Powers"}
@@ -53,7 +54,8 @@ async function switchGame(id){
     if(previous&&campaigns.some(c=>c.id===previous))await callTool("get_campaign",{campaign_id:previous});
     notice(campaigns.length?"Showing "+gameNames[id]+" saves.":"No "+gameNames[id]+" campaigns yet. Start one when ready.");
     publishGameContext();
-  }catch(error){notice(error.message)}finally{gameSwitching=false}
+    return true;
+  }catch(error){notice(error.message);return false}finally{gameSwitching=false;updateSyncStatus()}
 }
 let sovereignSearchTargets=new Map();
 const sovereignChildren=power=>["upgrades","evolutions"].flatMap(key=>Array.isArray(power[key])?power[key]:[]).filter(child=>child?.known_to_player!==false);
@@ -185,5 +187,8 @@ function renderSovereignty(next){
   $("sovereign-tab-"+sovereignTab).click();
 }
 $("gameSelect").onchange=()=>switchGame($("gameSelect").value);
-$("newGame").onclick=()=>sendPrompt("Create a NEW "+gameNames[currentGame]+" campaign with game_id="+currentGame+". Read this game's rules and begin its World Preview and normal creation choices. Preserve existing campaigns.");
+for(const button of document.querySelectorAll("[data-choose-game]"))button.onclick=async()=>{
+  if(await switchGame(button.dataset.chooseGame))await sendPrompt("I choose "+gameNames[currentGame]+" (game_id="+currentGame+"). Continue my DnDGPT request using this game mode.");
+};
+$("newGame").onclick=()=>{if(currentGame)sendPrompt("Create a NEW "+gameNames[currentGame]+" campaign with game_id="+currentGame+". Read this game's rules and begin its normal creation choices. Preserve existing campaigns.")};
 activateGame(currentGame);

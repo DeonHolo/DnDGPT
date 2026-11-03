@@ -530,18 +530,23 @@ class Engine:
                     "raw_rolls_included": show_rolls}
 
     def dashboard(self, owner, campaign_id=None, game_id=None):
-        from .game_profiles import DEFAULT_GAME, GAMES, validate_game, game_id as saved_game
+        from .game_profiles import DEFAULT_GAME, GAMES, GAME_INTRODUCTIONS, validate_game, game_id as saved_game
         context = self.campaign_context(owner, campaign_id) if campaign_id else {"campaign": None, "_meta": {}}
-        selected = saved_game(context["campaign"]) if campaign_id else game_id or DEFAULT_GAME
+        selected = saved_game(context["campaign"]) if campaign_id else game_id if game_id is not None else DEFAULT_GAME
         try:
-            validate_game(selected)
+            if selected is not None:
+                validate_game(selected)
         except ValueError as error:
             fail(422, "invalid_game", str(error))
         if campaign_id and game_id is not None and game_id != selected:
             fail(409, "game_mismatch", "This campaign belongs to a different game; open it in its own game")
         return {"app_version": APP_VERSION, "rules_version": RULES_VERSION,
                 "game_id": selected, "games": list(GAMES),
-                "campaigns": self.list_campaigns(owner, selected),
+                "mode_selection_required": selected is None,
+                "game_modes": ([{**game, "introduction": GAME_INTRODUCTIONS[game["id"]]} for game in GAMES]
+                               if selected is None else []),
+                "next_step": ("Introduce all three game modes and ask the player to choose before reading a game's rules, creating a campaign or rolling. Use an explicitly named mode or the named existing campaign directly." if selected is None else "Use this selected game's rules; selecting or opening it never resumes play."),
+                "campaigns": self.list_campaigns(owner, selected) if selected is not None else [],
                 "campaign": context["campaign"],
                 "view_preferences": self.get_view_preferences(owner),
                 "_meta": context["_meta"],

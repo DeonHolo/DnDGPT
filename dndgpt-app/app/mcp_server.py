@@ -76,7 +76,7 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         creation_uri = "ui://dndgpt/creation-v1.0-" + hashlib.sha256(creation_html.encode()).hexdigest()[:12] + ".html"
     server = FastMCP(
         "DnDGPT", stateless_http=True, json_response=True,
-        instructions="DnDGPT supports D&D 2024 (default game), Age of Convergence and Sovereign System through one connection. Existing saves select their own game. Read only that game's hardener/index and relevant sections. D&D has NO default adventure: FIRST offer published adventures plus an original premise and wait for the player to choose, unless already chosen or delegated. THEN build around its setting, tone and starting level. Guided character creation groups class+species in character turn 1 and all remaining choices in turn 2, with visible explanations. Quickplay is one explained character draft after adventure selection; standalone library drafts need no adventure. Reuse list_dnd_options summaries and retrieve selected exact rules. Published HTML/PDF sources are read automatically and cached; inspect visual pages for image-only stats. Keep reusable library sheets independent from campaign copies. Ordinary chat starts and selected advancement need no extra approval. Sovereign uses four core personal powers and upgrade-only personal growth; read sovereign-personal. Batch party/scene changes in one save. Keep the full HUD in the dashboard. Never mix homebrew rarity/LCK/MP/evolutions into D&D.",
+        instructions="On first DnDGPT use in a chat, FIRST call render_dashboard to open the dashboard automatically. Reuse the mounted dashboard and established campaign during ongoing play; do not add a render or mode question to every turn. Pass game_id only when the player explicitly names a mode, or campaign_id for a specifically requested save. Otherwise omit both: introduce D&D 2024 (classic D&D rules, published or original adventures), Age of Convergence (Earth-meets-fantasy power growth), and Sovereign System (core personal powers plus domain, generals and armies), and ask which they want before reading a book, choosing a save, creating a game or rolling. Never infer the mode from an old dashboard/widget preference or automatically use D&D. A named mode or specifically targeted existing campaign skips the question. Use the same connection; existing saves select their own game. Read only that game's hardener/index and relevant sections. D&D has NO default adventure: FIRST offer published adventures plus an original premise and wait for the player to choose, unless already chosen or delegated. THEN build around its setting, tone and starting level. Guided character creation groups class+species in character turn 1 and all remaining choices in turn 2, with visible explanations. Quickplay is one explained character draft after adventure selection; standalone library drafts need no adventure. Reuse list_dnd_options summaries and retrieve selected exact rules. Published HTML/PDF sources are read automatically and cached; inspect visual pages for image-only stats. Keep reusable library sheets independent from campaign copies. Ordinary chat starts and selected advancement need no extra approval. Sovereign uses four core personal powers and upgrade-only personal growth; read sovereign-personal. Batch party/scene changes in one save. Keep the full HUD in the dashboard. Never mix homebrew rarity/LCK/MP/evolutions into D&D.",
         token_verifier=verifier if config.configured else None,
         auth=AuthSettings(issuer_url=config.issuer, resource_server_url=config.resource_url,
                           required_scopes=[READ_SCOPE]) if config.configured else None,
@@ -87,11 +87,16 @@ def build_mcp(engine, config, verifier, creation_repository=None):
 
     server._mcp_server.version = APP_VERSION
 
-    def metadata(scope=READ_SCOPE, app_only=False):
+    def metadata(scope=READ_SCOPE, app_only=False, dashboard=False):
         scopes = [READ_SCOPE, WRITE_SCOPE] if scope == WRITE_SCOPE else [READ_SCOPE]
-        return {"securitySchemes": [{"type": "oauth2", "scopes": scopes}],
+        result = {"securitySchemes": [{"type": "oauth2", "scopes": scopes}],
                 "ui": {"visibility": ["app"] if app_only else ["model", "app"]},
                 "openai/widgetAccessible": True}
+        if dashboard:
+            result["ui"]["resourceUri"] = resource_uri
+            result["openai/outputTemplate"] = legacy_uri
+            result["openai/ui"] = {"entrypoints": [{"type": "thread"}, {"type": "global"}]}
+        return result
 
     def invoke(operation, write=False):
         token = get_access_token()
@@ -136,7 +141,7 @@ def build_mcp(engine, config, verifier, creation_repository=None):
                       "_meta": {**result.get("_meta", {}), "campaign_snapshot": result["campaign"]}}
         return result
 
-    @server.tool(annotations=read, meta=metadata())
+    @server.tool(annotations=read, meta=metadata(dashboard=True))
     def read_rules(document: Literal["rulebook", "hardener", "index"] = "rulebook",
                    offset: int = 0, section: str | None = None,
                    campaign_id: str | None = None, game_id: str | None = None) -> CallToolResult:
@@ -152,26 +157,32 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         A player's explicit custom rulebook takes precedence for that campaign.
         Reading rules never creates a campaign, rolls dice, resumes play or changes saves.
         For an existing campaign pass campaign_id: its saved game selects the book automatically.
-        Before creation choose dnd-2024 (default), age-of-convergence or sovereign-system. Fetch only that book.
+        No mode is implicit. Without game_id/campaign_id return the three-mode introduction and
+        open the dashboard; ask the player to choose. With a choice fetch only that book.
         D&D 2024 uses its own operational guide and lookup_dnd_reference for official SRD pages/options.
         Keep campaign_id/game_id with every section/page and cache by game plus source_sha256.
         """
         def read_selected(owner):
+            if campaign_id is None and game_id is None:
+                return engine.dashboard(owner)
             selected = saved_game(engine.get_campaign(owner, campaign_id)) if campaign_id else game_id or DEFAULT_GAME
             if campaign_id and game_id is not None and game_id != selected:
                 raise EngineError(409, "game_mismatch", "Read the rulebook belonging to this campaign's game")
             return rules_page(document, offset, section, selected)
         return invoke(read_selected)
 
-    @server.tool(annotations=write, meta=metadata(WRITE_SCOPE))
+    @server.tool(annotations=write, meta=metadata(WRITE_SCOPE, dashboard=True))
     def create_chat_game(name: str, action_id: str, disposable: bool = False,
-                         game_id: Literal["dnd-2024", "age-of-convergence", "sovereign-system"] = DEFAULT_GAME) -> CallToolResult:
+                         game_id: Literal["dnd-2024", "age-of-convergence", "sovereign-system"] | None = None) -> CallToolResult:
         """Create a FRESH chat-led character draft only on explicit new-game/test authorization.
         This does not roll, import, confirm a character, or start an adventure. Use disposable=true
         for tests. ChatGPT follows the complete rulebook and saves its choices through save_chat_update.
         Reuse exact action_id and arguments after uncertain delivery.
         Select the player's requested game; it is fixed for this save. Read that game's rules.
+        Without an explicit game_id, show the mode picker/dashboard and ask; create nothing.
         """
+        if game_id is None:
+            return invoke(lambda owner: engine.dashboard(owner))
         return invoke(lambda owner: {"campaign": chat_game.create(owner, name, action_id, disposable, game_id),
                                       "game_id": game_id, "standard_play": {"game_id": DND, "rules_version": "5.2.1", "attributes": ["STR","DEX","CON","INT","WIS","CHA"], "sheet_guide": "Read section=creation. Choose a published adventure or original premise FIRST; wait for the player unless chosen or delegated. Then tailor class+species together and the remaining choices together to its setting, tone and starting level. Quickplay is one explained character draft after selection. Reuse list_dnd_options."} if game_id == DND else {**rules_guidance(game_id), "game_id": game_id}}, True)
 
@@ -339,9 +350,12 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         from .creation_tools import register_creation_tools
         register_creation_tools(server, creation_repository, invoke, metadata, read, write, creation_uri)
 
-    @server.tool(annotations=read, meta=metadata())
-    def list_campaigns(game_id: Literal["dnd-2024", "age-of-convergence", "sovereign-system"] = DEFAULT_GAME) -> CallToolResult:
-        """List this authenticated account's stored sandboxes. Does not start or resume a game."""
+    @server.tool(annotations=read, meta=metadata(dashboard=True))
+    def list_campaigns(game_id: Literal["dnd-2024", "age-of-convergence", "sovereign-system"] | None = None) -> CallToolResult:
+        """List saves in the requested mode. Without a mode introduce all three and open the
+        dashboard picker first. Never select a mode or resume play implicitly."""
+        if game_id is None:
+            return invoke(lambda owner: engine.dashboard(owner))
         return invoke(lambda owner: {"game_id": game_id, "games": list(GAMES), "campaigns": engine.list_campaigns(owner, game_id)})
 
     preview_write = ToolAnnotations(readOnlyHint=False, destructiveHint=False,
@@ -369,7 +383,7 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         return invoke(lambda owner: campaign_lifecycle.delete(
             owner, campaign_id, expected_version, confirmation_token, confirm_permanent), True)
 
-    @server.tool(annotations=read, meta=metadata())
+    @server.tool(annotations=read, meta=metadata(dashboard=True))
     def get_campaign(campaign_id: str, view: Literal["full", "turn", "resume"] = "full") -> CallToolResult:
         """Read committed state without mutation, time advancement or raw rarity rolls.
         Use full for story/history decisions unless the relevant saved context is already present.
@@ -481,9 +495,13 @@ def build_mcp(engine, config, verifier, creation_repository=None):
     @server.tool(title="Campaign dashboard", annotations=read, meta=render_meta)
     def render_dashboard(campaign_id: str | None = None,
                          game_id: Literal["dnd-2024", "age-of-convergence", "sovereign-system"] | None = None) -> CallToolResult:
-        """Use when the player asks to open/show the campaign dashboard on desktop or mobile.
+        """FIRST DnDGPT call on invocation: automatically open this dashboard on desktop/mobile.
+        Pass game_id only when the player named a mode, or campaign_id for a specified save.
+        With neither, introduce all three modes and ask the player to choose. No automatic mode,
+        campaign creation, rules loading or gameplay. Explicit modes/saves skip the question.
         Call again when it is closed, missing or outdated, even for the same campaign.
-        get_campaign refreshes saved data but cannot open an absent UI. Return this component.
+        Common entry tools also carry this dashboard resource as a fallback. Return this component.
+        Reuse the mounted dashboard during ongoing play; do not render again each turn.
         Includes core chapters, Gallery and the selected game's panels. Read-only: never starts play.
         Once visibly mounted, normal saves/data calls update it without routine per-turn renders.
         """

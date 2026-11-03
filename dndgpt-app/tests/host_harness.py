@@ -344,12 +344,12 @@ async def test_journal_record(request: Request):
 
 
 @app.get("/test-legacy-widget")
-def test_legacy_widget():
+def test_legacy_widget(neutral: bool = False):
     """Phone-style bridge only: no standard ui/initialize response is available."""
     from app.presentation import dashboard_html
     shim = """<script>
     window.legacyCalls=[];
-    window.openai={displayMode:'inline',widgetState:{game_id:'age-of-convergence'},
+    window.openai={displayMode:'inline',toolOutput:{game_id:'age-of-convergence'},widgetState:{game_id:'age-of-convergence'},
       callTool:async(name,args)=>{
         window.legacyCalls.push(name);
         const response=await fetch('/test-rpc',{method:'POST',headers:{'Content-Type':'application/json'},
@@ -360,7 +360,23 @@ def test_legacy_widget():
       requestDisplayMode:async({mode})=>{window.openai.displayMode=mode;return {mode}}
     };
     </script>"""
+    if neutral:
+        shim = shim.replace("toolOutput:{game_id:'age-of-convergence'}", "toolOutput:{game_id:null,mode_selection_required:true}")
+        # Deliberately stale widgetState remains to catch implicit last-mode selection.
     return HTMLResponse(dashboard_html().replace("<head>", "<head>" + shim, 1))
+
+
+@app.get("/test-mode-launch")
+def test_mode_launch():
+    return FileResponse(HERE / "mode_launch.html")
+
+
+@app.post("/test-mode-launch-record")
+async def test_mode_launch_record(request: Request):
+    result = await request.json()
+    result["environment"] = "In-app browser, simulated legacy host, real authenticated MCP, disposable saves; not native ChatGPT"
+    (HERE.parent / "test-results/mode-launch-browser.json").write_text(json.dumps(result, indent=2), encoding="utf-8")
+    return {"saved": True}
 
 
 @app.get("/test-approvals")

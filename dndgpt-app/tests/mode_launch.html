@@ -1,0 +1,53 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DnDGPT mode launch checks</title>
+<style>body{background:#121711;color:#eee8db;font:15px/1.6 system-ui;margin:20px}iframe{width:1100px;max-width:none;height:1000px;border:1px solid #99865b}.pass{color:#b7d89b}.fail{color:#ffaaa2}button{padding:12px}</style>
+<h1>DnDGPT mode launch checks</h1><p>Disposable campaigns. Real authenticated MCP through a simulated host.</p><button id="run">Run checks</button><p id="result" role="status">Ready</p><ol id="results"></ol><iframe id="widget" src="/test-legacy-widget?neutral=true" title="Mode picker"></iframe>
+<script>
+const frame=document.getElementById('widget'),results=[],wait=ms=>new Promise(r=>setTimeout(r,ms));
+const assert=(value,message)=>{if(!value)throw Error(message)};
+async function until(fn){for(let i=0;i<120;i++){if(fn())return;await wait(100)}throw Error('Timed out waiting for UI')}
+async function test(name,fn){try{await fn();results.push({name,passed:true})}catch(e){results.push({name,passed:false,error:e.message})}const li=document.createElement('li');li.className=results.at(-1).passed?'pass':'fail';li.textContent=JSON.stringify(results.at(-1));document.getElementById('results').append(li)}
+document.getElementById('run').onclick=async()=>{
+ document.getElementById('run').disabled=true;const w=frame.contentWindow,d=frame.contentDocument;
+ await until(()=>d.getElementById('modePicker')&&!d.getElementById('modePicker').hidden&&w.legacyCalls?.includes('render_dashboard'));
+ const before=await(await fetch('/test-state')).json();
+ await test('Unspecified launch introduces all three games and ignores stale widget selection',async()=>{
+  assert(d.getElementById('gameSelect').value==='','A game was implicitly selected');
+  const cards=[...d.querySelectorAll('[data-choose-game]')];assert(cards.length===3,'Missing game introduction');
+  for(const name of ['D&D 2024','Age of Convergence','Sovereign System'])assert(d.getElementById('modePicker').textContent.includes(name),'Missing '+name);
+  assert(d.getElementById('newGame').disabled&&d.getElementById('hud').hidden&&d.getElementById('status').hidden,'Old campaign controls visible');
+  assert(!w.lastFixturePrompt,'Unspecified launch sent an action to chat');
+ });
+ await test('Picker stays readable in all layouts at narrow and wide widths',async()=>{
+  for(const layout of ['original','reclaimed','orrery','ember'])for(const width of [375,768,1100]){
+   frame.style.width=width+'px';const select=d.getElementById('layoutSelect');select.value=layout;select.dispatchEvent(new w.Event('change'));await wait(60);
+   assert(d.documentElement.scrollWidth<=width+2,layout+' overflow at '+width);
+   for(const button of d.querySelectorAll('[data-choose-game]'))assert(button.getBoundingClientRect().height>=44,layout+' small choice target');
+  }
+  frame.style.width='1100px';d.getElementById('layoutSelect').value='original';d.getElementById('layoutSelect').dispatchEvent(new w.Event('change'));
+ });
+ await test('An early rule call without a mode keeps the picker instead of loading a book',async()=>{
+  const response=await w.callTool('read_rules',{document:'hardener'}),data=response.structuredContent;
+  assert(data.mode_selection_required&&data.game_id===null&&!data.content,'A rulebook was selected');
+  assert(!d.getElementById('modePicker').hidden&&d.getElementById('gameSelect').value==='','Picker was replaced');
+ });
+ await test('A mode choice submits the named game and only opens that mode',async()=>{
+  d.querySelector('[data-choose-game="sovereign-system"]').click();await until(()=>w.lastFixturePrompt?.includes('I choose Sovereign System'));
+  assert(d.getElementById('gameSelect').value==='sovereign-system'&&d.getElementById('modePicker').hidden,'Chosen mode did not open');
+  assert(d.getElementById('hero').textContent==='No campaign selected','An old save was opened automatically');
+  assert(w.openai.widgetState.modelContent.game_id==='sovereign-system','Choice was not shared with model context');
+ });
+ await test('A new unspecified invocation clears the old mode and named modes bypass the question',async()=>{
+  await w.callTool('render_dashboard',{game_id:null});assert(!d.getElementById('modePicker').hidden&&d.getElementById('gameSelect').value==='','Old mode stuck');
+  for(const game of ['dnd-2024','age-of-convergence','sovereign-system']){
+   await w.callTool('render_dashboard',{game_id:game});assert(d.getElementById('modePicker').hidden&&d.getElementById('gameSelect').value===game,'Explicit '+game+' did not bypass the question');
+  }
+  await w.callTool('render_dashboard',{game_id:null});
+ });
+ await test('Browsing and choosing a mode preserve saved state and fictional time',async()=>{
+  const after=await(await fetch('/test-state')).json();assert(JSON.stringify(after.campaign)===JSON.stringify(before.campaign),'Saved campaign changed');assert(JSON.stringify(after.audit)===JSON.stringify(before.audit),'Campaign action history changed');
+ });
+ document.getElementById('result').textContent=results.filter(r=>r.passed).length+' / '+results.length+' checks passed';
+ await fetch('/test-mode-launch-record',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({results,calls:w.legacyCalls})});
+};
+if(location.search.includes('autorun'))frame.addEventListener('load',()=>document.getElementById('run').click(),{once:true});
+</script></html>

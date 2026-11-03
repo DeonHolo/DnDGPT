@@ -19,7 +19,7 @@ from .test_sovereign import fixture_state
 def seed(engine, selected=AGE, owner="owner-a"):
     state = fixture_state(engine) if selected == SOVEREIGN else ChatGame(engine).create(owner, "Living test", "living-create", True)
     state.update(phase="adventure", paused=False)
-    for key in ("rules_check", "resume_brief"):
+    for key in ("rules_check", "resume_brief", "personal_progression"):
         state.pop(key, None)
     with engine.store.transaction() as db:
         records.update(db, "campaigns_v1", {"id": state["id"]}, {"data": canonical(state)})
@@ -199,7 +199,7 @@ def test_sixty_turn_authenticated_save_chain_keeps_early_promises_and_closed_que
     with engine.store.transaction() as db:
         row = records.find(db, "campaigns_v1", {"id": state["id"]}, limit=1)[0]
         state.update(phase="adventure", paused=False)
-        for key in ("rules_check", "resume_brief"):
+        for key in ("rules_check", "resume_brief", "personal_progression"):
             state.pop(key, None)
         records.update(db, "campaigns_v1", {"id": state["id"]}, {"data": canonical(state)})
     durations = []

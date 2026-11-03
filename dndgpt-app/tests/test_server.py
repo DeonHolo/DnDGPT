@@ -104,7 +104,10 @@ def test_mcp_initialization_tools_and_ui_resource(web):
     assert by_name["execute_confirmed_action"]["_meta"]["ui"]["visibility"] == ["app"]
     for name, item in by_name.items():
         assert item["securitySchemes"][0]["type"] == "oauth2"
-        if name != "render_dashboard":
+        if name in {"render_dashboard", "read_rules", "create_chat_game", "list_campaigns", "get_campaign"}:
+            assert item["_meta"]["ui"]["resourceUri"] == render["_meta"]["ui"]["resourceUri"]
+            assert item["_meta"]["openai/outputTemplate"] == render["_meta"]["openai/outputTemplate"]
+        else:
             assert "resourceUri" not in item["_meta"]["ui"]
     resource = rpc(web, "resources/read", {"uri": render["_meta"]["ui"]["resourceUri"]})["contents"][0]
     assert resource["mimeType"] == "text/html;profile=mcp-app"
@@ -234,5 +237,5 @@ def test_hosted_rules_are_complete_paginated_read_only_text(web, tokens, documen
 @pytest.mark.parametrize("arguments", [{"offset": -1}, {"offset": 10**9},
                                        {"document": "../../.env"}])
 def test_hosted_rules_reject_invalid_pages_and_arbitrary_files(web, arguments):
-    assert tool(web, "read_rules", arguments)["isError"] is True
+    assert tool(web, "read_rules", {"game_id": "age-of-convergence", **arguments})["isError"] is True
 

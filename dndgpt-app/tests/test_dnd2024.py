@@ -139,8 +139,8 @@ def test_rules_search_exact_name_source_scope_and_pagination():
             assert all(r["document"]["key"] == "srd-2024" for r in rows)
 
 
-def test_mcp_defaults_rules_library_scope_and_character_copy_retry(web, tokens):
-    new = tool(web, "create_chat_game", {"name": "Quickplay test", "action_id": "mcp-dnd-default", "disposable": True})
+def test_mcp_selected_rules_library_scope_and_character_copy_retry(web, tokens):
+    new = tool(web, "create_chat_game", {"name": "Quickplay test", "action_id": "mcp-dnd-selected", "disposable": True, "game_id": GAME})
     assert not new.get("isError"), new
     state = new["structuredContent"]["campaign"]
     assert state["game_id"] == GAME

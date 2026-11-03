@@ -8,11 +8,16 @@ from pathlib import Path
 AGE = "age-of-convergence"
 SOVEREIGN = "sovereign-system"
 DND = "dnd-2024"
-DEFAULT_GAME = DND
+DEFAULT_GAME = None
 VERSION = "1.0"
 GAMES = ({"id": DND, "name": "D&D 2024", "rules_version": "5.2.1"},
          {"id": AGE, "name": "Age of Convergence", "rules_version": VERSION},
          {"id": SOVEREIGN, "name": "Sovereign System", "rules_version": VERSION})
+GAME_INTRODUCTIONS = {
+    DND: "D&D's revised 2024 rules: classic classes, species, spells and character sheets. Choose a published adventure or an original D&D story, solo or with a party.",
+    AGE: "A power-fantasy RPG where Earth meets other worlds. Discover generated classes and powers, rarity-ranked rewards and flexible personal builds.",
+    SOVEREIGN: "A sovereign power fantasy: develop four core personal powers while growing your domain, autonomous generals and armies. Adventure personally or focus on conquest.",
+}
 RULES = Path(__file__).resolve().parent.parent / "rules"
 
 

@@ -2,6 +2,8 @@
 
 ## Sovereign core powers — 2026-11-03
 
+The same candidate adds a neutral entry: open the dashboard first, introduce all three modes and ask when none was named. An explicit mode or targeted save opens directly. Early rules/list/create calls also provide the chooser; a missing mode creates nothing. Stale widget preferences no longer choose a game. See docs/MODE_SELECTION_2026_11_03.md.
+
 Candidate runtime **1.1.4** replaces Sovereign personal skill acquisition with a compact four-power kit and integrated growth. Creation chooses two refinements instead of new standalone Signatures; levels grant two personal upgrades plus the separate guaranteed permanent Sovereign upgrade. The named power list keeps Overview, Full rules and Upgrades without activation categories. Legacy powers/history remain, and actual banked points carry once on the next ordinary save. Age of Convergence and D&D retain their mechanics. Verification: `docs/SOVEREIGN_CORE_POWERS_2026_11_03.md`.
 
 
