@@ -648,7 +648,7 @@ function renderAbilityInspector(article,ability){
   const suffix=String(ability.id||"ability").replace(/[^a-z0-9_-]/gi,"-");
   article.append(element("h3",ability.name||"Unnamed ability","rarity-"+rarity));
   if(typeof ability.flavor_text==="string"&&ability.flavor_text.trim())article.append(element("p",ability.flavor_text,"ability-flavor"));
-  paragraph(article,[rarity,activationLabel(ability)].join(" · "),"article-meta");
+  paragraph(article,currentGame==="sovereign-system"?rarity:[rarity,activationLabel(ability)].join(" · "),"article-meta");
   const facts=element("dl",undefined,"ability-facts");
   for(const [label,value]of [["Cost",skillCost(ability)],["Reach",readableReach(ability)],["Target",ability.target],
     ["Attack / save",ability.attack_save],["Damage",ability.damage],["Duration",ability.duration],["Cooldown",skillCooldown(ability)]]){
@@ -668,13 +668,13 @@ function renderAbilityInspector(article,ability){
     tabs.append(button);
   }
   article.append(tabs,...Object.values(panels));
-  const mechanics=abilityCopy(ability.mechanics_display??ability.mechanics??ability.effect??ability.effects??ability.rules),overview=abilityCopy(ability.simple||ability.description);
+  const mechanics=abilityCopy(ability.mechanics_display??ability.mechanics??ability.full_rules??ability.effect??ability.effects??ability.rules),overview=abilityCopy(ability.simple||ability.description);
   if(overview)renderValue(panels.overview,overview);
   else if(typeof mechanics==="string"){
     const first=mechanics.split(/(?<=[.!?])\s+(?=[A-Z])/)[0];paragraph(panels.overview,briefText(first,420));
     if(first!==mechanics||first.length>420)paragraph(panels.overview,"Excerpt · See Full rules.","muted");
   }else if(mechanics)renderValue(panels.overview,mechanics);else paragraph(panels.overview,"Full mechanics have not been recorded.","muted");
-  if(skillGroup(ability)===3)paragraph(panels.overview,"Outside combat · "+activationLabel(ability),"chapter-note");
+  if(currentGame!=="sovereign-system"&&skillGroup(ability)===3)paragraph(panels.overview,"Outside combat · "+activationLabel(ability),"chapter-note");
   if(ability.ready===false&&meaningful(ability.status_reason))paragraph(panels.rules,ability.status_reason,"muted");
   if(mechanics)renderValue(panels.rules,mechanics);else paragraph(panels.rules,"Full mechanics have not been recorded.","muted");
   const passiveRequirement=activationLabel(ability)==="Passive"&&typeof ability.cost==="string"?ability.cost.split(";").slice(1).join(";").trim():undefined;
@@ -686,7 +686,8 @@ function renderAbilityInspector(article,ability){
     for(const {label,value}of upgrades){
       const section=element("section",undefined,"source-note");paragraph(section,label,"eyebrow");
       if(value&&typeof value==="object"){
-        section.append(element("h4",value.name||label));
+        section.append(element("h4",value.name||label,value.rarity?"rarity-"+String(value.rarity).toUpperCase():undefined));
+        if(value.rarity)paragraph(section,String(value.rarity).toUpperCase(),"entry-rarity rarity-"+String(value.rarity).toUpperCase());
         if(typeof value.flavor_text==="string"&&value.flavor_text.trim())section.append(element("p",value.flavor_text,"ability-flavor"));
         const change=upgradeContent(value,ability);
         if(change)renderValue(section,change);else if(!value.name)paragraph(section,"Ask your GM to record what this upgrade changes.","muted");
@@ -714,8 +715,9 @@ function renderSkills(abilities){
   }
   if(state?.mode==="chat"&&state.phase==="character_draft")paragraph(root,"Saved abilities · character creation is still in progress.","chapter-note");
   if(state?.rules_check?.missing?.length){
-    const note=element("aside",undefined,"rules-notice");paragraph(note,"Class kit still needs: "+state.rules_check.missing.join(", ")+".");paragraph(note,"Ask your GM to complete the class kit before confirming the character.");root.append(note);
+    const note=element("aside",undefined,"rules-notice");paragraph(note,"Class kit still needs: "+state.rules_check.missing.join(", ")+".");paragraph(note,"Ask your GM to complete the class kit before starting.");root.append(note);
   }
+  if(currentGame==="sovereign-system"){renderPersonalPowers(root,abilities);return}
   const tabs=element("div",undefined,"gear-tabs skills-tabs");tabs.id="skillTabs";
   tabs.setAttribute("role","tablist");tabs.setAttribute("aria-label","Skills and class ability groups");root.append(tabs);
   for(const [index,[id,label]]of skillTabs.entries()){
@@ -1014,7 +1016,7 @@ function renderCampaign(next){
   renderResources(c);
   $("characterPreview").textContent="Level "+c.level+" · XP "+c.xp+" / "+c.xp_next;
   const regularAbilities=(next.abilities||[]).filter(a=>next.game_id!=="sovereign-system"||!isSovereignFoundation(a));
-  $("skillsPreview").textContent=regularAbilities.length+" owned · "+(next.mode==="chat"&&next.phase==="character_draft"?"creation draft":regularAbilities.filter(a=>skillStatus(a)==="READY").length+" ready");
+  $("skillsPreview").textContent=next.game_id==="sovereign-system"?regularAbilities.length+" personal powers":regularAbilities.length+" owned · "+(next.mode==="chat"&&next.phase==="character_draft"?"creation draft":regularAbilities.filter(a=>skillStatus(a)==="READY").length+" ready");
   $("healthPreview").textContent=next.conditions.length+" recorded conditions · DEF "+c.def;
   const combatView=sovereignCombatView(next);
   $("summonsPreview").textContent=combatView.summons.length+(combatView.summons.length===1?" ally · ":" allies · ")+combatView.enemies.length+" active enemies";
@@ -1056,8 +1058,10 @@ function renderCampaign(next){
   }
   $("character").append(progression);
   const freeEvolutions=Math.max(0,(next.reward_credits?.earned||0)-(next.reward_credits?.spent?.length||0));
-  if(freeEvolutions)paragraph($("character"),"Banked Skill Evolution credits · "+freeEvolutions+" · ask your GM to use one when ready.","pending");
-  const unspent=[["Attribute",c.attribute_points],["Skill",c.skill_points],["Talent",c.talent_points]].filter(([,value])=>value>0);
+  if(freeEvolutions)paragraph($("character"),(next.game_id==="sovereign-system"?"Quest upgrades available · ":"Banked Skill Evolution credits · ")+freeEvolutions+" · ask your GM to use one when ready.","pending");
+  const personal=next.personal_progression;
+  if(personal?.upgrades_available)paragraph($("character"),"Personal upgrades available · "+personal.upgrades_available,"pending");
+  const unspent=(currentGame==="sovereign-system"?[["Attribute",c.attribute_points]]:[["Attribute",c.attribute_points],["Skill",c.skill_points],["Talent",c.talent_points]]).filter(([,value])=>value>0);
   if(unspent.length)paragraph($("character"),"Unspent points · "+unspent.map(([label,value])=>label+" "+value).join(" · "));
   if(next.phase==="character_draft")paragraph($("character"),"Character draft · finish your choices in chat. Your GM saves your story, equipment and first scene together.","pending");
   if(next.phase==="ready")paragraph($("character"),"Character prepared · your GM can save the completed build and first scene directly from chat.","pending");

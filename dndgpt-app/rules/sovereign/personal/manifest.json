@@ -1,0 +1,126 @@
+{
+  "rulebook": [
+    {
+      "section": "creation-order",
+      "file": "section-creation-order.txt",
+      "source_sha256": "a9964fe4d7f93078802fccef727292a650ba89927684bb6282f05ebd4cce2545"
+    },
+    {
+      "section": "generation",
+      "file": "section-generation.txt",
+      "source_sha256": "f6f7c800390621b74fe3c4da6f3bc839650a9d4e8f85c8aeb7f864329ffe06bc"
+    },
+    {
+      "section": "utility",
+      "file": "section-utility.txt",
+      "source_sha256": "44b1f090f7df4643ddbbfc7788658b67aa943d67aeb487711dc5422ebc0f1021"
+    },
+    {
+      "section": "class-craft",
+      "file": "section-class-craft.txt",
+      "source_sha256": "db6562f484e40a4430c9cc7df6aa02bcf43a9f854c0449df918bc63ec706c664"
+    },
+    {
+      "section": "7",
+      "file": "section-7.txt",
+      "source_sha256": "c664a805de817704a43ef177f1e68af70b8eb042c3b9b2c3ffa0e7fe710130aa"
+    },
+    {
+      "section": "8",
+      "file": "section-8.txt",
+      "source_sha256": "580637f9f55acc6f2ee1893c8cb7361c2bc6fea6aa6c662cf79ddf34c570c8e9"
+    },
+    {
+      "section": "9",
+      "file": "section-9.txt",
+      "source_sha256": "622f8a04411c54984b489cfcb3622a35eb29fb48a8b039d87dd8920ec7c1d8da"
+    },
+    {
+      "section": "10",
+      "file": "section-10.txt",
+      "source_sha256": "d4d921cdcf68796f52d9b93e96ec9c23c726de62b8fe7e1f38188a2516fb1322"
+    },
+    {
+      "section": "11",
+      "file": "section-11.txt",
+      "source_sha256": "e3b80b17b8a88d471b7a6f3e4bd9a206f95f9290518d8798bf22eb88436b7247"
+    },
+    {
+      "section": "18",
+      "file": "section-18.txt",
+      "source_sha256": "f573ab915a262b1a093e9156a69499f9ed3104d2446a1d284d9afaa4784f28bb"
+    },
+    {
+      "section": "19",
+      "file": "section-19.txt",
+      "source_sha256": "5ee8aa6c88aa9be97fd9d7d0bba136de7fa8d019e66f388e43ef001b4e1ce4b0"
+    },
+    {
+      "section": "20",
+      "file": "section-20.txt",
+      "source_sha256": "93a38ef04e6a2371cf22019579d7ab272417ae45ec87631b1b0f9130a48e41bc"
+    },
+    {
+      "section": "21",
+      "file": "section-21.txt",
+      "source_sha256": "d592029d0ebd76458e2393a7964ca55681d1b869bfc2e5bcc592cdb5ece751ab"
+    },
+    {
+      "section": "22",
+      "file": "section-22.txt",
+      "source_sha256": "7573705c89768404e42dd41545c1bf9598181d8f72ca095c2a43e8bd4ed62ef4"
+    },
+    {
+      "section": "34",
+      "file": "section-34.txt",
+      "source_sha256": "8629506f40e9bc4436c35ab94fe7b44cad50f64f68b014a9b6c3ed07baea20fe"
+    },
+    {
+      "section": "36",
+      "file": "section-36.txt",
+      "source_sha256": "2cd3a0a7b48ddfcbce7c62af8c881fb983d18889fe74cb43cbd028e869969747"
+    },
+    {
+      "section": "37",
+      "file": "section-37.txt",
+      "source_sha256": "58c6678270c1435390ffe632d27fd6f0c75ebc16aa1e5eaa179c37d0fa121f59"
+    },
+    {
+      "section": "38",
+      "file": "section-38.txt",
+      "source_sha256": "5e721aa04fe460efeb96ca8218236bfe8ed20745d1b47f7efc4bb8100718e253"
+    },
+    {
+      "section": "43",
+      "file": "section-43.txt",
+      "source_sha256": "70271168580db667b1db5653cc7e97d73ef1a9228188d5d3e5453a4ad96f87ca"
+    },
+    {
+      "section": "45",
+      "file": "section-45.txt",
+      "source_sha256": "5c21cac0190ab19ccc9e8649394c5e5f6e9d629142b64261019d1cc335f95ef6"
+    },
+    {
+      "section": "46",
+      "file": "section-46.txt",
+      "source_sha256": "7d7d87acbca476ef6541c47cca33a002c885ed2a7793f88f6c214c307c76fb88"
+    }
+  ],
+  "hardener": [
+    {
+      "id": "kit",
+      "old": "Standard: STR, DEX, INT, CHA, LCK, HP, MP. Starting HP = 45 + 3 × STR; MP = 75 + 5 × INT before earned changes. Epic/Legendary class kits require Active, Passive, Reaction, Free Action and one class Utility; UNIQUE requires two distinct class Utilities. Class powers inherit class rarity. Independent Utilities use normal rarity/Luck and acquisition slots. Utility describes noncombat purpose and can be Active OR Passive. Reactions describe timing and can attack, disrupt or protect; preserve clear triggers, counterplay and the normal budget. Background modifies ONE actually owned parent; an Imprint/Evolution adds no separate activation.",
+      "new": "Standard resources/attributes remain. Read sovereign-personal: FOUR substantial personal powers, optionally a justified fifth; no activation-category or Utility quota. Uses retain actual costs/timing and combat budgets. Class powers inherit rarity; refinements retain their own grade. Creation chooses two nested refinements instead of standalone Signatures. Title/Background effects stay nested. Existing characters keep earned powers."
+    },
+    {
+      "id": "utility",
+      "old": "Utility offers need three ordinary uses across two problem types and whole-kit overlap checks.",
+      "new": "Practical applications belong inside the actual core powers. Test broad ordinary usefulness; do not manufacture a niche Utility skill or a new MP bill for routine orders."
+    },
+    {
+      "id": "growth",
+      "old": "Read 17-22/37: freeze clocks/hazards for pending advancement; preserve tracks, offer counts, rolls and banking. Selections commit directly; clear the freeze when resolved and continue queued actions, honoring manual pause. Chapter 19: standalone passives can evolve. Dependent riders stay nested in their base's Upgrades, preserving prior children and combined Full rules; further evolutions target the base. Read starting-gear: precommit class/story slot weights, draw four functional pieces into any legal slots, and weave them into Your story. Save receipt/item_ids and essentials. Read 23-28 for gear/weight/loot/crafting/durability, 31/32 for options/quests. Read quest-journal: finite objectives/finish line, System rewards separate from NPC payment, once-only server settlement; no duplicate XP/funds/items. Offer five evolutions on quest completion, with optional banking; simultaneous level-up allows one SP purchase plus one free purchase. Spend the free credit with its nested parent update, no SP. Read 32A: 10/30/50/70% event rates, one conditional world_event call, cached regional pool; record event_transition in the normal save. A missing check is not “no event”. Preserve the two-decision ceiling; compress routine preparation for action-seeking players without inventing attacks.",
+      "new": "Read sovereign-personal/sovereign-progression and 18-22/37: each level gives two personal upgrades and one permanent Sovereign upgrade, with one attribute point; fourth-level milestones give an additional major personal refinement. Personal offers improve OWNED powers only. No Talent acquisition board or extra standalone skill drops. Freeze actual advancement choices, allow explicit banking, commit selections together and continue queued actions without another approval. Save spend_personal_upgrades=[{ability_id,upgrade_id}] with nested children and changed combined rules. Ledger totals are automatic; do not add old Skill/Talent points. Legacy banked points carry once; owned powers/history stay. Additional standalone powers need an explicit player request and personal_power_exception. Quest evolutions remain separate free parent upgrades. Read starting-gear/23-28 for the class-budgeted outfit and gear; quest-journal/31-32 for finite objectives, promised System rewards and once-only payouts. Read 32A for 10/30/50/70% event checks; reuse regional pools and save event_transition. A missing check is not no-event. Keep the two-decision obstacle ceiling."
+    }
+  ]
+}

@@ -154,10 +154,8 @@ def test_sovereign_starting_gift_and_cached_start_work_together_without_approval
     parents = [{"id": role, "name": role.title(), "scope": "sovereign", "sovereign_role": role,
                 "activation": "Passive", "rarity": "UNIQUE", "mechanics": "The existing permanent foundation.",
                 "flavor_text": "The realm remembers."} for role in ("domain", "general", "army")]
-    regular = [{"id": str(i), "name": "Fixture skill "+str(i), "activation": activation,
-                "source": "Class", "group": group, "rarity": "UNIQUE"}
-               for i, (activation, group) in enumerate([(a, "Combat") for a in
-                   ("Active", "Passive", "Reaction", "Free action")] + [("Active", "Utility")]*2)]
+    from .test_personal_powers import core_powers
+    regular = core_powers()
     args["changes"].update(sovereignty=strategy)
     args["changes"]["upsert"]["abilities"] = parents + regular
     ready = tool(web, "save_chat_update", {**args, "action_id": "complete-sovereign-build", "begin_adventure": False})

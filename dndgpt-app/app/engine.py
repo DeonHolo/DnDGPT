@@ -83,6 +83,8 @@ def public_state(state):
         if result["game_id"] == "sovereign-system":
             from .sovereignty import sovereign_kit_check
             result["rules_check"]["sovereign_kit"] = sovereign_kit_check(state)
+            from .personal_powers import summary
+            result["personal_progression"] = summary(state)
     result["rarity_candidates"] = {
         key: {"final_rarity": roll["final_rarity"], "enhanced": roll["enhanced"]}
         for key, roll in result["rarity_candidates"].items()}

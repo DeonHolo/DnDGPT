@@ -20,7 +20,7 @@ function searchPublicText(value){
 function searchPowerText(ability,child){
   if(child)return [child.name,child.rarity,child.flavor_text,searchPublicText(upgradeContent(child,ability))].filter(Boolean).join(" ");
   return [ability.name,ability.rarity,activationLabel(ability),ability.flavor_text,
-    ...[ability.simple||ability.description,ability.mechanics_display??ability.mechanics??ability.effect??ability.effects??ability.rules,
+    ...[ability.simple||ability.description,ability.mechanics_display??ability.mechanics??ability.full_rules??ability.effect??ability.effects??ability.rules,
       ability.target,ability.damage,ability.duration,ability.prerequisites,ability.stacking,ability.manifestation??ability.visual]
       .map(value=>searchPublicText(abilityCopy(value)))].filter(Boolean).join(" ");
 }
@@ -54,7 +54,7 @@ function refreshDashboardSearch(){
   for(const ability of state.abilities||[]){
     if(ability.known_to_player===false)continue;
     const foundation=isSovereignFoundation(ability)&&currentGame==="sovereign-system";
-    const section=foundation?"Sovereignty":("Skills · "+skillTabs[skillGroup(ability)][1]);
+    const section=foundation?"Sovereignty":currentGame==="sovereign-system"?"Personal Powers":("Skills · "+skillTabs[skillGroup(ability)][1]);
     add(ability.name,section,searchPowerText(ability),()=>openSearchPower(ability,"rules"));
     for(const key of ["evolutions","imprints","integrated_imprints","upgrades"]){
       const children=Array.isArray(ability[key])?ability[key]:ability[key]?[ability[key]]:[];
@@ -96,8 +96,13 @@ function openSearchPower(ability,view,child){
     selectCompanionPage("sovereignty");$("sovereign-tab-"+({domain:"domain",general:"commanders",army:"forces"}[ability.sovereign_role]))?.click();
     return sovereignSearchTargets.get(ability.id+":"+(child?.id||view));
   }else{
-    selectCompanionPage("skills");const tab=skillTabs[skillGroup(ability)][0];selectSkillTab(tab);
-    [...document.querySelectorAll("#skill-page-"+tab+" [data-ability-id]")].find(b=>b.dataset.abilityId===ability.id)?.click();
+    selectCompanionPage("skills");
+    if(currentGame==="sovereign-system"){
+      [...document.querySelectorAll("#personalPowersList [data-ability-id]")].find(b=>b.dataset.abilityId===ability.id)?.click();
+    }else{
+      const tab=skillTabs[skillGroup(ability)][0];selectSkillTab(tab);
+      [...document.querySelectorAll("#skill-page-"+tab+" [data-ability-id]")].find(b=>b.dataset.abilityId===ability.id)?.click();
+    }
   }
   const suffix=String(identity||"ability").replace(/[^a-z0-9_-]/gi,"-");
   const button=$("ability-view-"+view+"-"+suffix);for(let node=button;node;node=node.parentElement)if(node.tagName==="DETAILS")node.open=true;

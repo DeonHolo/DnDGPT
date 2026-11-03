@@ -20,7 +20,7 @@ STATE_FIELDS = {"id", "name", "version", "mode", "rules_version", "rules_profile
                 "notes", "fictional_time_seconds", "world", "creation", "advancement", "funds",
                 "rarity_candidates", "last_event", "continuity", "restored_from"} | COLLECTIONS
 STATE_FIELDS |= {"sovereignty", "quest_settlements", "reward_credits", "event_tracking", "campaign_life", "campaign_preferences"}
-STATE_FIELDS |= {"party", "hero_id", "party_mode", "adventure"}
+STATE_FIELDS |= {"party", "hero_id", "party_mode", "adventure", "personal_powers"}
 
 
 def digest(value):
@@ -48,7 +48,7 @@ def validate_archive(archive):
             or not secrets.compare_digest(digest(source), checksum)):
         fail(422, "archive_checksum", "Campaign export is damaged or its checksum does not match")
     required = (STATE_FIELDS - {"continuity", "restored_from", "rules_profile", "game_id", "game_rules_version", "sovereignty",
-                               "quest_settlements", "reward_credits", "event_tracking", "campaign_life", "campaign_preferences", "party", "hero_id", "party_mode", "adventure"})
+                               "quest_settlements", "reward_credits", "event_tracking", "campaign_life", "campaign_preferences", "party", "hero_id", "party_mode", "adventure", "personal_powers"})
     if not required <= source.keys() or source["mode"] != "chat":
         fail(422, "invalid_archive", "Only complete chat-led campaign snapshots can be restored")
     if type(source["phase"]) is not str or source["phase"] not in {"character_draft", "ready", "adventure"}:

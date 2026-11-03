@@ -1,0 +1,8 @@
+# 36. SOVEREIGN CREATION INTERFACE
+
+Use the four grouped creation turns in Sections 7-11. Class previews expose four recognizable personal powers and concrete Domain/General/Army starting functionality. The selected class gets full details on the next existing turn. Personal refinements, Title selection and the free Sovereign upgrade share the third turn; background, attributes and name share the fourth.
+
+Explain every selectable benefit and use full names. Each named personal power has Overview, Full rules and Upgrades; do not add activation-category tabs, extra Signature skill rows or unsupported controls. A fifth class power needs a real design reason. Keep rarity colors fixed, narrow-screen wrapping readable and Your story collapsible. Final choices save directly with the first scene; no extra confirmation screen.
+
+---
+

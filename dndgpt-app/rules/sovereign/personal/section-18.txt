@@ -1,0 +1,10 @@
+# 18. SOVEREIGN LEVEL-UP AND TIME FREEZE
+
+Each earned level grants ONE Attribute Point, TWO personal power upgrade selections, and ONE guaranteed permanent Sovereign Evolution. The personal selections replace separate Skill Points and Talent Points; they fund upgrades to owned personal powers only. Every fourth level also grants one free major personal refinement under Section 20. Domain milestones, General XP and Army veterancy remain independent.
+
+Resolve the triggering action and its real consequences, apply the shared Vital Surge, then freeze fictional time for actual advancement choices. Show one personal upgrade board and the permanent Sovereign choices together, plus the attribute allocation and a milestone selection when earned. No separate Talent Web or standalone skill acquisition board appears. The player may select or explicitly bank choices; commit selected changes and continue already queued actions without another approval, respecting a manual pause.
+
+The server grants personal and Sovereign allowances from actual level gains, including legitimate multi-level gains. Do not manually add skill_points/talent_points or personal ledger totals. Clock, cooldown, condition and summon timers remain frozen until selections/banking resolve. No new player micro-turn is required for each track.
+
+---
+

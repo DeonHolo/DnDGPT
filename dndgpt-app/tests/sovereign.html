@@ -41,12 +41,34 @@ document.getElementById('run').onclick=async()=>{
   assert(!d.querySelector('.power-scopes'),'Redundant Sovereign filter remained');
   assert(skills.innerText.includes('Iron sweep')&&skills.innerText.includes('Open the fortress gate'),'Regular command or attack disappeared');
   assert(!skills.textContent.includes('Fortress domain')&&!skills.textContent.includes('Hold the line'),'Foundation or commander power leaked into regular Skills');
-  assert(d.querySelectorAll('#skillTabs [role="tab"]').length===4,'Existing skill groups regressed');
+  assert(!d.getElementById('skillTabs'),'Activation-category tabs remained');assert(d.getElementById('personalPowersList'),'Named personal list missing');
   for(const [tab,role]of [['domain','domain'],['commanders','general'],['forces','army']]){
    d.getElementById('nav-sovereignty').click();d.getElementById('sovereign-tab-'+tab).click();
    const root=d.querySelector('#sovereign-panel-'+tab+' .sovereign-card');assert(root,'Owner absent: '+role);for(const detail of root.querySelectorAll('details'))detail.open=true;
    assert(!root.querySelector('.reading-tabs'),'Foundation rendered as another skill');assert(root.innerText.includes('permanent '+role),'Combined rules missing');assert(root.querySelector('.sovereign-earned').innerText.includes(role[0].toUpperCase()+role.slice(1)+' growth'),'Acquired upgrade missing');
   }
+ });
+ await test('Named core powers retain details, search and readable selection in every layout',async()=>{
+  d.getElementById('nav-skills').click();const panel=d.getElementById('skills');
+  assert(d.getElementById('nav-skills').innerText.includes('Personal Powers'),'Personal navigation label missing');
+  assert(d.querySelectorAll('#personalPowersList [data-ability-id]').length===4,'Expected four personal powers');
+  assert(!panel.querySelector('#skillTabs'),'Activation groups remained');
+  for(const row of d.querySelectorAll('#personalPowersList [data-ability-id]')){
+   row.click();assert(panel.querySelectorAll('.reading-tabs [role=tab]').length===3,'Lost a detail tab');
+   const rules=[...panel.querySelectorAll('.reading-tabs button')].find(b=>b.textContent==='Full rules');rules.click();
+   assert(!panel.querySelector('[role=tabpanel]:not([hidden])').textContent.includes('not been recorded'),'Full rules field was not shown');
+  }
+  const search=d.getElementById('dashboardSearch');search.value='Twin arrival';search.dispatchEvent(new Event('input'));await wait(100);
+  const hit=[...d.querySelectorAll('#dashboardSearchList button')].find(b=>b.textContent.includes('Twin arrival'));assert(hit,'Upgrade search missing');hit.click();
+  assert(d.querySelector('#personalPowersList [aria-pressed=true]').dataset.abilityId==='gate','Search selected the wrong power');
+  assert(panel.querySelector('[role=tabpanel]:not([hidden])').textContent.includes('Twin arrival'),'Search did not open Upgrades');
+  d.getElementById('dashboardSearchClear').click();
+  for(const width of [375,768,1100]){frame.style.width=width+'px';for(const layout of ['original','reclaimed','orrery','ember']){
+   w.selectLayout(layout,false);await wait(60);const list=d.getElementById('personalPowersList');
+   assert(d.documentElement.scrollWidth<=d.documentElement.clientWidth+1,'Powers overflow '+layout+'/'+width);
+   for(const button of list.querySelectorAll('button'))assert(button.getBoundingClientRect().height>=44,'Compressed power row '+layout+'/'+width);
+   assert(list.querySelectorAll('[aria-pressed=true]').length===1,'Ambiguous selection');
+  }}
  });
  await test('Game picker and Sovereignty cards fit all layouts at narrow/wide widths',async()=>{
   d.getElementById('nav-sovereignty').click();

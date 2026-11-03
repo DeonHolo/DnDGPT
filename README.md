@@ -39,6 +39,9 @@ These published 5e adventures are run with the installed 2024 rules; they includ
 
 ### Three games, one connection
 
+**Sovereign System** uses a compact kit of four substantial personal powers that grow through integrated upgrades. Personal development no longer adds a new skill every level. Permanent Domain, General and Army improvements remain separate in Sovereignty, alongside independent entity development. Existing characters keep their earned powers.
+
+
 Choose **D&D 2024**, **Age of Convergence** or **Sovereign System** in the dashboard. Each game shows its own campaigns and serves its own rules through the same DnDGPT connection. A campaign keeps the game it was created for. Existing homebrew saves keep their mechanics, including older saves without a game label.
 
 Age of Convergence remains the original **5e Hack and homebrew fantasy RPG**, with five attributes including Luck, HP/MP resources, generated rarity-based class kits and custom progression. ChatGPT creates its classes and abilities under the rulebook's uniqueness gate. These mechanics belong to that game rather than standard D&D. See [the rules comparison](docs/SYSTEM_IDENTITY.md).

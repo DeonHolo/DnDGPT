@@ -60,6 +60,9 @@ def rule_source(selected=AGE, document="rulebook"):
                 "base_sha256": hashlib.sha256(data).hexdigest(), "replacements": []}
     overlay = json.loads((RULES / "sovereign/overlay.json").read_text(encoding="utf-8"))
     text, audit = compose(data.decode("utf-8"), overlay[document])
+    from .sovereign_rules import compose_personal_rules
+    text, personal_audit = compose_personal_rules(text, document)
+    audit.extend(personal_audit)
     module = (RULES / ("sovereign/system.txt" if document == "rulebook" else "sovereign/checklist.txt")).read_text(encoding="utf-8")
     if document == "rulebook":
         # The module remains in the preface, before the unchanged numbered chapters.

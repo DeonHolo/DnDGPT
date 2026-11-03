@@ -1,0 +1,8 @@
+# 34. READABLE PERSONAL POWER DETAILS
+
+Personal powers are browsed by full names, with actual rarity and short italic flavor. Keep Overview, Full rules and Upgrades. Overview explains the current useful capability; Full rules contains one coherent combined description with actual legal uses, costs, timing, targets and checks. Upgrades preserves named changes and their individual rarity/provenance. It is a history, not a new list of standalone skills.
+
+Do not display activation-category groups or fill required Active/Passive/Reaction/Free Action/Utility slots. The mechanics still specify whether a particular use takes an Action, responds to a trigger or happens automatically. Omit boilerplate limitations and lists of unchanged parameters. Rewrite current rules clearly when a real acquired upgrade changes the power, and preserve the original history. Ordinary entity powers stay with their actual General or formation. The full HUD remains in the separate dashboard.
+
+---
+

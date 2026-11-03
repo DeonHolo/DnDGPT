@@ -31,6 +31,11 @@ def ability_kind(ability):
 
 def class_kit_check(state):
     """Report fixed starting-kit counts, never invent or roll missing abilities."""
+    if state.get("game_id") == "sovereign-system" and state.get("creation", {}).get("rules_source") != "custom":
+        from .personal_powers import kit_check
+        personal = kit_check(state)
+        if personal is not None:
+            return personal
     rarity = str(state.get("character", {}).get("rarity", "")).upper()
     minimum = (0 if state.get("creation", {}).get("rules_source") == "custom"
                else UTILITY_MINIMUM.get(rarity, 0))
@@ -52,8 +57,8 @@ def class_kit_check(state):
     return {"missing": missing, "utility_required": minimum, "utility_recorded": counts["utility"]}
 
 
-def rules_guidance():
-    return {"resources": ["HP", "MP"], "starting_hp": "45 + 3 * STR",
+def rules_guidance(game="age-of-convergence"):
+    guidance = {"resources": ["HP", "MP"], "starting_hp": "45 + 3 * STR",
             "starting_mp": "75 + 5 * INT",
             "attributes": ["STR", "DEX", "INT", "CHA", "LCK"],
             "completion": "Read direct-play. Final creation choices save story, gear and opening with "
@@ -75,3 +80,8 @@ def rules_guidance():
                        "skill-board rarity/Luck rolls and selection slots. Apply the same creativity, "
                        "originality and class-flavor locks to every Utility.",
             "custom_rules": "For a player's explicit replacement rulebook, save creation.rules_source=custom."}
+    if game == "sovereign-system":
+        guidance.update(class_kits="FOUR substantial personal powers, optionally a class-justified fifth. No activation-category quotas. Three passive sovereign foundations are separate.",
+                        utility="Practical applications belong inside the actual core powers; ordinary orders use established authority.",
+                        personal_progression="Read sovereign-personal once. Two starting refinements and two personal upgrades per gained level; spend_personal_upgrades=[{ability_id,upgrade_id}] with nested children and consolidated current rules. No new Talent acquisition. Keep old kits; actual banked Skill/Talent points carry once.")
+    return guidance

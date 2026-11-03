@@ -1,0 +1,8 @@
+# 20. MAJOR PERSONAL REFINEMENTS
+
+At character levels 4, 8, 12 and so on, preserve the free milestone reward as ONE major refinement to an owned personal power. Show five distinct compatible directions at the owned source's established class-grade power, without another rarity/Luck roll. This reward broadens or transforms the actual power; it never creates another standalone Grand Signature or a parallel personal skill tree. It is additional to the two normal personal upgrades and guaranteed permanent Sovereign Evolution.
+
+The server adds the extra personal selection when crossing each fourth-level milestone. Record the chosen nested child as a major refinement with source=Milestone and its actual source grade; spend it through spend_personal_upgrades alongside other selected personal refinements in the normal level-up save. Keep the five milestone directions in the same advancement reply, with compact effects and expandable details. Preserve previous children, identity and the recognizable current kit. Banking is optional and never assumed.
+
+---
+

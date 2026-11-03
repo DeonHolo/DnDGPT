@@ -30,6 +30,7 @@ SUBSECTIONS = {
 }
 
 GAME_SECTIONS = {"sovereign-creation": "Sovereign creation and inherited rules",
+                 "sovereign-personal": "Sovereign personal powers and development",
                  "sovereign-progression": "Sovereign ownership and progression",
                  "sovereign-warfare": "Sovereign warfare and consequences",
                  "sovereign-dashboard": "Sovereign dashboard and efficient play"}
@@ -93,6 +94,13 @@ def index_text(text):
              "## Current amendments"]
     if "sovereign-creation" in entries:
         lines.insert(2, "Selected game: sovereign-system. Keep game_id='sovereign-system' or the campaign_id on EVERY rules request/page. Begin with sovereign-creation; fetch sovereign-progression/warfare/dashboard when relevant.")
+        lines = [line.replace("Class offers: creation-order, generation, utility, class-craft, reach, 5, 6, 7, 8. Read 9/10/11 for their creation stage.",
+                              "Class offers: sovereign-personal, sovereign-creation, 5-11. Four substantial personal powers; creation refinements and identity stay nested. No activation-category kit.")
+                      .replace("Utility offers and revisions: utility, generation, class-craft and the applicable acquisition chapter.",
+                               "Practical uses: sovereign-personal and utility. Develop broad applications inside owned powers.")
+                      .replace("Advancement: 17, 18 and the applicable track in 19 through 22; interfaces 37/38. Chapter 19 includes standalone-passive eligibility and nested upgrade saves; 38 distinguishes base skills from dependent riders.",
+                               "Advancement: sovereign-personal, sovereign-progression, 18-22/37. Two personal upgrades per level, guaranteed permanent Sovereign growth; no Talent acquisition board.")
+                 for line in lines]
     for key in {**AMENDMENTS, **SUBSECTIONS}:
         item = entries[key]
         lines.append(f"{key} | {item['title']} | {item['end'] - item['start']} characters")

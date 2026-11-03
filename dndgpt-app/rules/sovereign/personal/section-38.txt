@@ -1,0 +1,12 @@
+# 38. SOVEREIGN DASHBOARD — POWERS AND THEIR OWNERS
+
+Keep Character & Progression, Personal Powers, Health & Conditions, Allies & Combat, Equipment & Inventory, Quest Journal, World & Campaign Log, Sovereignty and Gallery in the separate dashboard. Game identity selects this interface and filters its campaigns. Layout/atmosphere switches are presentation only.
+
+Personal Powers is ONE readable named list with a shared inspector, keeping Overview, Full rules and Upgrades. It has no Combat/Reactions/Passives/Utility group tabs. Each power appears once regardless of its multiple uses, with one current consolidated description. History children are nested. Search opens the actual power and matching detail tab. Preserve all earned legacy powers; no automatic truncation to four.
+
+Sovereignty owns the actual Domain, commander and formation cards, with distinct Core capabilities and Earned upgrades. Keep one authoritative entity record and current owner stats. A permanent Sovereign upgrade is a change there, not another personal skill. Allies & Combat shows active relevant actors with compact inspection and retained archived casualties. Gallery, quest objectives, save history, corrections and export/import remain available. Internal IDs, ledgers and enum spellings stay hidden; use full names, readable statuses and well-spaced prose.
+
+Show available personal upgrades as one count, separate from permanent Sovereign growth. No new resource currency appears. Keep touch targets, keyboard navigation, visible selection/focus, unclipped narrow-screen content and all existing layouts. Browsing and searching change no campaign, resources or fictional time.
+
+---
+

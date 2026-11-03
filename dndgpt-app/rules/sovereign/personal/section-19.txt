@@ -1,0 +1,14 @@
+# 19. PERSONAL POWER DEVELOPMENT — UPGRADE THE OWNED KIT
+
+Every level presents FIVE distinct personal upgrade offers across actual owned powers; the player has TWO selections per earned level and may bank them. A board can contain multiple directions for one power when meaningful. Keep both selection and source explicit; do not force one upgrade into each of four categories. Sources include an older campaign's established Signature, Title or talent powers, preserving that campaign's real kit. A dependent child is never a separate source.
+
+Upgrades can reshape what a power does: new target behavior, a form, movement, practical application, interaction or an integrated automatic benefit. New usable modes belong inside the same coherent power, with explicit costs/timing and the existing overall Action/Reaction/movement budget. Avoid unrelated subspells, new named top-level casts or endless tiny conditional riders. Consolidate interactions and upgrade ordinary applications rather than inventing a new charge currency for every addition. Improvements should be substantial and useful in ordinary play.
+
+Use independent eligible rarity/Luck for each newly issued normal offer after its concept is fixed. The upgrade's grade changes its actual ambition and magnitude; preserve source rarity and already earned children. An existing Unique power stays Unique when receiving a Rare refinement. Save positive changed effects, concise flavor and complete current combined rules.
+
+Batch spend_personal_upgrades=[{ability_id,upgrade_id},...] with the actual parent's updated mechanics_display/full rules and nested upgrades/evolutions. The server checks availability, prior history, changed combined rules and single funding, and rejects new personal rows during adventure play unless the player explicitly requested an exception. Routine uses/status changes are ordinary saves and spend no upgrade. Quest-funded improvements use spend_evolution_credit separately; one child cannot use both funds. To combine a quest refinement with paid refinements, prefer distinct parents in the same save or resolve same-parent funds sequentially under the existing quest validator.
+
+No automatic personal skill drops or Talent acquisitions occur. Convert an offered personal power reward to an upgrade of a real parent while preserving the promised reward's value and player choice. Equipment and genuinely independent General/Army acquisitions remain available on their own tracks. Only a player's explicit request for an additional personal power permits personal_power_exception={ability_ids:[...],reason:the actual player request}. An ordinary GM loot choice is not that request. A rebuild/consolidation of older owned powers uses the existing reviewed correction flow; never silently remove history.
+
+---
+

@@ -9,10 +9,10 @@ An omitted section still governs play; fetch it when the situation needs it.
 World preview: loading, world-preview, story, ancestry, clear-story, 4.
 Campaign preferences: campaign-focus. Apply saved focus and dialogue from every view; choose during existing creation, change on request, no extra turn or routine read.
 Quests/rewards: quest-journal, 17, 24, 32. Random events: 32A. Saved illustrations: gallery.
-Class offers: creation-order, generation, utility, class-craft, reach, 5, 6, 7, 8. Read 9/10/11 for their creation stage.
-Utility offers and revisions: utility, generation, class-craft and the applicable acquisition chapter.
+Class offers: sovereign-personal, sovereign-creation, 5-11. Four substantial personal powers; creation refinements and identity stay nested. No activation-category kit.
+Practical uses: sovereign-personal and utility. Develop broad applications inside owned powers.
 Combat: enemy-tactics, roster-cleanup, reach, 12, 13, 14; also 15/16/29/30 when applicable. Reuse prepared enemy profiles; batch roster cleanup with the turn save.
-Advancement: 17, 18 and the applicable track in 19 through 22; interfaces 37/38. Chapter 19 includes standalone-passive eligibility and nested upgrade saves; 38 distinguishes base skills from dependent riders.
+Advancement: sovereign-personal, sovereign-progression, 18-22/37. Two personal upgrades per level, guaranteed permanent Sovereign growth; no Talent acquisition board.
 Routine story/presentation: continuity (world initiative, causal bridges and conclusive two-decision obstacles) and story-ui. Intelligent UI means story, inline glossary, colors and choices in chat; never a seven-chapter dump. Cache current sections; do not reload every turn.
 Story styling/tooltips: story-ui; 33 has the full glossary, 35 colors, 39 choices. Story flavor: story. Ability copy/details: dashboard-writing, 34. Dashboard architecture only: 38; full in-chat sheet only on explicit request.
 Creation completion/advancement: direct-play. Final creation saves Your story, outfit and opening together with changes.begin_adventure=true; selections need no follow-up approval. Advancement continues automatically when all pending tracks are resolved.
@@ -23,15 +23,15 @@ campaign-focus | Campaign focus, dialogue and action-led play | 4828 characters
 living-campaigns | Living campaigns, growth and pacing | 8706 characters
 loading | Rules loading and checklist precedence | 2498 characters
 continuity | Turn continuity and efficient resolution | 7797 characters
-creation-order | V1.0 surgical four-turn creation and in-chat continuation precedence | 2012 characters
+creation-order | V1.0 surgical four-turn creation and in-chat continuation precedence | 1209 characters
 direct-play | Direct creation and advancement choices | 2202 characters
 starting-gear | Starting equipment by class rarity | 4973 characters
 quest-journal | Finite quests, System rewards and completion | 4370 characters
 gallery | Campaign Gallery and selected scene images | 3415 characters
 story | Story flavor, character identity and player voice | 6960 characters
-generation | Generation breadth, reaction roles and a playable world | 7333 characters
-utility | Utility usefulness and creative application | 4658 characters
-class-craft | Class concept diversity and writing craft | 5674 characters
+generation | Generation breadth, reaction roles and a playable world | 1928 characters
+utility | Utility usefulness and creative application | 1036 characters
+class-craft | Class concept diversity and writing craft | 1505 characters
 world-preview | World introduction: history, place and the player's footing | 3102 characters
 reach | Dexterity and player-facing reach | 2903 characters
 clear-story | Clear story language and names | 2725 characters
@@ -40,10 +40,11 @@ dashboard-writing | Player-facing dashboard writing contract | 6144 characters
 story-ui | Compact Intelligent Story UI contract | 6877 characters
 enemy-tactics | Enemy identity, adaptive tactics and visible voice | 3909 characters
 roster-cleanup | Combat roster cleanup | 1822 characters
-sovereign-creation | Sovereign creation and inherited rules | 5251 characters
-sovereign-progression | Sovereign ownership and progression | 7310 characters
+sovereign-creation | Sovereign creation and inherited rules | 5459 characters
+sovereign-personal | Sovereign personal powers and development | 4901 characters
+sovereign-progression | Sovereign ownership and progression | 7318 characters
 sovereign-warfare | Sovereign warfare and consequences | 4004 characters
-sovereign-dashboard | Sovereign dashboard and efficient play | 1411 characters
+sovereign-dashboard | Sovereign dashboard and efficient play | 1427 characters
 
 ## Full chapters
 1 | THE CORE EXPERIENCE | 1127 characters
@@ -52,22 +53,22 @@ sovereign-dashboard | Sovereign dashboard and efficient play | 1411 characters
 4 | THE WORLD — THE AGE OF CONVERGENCE (V4.0 WORLD BIBLE) | 15743 characters
 5 | SIX-TIER RARITY SYSTEM | 19324 characters
 6 | LUCK ENHANCEMENT | 1650 characters
-7 | CHARACTER CREATION — FOUR CHOICE TURNS, FIVE PREPARATION PHASES | 14295 characters
-8 | CLASSES AND HEROIC POWER | 25098 characters
-9 | SIGNATURE SKILLS | 11950 characters
-10 | STARTING TITLES | 951 characters
-11 | BACKGROUNDS — IDENTITY, INTEGRATED IMPRINT AND WORLD FOOTPRINT | 18356 characters
+7 | SOVEREIGN CHARACTER CREATION — FOUR CHOICE TURNS | 2291 characters
+8 | SOVEREIGN CLASSES AND THE CORE PERSONAL KIT | 2098 characters
+9 | STARTING PERSONAL REFINEMENTS | 1336 characters
+10 | SOVEREIGN TITLES | 661 characters
+11 | SOVEREIGN BACKGROUND — HISTORY, IMPRINT AND WORLD CONNECTION | 1524 characters
 12 | ATTRIBUTES AND RESOURCES | 1486 characters
 13 | DICE AND DIFFICULTY | 1228 characters
 14 | COMBAT | 33288 characters
 15 | CONDITIONS AND INJURIES | 1038 characters
 16 | REST AND VITAL SURGE | 3339 characters
 17 | EXPERIENCE AND FAST LEVELING | 1715 characters
-18 | LEVEL-UP AND TIME FREEZE | 2239 characters
-19 | SKILL EVOLUTION SYSTEM — V4.0 INTEGRATED PASSIVE EVOLUTIONS | 21660 characters
-20 | HYBRID BREAKTHROUGHS — CLASS BREAKTHROUGHS & GRAND SIGNATURES (V4.1) | 12978 characters
-21 | TALENT WEB — V4.0 HYBRID WEB | 13345 characters
-22 | CLASS EVOLUTION AND RARITY ASCENSION | 1150 characters
+18 | SOVEREIGN LEVEL-UP AND TIME FREEZE | 1324 characters
+19 | PERSONAL POWER DEVELOPMENT — UPGRADE THE OWNED KIT | 2801 characters
+20 | MAJOR PERSONAL REFINEMENTS | 1064 characters
+21 | THE STABLE PERSONAL KIT — NO TALENT ACQUISITION WEB | 842 characters
+22 | CLASS EVOLUTION AND RARITY ASCENSION | 621 characters
 23 | EQUIPMENT — SIXTEEN SLOTS | 954 characters
 24 | INVENTORY AND CARRY WEIGHT | 6095 characters
 25 | QUICK-USE REFERENCES | 609 characters
@@ -80,16 +81,16 @@ sovereign-dashboard | Sovereign dashboard and efficient play | 1411 characters
 32 | QUESTS, NPCS AND STORY CLARITY | 20225 characters
 32A | LIVING-WORLD RANDOM EVENT ENGINE — V1.0 CODE-ROLLED, CONTEXTUAL, AUDITABLE | 11967 characters
 33 | INTELLIGENT INTERACTIVE UI | 32819 characters
-34 | SIMPLIFIED ABILITY DISPLAY | 4795 characters
+34 | READABLE PERSONAL POWER DETAILS | 983 characters
 35 | RARITY COLORS AND VISUAL PRIORITY | 2594 characters
-36 | CHARACTER CREATION INTERFACE | 1918 characters
-37 | V4.1 LEVEL-UP INTERFACE | 4221 characters
-38 | CAMPAIGN DASHBOARD — SEVEN CORE CHAPTERS, GALLERY AND ABILITY DETAILS | 13060 characters
+36 | SOVEREIGN CREATION INTERFACE | 836 characters
+37 | SOVEREIGN ADVANCEMENT INTERFACE | 968 characters
+38 | SOVEREIGN DASHBOARD — POWERS AND THEIR OWNERS | 1672 characters
 39 | GAMEPLAY OPTION UI | 553 characters
 40 | PERSISTENCE AND INTERNAL AUDITS | 6693 characters
 41 | CAMPAIGN CONTINUITY; AUTOMATIC SAVES AND OPTIONAL MANUAL EXPORT | 7945 characters
 42 | VERSION COMPATIBILITY | 3135 characters
-43 | COMPLETE V1.0 NEW GAME PROCEDURE | 6970 characters
+43 | SOVEREIGN NEW GAME AND CONTINUATION | 1368 characters
 44 | ABSOLUTE GAME MASTER RESTRICTIONS | 8237 characters
-45 | PRIMARY DIRECTIVE — VERSION 1.0 | 7239 characters
-46 | INITIAL RESPONSE INSTRUCTION | 3474 characters
+45 | SOVEREIGN PRIMARY DIRECTIVE | 1041 characters
+46 | SOVEREIGN INITIAL RESPONSE | 776 characters

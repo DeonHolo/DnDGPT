@@ -1,0 +1,14 @@
+# 8. SOVEREIGN CLASSES AND THE CORE PERSONAL KIT
+
+A Sovereign class defines a repeatable personal play style and the way its civilization or host exists, grows and commands. Every candidate starts with a functioning extraordinary domain, persistent autonomous major commander and useful forces. It must remain enjoyable when the character acts personally.
+
+Give the class FOUR substantial, named personal powers. Their forms and uses follow its actual law. The kit as a whole supplies capable personal combat, survivability and broad exploration. Do not prescribe one attack, one passive, one reaction, one free action and two utilities. No rarity tier requires those categories. A fifth power needs a genuine independent class-specific role, recorded during creation; a Unique result normally still has four.
+
+Each personal power has a stable ID, full name, source=Class, scope=personal, inherited class rarity, short simple description, italic flavor_text and consolidated mechanics_display/full rules. Define its legal uses, any voluntary activation, automatic behavior or observable response, costs, checks, targets, descriptive reach, duration and recovery within that one power. Keep numerical source ranges privately and retain combat action budgets. A broader use within the same recognizable power is not a new standalone ability.
+
+Rarity controls ambition and strength under Section 5. Every tier must be usable; high tiers offer exceptional concrete permissions and meaningful scale rather than extra cards. Class-native powers inherit class rarity without extra rolls. Do not quietly lower an owned source's rarity when it receives a lower-rarity upgrade.
+
+Prepare the Domain, General and Army as three separate UNIQUE passive foundation records and real owner records in Sovereignty. Those records are permanent foundations, not personal power slots or casts. General-owned and formation-owned abilities stay with those owners. Routine command is part of the real authority, rather than another purchased skill. Existing player powers, items and earned history remain preserved.
+
+---
+

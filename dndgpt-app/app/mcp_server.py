@@ -76,7 +76,7 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         creation_uri = "ui://dndgpt/creation-v1.0-" + hashlib.sha256(creation_html.encode()).hexdigest()[:12] + ".html"
     server = FastMCP(
         "DnDGPT", stateless_http=True, json_response=True,
-        instructions="DnDGPT supports D&D 2024 (default game), Age of Convergence and Sovereign System through one connection. Existing saves select their own game. Read only that game's hardener/index and relevant sections. D&D has NO default adventure: FIRST offer published adventures plus an original premise and wait for the player to choose, unless already chosen or delegated. THEN build around its setting, tone and starting level. Guided character creation groups class+species in character turn 1 and all remaining choices in turn 2, with visible explanations. Quickplay is one explained character draft after adventure selection; standalone library drafts need no adventure. Reuse list_dnd_options summaries and retrieve selected exact rules. Published HTML/PDF sources are read automatically and cached; inspect visual pages for image-only stats. Keep reusable library sheets independent from campaign copies. Ordinary chat starts and selected advancement need no extra approval. Batch party/scene changes in one save. Keep the full HUD in the dashboard. Never mix homebrew rarity/LCK/MP/evolutions into D&D.",
+        instructions="DnDGPT supports D&D 2024 (default game), Age of Convergence and Sovereign System through one connection. Existing saves select their own game. Read only that game's hardener/index and relevant sections. D&D has NO default adventure: FIRST offer published adventures plus an original premise and wait for the player to choose, unless already chosen or delegated. THEN build around its setting, tone and starting level. Guided character creation groups class+species in character turn 1 and all remaining choices in turn 2, with visible explanations. Quickplay is one explained character draft after adventure selection; standalone library drafts need no adventure. Reuse list_dnd_options summaries and retrieve selected exact rules. Published HTML/PDF sources are read automatically and cached; inspect visual pages for image-only stats. Keep reusable library sheets independent from campaign copies. Ordinary chat starts and selected advancement need no extra approval. Sovereign uses four core personal powers and upgrade-only personal growth; read sovereign-personal. Batch party/scene changes in one save. Keep the full HUD in the dashboard. Never mix homebrew rarity/LCK/MP/evolutions into D&D.",
         token_verifier=verifier if config.configured else None,
         auth=AuthSettings(issuer_url=config.issuer, resource_server_url=config.resource_url,
                           required_scopes=[READ_SCOPE]) if config.configured else None,
@@ -173,7 +173,7 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         Select the player's requested game; it is fixed for this save. Read that game's rules.
         """
         return invoke(lambda owner: {"campaign": chat_game.create(owner, name, action_id, disposable, game_id),
-                                      "game_id": game_id, "standard_play": {"game_id": DND, "rules_version": "5.2.1", "attributes": ["STR","DEX","CON","INT","WIS","CHA"], "sheet_guide": "Read section=creation. Choose a published adventure or original premise FIRST; wait for the player unless chosen or delegated. Then tailor class+species together and the remaining choices together to its setting, tone and starting level. Quickplay is one explained character draft after selection. Reuse list_dnd_options."} if game_id == DND else {**rules_guidance(), "game_id": game_id}}, True)
+                                      "game_id": game_id, "standard_play": {"game_id": DND, "rules_version": "5.2.1", "attributes": ["STR","DEX","CON","INT","WIS","CHA"], "sheet_guide": "Read section=creation. Choose a published adventure or original premise FIRST; wait for the player unless chosen or delegated. Then tailor class+species together and the remaining choices together to its setting, tone and starting level. Quickplay is one explained character draft after selection. Reuse list_dnd_options."} if game_id == DND else {**rules_guidance(game_id), "game_id": game_id}}, True)
 
     @server.tool(annotations=write, meta=metadata(WRITE_SCOPE))
     def save_chat_update(campaign_id: str, action_id: str, expected_version: int,
@@ -194,6 +194,12 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         orders:[{id:formation_id,stance:attack|guard|withdraw,target_id?}],phases:1..3}.
         Read sovereign-progression/sovereign-warfare once before using these. Save handles progression,
         real formation rolls and their receipts atomically; never roll each unit separately.
+        Sovereign personal kits have FOUR substantial powers, optionally a justified fifth.
+        Read sovereign-personal: upgrades only, no activation-category acquisition boards.
+        Save spend_personal_upgrades=[{ability_id,upgrade_id},...] with changed parent rules and
+        nested upgrades; two personal selections per gained level are granted automatically.
+        Do not increment old skill_points/talent_points. Extra standalone personal powers require
+        the player's explicit request and personal_power_exception={ability_ids:[...],reason}.
         {slot:inventory_id|null}, name/current_location/opening_preview/notes, fictional_time_seconds,
         level_up_freeze, world (recursive object-field merge), creation/advancement/funds (replace), and collection
         upsert/remove/replace dictionaries.

@@ -6,7 +6,7 @@ from . import records
 from .chat_game import number
 
 PRIVATE = re.compile(r"secret|private|gm_only|gm_notes|token|receipt|raw_roll|sha256", re.I)
-IGNORED = {"id", "version", "last_event", "rules_check", "resume_brief", "rarity_candidates"}
+IGNORED = {"id", "version", "last_event", "rules_check", "resume_brief", "rarity_candidates", "personal_progression"}
 AREAS = {"character", "current_location", "fictional_time_seconds", "paused", "phase",
          "level_up_freeze", "abilities", "conditions", "summons", "inventory", "equipment",
          "quest_log", "continuity", "funds", "supplies", "name", "world", "world_log",

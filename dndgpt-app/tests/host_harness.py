@@ -295,10 +295,20 @@ def sovereign_fixture():
             objective["status"] = "done"
         power = {"id": "gate", "name": "Open the fortress gate", "rarity": "UNIQUE", "activation": "Active", "scope": "sovereign",
                  "simple": "Deploy a formation through an established gate.",
+                 "flavor_text": "The fortress opens a road through iron.",
                  "mechanics_display": "Spend 10 MP and your Action to deploy an assigned formation at an established gate.",
                  "upgrades": [{"id": "gate-two", "name": "Twin arrival", "change_display": "Deploy two formations."}]}
         state["abilities"] = [power, {"id": "blade", "name": "Iron sweep", "rarity": "RARE", "activation": "Active", "scope": "personal",
-                                      "simple": "Strike an engaged enemy.", "mechanics_display": "Use your Action for a melee attack."}]
+                                      "simple": "Strike an engaged enemy.", "flavor_text": "An iron edge clears the passage.", "mechanics_display": "Use your Action for a melee attack."}]
+        state["abilities"] += [{"id": "shell", "name": "Living shell", "rarity": "UNIQUE", "scope": "personal",
+                                "simple": "Shape the fortress's armor around your body.", "flavor_text": "Iron plates settle like scales.",
+                                "full_rules": "Your living shell provides its recorded defense and can shape a shelter during a rest.",
+                                "activation": "Automatic"},
+                               {"id": "senses", "name": "Distant senses", "rarity": "EPIC", "scope": "personal",
+                                "flavor_text": "The fortress's distant windows become your eyes.",
+                                "simple": "Perceive through the fortress's established observation points.",
+                                "mechanics_display": "Use your established sensory link to inspect an accessible observation point.",
+                                "activation": "Automatic"}]
         state["abilities"].extend({"id": "foundation-"+role, "name": "Fortress "+role, "rarity": "UNIQUE",
                                   "scope": "sovereign", "sovereign_role": role, "activation": "Passive",
                                   "mechanics_display": "The permanent "+role+" foundation.",
@@ -339,7 +349,7 @@ def test_legacy_widget():
     from app.presentation import dashboard_html
     shim = """<script>
     window.legacyCalls=[];
-    window.openai={displayMode:'inline',widgetState:{},
+    window.openai={displayMode:'inline',widgetState:{game_id:'age-of-convergence'},
       callTool:async(name,args)=>{
         window.legacyCalls.push(name);
         const response=await fetch('/test-rpc',{method:'POST',headers:{'Content-Type':'application/json'},

@@ -2,6 +2,16 @@
 
 Approved 24 October 2026. The original startup document is design material, not authorization to create or play a campaign. Its old separate character/start approvals and seven-chapter restriction are superseded by the user's current instructions.
 
+## Current personal powers — 3 November 2026
+
+Sovereign now starts with four substantial personal powers; a fifth requires a concrete class-specific role. Rarity changes mechanical ambition and strength, not the number of cards. No Active/Passive/Reaction/Free Action/Utility slot quota or dashboard grouping applies. Each power retains actual costs, timing and combat budgets, with Overview, Full rules and Upgrades.
+
+Two starting personal refinements replace the two standalone Signature acquisitions on the same third creation turn. Title and Background effects stay nested. Every gained level grants two personal upgrades automatically; fourth-level milestones preserve an additional free major refinement. This replaces the separate Skill/Talent acquisition boards. Personal growth targets actual owned powers; permanent Domain/General/Army progression keeps its separate starting gift and per-level award. Independent commander, formation and domain growth remains.
+
+Old campaigns retain every earned power and history. Actual unspent Skill/Talent points carry once on the next ordinary authorized save, without retroactive level awards or a read-triggered migration. An extra standalone power requires an explicit player request recorded in the save; a rebuild uses the existing correction review. A normal level or reward no longer silently expands the personal list. Mixed focus remains 70/30 personal adventure/strategy.
+
+The implementation replaces reviewed Sovereign rule sections using source hashes, preserves the shared Age of Convergence book, and batches selected refinements with the same normal save. Details and verification: [Sovereign core powers release](SOVEREIGN_CORE_POWERS_2026_11_03.md). Older implementation evidence below describes its respective release.
+
 ## Release requirements
 
 - [x] One connection and existing tools select the game's rules and dashboard.
@@ -15,7 +25,7 @@ Approved 24 October 2026. The original startup document is design material, not 
 
 ## Play contract
 
-Keep approximately 75% personal adventure and 25% strategy. A new sovereign begins with a functioning class-specific domain, major autonomous commander and useful forces. Classes have genuinely different production, command, expansion and recovery rules. The class board contains eight Unique sovereigns; ordinary subsequent acquisition retains the shared rarity rules. Charm governs class-specific sovereign mechanics. Starting Luck allocation remains a player choice.
+Keep approximately 70% personal adventure and 30% strategy in mixed focus. A new sovereign begins with a functioning class-specific domain, major autonomous commander and useful forces. Classes have genuinely different production, command, expansion and recovery rules. The class board contains eight Unique sovereigns; ordinary subsequent acquisition retains the shared rarity rules. Charm governs class-specific sovereign mechanics. Starting Luck allocation remains a player choice.
 
 Character XP, domain milestones, formation veterancy and commander XP are separate tracks. Creation grants one free permanent Sovereign Evolution after Class selection, within an existing creation board. Each gained character level then guarantees one permanent significant Sovereign Evolution for the actual domain, general or army. The player chooses from five compatible offers; applying the selection needs no further approval. Routine entity growth is automatic. Domain development still follows its finite published milestone; it does not replace the guaranteed character-level improvement.
 

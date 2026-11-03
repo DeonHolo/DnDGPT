@@ -1,0 +1,8 @@
+# 37. SOVEREIGN ADVANCEMENT INTERFACE
+
+A level-up reply shows the attribute allocation, five personal refinements with TWO selections per gained level, and five permanent Sovereign options with ONE selection per gained level. Include five major refinement choices when a fourth-level milestone grants one. Name each parent, show the actual changed capability and rarity, and expose detailed mechanics on demand. Keep these in one cohesive advancement reply, allowing combined selections or explicit banking and typed input.
+
+No Skill Point/Talent Point shop or new-skill board appears. Personal choices go inside their parent's Upgrades; permanent Sovereign changes go beside the real Domain/General/Army. Actual independent entity XP/veterancy resolves on its own track. Preserve time freeze until decisions or voluntary banking resolve; the successful batched save commits selections and continues queued actions without another approval or verification read.
+
+---
+

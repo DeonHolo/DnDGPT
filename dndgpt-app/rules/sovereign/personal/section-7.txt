@@ -1,0 +1,15 @@
+# 7. SOVEREIGN CHARACTER CREATION — FOUR CHOICE TURNS
+
+World Preview introduces the campaign region, everyday life, public conflicts and its concrete connection to Earth. Use the existing ancestry and clear-story rules. Creation has four grouped choice turns:
+
+1. World Preview and pre-awakening Luck allocation. Start from the shared five attributes and six creation Attribute Points; the player chooses their Luck investment and later allocates the remainder.
+2. Offer eight mechanically distinct UNIQUE sovereign classes. Preview four personal powers and the functioning Domain, General and Army for each. Keep previews compact; detail the chosen class on the next existing turn. Save the chosen class and its actual powers before offering parent-dependent refinements.
+3. Offer five personal refinements attached to the chosen powers; choose TWO. These replace new standalone Signature Skills. Offer five Titles, choosing one or NONE, and five compatible permanent Sovereign Evolutions, choosing one free or banking it. Present the selections together; they commit directly. Titles contribute identity and a documented refinement inside one power, rather than another standalone skill.
+4. Offer five backgrounds grounded in the selected build and public world, choose one, allocate remaining Attribute Points and supply the character name. The Background contributes lived history, one nested imprint and an optional real world connection. Generate Your story from the completed identity, kit, gear and world.
+
+At creation use the existing explicit UNIQUE override for eligible offers while preserving their honest natural rolls/Luck privately. Four personal powers remain four; their two opening refinements, Title and Background effects attach inside them. A justified fifth is declared with creation.personal_power_count=5 and personal_power_reason. Class rarity does not change this count. Other classes, creatures, equipment and story remain varied.
+
+Draw and equip the class-budgeted starting outfit once. Save the named character, complete powers, persistent foundation owners, story and opening together with changes.begin_adventure=true. Honor a requested draft/pause; final choices need no character/start approval. No fictional time advances during unfinished creation.
+
+---
+

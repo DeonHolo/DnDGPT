@@ -47,8 +47,8 @@ def test_rules_are_composed_without_rewriting_shared_source():
     base = rule_source(AGE)
     s = rule_source(SOVEREIGN)
     creation = rules_page("rulebook", 0, "sovereign-creation", SOVEREIGN)["content"]
-    assert "Starting Sovereign Evolution on the Signature/Title turn" in creation
-    assert "choose ONE free in addition to the Signature and Title selections" in creation
+    assert "Starting Sovereign Evolution on the personal-refinement/Title turn" in creation
+    assert "choose ONE free in addition to the personal-refinement and Title selections" in creation
     assert "Level 2 upgrade available" in creation
     text = s["content"]
     from app.game_profiles import RULES
@@ -63,7 +63,7 @@ def test_rules_are_composed_without_rewriting_shared_source():
     assert restored == base["content"]
     assert s["base_sha256"] == base["source_sha256"]
     assert hashlib.sha256(restored.encode()).hexdigest() == base["source_sha256"]
-    assert "every EPIC, LEGENDARY or UNIQUE" in text
+    assert "four substantial powers" in text
     assert "Sovereign ownership and progression" not in base["content"]
     with pytest.raises(ValueError, match="anchor changed"):
         compose("Changed source", [{"id": "test", "old": "Missing", "new": "New"}])
@@ -91,7 +91,7 @@ def test_starting_sovereign_kit_is_real_and_distinct_from_personal_powers(engine
     from app.standard_rules import class_kit_check
     for power in state["abilities"]:
         power["source"] = "Class"
-    assert "1 passive" in class_kit_check(state)["missing"]
+    assert class_kit_check(state)["personal_recorded"] == 0 and class_kit_check(state)["missing"]
 
 
 @pytest.mark.parametrize("game", [AGE, SOVEREIGN])
@@ -414,7 +414,7 @@ def test_legacy_temporary_sovereign_command_counts_as_regular_skill(engine):
     from app.sovereignty import sovereign_kit_check
     state = fixture_state(engine); state["character"]["rarity"] = "UNIQUE"
     state["abilities"] = [{"id": "old-command", "source": "Class", "scope": "sovereign", "activation": "Active"}]
-    assert "1 active" not in class_kit_check(state)["missing"]
+    assert class_kit_check(state)["personal_recorded"] == 1
     state["abilities"] += [{"id": role, "name": role.title(), "scope": "sovereign", "sovereign_role": role,
                             "activation": "Passive", "rarity": "UNIQUE", "mechanics": "The existing foundation.",
                             "flavor_text": "The realm endures."} for role in ("domain", "general", "army")]

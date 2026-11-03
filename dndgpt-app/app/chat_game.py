@@ -72,7 +72,7 @@ def validate_changes(changes, *, allow_empty=False):
                                            "level_up_freeze", "upsert", "remove", "replace",
                                            "spend_evolution_credit", "event_transition", "sovereign_awards",
                                            "sovereign_development", "spend_sovereign_evolution", "sovereign_battle", "life_updates",
-                                           "campaign_preferences"}
+                                           "campaign_preferences", "spend_personal_upgrades", "personal_power_exception"}
     if set(changes) - allowed:
         fail(422, "protected_field", "Unknown or server-controlled state field")
     for key in TEXT_FIELDS & changes.keys():
@@ -192,6 +192,8 @@ def apply_changes(state, changes, *, correction=False, completing=False, event_r
     apply_quests(state, projected, changes, correction)
     from .sovereignty import apply_sovereignty
     apply_sovereignty(state, projected, changes, correction, dice)
+    from .personal_powers import apply_personal_powers
+    apply_personal_powers(state, projected, changes, correction)
     from .campaign_life import apply_life
     apply_life(state, projected, changes, correction)
     if not correction:
@@ -366,6 +368,8 @@ class ChatGame:
             if game_id == SOVEREIGN:
                 from .sovereignty import initial
                 state["sovereignty"] = initial()
+                from .personal_powers import initial as personal_initial
+                state["personal_powers"] = personal_initial()
             records.insert(db, "campaigns_v1", {"id": state["id"], "owner": owner, "version": 1, "data": canonical(state)})
             self.engine._append(db, state, {"kind": "create_chat_game", "action_id": action_id})
             records.update(db, "campaigns_v1", {"id": state["id"]}, {"data": canonical(state)})

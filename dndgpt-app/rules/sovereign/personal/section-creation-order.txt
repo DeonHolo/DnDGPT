@@ -1,0 +1,8 @@
+## V1.0 surgical four-turn creation and in-chat continuation precedence
+
+Sovereign System has four choice turns: (1) World Preview and starting Luck; (2) eight UNIQUE classes, each with four substantial personal powers and working Domain/General/Army; (3) five personal refinements, choosing two for the selected powers, five Titles choosing one or NONE, and the free starting Sovereign Evolution; (4) five Backgrounds, choosing one, alongside remaining attributes and name. A fifth personal power requires a specific class-design reason, never a rarity-based extra slot. Reuse actual selections and show the selected class's full kit on the existing third turn. Final choices save Your story, outfit and opening together with changes.begin_adventure=true. Respect a requested draft/pause. No extra confirmation.
+
+Sovereign personal rules supersede inherited Signature/Talent acquisition boards and activation-category kit quotas. Parent powers retain clear timing and costs. Preserve genuine rolls, offered choices and separate game identities. Connected play saves authorized progress automatically; manual export is optional. UI inspection, opening rules or selecting a layout changes no game state.
+
+---
+

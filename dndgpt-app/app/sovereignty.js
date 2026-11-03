@@ -27,6 +27,7 @@ function activateGame(id){
   document.documentElement.dataset.game=id;$("gameSelect").value=id;
   renderSceneOptions(id);selectScene(preferences.game_scenes?.[id]||preferences.scene||scene,false);
   setDndNavigation(id==="dnd-2024");
+  if(id==="sovereign-system"){$("title-skills").textContent="Personal Powers";$("nav-skills").querySelector(".nav-title").textContent="Personal Powers"}
   document.querySelector(".identity h1").textContent=id==="sovereign-system"?"Sovereign System":"DnDGPT";
   sovereignNav.hidden=id!=="sovereign-system";
   $("nav-gallery").querySelector(".nav-index").textContent=id==="sovereign-system"?"09":"08";
@@ -64,6 +65,22 @@ function sovereignEffect(parent,power,key){
   renderValue(detail,abilityCopy(power.mechanics_display??power.mechanics??power.description??power.effect??power.rules??power.full_rules));
   for(const child of sovereignChildren(power)){detail.append(element("h5",child.name||"Improvement"));renderValue(detail,upgradeContent(child,power))}
   return detail;
+}
+function renderPersonalPowers(root,powers){
+  const info=state?.personal_progression;
+  paragraph(root,info?.legacy_kit?"Your established powers. Earned development improves these powers.":"Your core powers. Each grows through its own upgrades.","chapter-note");
+  if(info?.upgrades_available)paragraph(root,"Personal upgrades available · "+info.upgrades_available,"pending");
+  if(!powers.length){paragraph(root,"Your personal powers will appear after class selection.","muted");return}
+  const {index:list,article}=readingLayout(root);list.id="personalPowersList";list.setAttribute("role","group");list.setAttribute("aria-label","Personal powers");
+  const selected=powers.find(p=>p.id===selectedAbilities.powers)||powers[0];
+  for(const power of powers){
+    const button=element("button",undefined,"index-entry"),rarity=String(power.rarity||"COMMON").toUpperCase();button.type="button";button.dataset.abilityId=power.id;
+    button.append(element("span",power.name||"Unnamed power","entry-name rarity-"+rarity));
+    const upgrades=["upgrades","evolutions","imprints","integrated_imprints"].reduce((n,key)=>n+(Array.isArray(power[key])?power[key].length:0),0);
+    const meta=element("span",undefined,"entry-meta");meta.append(element("span",rarity,"entry-rarity rarity-"+rarity),element("span",upgrades+" improvement"+(upgrades===1?"":"s")));button.append(meta);
+    button.setAttribute("aria-pressed",String(power===selected));button.onclick=()=>{selectedAbilities.powers=power.id;for(const row of list.children)row.setAttribute("aria-pressed",String(row===button));renderAbilityInspector(article,power)};list.append(button);
+  }
+  renderAbilityInspector(article,selected);
 }
 function sovereignRecords(card,next,entity,role){
   card.dataset.sovereignEntity=entity.id;

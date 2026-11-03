@@ -58,6 +58,8 @@ def test_release_contains_canonical_source_and_complete_rules_without_runtime_da
                 assert archive.read("assets/prototype/app/assets/" + source.name) == source.read_bytes()
         for source in (APP / "rules/dnd2024").iterdir():
             assert archive.read("assets/prototype/rules/dnd2024/" + source.name) == source.read_bytes()
+        for source in (APP / "rules/sovereign/personal").glob("*"):
+            assert archive.read("assets/prototype/rules/sovereign/personal/" + source.name) == source.read_bytes()
         assert archive.read("assets/prototype/third_party/dnd-mcp/NOTICE.md") == (APP / "third_party/dnd-mcp/NOTICE.md").read_bytes()
         assert "skills/game-master/references/rulebook-v4.2.txt" not in names
 
