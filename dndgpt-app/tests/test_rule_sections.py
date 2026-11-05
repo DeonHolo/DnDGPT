@@ -13,6 +13,15 @@ from .test_server import rpc, tool
 SOURCE = Path(__file__).resolve().parents[1] / "rules/rulebook-v1.0.txt"
 
 
+@pytest.mark.parametrize("game,profile", [("age-of-convergence", None), ("dnd-2024", None),
+    ("sovereign-system", "sovereign-embodied-2026-11-04"), ("sovereign-system", "sovereign-laws-2026-11-05")])
+def test_index_alias_supports_cached_document_enums_and_keeps_selected_profile(game, profile):
+    hardener = rules_page("hardener", 0, game_id=game, profile=profile)
+    alias = rules_page(**hardener["index_request"], game_id=game, profile=profile)
+    assert alias == rules_page("index", 0, game_id=game, profile=profile)
+    assert alias["document"] == "index" and alias["scope"] == "index"
+
+
 def test_index_covers_every_chapter_and_required_current_amendment():
     text = SOURCE.read_bytes().decode()
     entries = sections(text)

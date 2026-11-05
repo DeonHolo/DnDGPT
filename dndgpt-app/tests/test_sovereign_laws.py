@@ -125,7 +125,9 @@ def test_identity_quest_awards_development_once_and_restores_with_its_history(en
 
 def test_authenticated_rules_and_start_follow_new_profile_and_other_modes_remain_scoped(web):
     draft = tool(web, "create_chat_game", {"name": "Laws transport", "action_id": "laws-tool-create", "game_id": SOVEREIGN})["structuredContent"]["campaign"]
-    book = tool(web, "read_rules", {"campaign_id": draft["id"], "document": "index"})["structuredContent"]
+    checklist = tool(web, "read_rules", {"campaign_id": draft["id"], "document": "hardener"})["structuredContent"]
+    assert checklist["index_request"]["campaign_id"] == draft["id"]
+    book = tool(web, "read_rules", checklist["index_request"])["structuredContent"]
     assert "identity | Origin and Title" in book["content"]
     assert "maneuvers | One real roll" in book["content"]
     started = tool(web, "save_chat_update", {"campaign_id": draft["id"], "action_id": "laws-tool-start",

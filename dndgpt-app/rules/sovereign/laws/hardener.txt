@@ -1,6 +1,6 @@
 # Sovereign Laws execution checklist
 
-Use this profile for a new Sovereign Laws game. Open the dashboard once, then read the index and applicable sections. Existing campaigns select their own book by campaign_id. Cache rules by hash and reuse the last successful save. Read-only inspection gives no authority to advance time.
+Use this profile for a new Sovereign Laws game. Open the dashboard once. Use the response's index_request to fetch the index through cached tool definitions, then read applicable sections. Existing campaigns select their own book by campaign_id. Cache rules by hash and reuse the last successful save. Read-only inspection gives no authority to advance time.
 
 CREATION. Start with the player's premise. Offer about three genuinely different bodies/ways to play, or one complete draft when delegated. Include extraordinary and familiar possibilities when the premise is open. Bound is a special fixed-locus form with real channels for action. Mobile and distributed bodies have their own useful functions and threats. Show how each plays in its first scene. Provide the actual Domain, four Laws, fitting allies/gear and two personal/two Sovereign opening developments by default. Honor chosen counts. Offer a playable Origin and Title in the starting build, then apply the player's choices and an editable Your story with the opening in one save. The Title has a chosen prior deed, or the player can defer it.
 

@@ -43,6 +43,8 @@ The save validator accepts creature capabilities, four Laws, Origin, Title, actu
 
 The dashboard displays native capability records and each owner's earned history. Laws keep Overview, Full rules and Upgrades; Your story stays collapsible. Gear records its actual holder or place. All four layouts use the same records. Search uses the mounted campaign without another tool call.
 
+The connected client exposed a stale enum accepting only `rulebook` and `hardener`: `document=index` failed connector validation before reaching the live server, while `section=identity` reached the correct new book. `document=rulebook, section=index` is therefore an equivalent compatibility route. A hardener response supplies an `index_request` that preserves the current campaign or game. Direct and compatible index reads are tested for all three games and the archived Sovereign profile. A client schema refresh can restore direct index requests; this alias remains equivalent.
+
 This release adds no model judge or simulation call per turn. Ordinary risky play uses one roll call and one batched saved outcome, with already loaded rules and current state reused. This describes the intended call path, not measured end-to-end ChatGPT latency or proof of long-campaign story quality.
 
 ## Verification

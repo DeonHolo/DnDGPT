@@ -29,6 +29,8 @@ RULE_FILES = {"rulebook": "rulebook-v1.0.txt", "hardener": "rule-hardener.txt"}
 
 
 def rules_page(document, offset, section=None, game_id=AGE, profile=None):
+    if document == "rulebook" and section == "index":
+        document, section = "index", None
     if document not in {*RULE_FILES, "index"}:
         raise EngineError(400, "invalid_rules_document", "Choose rulebook, hardener or index")
     try:
@@ -59,6 +61,7 @@ def rules_page(document, offset, section=None, game_id=AGE, profile=None):
             "source_sha256": source["source_sha256"], "base_sha256": source["base_sha256"], "section": section,
             "scope": "section" if section is not None else "index" if document == "index" else "document",
             "source_characters": source_length, "content": text[offset:end],
+            "index_request": {"document": "rulebook", "section": "index", "offset": 0} if document == "hardener" else None,
             "standard_play": {**{key: value for key, value in rules_guidance(game_id, profile).items() if key in
                                   {"resources", "attributes", "starting_hp", "starting_mp", "rules_profile"}}, "game_id": game_id}
                              if offset == 0 and document == "hardener" and game_id != DND else {}}
@@ -151,6 +154,7 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         refresh after changed hashes, missing context or an explicit rules update.
         Omit section to read the complete document for an audit or offline fallback.
         Follow the selected profile. Sovereign Laws uses fictional reach and maneuver dice.
+        Cached schemas can request the index with document=rulebook, section=index.
         A player's explicit custom rulebook takes precedence for that campaign.
         Reading rules never creates a campaign, rolls dice, resumes play or changes saves.
         For an existing campaign pass campaign_id: its saved profile selects the book automatically.
@@ -166,7 +170,10 @@ def build_mcp(engine, config, verifier, creation_repository=None):
             selected = saved_game(campaign) if campaign else game_id or DEFAULT_GAME
             if campaign_id and game_id is not None and game_id != selected:
                 raise EngineError(409, "game_mismatch", "Read the rulebook belonging to this campaign's game")
-            return rules_page(document, offset, section, selected, campaign.get("rules_profile") if campaign else None)
+            result = rules_page(document, offset, section, selected, campaign.get("rules_profile") if campaign else None)
+            if result.get("index_request"):
+                result["index_request"].update({"campaign_id": campaign_id} if campaign_id else {"game_id": selected})
+            return result
         return invoke(read_selected)
 
     @server.tool(annotations=write, meta=metadata(WRITE_SCOPE))
