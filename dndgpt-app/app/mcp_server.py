@@ -212,11 +212,15 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         Character ancestry/ancestry_description retain the chosen race; missing race never means human.
         changes supports partial character (attributes merge), equipment
         For rules_profile=sovereign-laws-2026-11-05, read save/laws/identity/growth once.
-        Record creation.origin and creation.title with their real effect and earned upgrades.
+        Offer 12 classes (choose 1); other creation/development boards have 6 options (choose 2).
+        Record creation.origins and creation.titles as the selected identity records with real effects
+        and earned upgrades. Singular origin/title records remain readable for older saves.
+        Creation.selection_policy carries offer preferences, not spendable credits.
+        Record selection_boards with kind, offers, selected_ids and complete. Issued counts stay fixed.
         Laws live in abilities, with rarity, simple, flavor_text, mechanics_display and upgrades.
         Sovereignty holds the Domain and actual allies with their capabilities, orders and conditions.
-        Quest system_reward.development={scope,summary} supports personal/origin/title/domain/general/forces.
-        A completed quest funds one named owner upgrade whose source is 'quest:'+quest_id.
+        Quest system_reward.development={scope,summary,picks:2} supports personal/origin/title/domain/general/forces.
+        A completed quest grants its promised owner picks once, with source='quest:'+quest_id on each upgrade.
         Use maneuver dice and one batched save. The following numerical progression fields apply
         only to archived Sovereign profiles, which read sovereign-progression/sovereign-warfare.
         Archived Sovereign saves merge sovereignty and accept sovereign_awards, sovereign_development,

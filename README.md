@@ -41,7 +41,7 @@ These published 5e adventures are run with the installed 2024 rules; they includ
 
 ### Three games, one connection
 
-**Sovereign System** lets you play a mobile creature, a bound dungeon heart or a distributed being such as a living forest. Four broad magical Laws give you different ways to act. Upgrades unlock new possibilities, and your Origin and Title each grant an ability from the start. Your domain and allies take their form from the creature you choose. Creation uses normal rarity and Luck; ask explicitly if you want a scoped UNIQUE override.
+**Sovereign System** lets you play a mobile creature, a bound dungeon heart or a distributed being such as a living forest. Choose one of twelve classes, with four broad core powers. Other creation and development boards have six options, choosing two. Core-power upgrades expand those four powers; Sovereign upgrades permanently develop your Domain, General or forces. Origin traits and Titles grant their own abilities and can grow through related quests and deeds. Creation uses normal rarity and Luck; ask explicitly if you want a scoped UNIQUE override.
 
 
 Choose **D&D 2024**, **Age of Convergence** or **Sovereign System** in the dashboard. Each game shows its own campaigns and serves its own rules through the same DnDGPT connection. A campaign keeps the game it was created for. Existing homebrew saves keep their mechanics, including older saves without a game label.

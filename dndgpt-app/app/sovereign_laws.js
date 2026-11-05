@@ -33,12 +33,12 @@ function renderLawsCampaign(next) {
   const owners = [...sovereignty.commanders, ...sovereignty.formations, ...next.summons];
   const allies = owners.filter(actor => actor.side !== "enemy" && activeActor(actor));
   const enemies = [...next.enemies, ...owners.filter(actor => actor.side === "enemy")].filter(enemy => activeActor(enemy, true));
-  $("title-skills").textContent = "Laws & Developments";
-  $("nav-skills").querySelector(".nav-title").textContent = "Laws & Developments";
+  $("title-skills").textContent = "Core Powers";
+  $("nav-skills").querySelector(".nav-title").textContent = "Core Powers";
   $("hero").textContent = character.name + " · " + character.class_name;
   $("resources").replaceChildren();
   $("characterPreview").textContent = character.rarity + (body ? " · " + body.form : " · Creation");
-  $("skillsPreview").textContent = next.abilities.length + " Laws";
+  $("skillsPreview").textContent = next.abilities.length + " core powers";
   $("healthPreview").textContent = next.conditions.length + " recorded conditions";
   $("summonsPreview").textContent = allies.length + (allies.length === 1 ? " ally · " : " allies · ") + enemies.length + " threats";
   $("equipmentPreview").textContent = next.inventory.length + (next.inventory.length === 1 ? " item" : " items");
@@ -53,13 +53,24 @@ function renderLawsCampaign(next) {
   paragraph($("character"), character.name, "page-lead");
   paragraph($("character"), character.class_name + " · " + character.rarity, "muted");
   paragraph($("character"), "Luck · " + character.attributes.LCK, "muted");
+  const policy = {class_offers:12, other_offers:6, picks:2, ...next.creation.selection_policy};
+  const growth = recordDetail($("character"), "How your powers grow", "laws-progression-guide");
+  renderFacts(growth, [
+    ["Your main powers", "Four core powers, shaped by your class and creature."],
+    ["Class selection", policy.class_offers + " options · choose one"],
+    ["Other selection boards", policy.other_offers + " options · choose " + policy.picks],
+    ["Creation and chapter boards", policy.picks + " core-power upgrades and " + policy.picks + " Sovereign upgrades."],
+    ["Core-power upgrades", "Expand one of your four powers with a new usable possibility."],
+    ["Sovereign upgrades", "Give your Domain, General or forces a new capability."],
+    ["Origin and Title growth", "Earned through related quests, discoveries and deeds; shown on the identity that grows."]
+  ]);
   const story = recordDetail($("character"), "Your story", "character-story");
   story.className = "character-story";
   const copy = element("div", undefined, "story-copy");
   paragraph(copy, character.story_summary || "Your story takes shape during creation.");
   story.append(copy);
-  renderLawsOwner($("character"), next.creation.origin, "Origin");
-  renderLawsOwner($("character"), next.creation.title, "Title");
+  for (const origin of next.creation.origins || (next.creation.origin ? [next.creation.origin] : [])) renderLawsOwner($("character"), origin, "Origin trait");
+  for (const title of next.creation.titles || (next.creation.title ? [next.creation.title] : [])) renderLawsOwner($("character"), title, "Title");
   renderSkills(next.abilities);
   renderRecords($("health"), next.conditions, "Your current condition is clear.");
   for (const ally of allies) renderLawsOwner($("summons"), ally, "Ally");

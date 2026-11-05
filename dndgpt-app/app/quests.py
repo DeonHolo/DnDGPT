@@ -33,9 +33,10 @@ def reward(value, contract=False, laws=False):
     if "development" in value:
         from .sovereign_laws import SCOPES
         development = value["development"]
-        require(type(development) is dict and development.keys() == {"scope", "summary"} and
+        require(type(development) is dict and {"scope", "summary"} <= development.keys() <= {"scope", "summary", "picks"} and
                 type(development["scope"]) is str and development["scope"] in SCOPES and
-                nonblank(development["summary"]), "A development reward needs its scope and a named benefit")
+                nonblank(development["summary"]) and integer(development.get("picks", 1), 20) and development.get("picks", 1) >= 1,
+                "A development reward needs its scope, named benefit and promised number of picks")
     currency = value.get("currency", {})
     require(type(currency) is dict and len(currency) <= 8 and
             all(nonblank(key, 40) and integer(amount) for key, amount in currency.items()),

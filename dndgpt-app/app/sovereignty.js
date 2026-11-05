@@ -31,7 +31,7 @@ function activateGame(id){
   renderSceneOptions(id);selectScene(preferences.game_scenes?.[id]||preferences.scene||scene,false);
   setDndNavigation(id==="dnd-2024");
   if(id==="sovereign-system"){
-    const laws=usesSovereignLaws(state||{}),title=laws?"Laws & Developments":"Core Powers";
+    const laws=usesSovereignLaws(state||{}),title="Core Powers";
     $("title-skills").textContent=title;$("nav-skills").querySelector(".nav-title").textContent=title;$("xpMeter").hidden=laws;
   }
   document.querySelector(".identity h1").textContent=id==="sovereign-system"?"Sovereign System":"DnDGPT";

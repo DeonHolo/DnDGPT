@@ -61,9 +61,9 @@ def rules_guidance(game="age-of-convergence", profile=None):
     from .game_profiles import SOVEREIGN, SOVEREIGN_LAWS
     if game == SOVEREIGN and profile in (None, SOVEREIGN_LAWS):
         return {"rules_profile": SOVEREIGN_LAWS, "resources": [], "attributes": ["LCK"],
-                "creation": "Read creation, body-and-domain, laws and identity. Build from the player's premise with Origin and Title available at the start.",
+                "creation": "Read creation, body-and-domain, laws and identity. Offer 12 classes, choose 1. Other creation/development boards have 6 options, choose 2. Keep four core Laws; a creature's body can be its Domain or colony.",
                 "resolution": "Read maneuvers. One actual d6 exchange with a clear edge. Save fictional effects and meaningful conditions.",
-                "progression": "Read growth. Develop named capabilities on their actual owner, including quest-earned Origin and Title growth.",
+                "progression": "Read growth. Core-power upgrades develop the four Laws. Sovereign upgrades develop Domain/General/forces. Both unlock new creature-specific plans. Origin/Title grow through earned identity rewards.",
                 "completion": "Save the accepted build, Your story and opening with changes.begin_adventure=true.",
                 "records": "Read save. Reuse current state, real roll receipts and one batched saved outcome."}
     guidance = {"resources": ["HP", "MP"], "starting_hp": "45 + 3 * STR",

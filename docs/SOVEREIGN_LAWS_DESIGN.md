@@ -2,6 +2,8 @@
 
 5 November 2026. Approved design and implementation for the Sovereign Laws playtest.
 
+Follow-up correction: the player requested twelve class offers (choose one) and six other selection offers (choose two). Current terminology uses Core Powers for the four Laws and Core-power upgrades for their growth. The before/after progression audit, identity distinctions and unapproved level/ascension decisions are in [the progression review](SOVEREIGN_PROGRESSION_REVIEW_2026_11_05.md). The original implementation and release evidence below remain historical.
+
 ## Agreed direction
 
 - Build play around a creature and the laws that govern what it can do. Allow mobile, bound and distributed forms with distinct ways to act, sense and be threatened. Let the GM derive each domain from its creature and setting. Roots, reflections, tide pools and built gates all belong where the fiction supports them.

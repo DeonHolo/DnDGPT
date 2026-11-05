@@ -203,6 +203,10 @@ def apply_changes(state, changes, *, correction=False, completing=False, event_r
     if laws:
         from .sovereign_laws import validate
         validate(state, projected, changes, correction)
+        if set(changes) == {"creation"} and set(changes["creation"]) == {"selection_policy"}:
+            if len(canonical(projected).encode()) > 2000000:
+                fail(422, "invalid_chat_update", "Saved record exceeds 2000000 bytes")
+            return projected  # Offer preferences do not alter a paused creature or advance time.
     else:
         from .sovereignty import apply_sovereignty
         from .personal_powers import apply_personal_powers
@@ -392,11 +396,12 @@ class ChatGame:
             from .campaign_focus import DEFAULTS
             state["campaign_preferences"] = dict(DEFAULTS)
             if laws:
-                from .sovereign_laws import initial
+                from .sovereign_laws import initial, SELECTIONS
                 state["rules_profile"] = SOVEREIGN_LAWS
                 state["character"] = {key: character[key] for key in ("name", "class_name", "rarity")}
                 state["character"]["attributes"] = {"LCK": 5}
                 state["sovereignty"] = initial()
+                state["creation"]["selection_policy"] = dict(SELECTIONS)
             elif game_id == SOVEREIGN:
                 from .sovereign_play import GROWTH
                 state["creation"]["sovereign_ruleset"] = embodied_profile

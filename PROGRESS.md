@@ -1,5 +1,9 @@
 # Continuity and recovery release
 
+## Sovereign selection and progression clarity — 2026-11-05
+
+Following player feedback, correct new Laws boards to twelve classes/one pick and six other offers/two picks. Preserve four core powers, distinguish core-power upgrades from permanent Domain/General/forces upgrades, require possibility-based distinctive offers, and support two Origin traits/Title records with their own growth history. A collapsible dashboard guide explains the current structure. Numbered levels, fourth-level bonuses, Luck growth and a definite class-ascension route were not restored without a settled progression design. Before/after audit and remaining decisions: `docs/SOVEREIGN_PROGRESSION_REVIEW_2026_11_05.md`.
+
 ## Sovereign Laws — 2026-11-05
 
 Approved redesign implemented as a new native Sovereign profile: broad Laws, meaningful possibility-based developments, playable Origin and Title from creation, one d6 maneuver exchange, creature-shaped Domain and allies, and one upgrade list per owner. Native saves and dashboard no longer require the archived stat, equipment-slot and formation templates. Existing campaigns select their recorded book. Release checks and playtest limits: `docs/SOVEREIGN_LAWS_DESIGN.md`.

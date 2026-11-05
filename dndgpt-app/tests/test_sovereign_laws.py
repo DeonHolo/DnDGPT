@@ -11,11 +11,13 @@ from app.rules import Dice
 from .test_server import tool
 
 
-def build(mode="bound"):
-    return {
+def build(mode="bound", paired=False):
+    changes = {
         "character": {"name": "The Still Guest", "class_name": "Keeper of reflections", "rarity": "RARE",
                       "story_summary": "A guest woke in the village's empty mirrors."},
         "creation": {
+            # Retain the previously published single-identity fixture for compatibility checks.
+            "selection_policy": {"class_offers": 12, "other_offers": 6, "picks": 1},
             "sovereign_body": {"mode": mode, "form": "A reflected silhouette",
                 "description": "A visible figure in linked reflective surfaces.",
                 "reach": "Acts through reflections that bear its handprint.",
@@ -45,6 +47,16 @@ def build(mode="bound"):
         "opening_preview": "A guest runs toward the creek as its bridge gives way.",
         "current_location": "The inn window",
     }
+    if paired:
+        creation = changes["creation"]
+        creation["selection_policy"]["picks"] = 2
+        creation["origins"] = [creation.pop("origin"), {"id": "silver", "name": "Silver remembers", "rarity": "RARE",
+            "history": "The invitation woke a guest in glass silvered from a lost kiln.",
+            "effect": "Can retain a reflected flame to warm someone later.", "upgrades": []}]
+        creation["titles"] = [creation.pop("title"), {"id": "shelter", "name": "Keeper of the Last Light", "rarity": "UNCOMMON",
+            "deed": "Kept a reflected lamp lit while the inn flooded.", "recognition": "The rescued guests remember the light.",
+            "effect": "Can shelter a small flame inside an unbroken reflection.", "upgrades": []}]
+    return changes
 
 
 def active(engine, mode="bound"):
@@ -131,9 +143,11 @@ def test_authenticated_rules_and_start_follow_new_profile_and_other_modes_remain
     assert "identity | Origin and Title" in book["content"]
     assert "maneuvers | One real roll" in book["content"]
     started = tool(web, "save_chat_update", {"campaign_id": draft["id"], "action_id": "laws-tool-start",
-        "expected_version": 1, "summary": "Accept the creature", "changes": {**build(), "begin_adventure": True}})
+        "expected_version": 1, "summary": "Accept the creature", "changes": {**build(paired=True), "begin_adventure": True}})
     assert not started.get("isError"), started
     assert started["structuredContent"]["campaign"]["phase"] == "adventure"
+    assert len(started["structuredContent"]["campaign"]["creation"]["origins"]) == 2
+    assert len(started["structuredContent"]["campaign"]["creation"]["titles"]) == 2
     from app.sovereign_play import PROFILE
     old = tool(web, "create_chat_game", {"name": "Archived profile", "action_id": "laws-old-profile", "game_id": SOVEREIGN,
                                          "sovereign_ruleset": PROFILE})["structuredContent"]["campaign"]
@@ -188,3 +202,105 @@ def test_maneuver_and_independent_surprise_share_one_receipt_and_saved_outcome(e
     assert result["campaign"]["event_tracking"]["last_check"]["outcome"] == "no_event"
     assert game.update("owner-a", state["id"], "laws-crossing", state["version"], "The guest reaches safety", changes) == result
     assert random.roll("owner-a", action, request, state["id"]) == rolled
+
+
+def test_twelve_independent_class_rolls_and_complete_board_contract(engine):
+    game = ChatGame(engine)
+    draft = game.create("owner-a", "Twelve classes", "twelve-create", True, SOVEREIGN)
+    assert draft["creation"]["selection_policy"] == {"class_offers": 12, "other_offers": 6, "picks": 2}
+    draws, used = iter([0, 2000, 5000, 7500, 9000, 9700] * 2), []
+    def draw(sides):
+        used.append(sides)
+        return next(draws)
+    random = GameRandom(engine.store, Dice(draw), engine)
+    requests = [{"label": "Class concept " + str(n), "kind": "rarity", "luck": 5} for n in range(12)]
+    receipt = random.roll("owner-a", "twelve-class-rarities", requests, draft["id"])
+    assert used == [10000] * 12
+    assert [row["result"]["final_rarity"] for row in receipt["results"]] == ["COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY", "UNIQUE"] * 2
+    assert random.roll("owner-a", "twelve-class-rarities", requests, draft["id"]) == receipt
+    board = {"id": "class-board", "kind": "class", "offers": [
+        {"id": "class-" + str(n), "name": "Creature concept " + str(n), "rarity": row["result"]["final_rarity"]}
+        for n, row in enumerate(receipt["results"])], "selected_ids": [], "complete": False}
+    with pytest.raises(EngineError, match="complete board"):
+        game.update("owner-a", draft["id"], "three-classes", 1, "Attempt a reduced board",
+                    {"creation": {"selection_boards": [{**board, "offers": board["offers"][:3]}]}})
+    saved = game.update("owner-a", draft["id"], "twelve-classes", 1, "Offer twelve classes",
+                        {"creation": {"selection_boards": [board]}})["campaign"]
+    assert len(saved["creation"]["selection_boards"][0]["offers"]) == 12
+    assert saved["fictional_time_seconds"] == 0 and len(used) == 12
+
+
+def test_two_identity_picks_and_six_option_upgrade_boards_start_without_losing_four_laws(engine):
+    game = ChatGame(engine)
+    draft = game.create("owner-a", "Paired identity", "pairs-create", True, SOVEREIGN)
+    changes = build(paired=True)
+    board = {"id": "opening-refinements", "kind": "personal", "offers": [
+        {"id": "refinement-" + str(n), "name": "New application " + str(n), "rarity": "RARE"} for n in range(6)],
+        "selected_ids": ["refinement-0"], "complete": True}
+    changes["creation"]["selection_boards"] = [board]
+    with pytest.raises(EngineError, match="selected picks"):
+        game.update("owner-a", draft["id"], "pairs-one-pick", 1, "Attempt one of two picks", changes, True)
+    board["selected_ids"].append("refinement-1")
+    law = changes["upsert"]["abilities"][0]
+    law["mechanics_display"] += " Carry an invited guest and leave a return reflection."
+    law["upgrades"] = [{"id": "refinement-" + str(n), "name": "New application " + str(n), "rarity": "RARE",
+                        "effect": effect, "source": "Creation"} for n, effect in enumerate(
+                            ("Carry an invited guest.", "Leave a return reflection."))]
+    result = game.update("owner-a", draft["id"], "pairs-start", 1, "Choose both identity traits and Titles", changes, True)
+    assert game.update("owner-a", draft["id"], "pairs-start", 1, "Choose both identity traits and Titles", changes, True) == result
+    state = result["campaign"]
+    assert state["phase"] == "adventure" and state["rules_check"]["ready"]
+    assert len(state["abilities"]) == 4
+    assert len(state["abilities"][0]["upgrades"]) == 2
+    assert len(state["creation"]["origins"]) == len(state["creation"]["titles"]) == 2
+    assert all(owner["effect"] for scope in ("origins", "titles") for owner in state["creation"][scope])
+    archive = CampaignArchive(engine)
+    restored = archive.restore("owner-a", archive.export("owner-a", state["id"])["archive"], "pairs-restore", True)["campaign"]
+    assert restored["creation"] == state["creation"]
+
+
+def test_future_offer_preferences_preserve_issued_boards_and_paused_creature(engine):
+    game = ChatGame(engine)
+    draft = game.create("owner-a", "Offer preferences", "offer-prefs-create", True, SOVEREIGN)
+    changes = build(paired=True)
+    changes["creation"]["selection_boards"] = [{"id": "old-board", "kind": "personal", "offers": [
+        {"id": "old-" + str(n), "name": "Old application " + str(n), "rarity": "RARE"} for n in range(6)],
+        "selected_ids": ["old-0", "old-1"], "complete": True}]
+    state = game.update("owner-a", draft["id"], "offer-prefs-start", 1, "Choose the creature", changes, True)["campaign"]
+    from .conftest import commit
+    state = commit(engine, state, "pause")["campaign"]
+    saved = game.update("owner-a", state["id"], "offer-prefs-change", state["version"], "Change future offer counts",
+        {"creation": {"selection_policy": {"class_offers": 12, "other_offers": 8, "picks": 3}}})["campaign"]
+    assert saved["paused"] and saved["fictional_time_seconds"] == state["fictional_time_seconds"]
+    assert saved["character"] == state["character"] and saved["abilities"] == state["abilities"]
+    assert saved["creation"]["selection_boards"] == state["creation"]["selection_boards"]
+    assert saved["rules_check"]["ready"]
+
+
+def test_advertised_two_pick_identity_reward_applies_both_once_and_preserves_parent_rarity(engine):
+    game = ChatGame(engine)
+    draft = game.create("owner-a", "Two rewards", "two-rewards-create", True, SOVEREIGN)
+    state = game.update("owner-a", draft["id"], "two-rewards-start", 1, "Begin the creature", build(paired=True), True)["campaign"]
+    quest = {"id": "lost-glass", "name": "Recover the lost glass", "quest_schema": 1,
+             "finish_condition": "The original glass is recovered.",
+             "objectives": [{"id": "recover", "text": "Recover the original glass", "status": "pending"}],
+             "system_reward": {"development": {"scope": "origin", "summary": "Awaken two new uses of your origin traits.", "picks": 2}}}
+    state = game.update("owner-a", state["id"], "two-rewards-offer", state["version"], "Take the quest", {"upsert": {"quest_log": [quest]}})["campaign"]
+    origins = copy.deepcopy(state["creation"]["origins"])
+    for n, origin in enumerate(origins):
+        origin["effect"] += " The recovered glass enables a new use."
+        origin["upgrades"] = [{"id": "awakening-" + str(n), "name": "New glass application " + str(n),
+            "effect": "Carry a reflected guest." if n == 0 else "Keep a reflected warmth through rain.",
+            "rarity": "EPIC", "source": "quest:lost-glass"}]
+    quest["objectives"][0]["status"] = "done"
+    changes = {"creation": {"origins": origins}, "upsert": {"quest_log": [quest]}}
+    result = game.update("owner-a", state["id"], "two-rewards-close", state["version"], "The glass returns", changes)
+    assert game.update("owner-a", state["id"], "two-rewards-close", state["version"], "The glass returns", changes) == result
+    saved = result["campaign"]
+    assert [row["rarity"] for row in saved["creation"]["origins"]] == [row["rarity"] for row in state["creation"]["origins"]]
+    assert all(len(row["upgrades"]) == 1 for row in saved["creation"]["origins"])
+    assert saved["character"]["rarity"] == state["character"]["rarity"]
+    third = copy.deepcopy(origins)
+    third[0]["upgrades"].append({**third[0]["upgrades"][0], "id": "third-award"})
+    with pytest.raises(EngineError, match="promised development picks once"):
+        game.update("owner-a", saved["id"], "two-rewards-third", saved["version"], "Attempt an extra reward", {"creation": {"origins": third}})

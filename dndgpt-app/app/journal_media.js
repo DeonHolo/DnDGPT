@@ -7,7 +7,7 @@ function renderReward(parent,title,reward,status){
   if(reward?.xp)list.append(element("li",reward.xp+" XP"));
   for(const [unit,amount]of Object.entries(reward?.currency||{}))if(amount)list.append(element("li",amount+" "+unit));
   for(const item of reward?.items||[])list.append(element("li",(item.name||"Equipment")+(item.rarity?" · "+item.rarity:"")));
-  if(reward?.development)list.append(element("li",reward.development.summary));
+  if(reward?.development){const count=reward.development.picks||1;list.append(element("li",count+" upgrade choice"+(count===1?"":"s")+" · "+reward.development.summary))}
   if(reward?.evolution_credits)list.append(element("li",reward.evolution_credits+" bankable Skill Evolution credit"+(reward.evolution_credits===1?"":"s")));
   if(list.children.length)box.append(list);else if(!reward?.summary)box.append(element("p","Reward terms have not been recorded.","muted"));
   if(status)box.append(element("small",status));parent.append(box);

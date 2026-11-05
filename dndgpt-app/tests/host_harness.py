@@ -221,7 +221,7 @@ def laws_fixture():
     stamp = str(time.time_ns())
     game = ChatGame(INNER.state.engine)
     draft = game.create(OWNER, "Reflections · disposable Laws fixture", "laws-browser-" + stamp, True, "sovereign-system")
-    changes = build()
+    changes = build(paired=True)
     changes["upsert"]["inventory"] = [{"id": "lantern", "name": "The guest lantern", "rarity": "RARE",
         "holder": "Glass moths", "effect": "Stores a reflection of sunlight for a dark passage."}]
     changes["sovereignty"]["fronts"] = [{"id": "creek", "name": "The broken creek bridge",

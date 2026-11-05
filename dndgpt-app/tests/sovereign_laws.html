@@ -22,6 +22,9 @@ document.getElementById('run').onclick=async()=>{
    d.getElementById('nav-character').click();const panel=d.getElementById('character');
    assert(panel.textContent.includes('An unclaimed invitation')&&panel.textContent.includes('The Door Opener'),'Identity missing');
    assert(panel.textContent.includes('Can open a door'),'Title effect missing');
+   assert(panel.querySelectorAll('[data-laws-owner]').length===4,'Both Origin traits and Titles were not shown');
+   const guide=[...panel.querySelectorAll('details')].find(node=>node.querySelector('summary')?.textContent==='How your powers grow');assert(guide,'Progression guide missing');
+   if(!guide.open)guide.querySelector('summary').click();assert(guide.innerText.includes('12 options')&&guide.innerText.includes('6 options'),'Offer counts missing');
    assert(panel.querySelector('.character-story summary'),'Story disclosure missing');
    assert(d.getElementById('xpMeter').hidden&&!d.getElementById('resources').children.length,'Old resource HUD remained');
   });
@@ -56,7 +59,7 @@ document.getElementById('run').onclick=async()=>{
   });
   await test('Browsing leaves the real saved campaign unchanged',async()=>{
    const after=await w.openai.callTool('get_campaign',{campaign_id:fixture.campaign.id});assert(after.structuredContent.campaign.version===fixture.campaign.version,'Browsing changed the save');
-   await w.callTool('get_campaign',{campaign_id:fixture.campaign.id});assert(d.getElementById('xpMeter').hidden&&d.getElementById('nav-skills').textContent.includes('Laws & Developments'),'Refresh restored old profile labels');
+   await w.callTool('get_campaign',{campaign_id:fixture.campaign.id});assert(d.getElementById('xpMeter').hidden&&d.getElementById('nav-skills').textContent.includes('Core Powers'),'Refresh restored old profile labels');
   });
  }catch(e){results.push({name:'Setup',passed:false,error:e.message})}
  const passed=results.every(r=>r.passed);document.getElementById('result').textContent=passed?'All '+results.length+' checks passed':'Failed: '+JSON.stringify(results.filter(r=>!r.passed));
