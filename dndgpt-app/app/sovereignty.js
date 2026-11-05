@@ -157,8 +157,10 @@ function sovereigntyCard(parent,title,meta,description){
 function renderSovereignBody(parent,next){
   const body=next.creation?.sovereign_body;if(!body)return;
   const modes={mobile:"Mobile sovereign",bound:"Bound core",distributed:"Distributed being"};
-  const card=sovereigntyCard(parent,body.form,modes[body.mode]||"Your body",body.description);card.dataset.sovereignScene="body";
-  if(body.mode==="bound")paragraph(card,"Core location · "+body.core_location,"sovereign-meta");
+  const native=usesSovereignLaws(next);
+  const card=sovereigntyCard(parent,body.form,modes[body.mode]||"Your body",native?undefined:body.description);card.dataset.sovereignScene="body";
+  if(native)renderLawsAppearance(card,body,"body-appearance");
+  if(body.mode==="bound"&&!native)paragraph(card,"Core location · "+body.core_location,"sovereign-meta");
   const detail=recordDetail(card,"How you act","sovereign-body-functions");
   renderFacts(detail,[["Reach",body.reach],["Movement",body.movement],["Manipulation",body.manipulation],["Communication",body.communication],
     ["Perception",body.perception],...(!usesSovereignLaws(next)?[["Vulnerability",body.vulnerability],["Primary attribute",body.primary_attribute]]:[])]);

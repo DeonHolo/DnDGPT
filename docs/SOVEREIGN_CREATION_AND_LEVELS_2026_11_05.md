@@ -49,3 +49,9 @@ Current Sovereign has its own compact book/hardener and section index. Archived 
 ## Verification status
 
 Focused native tests pass 27 cases, including complete starting awards, world-before-Class generation, server-scoped rarity, levels 2/3/4 with actual selected regular/major/Sovereign upgrades, once-only reward retries, source-budget rejection, Class ascension preserving history, combined level/UNIQUE refinement rewards, capped internal growth, pre-existing active-save compatibility, declared maneuver scope and portable restoration. Full regression, in-app browser and public release evidence are recorded after those checks complete. The tests use disposable campaigns, not live player saves.
+
+## Appearance and Sovereignty navigation
+
+Sovereignty again has Domain, General and Army / Minions subtabs. Keyboard navigation, search routing and the selected tab survive normal campaign refreshes. Each owner groups Appearance, its actual named abilities and its upgrade history. Character and core powers also have Appearance disclosures. The renderer accepts saved strings and title/text aliases, skips empty ability dropdowns and reports missing descriptions plainly. Where/Orders rows no longer displace these descriptions. Orders and locations remain campaign data.
+
+New drafts use setup_version=3 and require a visible description for the selected powers and actual owners before starting. Earlier active saves keep working; rendering legacy text does not rewrite their gameplay. The rulebook, hardener and GM wrapper require concrete looks and current effects, preserving established identity. This adds fields to the existing creation save, without another per-turn tool loop.

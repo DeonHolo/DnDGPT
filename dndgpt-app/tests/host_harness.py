@@ -222,6 +222,15 @@ def laws_fixture():
     game = ChatGame(INNER.state.engine)
     draft = game.create(OWNER, "Reflections · disposable Laws fixture", "laws-browser-" + stamp, True, "sovereign-system")
     changes = build(paired=True)
+    changes["sovereignty"]["domain"]["appearance"] = "Tall silver windows line the inn's timber balconies; their reflections open onto a second shoreline."
+    changes["sovereignty"]["commanders"] = [{"id": "porter", "name": "The Glass Porter",
+        "appearance": "A broad, translucent porter with a brass lantern glowing inside its chest.",
+        "capabilities": ["Open-handed: Carries fragile reflections in its palms.",
+            {"id": "shade", "title": "Shelter a candle", "text": "Its glass ribs shelter a guest's candle from the wind."},
+            {"id": "empty", "name": "An unfinished description"}],
+        "abilities": [{"id": "route", "name": "A remembered route", "effect": "Traces the path a reflected traveler took."}],
+        "upgrades": [{"id": "porter-glow", "name": "A light for every guest", "rarity": "RARE",
+            "effect": "The porter's inner lantern can guide a lost guest through reflected mist.", "source": "Creation"}]}]
     changes["upsert"]["inventory"] = [{"id": "lantern", "name": "The guest lantern", "rarity": "RARE",
         "holder": "Glass moths", "effect": "Stores a reflection of sunlight for a dark passage."}]
     changes["sovereignty"]["fronts"] = [{"id": "creek", "name": "The broken creek bridge",

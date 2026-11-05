@@ -33,12 +33,39 @@ document.getElementById('run').onclick=async()=>{
    const powers=[...panel.querySelectorAll('[data-ability-id]')];assert(powers.length===4,'Expected four Laws');
    for(const power of powers){power.click();const tabs=panel.querySelectorAll('.reading-tabs [role=tab]');assert(tabs.length===3,'Missing a detail tab');[...tabs].find(t=>t.textContent==='Full rules').click();assert(!panel.querySelector('[role=tabpanel]:not([hidden])').textContent.includes('not been recorded'),'Law effect missing')}
   });
-  await test('Domain and forces show capabilities without old gate or capacity templates',()=>{
+  await test('Domain, General and Army / Minions have separate keyboard-accessible tabs',()=>{
    d.getElementById('nav-sovereignty').click();const panel=d.getElementById('sovereignty');
+   const tabs=[...panel.querySelectorAll('.sovereign-tabs [role=tab]')];assert(tabs.map(t=>t.textContent).join('|')==='Domain|General|Army / Minions','Owner tabs missing');
+   const selected=()=>panel.querySelector('.sovereign-tabs [aria-selected=true]');
+   tabs[0].click();assert(d.getElementById('sovereign-panel-domain').hidden===false&&d.getElementById('sovereign-panel-commanders').hidden,'Domain separation failed');
+   tabs[0].dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));assert(selected()===tabs[1]&&d.activeElement===tabs[1],'Arrow key navigation failed');
+   tabs[1].dispatchEvent(new KeyboardEvent('keydown',{key:'End',bubbles:true}));assert(selected()===tabs[2],'End navigation failed');
+   tabs[2].dispatchEvent(new KeyboardEvent('keydown',{key:'Home',bubbles:true}));assert(selected()===tabs[0],'Home navigation failed');
    assert(panel.textContent.includes('The mirrored inn')&&panel.textContent.includes('Glass moths'),'Actual owners missing');
    assert(panel.textContent.includes('Borrowed light'),'Force capability missing');
    assert(!/Domain level|Defenses & vital|Veterancy|max strength|undefined/.test(panel.textContent),'Old template or broken wording remained');
-   const card=panel.querySelector('[data-laws-owner=moths]'),detail=card.querySelector('details');if(!detail.open)detail.querySelector('summary').click();assert(card.innerText.includes('Signal by turning reflected light'),'Capability did not open');
+   tabs[2].click();const card=panel.querySelector('[data-laws-owner=moths]'),detail=[...card.querySelectorAll('details')].find(n=>n.querySelector('summary').textContent==='Borrowed light');detail.open=true;assert(card.innerText.includes('Signal by turning reflected light'),'Capability did not open');
+  });
+  await test('Appearance and real ability names replace empty capability and order rows',()=>{
+   const panel=d.getElementById('sovereignty');d.getElementById('sovereign-tab-commanders').click();const general=panel.querySelector('[data-laws-owner=porter]');
+   for(const detail of general.querySelectorAll('details'))detail.open=true;
+   assert(general.innerText.includes('brass lantern glowing inside its chest'),'General appearance missing');
+   assert(general.innerText.includes('Open-handed')&&general.innerText.includes('Carries fragile reflections'),'Legacy string ability missing');
+   assert(general.innerText.includes('Shelter a candle')&&general.innerText.includes('glass ribs shelter'),'Title/text ability missing');
+   assert(general.innerText.includes('A light for every guest'),'Owned upgrade missing');
+   assert(!panel.textContent.includes('Recorded capability'),'Generic capability label remained');
+   assert(![...panel.querySelectorAll('dt')].some(n=>['Where','Orders'].includes(n.textContent)),'Logistics still replace description');
+   assert(![...general.querySelectorAll('summary')].some(n=>n.textContent.includes('unfinished')),'Empty ability became a dropdown');
+   for(const detail of panel.querySelectorAll('.laws-abilities details'))assert([...detail.children].some(n=>n.tagName!=='SUMMARY'&&n.textContent.trim()),'Empty ability dropdown');
+   d.getElementById('sovereign-tab-domain').click();const appearance=panel.querySelector('[data-laws-owner=domain] .laws-appearance');appearance.open=true;assert(appearance.innerText.includes('timber balconies'),'Domain appearance missing');
+   d.getElementById('sovereign-tab-forces').click();const army=panel.querySelector('[data-laws-owner=moths] .laws-appearance');army.open=true;assert(army.innerText.includes('mirrored wings'),'Army appearance missing');
+   d.getElementById('nav-skills').click();const power=d.querySelector('#skills .laws-appearance');assert(power,'Power appearance disclosure missing');power.open=true;assert(power.innerText.includes('Silver handprints'),'Power manifestation missing');
+  });
+  await test('Sovereignty search selects the owner tab and refresh keeps that tab',async()=>{
+   const calls=w.legacyCalls.length,search=d.getElementById('dashboardSearch');search.value='glass ribs';search.dispatchEvent(new Event('input'));
+   const hit=[...d.querySelectorAll('#dashboardSearchList button')].find(b=>b.textContent.includes('Sovereignty'));assert(hit,'General ability search missing');hit.click();
+   assert(d.getElementById('page-sovereignty').hidden===false&&!d.getElementById('sovereign-panel-commanders').hidden,'Search opened wrong owner');assert(w.legacyCalls.length===calls,'Search fetched state');d.getElementById('dashboardSearchClear').click();
+   await w.callTool('get_campaign',{campaign_id:fixture.campaign.id});assert(!d.getElementById('sovereign-panel-commanders').hidden,'Refresh lost owner tab');
   });
   await test('Gear search opens the actual item without a tool call',()=>{
    const calls=w.legacyCalls.length,search=d.getElementById('dashboardSearch');search.value='guest lantern';search.dispatchEvent(new Event('input'));
@@ -53,6 +80,7 @@ document.getElementById('run').onclick=async()=>{
    for(const width of [390,1100]){frame.style.width=width+'px';for(const layout of ['original','reclaimed','orrery','ember']){
     w.selectLayout(layout,false);await wait(60);d.getElementById('nav-sovereignty').click();
     assert(d.documentElement.scrollWidth<=d.documentElement.clientWidth+1,'Overflow '+layout+'/'+width);
+    for(const tab of d.querySelectorAll('#sovereignty .sovereign-tabs button')){tab.click();assert(tab.getBoundingClientRect().height>=44,'Small owner tab '+layout+'/'+width);assert(d.documentElement.scrollWidth<=d.documentElement.clientWidth+1,'Owner panel overflow '+layout+'/'+width)}
     for(const card of d.querySelectorAll('#sovereignty .sovereign-card')){const css=w.getComputedStyle(card);for(const edge of ['Top','Right','Bottom','Left'])assert(parseFloat(css['border'+edge+'Width'])>=1,'Missing border '+layout+'/'+width);assert(parseFloat(css.paddingLeft)>=14,'Missing padding')}
     d.getElementById('nav-skills').click();for(const button of d.querySelectorAll('#personalPowersList button'))assert(button.getBoundingClientRect().height>=44,'Compressed Law '+layout+'/'+width);
    }}frame.style.width='1100px';w.selectLayout('original',false);d.getElementById('nav-character').click();

@@ -82,6 +82,16 @@ def kit_check(state):
     ):
         if not ready:
             missing.append(label)
+    if not established and creation.get("setup_version", 1) >= 3:
+        for scope, owner in owners(state):
+            if scope == "personal":
+                visible = owner.get("appearance") or owner.get("visual_description") or owner.get("manifestation")
+            elif scope in {"domain", "general", "forces"}:
+                visible = owner.get("appearance") or owner.get("description")
+            else:
+                continue
+            if not words(visible, 6000):
+                missing.append("appearance of " + owner.get("name", "the selected power"))
     return {"required": True, "ready": not missing, "missing": missing}
 
 
@@ -166,6 +176,9 @@ def validate(before, state, changes, correction=False):
         require(words(owner.get("name")), "Name the owner of the capability")
         if scope in {"general", "forces"}:
             records(owner.get("abilities", []), "Ally abilities")
+            if (scope, owner["id"]) not in previous:
+                require(words(owner.get("appearance") or owner.get("description"), 6000),
+                        "Describe what the new General or force looks like")
         for upgrade in records(owner.get("upgrades", []), "Earned developments", 1000).values():
             require(all(words(upgrade.get(key)) for key in ("name", "effect", "source")) and
                     upgrade.get("rarity") in RARITIES, "Record the named upgrade, effect, source and rarity")

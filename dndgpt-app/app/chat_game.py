@@ -403,7 +403,7 @@ class ChatGame:
                 state["character"]["level"] = 1
                 state["sovereignty"] = initial()
                 state["creation"]["selection_policy"] = dict(SELECTIONS)
-                state["creation"]["setup_version"] = 2
+                state["creation"]["setup_version"] = 3
             elif game_id == SOVEREIGN:
                 from .sovereign_play import GROWTH
                 state["creation"]["sovereign_ruleset"] = embodied_profile

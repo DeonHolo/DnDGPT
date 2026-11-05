@@ -32,7 +32,8 @@ def build(mode="bound", paired=False):
                 "effect": "Can open a door by touching its reflected handle.", "upgrades": []}},
         "upsert": {"abilities": [
             {"id": key, "name": name, "rarity": "RARE", "mechanics_display": effect,
-             "simple": effect, "flavor_text": "A guest answers from the glass.", "upgrades": []}
+             "simple": effect, "flavor_text": "A guest answers from the glass.",
+             "appearance": "Silver handprints gather at the mirror's edge as the guest " + name.lower() + ".", "upgrades": []}
             for key, name, effect in (
                 ("step", "Borrow a doorway", "Move between reflections that bear your handprint."),
                 ("carry", "The other side", "Carry a real object inside its reflection."),
@@ -493,9 +494,28 @@ def test_existing_active_creature_without_new_creation_fields_stays_playable(eng
         old["world"] = {}
         for law in old["abilities"]:
             law["upgrades"] = []
+            law.pop("appearance", None)
         old["sovereignty"]["domain"]["upgrades"] = []
         records.update(db, "campaigns_v1", {"id": state["id"]}, {"data": canonical(old)})
     saved = game.update("owner-a", state["id"], "legacy-still-playable", state["version"], "The guest continues", {"current_location": "The far-bank reflection"})["campaign"]
     assert saved["rules_check"]["ready"] and saved["phase"] == "adventure"
     assert saved["character"]["attributes"]["LCK"] == 5 and "level" not in saved["character"]
     assert saved["current_location"] == "The far-bank reflection"
+
+
+def test_new_build_requires_visible_power_and_ally_descriptions_before_start(engine):
+    game = ChatGame(engine)
+    draft = game.create("owner-a", "Descriptive fixture", "appearance-create", True, SOVEREIGN)
+    changes = build(paired=True)
+    changes["upsert"]["abilities"][0].pop("appearance")
+    with pytest.raises(EngineError, match="appearance of Borrow a doorway"):
+        game.update("owner-a", draft["id"], "appearance-missing", 1, "Choose the creature", changes, True)
+    assert engine.get_campaign("owner-a", draft["id"])["version"] == 1
+    changes = build(paired=True)
+    changes["sovereignty"]["commanders"] = [{"id": "deputy", "name": "The Glass Porter",
+        "abilities": [{"id": "carry", "name": "Open-handed", "effect": "Carries fragile reflections in its palms."}]}]
+    with pytest.raises(EngineError, match="what the new General or force looks like"):
+        game.update("owner-a", draft["id"], "ally-appearance-missing", 1, "Choose the creature", changes, True)
+    changes["sovereignty"]["commanders"][0]["appearance"] = "A broad, translucent porter with lamplight trapped in its hands."
+    saved = game.update("owner-a", draft["id"], "appearance-complete", 1, "Choose the creature", changes, True)["campaign"]
+    assert saved["rules_check"]["ready"] and saved["creation"]["setup_version"] == 3

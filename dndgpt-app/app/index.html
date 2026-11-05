@@ -654,6 +654,7 @@ function renderAbilityInspector(article,ability){
   article.append(element("h3",ability.name||"Unnamed ability","rarity-"+rarity));
   if(typeof ability.flavor_text==="string"&&ability.flavor_text.trim())article.append(element("p",ability.flavor_text,"ability-flavor"));
   paragraph(article,currentGame==="sovereign-system"?rarity:[rarity,activationLabel(ability)].join(" · "),"article-meta");
+  if(usesSovereignLaws(state||{}))renderLawsAppearance(article,{appearance:ability.appearance||ability.visual_description||ability.manifestation||ability.visual||ability.flavor_text},"power-appearance-"+suffix);
   const facts=element("dl",undefined,"ability-facts");
   for(const [label,value]of [["Cost",skillCost(ability)],["Reach",readableReach(ability)],["Target",ability.target],
     ["Attack / save",ability.attack_save],["Damage",ability.damage],["Duration",ability.duration],["Cooldown",skillCooldown(ability)]]){

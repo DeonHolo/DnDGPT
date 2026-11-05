@@ -5,7 +5,7 @@ Start with world and creation: Age of Convergence introduction before Classes, b
 Use growth for quest rewards, rarity-and-gear for acquisitions, and save for the connected records.
 Read story-ui for presentation. Reuse cached sections and successful save results.
 
-creation | Choose a creature and enter play | 6017 characters
+creation | Choose a creature and enter play | 6741 characters
 world | Age of Convergence lore and the story introduction | 2398 characters
 body-and-domain | Bodies, reach and a living domain | 1721 characters
 laws | Powers and meaningful improvements | 2977 characters
@@ -15,5 +15,5 @@ forces | Allies, forces and work between scenes | 1662 characters
 story | Advance the story through choices and consequences | 2765 characters
 growth | Quests, rewards and one upgrade list per owner | 3983 characters
 rarity-and-gear | Rarity, Luck and meaningful gear | 1680 characters
-save | Hosted play and continuity | 4446 characters
+save | Hosted play and continuity | 4791 characters
 story-ui | Readable story and working choices | 2009 characters

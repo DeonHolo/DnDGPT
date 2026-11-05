@@ -19,7 +19,7 @@ function searchPublicText(value){
 }
 function searchPowerText(ability,child){
   if(child)return [child.name,child.rarity,child.flavor_text,searchPublicText(upgradeContent(child,ability))].filter(Boolean).join(" ");
-  return [ability.name,ability.rarity,activationLabel(ability),ability.flavor_text,
+  return [ability.name,ability.rarity,activationLabel(ability),ability.flavor_text,ability.appearance,ability.visual_description,
     ...[ability.simple||ability.description,ability.mechanics_display??ability.mechanics??ability.full_rules??ability.effect??ability.effects??ability.rules,
       ability.target,ability.damage,ability.duration,ability.prerequisites,ability.stacking,ability.manifestation??ability.visual]
       .map(value=>searchPublicText(abilityCopy(value)))].filter(Boolean).join(" ");
@@ -54,7 +54,7 @@ function refreshDashboardSearch(){
   for(const ability of state.abilities||[]){
     if(ability.known_to_player===false)continue;
     const foundation=isSovereignFoundation(ability)&&currentGame==="sovereign-system";
-    const section=foundation?"Sovereignty":currentGame==="sovereign-system"?"Personal Powers":("Skills · "+skillTabs[skillGroup(ability)][1]);
+    const section=foundation?"Sovereignty":currentGame==="sovereign-system"?(usesSovereignLaws(state)?"Core Powers":"Personal Powers"):("Skills · "+skillTabs[skillGroup(ability)][1]);
     add(ability.name,section,searchPowerText(ability),()=>openSearchPower(ability,"rules"));
     for(const key of ["evolutions","imprints","integrated_imprints","upgrades"]){
       const children=Array.isArray(ability[key])?ability[key]:ability[key]?[ability[key]]:[];
@@ -77,7 +77,7 @@ function refreshDashboardSearch(){
     });
   for(const [selector,section,page]of domGroups)for(const node of document.querySelectorAll(selector)){
     const title=node.querySelector(".item-name,h3,summary")?.textContent;if(!title)continue;
-    add(title,section,searchableText(node),()=>{selectCompanionPage(page);return node});
+    add(title,section,searchableText(node),()=>{selectCompanionPage(page);return page==="sovereignty"&&usesSovereignLaws(state)?openLawsSovereigntyCard(node):node});
   }
   for(const [key,value]of Object.entries(state.world||{})){
     if(!publicField(key)||/^(?:gm|internal|hidden)(?:_|$)/i.test(key)||["title","name"].includes(key)||value?.known_to_player===false)continue;
