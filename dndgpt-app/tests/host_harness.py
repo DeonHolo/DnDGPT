@@ -209,6 +209,36 @@ def test_sovereign_page():
     return FileResponse(HERE / "sovereign.html")
 
 
+@app.get("/test-laws")
+def test_laws_page():
+    return FileResponse(HERE / "sovereign_laws.html")
+
+
+@app.post("/test-laws-fixture")
+def laws_fixture():
+    from .test_sovereign_laws import build
+    from app.chat_game import ChatGame
+    stamp = str(time.time_ns())
+    game = ChatGame(INNER.state.engine)
+    draft = game.create(OWNER, "Reflections · disposable Laws fixture", "laws-browser-" + stamp, True, "sovereign-system")
+    changes = build()
+    changes["upsert"]["inventory"] = [{"id": "lantern", "name": "The guest lantern", "rarity": "RARE",
+        "holder": "Glass moths", "effect": "Stores a reflection of sunlight for a dark passage."}]
+    changes["sovereignty"]["fronts"] = [{"id": "creek", "name": "The broken creek bridge",
+        "status": "active", "objective": "Bring the guest safely across the creek"}]
+    return game.update(OWNER, draft["id"], "laws-browser-start-" + stamp, 1, "Accept the reflection creature", changes, True)
+
+
+@app.post("/test-laws-record")
+async def record_laws(request: Request):
+    result = await request.json()
+    result["environment"] = "In-app browser, simulated host, real authenticated transport, disposable SQLite campaign"
+    output = HERE.parent / "test-results/sovereign-laws-browser.json"
+    output.parent.mkdir(exist_ok=True)
+    output.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
+    return {"saved": True}
+
+
 @app.get("/test-living")
 def test_living_page():
     return FileResponse(HERE / "living.html")
@@ -223,7 +253,9 @@ def living_fixture():
     game = ChatGame(engine)
     output = {}
     for selected in ("age-of-convergence", "sovereign-system"):
-        state = game.create(OWNER, "Living demo · "+selected, "living-fixture-"+selected+"-"+str(time.time_ns()), True, selected)
+        from app.sovereign_play import PROFILE
+        state = game.create(OWNER, "Living demo · "+selected, "living-fixture-"+selected+"-"+str(time.time_ns()), True, selected,
+                            sovereign_ruleset=PROFILE if selected == "sovereign-system" else None)
         with engine.store.transaction() as db:
             raw = engine._get(db, OWNER, state["id"])
             raw.update(phase="adventure", paused=False)
@@ -266,7 +298,9 @@ async def record_living(request: Request):
 def sovereign_draft_fixture():
     from app.chat_game import ChatGame
     game = ChatGame(INNER.state.engine)
-    state = game.create(OWNER, "Sovereign starting powers · disposable draft", "draft-powers-"+str(time.time_ns()), True, "sovereign-system")
+    from app.sovereign_play import PROFILE
+    state = game.create(OWNER, "Sovereign starting powers · disposable draft", "draft-powers-"+str(time.time_ns()), True,
+                        "sovereign-system", sovereign_ruleset=PROFILE)
     powers = [{"id": role, "name": "Fixture "+role+" power", "scope": "sovereign", "sovereign_role": role,
                "source": "Class", "rarity": "UNIQUE", "activation": "Passive",
                "mechanics": "A recorded starting-power renderer fixture.", "flavor_text": "The domain answers."}

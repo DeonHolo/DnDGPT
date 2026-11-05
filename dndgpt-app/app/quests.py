@@ -21,13 +21,21 @@ def integer(value, maximum=10**9):
     return type(value) is int and 0 <= value <= maximum
 
 
-def reward(value, contract=False):
+def reward(value, contract=False, laws=False):
     require(type(value) is dict, "Quest rewards must be objects")
     allowed = {"summary", "source", "currency", "items"} | (set() if contract else {"xp", "evolution_credits"})
+    if laws and not contract:
+        allowed = (allowed - {"xp", "evolution_credits"}) | {"development"}
     require(not value.keys() - allowed, "Unknown reward field; settlement is server-controlled")
     require(value.get("source", "System") == "System" or contract, "System reward source must be System")
     require(integer(value.get("xp", 0), 100000), "Quest XP must be 0..100000")
     require(integer(value.get("evolution_credits", 0), 3), "Evolution credits must be 0..3")
+    if "development" in value:
+        from .sovereign_laws import SCOPES
+        development = value["development"]
+        require(type(development) is dict and development.keys() == {"scope", "summary"} and
+                type(development["scope"]) is str and development["scope"] in SCOPES and
+                nonblank(development["summary"]), "A development reward needs its scope and a named benefit")
     currency = value.get("currency", {})
     require(type(currency) is dict and len(currency) <= 8 and
             all(nonblank(key, 40) and integer(amount) for key, amount in currency.items()),
@@ -43,7 +51,7 @@ def reward(value, contract=False):
     return value
 
 
-def normalize(quest):
+def normalize(quest, laws=False):
     require(nonblank(quest.get("name") or quest.get("title"), 200), "A quest needs a short title")
     if "activity" in quest:
         require(type(quest["activity"]) is str and quest["activity"] in {"hunt", "conquest"}, "Activity must be hunt or conquest")
@@ -68,13 +76,14 @@ def normalize(quest):
                 require(obj.get("status") != "done", "A completed counter must reach its target")
         if "reward" in obj:
             require(obj.get("optional", False), "Use System reward for required objectives")
-            reward(obj["reward"])
+            reward(obj["reward"], laws=laws)
+            require("development" not in obj["reward"], "Put a promised development in the quest's System reward")
         ids.append(obj["id"])
     require(len(ids) == len(set(ids)) and any(not obj.get("optional") for obj in objectives),
             "Use distinct objective IDs and at least one required objective")
-    reward(quest.get("system_reward"))
+    reward(quest.get("system_reward"), laws=laws)
     package = quest["system_reward"]
-    require(package.get("xp") or package.get("evolution_credits") or package.get("items") or
+    require(package.get("xp") or package.get("evolution_credits") or package.get("items") or package.get("development") or
             any(package.get("currency", {}).values()), "Declare a concrete System reward")
     status = str(quest.get("status", "active")).lower()
     require(status in TERMINAL | {"active", "paused"}, "Unknown quest status")
@@ -110,6 +119,8 @@ def grant(state, package):
 
 
 def apply_quests(before, state, changes, correction=False):
+    from .game_profiles import uses_sovereign_laws
+    laws = uses_sovereign_laws(state)
     old = {row["id"]: row for row in before.get("quest_log", [])}
     current = {row["id"]: row for row in state.get("quest_log", [])}
     structured = [row for row in current.values() if row.get("quest_schema") == 1]
@@ -122,7 +133,7 @@ def apply_quests(before, state, changes, correction=False):
         require(all(row["id"] in current and current[row["id"]].get("quest_schema") == 1 for row in prior),
                 "Keep structured quest history; use a reviewed correction to remove it")
     for quest in structured:
-        normalize(quest)
+        normalize(quest, laws)
         previous = old.get(quest["id"], {})
         require(quest.get("reward_status") == previous.get("reward_status"), "Quest reward_status is server-controlled")
         if previous.get("quest_schema") == 1 and not correction:

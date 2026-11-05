@@ -1018,6 +1018,8 @@ function renderCampaign(next){
   const c=next.character,gear=gearRecords(next);
   $("stateVersion").textContent="State version "+next.version+" · Rules "+next.rules_version;
   $("lastEvent").textContent=next.last_event?format(next.last_event):"No recorded events.";
+  $("xpMeter").hidden=usesSovereignLaws(next);
+  if(usesSovereignLaws(next)){renderLawsCampaign(next);return}
   if(next.game_id==="dnd-2024"){renderDndPanels(next);return}
   $("hero").textContent=c.name+" · Level "+c.level+" · "+c.class_name;
   renderResources(c);

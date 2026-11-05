@@ -1,6 +1,10 @@
 # DnDGPT request tracker
 
-Updated: 21 October 2026. Checkboxes mean implemented and checked in the working files; release status is recorded separately.
+Updated: 5 November 2026. Checkboxes mean implemented and checked in the working files. Release status is recorded separately.
+
+## Next Sovereign redesign
+
+[Sovereign Laws design notes](docs/SOVEREIGN_LAWS_DESIGN.md) track the agreed direction, proposed Origin and Title progression, and the first playtest.
 
 ## ASAP — current approved work
 

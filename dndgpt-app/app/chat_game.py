@@ -11,6 +11,7 @@ from .rules import ATTRIBUTES, EQUIPMENT_SLOTS, derived
 from .storage import canonical
 from .version import RULES_VERSION
 from .standard_rules import PROFILE, starting_resources, uses_standard_rules, class_kit_check
+from .game_profiles import SOVEREIGN_LAWS, uses_sovereign_laws
 from . import records
 
 COLLECTIONS = {"abilities", "conditions", "summons", "enemies", "inventory", "supplies",
@@ -188,22 +189,28 @@ def apply_changes(state, changes, *, correction=False, completing=False, event_r
         projected[group] = list(records.values())
     for group, ids in changes.get("remove", {}).items():
         projected[group] = [row for row in projected[group] if row["id"] not in ids]
-    from .sovereign_play import apply_play
-    apply_play(state, projected, changes, correction)
-    if (not correction and state.get("phase") == "adventure" and set(changes) == {"creation"} and
-            set(changes["creation"]) <= {"sovereign_growth", "sovereign_growth_reason"}):
-        # An explicit future-rate preference changes neither earned rewards nor pause/time.
-        return projected
+    laws = uses_sovereign_laws(state)
+    if not laws:
+        from .sovereign_play import apply_play
+        apply_play(state, projected, changes, correction)
+        if (not correction and state.get("phase") == "adventure" and set(changes) == {"creation"} and
+                set(changes["creation"]) <= {"sovereign_growth", "sovereign_growth_reason"}):
+            # An explicit future-rate preference changes neither earned rewards nor pause/time.
+            return projected
     from .quests import apply_quests
     from .world_events import apply_tracking
     apply_quests(state, projected, changes, correction)
-    from .sovereignty import apply_sovereignty
-    apply_sovereignty(state, projected, changes, correction, dice)
-    from .personal_powers import apply_personal_powers
-    apply_personal_powers(state, projected, changes, correction)
+    if laws:
+        from .sovereign_laws import validate
+        validate(state, projected, changes, correction)
+    else:
+        from .sovereignty import apply_sovereignty
+        from .personal_powers import apply_personal_powers
+        apply_sovereignty(state, projected, changes, correction, dice)
+        apply_personal_powers(state, projected, changes, correction)
     from .campaign_life import apply_life
     apply_life(state, projected, changes, correction)
-    if not correction:
+    if not correction and (not laws or "event_transition" in changes):
         apply_tracking(state, projected, changes, event_receipt)
     ch = projected["character"]
     if uses_standard_rules(projected) and state["phase"] == "character_draft" and "attributes" in changes.get("character", {}):
@@ -243,7 +250,8 @@ def complete_creation(state, outfit_receipt=None):
     ch = state["character"]
     if not ch["name"].strip() or not ch["class_name"].strip() or ch["class_name"] == "Unassigned":
         fail(422, "incomplete_character", "Save the chosen name and class")
-    if not str(ch.get("background") or "").strip():
+    laws = uses_sovereign_laws(state)
+    if not laws and not str(ch.get("background") or "").strip():
         fail(422, "incomplete_character", "Save the chosen background")
     if not ch.get("story_summary", "").strip():
         fail(422, "incomplete_story", "Write Your story from the selected build and public world facts in this save")
@@ -273,8 +281,12 @@ def complete_creation(state, outfit_receipt=None):
                 fail(422, "starting_equipment_required", "Equip each planned item at its recorded tier with its actual effects")
     if state["level_up_freeze"]:
         fail(423, "advancement_frozen", "Resolve pending advancement choices")
-    from .sovereignty import complete_sovereign
-    complete_sovereign(state)
+    if laws:
+        from .sovereign_laws import complete
+        complete(state)
+    else:
+        from .sovereignty import complete_sovereign
+        complete_sovereign(state)
     state["phase"], state["paused"] = "adventure", False
 
 
@@ -327,7 +339,7 @@ class ChatGame:
     def __init__(self, engine):
         self.engine, self.store = engine, engine.store
 
-    def create(self, owner, name, action_id, disposable=False, game_id="age-of-convergence"):
+    def create(self, owner, name, action_id, disposable=False, game_id="age-of-convergence", *, sovereign_ruleset=None):
         if game_id == "dnd-2024":
             from .dnd5e import DndGame
             return DndGame(self.engine).create(owner, name, action_id, disposable)
@@ -340,9 +352,16 @@ class ChatGame:
         text(name, "name", 80)
         if not name.strip() or type(disposable) is not bool:
             fail(422, "invalid_chat_update", "A game needs a name and boolean disposable flag")
-        request = canonical({"mode": "chat", "name": name, "disposable": disposable})
+        from .sovereign_play import PROFILE as embodied_profile
+        if sovereign_ruleset is not None and (game_id != SOVEREIGN or sovereign_ruleset != embodied_profile):
+            fail(422, "invalid_game", "Only the existing embodied profile may be selected explicitly")
+        laws = game_id == SOVEREIGN and sovereign_ruleset is None
+        request_fields = {"mode": "chat", "name": name, "disposable": disposable}
         if game_id != "age-of-convergence":
-            request = canonical({"mode": "chat", "name": name, "disposable": disposable, "game_id": game_id})
+            request_fields["game_id"] = game_id
+        if sovereign_ruleset:
+            request_fields["sovereign_ruleset"] = sovereign_ruleset
+        request = canonical(request_fields)
         with self.store.transaction() as db:
             prior = records.get(db, "creations_v1", {"owner": owner, "action_id": action_id})
             if prior:
@@ -372,9 +391,15 @@ class ChatGame:
                      "fictional_time_seconds": 0, "advancement": {}, "rarity_candidates": {}, "last_event": None}
             from .campaign_focus import DEFAULTS
             state["campaign_preferences"] = dict(DEFAULTS)
-            if game_id == SOVEREIGN:
-                from .sovereign_play import PROFILE as sovereign_profile, GROWTH
-                state["creation"]["sovereign_ruleset"] = sovereign_profile
+            if laws:
+                from .sovereign_laws import initial
+                state["rules_profile"] = SOVEREIGN_LAWS
+                state["character"] = {key: character[key] for key in ("name", "class_name", "rarity")}
+                state["character"]["attributes"] = {"LCK": 5}
+                state["sovereignty"] = initial()
+            elif game_id == SOVEREIGN:
+                from .sovereign_play import GROWTH
+                state["creation"]["sovereign_ruleset"] = embodied_profile
                 from .sovereignty import initial
                 state["sovereignty"] = initial(GROWTH["sovereign_start"])
                 from .personal_powers import initial as personal_initial
@@ -438,8 +463,8 @@ class ChatGame:
                                   event_receipt=json.loads(event_row["result"]) if event_row else None,
                                   dice=self.engine.dice)
             if begin_adventure:
-                receipt = records.get(db, "game_rolls_v1", {"owner": owner,
-                                      "action_id": "starting-outfit-" + campaign_id})
+                receipt = None if uses_sovereign_laws(state) else records.get(db, "game_rolls_v1", {"owner": owner,
+                                                                                     "action_id": "starting-outfit-" + campaign_id})
                 complete_creation(state, json.loads(receipt["result"]) if receipt else None)
             state["version"] += 1
             event = self.engine._append(db, state, {"kind": "chat_update", "action_id": action_id, "summary": summary})

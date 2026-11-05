@@ -35,5 +35,5 @@ function renderCampaignFocus(next){
     for(const place of known){paragraph(places,place.name+(place.controller?" · Held by "+place.controller:""));for(const feature of place.features||[])paragraph(places,feature.name+" · "+feature.description,"life-meta")}
   }
   const fronts=(next.sovereignty?.fronts||[]).filter(f=>f.known!==false&&f.status==="active");
-  if(fronts.length){const card=lifeCard(root,"Active fronts");for(const f of fronts)paragraph(card,f.name+" · "+f.objective+" · "+f.player_progress+" / "+f.target_progress)}
+  if(fronts.length){const card=lifeCard(root,"Active fronts");for(const f of fronts)paragraph(card,f.name+" · "+f.objective+(f.target_progress!==undefined?" · "+f.player_progress+" / "+f.target_progress:""))}
 }

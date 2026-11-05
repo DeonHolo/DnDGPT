@@ -33,6 +33,7 @@ class Proposal(BaseModel):
 class CreateChatGame(CreateSandbox):
     disposable: bool = False
     game_id: str = "dnd-2024"
+    sovereign_ruleset: str | None = None
 
 
 class ChatUpdate(BaseModel):

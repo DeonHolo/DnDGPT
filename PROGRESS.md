@@ -1,5 +1,9 @@
 # Continuity and recovery release
 
+## Sovereign Laws — 2026-11-05
+
+Approved redesign implemented as a new native Sovereign profile: broad Laws, meaningful possibility-based developments, playable Origin and Title from creation, one d6 maneuver exchange, creature-shaped Domain and allies, and one upgrade list per owner. Native saves and dashboard no longer require the archived stat, equipment-slot and formation templates. Existing campaigns select their recorded book. Release checks and playtest limits: `docs/SOVEREIGN_LAWS_DESIGN.md`.
+
 ## Sovereign embodied redesign — 2026-11-04
 
 Approved audit implementation: consistent effective Sovereign rules; mobile/bound/distributed bodies, normal creation rarity/Luck with explicit-only overrides, body equipment and finite tactical defense scenes. New saves default to two personal/two permanent Sovereign developments; selected developments batch together. Explicit future growth-rate changes work through chat without dashboard approval or editing earned balances. Preserve existing campaigns and other games. Work and verification: docs/SOVEREIGN_EMBODIED_2026_11_04.md.

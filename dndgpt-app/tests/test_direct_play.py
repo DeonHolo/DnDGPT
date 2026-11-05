@@ -17,7 +17,8 @@ SLOT_PREFERENCES = [
 
 def prepare(web, game_id="age-of-convergence", rarity="COMMON"):
     state = tool(web, "create_chat_game", {"name": "Disposable direct-play fixture",
-                 "action_id": "direct-create", "disposable": True, "game_id": game_id})["structuredContent"]["campaign"]
+                 "action_id": "direct-create", "disposable": True, "game_id": game_id,
+                 **({"sovereign_ruleset": "sovereign-embodied-2026-11-04"} if game_id == "sovereign-system" else {})})["structuredContent"]["campaign"]
     state = tool(web, "save_chat_update", {"campaign_id": state["id"], "action_id": "class-selected",
                  "expected_version": state["version"], "summary": "Actual class choice",
                  "changes": {"character": {"class_name": "Door Warden", "rarity": rarity}}})["structuredContent"]["campaign"]

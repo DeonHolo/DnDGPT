@@ -71,12 +71,15 @@ def public_state(state):
     result = json.loads(canonical(state))
     from .campaign_focus import preferences
     result["campaign_preferences"] = preferences(state)
-    from .game_profiles import game_id, VERSION
+    from .game_profiles import game_id, VERSION, uses_sovereign_laws
     result["game_id"] = game_id(state)
     result["game_rules_version"] = state.get("game_rules_version", VERSION)
     if result["game_id"] == "dnd-2024":
         from .dnd5e import public_dnd_state
         public_dnd_state(result)
+    elif uses_sovereign_laws(state):
+        from .sovereign_laws import kit_check
+        result["rules_check"] = kit_check(state)
     elif state.get("mode") == "chat":
         from .standard_rules import class_kit_check, uses_standard_rules
         result["rules_check"] = {"current_profile": uses_standard_rules(state), **class_kit_check(state)}

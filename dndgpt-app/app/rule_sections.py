@@ -39,7 +39,7 @@ GAME_SECTIONS = {"sovereign-creation": "Sovereign creation and inherited rules",
 
 
 def sections(text):
-    if text.startswith("# DnDGPT D&D 2024"):
+    if text.startswith(("# DnDGPT D&D 2024", "# DnDGPT Sovereign Laws")):
         from .dnd_reference import guidance_sections
         return guidance_sections(text)
     chapters = list(re.finditer(r"^# (\d+[A-Z]?)\. (.+)$", text, re.M))
@@ -69,6 +69,13 @@ def sections(text):
 
 def index_text(text):
     entries = sections(text)
+    if text.startswith("# DnDGPT Sovereign Laws"):
+        lines = ["# DnDGPT Sovereign Laws index", "",
+                 "Read the compact hardener once. Use campaign_id for a saved campaign and game_id=sovereign-system for a new game.",
+                 "Start with creation, body-and-domain, laws and identity. Resolve play with maneuvers, forces and story.",
+                 "Use growth for quest rewards, rarity-and-gear for acquisitions, and save for the connected records.",
+                 "Read story-ui for presentation. Reuse cached sections and successful save results.", ""]
+        return "\n".join(lines + [f"{key} | {item['title']} | {item['end']-item['start']} characters" for key, item in entries.items()]) + "\n"
     if text.startswith("# DnDGPT D&D 2024"):
         lines = ["# DnDGPT D&D 2024 guide index", "",
                  "Selected game: dnd-2024. Read its compact hardener once, then relevant guide sections.",

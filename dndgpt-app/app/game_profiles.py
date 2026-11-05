@@ -7,6 +7,7 @@ from pathlib import Path
 
 AGE = "age-of-convergence"
 SOVEREIGN = "sovereign-system"
+SOVEREIGN_LAWS = "sovereign-laws-2026-11-05"
 DND = "dnd-2024"
 DEFAULT_GAME = None
 VERSION = "1.0"
@@ -16,13 +17,17 @@ GAMES = ({"id": DND, "name": "D&D 2024", "rules_version": "5.2.1"},
 GAME_INTRODUCTIONS = {
     DND: "D&D's revised 2024 rules: classic classes, species, spells and character sheets. Choose a published adventure or an original D&D story, solo or with a party.",
     AGE: "A power-fantasy RPG where Earth meets other worlds. Discover generated classes and powers, rarity-ranked rewards and flexible personal builds.",
-    SOVEREIGN: "Become a mobile monster, bound dungeon heart or distributed being. Develop four core powers, defend and expand your domain, and lead distinctive commanders and forces.",
+    SOVEREIGN: "Play an extraordinary being, from a traveling keeper to a tide-bound creature. Use your Laws in risky maneuvers, develop a living domain, and lead allies with their own abilities.",
 }
 RULES = Path(__file__).resolve().parent.parent / "rules"
 
 
 def game_id(state):
     return state.get("game_id", AGE)
+
+
+def uses_sovereign_laws(state):
+    return game_id(state) == SOVEREIGN and state.get("rules_profile") == SOVEREIGN_LAWS
 
 
 def rules_version(value):
@@ -51,13 +56,18 @@ def compose(base, operations):
 
 
 @lru_cache(maxsize=8)
-def rule_source(selected=AGE, document="rulebook"):
+def rule_source(selected=AGE, document="rulebook", profile=None):
     validate_game(selected)
     if document not in {"rulebook", "hardener"}:
         raise ValueError("Choose rulebook or hardener")
     if selected == DND:
         from .dnd_reference import rules_source
         return rules_source(document)
+    if selected == SOVEREIGN and profile == SOVEREIGN_LAWS:
+        data = (RULES / "sovereign" / "laws" / (document + ".txt")).read_bytes()
+        digest = hashlib.sha256(data).hexdigest()
+        return {"content": data.decode("utf-8"), "source_sha256": digest,
+                "base_sha256": digest, "replacements": []}
     path = RULES / ("rulebook-v1.0.txt" if document == "rulebook" else "rule-hardener.txt")
     data = path.read_bytes()
     if selected == AGE:

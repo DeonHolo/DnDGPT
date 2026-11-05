@@ -1,3 +1,4 @@
+from app.sovereign_play import PROFILE as EMBODIED_PROFILE
 import copy
 import hashlib
 from pathlib import Path
@@ -14,7 +15,7 @@ from .test_server import tool
 
 
 def fixture_state(engine):
-    s = ChatGame(engine).create("owner-a", "Sovereign fixture", "sovereign-create", True, SOVEREIGN)
+    s = ChatGame(engine).create("owner-a", "Sovereign fixture", "sovereign-create", True, SOVEREIGN, sovereign_ruleset=EMBODIED_PROFILE)
     # This suite preserves the already-published legacy rules and saved battle semantics.
     # New body/growth contracts have their own end-to-end cases in test_sovereign_embodied.
     s["creation"].pop("sovereign_ruleset", None)
@@ -50,7 +51,7 @@ def milestone():
 def test_rules_are_composed_without_rewriting_shared_source():
     base = rule_source(AGE)
     s = rule_source(SOVEREIGN)
-    creation = rules_page("rulebook", 0, "sovereign-creation", SOVEREIGN)["content"]
+    creation = rules_page("rulebook", 0, "sovereign-creation", SOVEREIGN, EMBODIED_PROFILE)["content"]
     assert "five permanent Sovereign developments choosing TWO" in creation
     assert "Normal independent rarity/Luck applies to creation" in creation
     assert "changes.begin_adventure=true" in creation
@@ -100,20 +101,20 @@ def test_starting_sovereign_kit_is_real_and_distinct_from_personal_powers(engine
 
 @pytest.mark.parametrize("game", [AGE, SOVEREIGN])
 def test_selected_rules_checklist_is_one_page_and_sections_are_lossless(game):
-    hardener = rules_page("hardener", 0, game_id=game)
+    hardener = rules_page("hardener", 0, game_id=game, profile=EMBODIED_PROFILE if game == SOVEREIGN else None)
     assert hardener["next_offset"] is None
     import json
     assert len(json.dumps(hardener, ensure_ascii=False)) < 10000
     assert hardener["game_id"] == game
     if game == SOVEREIGN:
-        assert "sovereign-progression" in rules_page("index", 0, game_id=game)["content"]
+        assert "sovereign-progression" in rules_page("index", 0, game_id=game, profile=EMBODIED_PROFILE)["content"]
         from app.rule_sections import sections
         source = rule_source(game)["content"]
         for key in ("sovereign-creation", "sovereign-progression", "sovereign-warfare", "sovereign-dashboard", "33"):
             expected = sections(source)[key]
             parts, offset = [], 0
             while True:
-                result = rules_page("rulebook", offset, key, game)
+                result = rules_page("rulebook", offset, key, game, EMBODIED_PROFILE)
                 parts.append(result["content"])
                 if result["next_offset"] is None:
                     break
@@ -141,7 +142,7 @@ def test_lists_and_dashboard_are_isolated_without_mutation(engine):
 
 
 def test_mcp_routes_rules_by_campaign_and_rejects_conflicting_game(web):
-    created = tool(web, "create_chat_game", {"name": "Rules routing fixture", "action_id": "mcp-sovereign-create", "game_id": SOVEREIGN})
+    created = tool(web, "create_chat_game", {"name": "Rules routing fixture", "action_id": "mcp-sovereign-create", "game_id": SOVEREIGN, "sovereign_ruleset": EMBODIED_PROFILE})
     cid = created["structuredContent"]["campaign"]["id"]
     result = tool(web, "read_rules", {"campaign_id": cid, "document": "rulebook", "section": "sovereign-creation"})
     assert result["structuredContent"]["game_id"] == SOVEREIGN

@@ -1,3 +1,4 @@
+from app.sovereign_play import PROFILE as EMBODIED_PROFILE
 import copy
 
 import pytest
@@ -37,7 +38,7 @@ def upgrade_request(state, entries):
 
 
 def test_four_substantial_powers_without_activation_quotas(engine):
-    state = ChatGame(engine).create("owner-a", "Four powers", "four-create", True, SOVEREIGN)
+    state = ChatGame(engine).create("owner-a", "Four powers", "four-create", True, SOVEREIGN, sovereign_ruleset=EMBODIED_PROFILE)
     assert state["personal_powers"]["profile"] == PROFILE
     assert state["personal_progression"]["upgrades_available"] == 2
     state["abilities"] = core_powers()
@@ -146,7 +147,7 @@ def test_personal_and_sovereign_upgrades_are_separate(engine):
 
 def test_transport_retry_and_failed_write_are_atomic(web):
     created = tool(web, "create_chat_game", {"name": "Personal transport", "game_id": SOVEREIGN,
-                                            "action_id": "personal-transport-create", "disposable": True})
+                                            "action_id": "personal-transport-create", "disposable": True, "sovereign_ruleset": EMBODIED_PROFILE})
     state = created["structuredContent"]["campaign"]
     guidance = created["structuredContent"]["standard_play"]
     assert "FOUR substantial" in guidance["class_kits"]
@@ -180,7 +181,7 @@ def test_age_rules_and_acquisition_are_unchanged(engine):
 def test_export_restore_preserves_paid_refinements_and_allowance(engine):
     from app.campaign_archive import CampaignArchive
     game = ChatGame(engine)
-    state = game.create("owner-a", "Portable powers", "personal-portable-create", True, SOVEREIGN)
+    state = game.create("owner-a", "Portable powers", "personal-portable-create", True, SOVEREIGN, sovereign_ruleset=EMBODIED_PROFILE)
     state = game.update("owner-a", state["id"], "personal-portable-kit", 1, "Record chosen powers",
                         {"upsert": {"abilities": core_powers()}})["campaign"]
     state = game.update("owner-a", state["id"], "personal-portable-spend", state["version"], "Refine the starting powers",

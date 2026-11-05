@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sovereign Laws dashboard checks</title>
+<style>body{background:#121711;color:#eee8db;font:15px/1.6 system-ui;margin:20px}iframe{width:1100px;max-width:none;height:900px;border:1px solid #99865b}.pass{color:#b7d89b}.fail{color:#ffaaa2}button{padding:12px}</style>
+<h1>Sovereign Laws dashboard checks</h1><p>Disposable campaign. Real authenticated transport.</p>
+<button id="run">Run checks</button><p id="result" role="status">Ready</p><ol id="results"></ol>
+<iframe id="widget" src="/test-legacy-widget" title="Campaign fixture"></iframe>
+<script>
+const frame=document.getElementById('widget'),results=[],wait=ms=>new Promise(r=>setTimeout(r,ms));
+const assert=(value,message)=>{if(!value)throw Error(message)};
+async function until(fn){for(let i=0;i<100;i++){if(fn())return;await wait(100)}throw Error('Timed out waiting for UI')}
+async function test(name,fn){try{await fn();results.push({name,passed:true})}catch(e){results.push({name,passed:false,error:e.message})}const li=document.createElement('li');li.className=results.at(-1).passed?'pass':'fail';li.textContent=JSON.stringify(results.at(-1));document.getElementById('results').append(li)}
+document.getElementById('run').onclick=async()=>{
+ document.getElementById('run').disabled=true;
+ try{
+  await until(()=>frame.contentDocument.getElementById('characterPreview')?.textContent.includes('Level'));
+  const w=frame.contentWindow,d=frame.contentDocument;
+  const response=await fetch('/test-laws-fixture',{method:'POST'}),fixture=await response.json();
+  assert(response.ok,JSON.stringify(fixture));
+  await w.switchGame('sovereign-system');await w.callTool('get_campaign',{campaign_id:fixture.campaign.id});
+  await test('Origin, Title and collapsible story show actual capabilities',()=>{
+   d.getElementById('nav-character').click();const panel=d.getElementById('character');
+   assert(panel.textContent.includes('An unclaimed invitation')&&panel.textContent.includes('The Door Opener'),'Identity missing');
+   assert(panel.textContent.includes('Can open a door'),'Title effect missing');
+   assert(panel.querySelector('.character-story summary'),'Story disclosure missing');
+   assert(d.getElementById('xpMeter').hidden&&!d.getElementById('resources').children.length,'Old resource HUD remained');
+  });
+  await test('Four Laws retain readable selection and all three detail tabs',()=>{
+   d.getElementById('nav-skills').click();const panel=d.getElementById('skills');
+   const powers=[...panel.querySelectorAll('[data-ability-id]')];assert(powers.length===4,'Expected four Laws');
+   for(const power of powers){power.click();const tabs=panel.querySelectorAll('.reading-tabs [role=tab]');assert(tabs.length===3,'Missing a detail tab');[...tabs].find(t=>t.textContent==='Full rules').click();assert(!panel.querySelector('[role=tabpanel]:not([hidden])').textContent.includes('not been recorded'),'Law effect missing')}
+  });
+  await test('Domain and forces show capabilities without old gate or capacity templates',()=>{
+   d.getElementById('nav-sovereignty').click();const panel=d.getElementById('sovereignty');
+   assert(panel.textContent.includes('The mirrored inn')&&panel.textContent.includes('Glass moths'),'Actual owners missing');
+   assert(panel.textContent.includes('Borrowed light'),'Force capability missing');
+   assert(!/Domain level|Defenses & vital|Veterancy|max strength|undefined/.test(panel.textContent),'Old template or broken wording remained');
+   const card=panel.querySelector('[data-laws-owner=moths]'),detail=card.querySelector('details');if(!detail.open)detail.querySelector('summary').click();assert(card.innerText.includes('Signal by turning reflected light'),'Capability did not open');
+  });
+  await test('Gear search opens the actual item without a tool call',()=>{
+   const calls=w.legacyCalls.length,search=d.getElementById('dashboardSearch');search.value='guest lantern';search.dispatchEvent(new Event('input'));
+   const hit=[...d.querySelectorAll('#dashboardSearchList button')].find(b=>b.textContent.includes('The guest lantern'));assert(hit,'Gear search missing');hit.click();
+   assert(d.getElementById('page-equipment').hidden===false,'Gear panel did not open');assert(w.legacyCalls.length===calls,'Search fetched campaign again');d.getElementById('dashboardSearchClear').click();
+  });
+  await test('Allies show capabilities and remain searchable',()=>{
+   d.getElementById('nav-summons').click();const panel=d.getElementById('summons');assert(panel.textContent.includes('Glass moths'),'Forces missing from allies');assert(!/Attack bonus|DEF|0 \/ undefined/.test(panel.textContent),'Stat template remained');
+   const search=d.getElementById('dashboardSearch');search.value='glass moths';search.dispatchEvent(new Event('input'));const hit=[...d.querySelectorAll('#dashboardSearchList button')].find(b=>b.textContent.includes('Allies & combat'));assert(hit,'Ally search missing');hit.click();assert(d.getElementById('page-summons').hidden===false,'Ally search failed');d.getElementById('dashboardSearchClear').click();
+  });
+  await test('All four layouts fit phone and desktop with padded borders and touch-sized Laws',async()=>{
+   for(const width of [390,1100]){frame.style.width=width+'px';for(const layout of ['original','reclaimed','orrery','ember']){
+    w.selectLayout(layout,false);await wait(60);d.getElementById('nav-sovereignty').click();
+    assert(d.documentElement.scrollWidth<=d.documentElement.clientWidth+1,'Overflow '+layout+'/'+width);
+    for(const card of d.querySelectorAll('#sovereignty .sovereign-card')){const css=w.getComputedStyle(card);for(const edge of ['Top','Right','Bottom','Left'])assert(parseFloat(css['border'+edge+'Width'])>=1,'Missing border '+layout+'/'+width);assert(parseFloat(css.paddingLeft)>=14,'Missing padding')}
+    d.getElementById('nav-skills').click();for(const button of d.querySelectorAll('#personalPowersList button'))assert(button.getBoundingClientRect().height>=44,'Compressed Law '+layout+'/'+width);
+   }}frame.style.width='1100px';w.selectLayout('original',false);d.getElementById('nav-character').click();
+  });
+  await test('Browsing leaves the real saved campaign unchanged',async()=>{
+   const after=await w.openai.callTool('get_campaign',{campaign_id:fixture.campaign.id});assert(after.structuredContent.campaign.version===fixture.campaign.version,'Browsing changed the save');
+   await w.callTool('get_campaign',{campaign_id:fixture.campaign.id});assert(d.getElementById('xpMeter').hidden&&d.getElementById('nav-skills').textContent.includes('Laws & Developments'),'Refresh restored old profile labels');
+  });
+ }catch(e){results.push({name:'Setup',passed:false,error:e.message})}
+ const passed=results.every(r=>r.passed);document.getElementById('result').textContent=passed?'All '+results.length+' checks passed':'Failed: '+JSON.stringify(results.filter(r=>!r.passed));
+ await fetch('/test-laws-record',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({passed,results})});document.getElementById('run').disabled=false;
+};
+if(location.search.includes('autorun'))frame.addEventListener('load',()=>document.getElementById('run').click(),{once:true});
+</script></html>

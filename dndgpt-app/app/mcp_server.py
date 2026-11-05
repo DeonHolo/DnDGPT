@@ -20,7 +20,7 @@ from .standard_rules import rules_guidance
 from .presentation import dashboard_html as load_dashboard_html
 from .rule_sections import sections as rule_sections, index_text as rule_index
 from .gallery import Gallery, GalleryFile
-from .game_profiles import AGE, DND, DEFAULT_GAME, VERSION as GAME_RULES_VERSION, GAMES, game_id as saved_game, rule_source, validate_game, rules_version
+from .game_profiles import AGE, DND, SOVEREIGN, SOVEREIGN_LAWS, DEFAULT_GAME, VERSION as GAME_RULES_VERSION, GAMES, game_id as saved_game, rule_source, validate_game, rules_version
 
 HTML_PATH = Path(__file__).with_name("index.html")
 MIME_TYPE = "text/html;profile=mcp-app"
@@ -28,11 +28,13 @@ LEGACY_MIME_TYPE = "text/html+skybridge"
 RULE_FILES = {"rulebook": "rulebook-v1.0.txt", "hardener": "rule-hardener.txt"}
 
 
-def rules_page(document, offset, section=None, game_id=AGE):
+def rules_page(document, offset, section=None, game_id=AGE, profile=None):
     if document not in {*RULE_FILES, "index"}:
         raise EngineError(400, "invalid_rules_document", "Choose rulebook, hardener or index")
     try:
-        source = rule_source(game_id, "hardener" if document == "hardener" else "rulebook")
+        if game_id == SOVEREIGN and profile is None:
+            profile = SOVEREIGN_LAWS
+        source = rule_source(game_id, "hardener" if document == "hardener" else "rulebook", profile)
     except ValueError as error:
         raise EngineError(422, "invalid_game_rules", str(error))
     text = source["content"]
@@ -57,8 +59,8 @@ def rules_page(document, offset, section=None, game_id=AGE):
             "source_sha256": source["source_sha256"], "base_sha256": source["base_sha256"], "section": section,
             "scope": "section" if section is not None else "index" if document == "index" else "document",
             "source_characters": source_length, "content": text[offset:end],
-            "standard_play": {**{key: value for key, value in rules_guidance().items() if key in
-                                  {"resources", "attributes", "starting_hp", "starting_mp"}}, "game_id": game_id}
+            "standard_play": {**{key: value for key, value in rules_guidance(game_id, profile).items() if key in
+                                  {"resources", "attributes", "starting_hp", "starting_mp", "rules_profile"}}, "game_id": game_id}
                              if offset == 0 and document == "hardener" and game_id != DND else {}}
 
 
@@ -76,7 +78,7 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         creation_uri = "ui://dndgpt/creation-v1.0-" + hashlib.sha256(creation_html.encode()).hexdigest()[:12] + ".html"
     server = FastMCP(
         "DnDGPT", stateless_http=True, json_response=True,
-        instructions="On first DnDGPT use in a chat, FIRST call render_dashboard to open the dashboard automatically. Reuse the mounted dashboard and established campaign during ongoing play; do not add a render or mode question to every turn. Pass game_id only when the player explicitly names a mode, or campaign_id for a specifically requested save. Otherwise omit both: introduce D&D 2024 (classic D&D rules, published or original adventures), Age of Convergence (Earth-meets-fantasy power growth), and Sovereign System (core personal powers plus domain, generals and armies), and ask which they want before reading a book, choosing a save, creating a game or rolling. Never infer the mode from an old dashboard/widget preference or automatically use D&D. A named mode or specifically targeted existing campaign skips the question. Use the same connection; existing saves select their own game. Read only that game's hardener/index and relevant sections. D&D has NO default adventure: FIRST offer published adventures plus an original premise and wait for the player to choose, unless already chosen or delegated. THEN build around its setting, tone and starting level. Guided character creation groups class+species in character turn 1 and all remaining choices in turn 2, with visible explanations. Quickplay is one explained character draft after adventure selection; standalone library drafts need no adventure. Reuse list_dnd_options summaries and retrieve selected exact rules. Published HTML/PDF sources are read automatically and cached; inspect visual pages for image-only stats. Keep reusable library sheets independent from campaign copies. Ordinary chat starts and selected advancement need no extra approval. Sovereign uses four core personal powers and upgrade-only personal growth; read sovereign-personal. Batch party/scene changes in one save. Keep the full HUD in the dashboard. Never mix homebrew rarity/LCK/MP/evolutions into D&D.",
+        instructions="On first DnDGPT use in a chat, FIRST call render_dashboard to open the dashboard automatically. Reuse the mounted dashboard and established campaign during ongoing play; do not add a render or mode question to every turn. Pass game_id only when the player explicitly names a mode, or campaign_id for a specifically requested save. Otherwise omit both: introduce D&D 2024 (classic D&D rules, published or original adventures), Age of Convergence (Earth-meets-fantasy power growth), and Sovereign System (core personal powers plus domain, generals and armies), and ask which they want before reading a book, choosing a save, creating a game or rolling. Never infer the mode from an old dashboard/widget preference or automatically use D&D. A named mode or specifically targeted existing campaign skips the question. Use the same connection; existing saves select their own game. Read only that game's hardener/index and relevant sections. D&D has NO default adventure: FIRST offer published adventures plus an original premise and wait for the player to choose, unless already chosen or delegated. THEN build around its setting, tone and starting level. Guided character creation groups class+species in character turn 1 and all remaining choices in turn 2, with visible explanations. Quickplay is one explained character draft after adventure selection; standalone library drafts need no adventure. Reuse list_dnd_options summaries and retrieve selected exact rules. Published HTML/PDF sources are read automatically and cached; inspect visual pages for image-only stats. Keep reusable library sheets independent from campaign copies. Ordinary chat starts and selected advancement need no extra approval. New Sovereign games use Sovereign Laws. Read creation, identity and maneuvers. Existing campaigns read their saved profile through campaign_id. Batch party/scene changes in one save. Keep the full HUD in the dashboard. Never mix homebrew rarity/LCK/MP/evolutions into D&D.",
         token_verifier=verifier if config.configured else None,
         auth=AuthSettings(issuer_url=config.issuer, resource_server_url=config.resource_url,
                           required_scopes=[READ_SCOPE]) if config.configured else None,
@@ -148,11 +150,10 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         Null completes the requested selection, not every rule. Cache by source_sha256;
         refresh after changed hashes, missing context or an explicit rules update.
         Omit section to read the complete document for an audit or offline fallback.
-        Player-facing starting kits and summon stats use descriptive reach, not counted
-        distance units. Exact spatial mechanics stay private unless explicitly requested.
+        Follow the selected profile. Sovereign Laws uses fictional reach and maneuver dice.
         A player's explicit custom rulebook takes precedence for that campaign.
         Reading rules never creates a campaign, rolls dice, resumes play or changes saves.
-        For an existing campaign pass campaign_id: its saved game selects the book automatically.
+        For an existing campaign pass campaign_id: its saved profile selects the book automatically.
         No mode is implicit. Without game_id/campaign_id return the three-mode introduction and
         ask the player to choose. Open once through render_dashboard if not already open. With a choice fetch only that book.
         D&D 2024 uses its own operational guide and lookup_dnd_reference for official SRD pages/options.
@@ -161,26 +162,31 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         def read_selected(owner):
             if campaign_id is None and game_id is None:
                 return engine.dashboard(owner)
-            selected = saved_game(engine.get_campaign(owner, campaign_id)) if campaign_id else game_id or DEFAULT_GAME
+            campaign = engine.get_campaign(owner, campaign_id) if campaign_id else None
+            selected = saved_game(campaign) if campaign else game_id or DEFAULT_GAME
             if campaign_id and game_id is not None and game_id != selected:
                 raise EngineError(409, "game_mismatch", "Read the rulebook belonging to this campaign's game")
-            return rules_page(document, offset, section, selected)
+            return rules_page(document, offset, section, selected, campaign.get("rules_profile") if campaign else None)
         return invoke(read_selected)
 
     @server.tool(annotations=write, meta=metadata(WRITE_SCOPE))
     def create_chat_game(name: str, action_id: str, disposable: bool = False,
-                         game_id: Literal["dnd-2024", "age-of-convergence", "sovereign-system"] | None = None) -> CallToolResult:
+                         game_id: Literal["dnd-2024", "age-of-convergence", "sovereign-system"] | None = None,
+                         sovereign_ruleset: Literal["sovereign-embodied-2026-11-04"] | None = None) -> CallToolResult:
         """Create a FRESH chat-led character draft only on explicit new-game/test authorization.
         This does not roll, import, confirm a character, or start an adventure. Use disposable=true
         for tests. ChatGPT follows the complete rulebook and saves its choices through save_chat_update.
         Reuse exact action_id and arguments after uncertain delivery.
         Select the player's requested game; it is fixed for this save. Read that game's rules.
         Without an explicit game_id, show the mode picker/dashboard and ask; create nothing.
+        Sovereign defaults to the Sovereign Laws book. Only set sovereign_ruleset for an
+        explicit request for the archived embodied rules. Read the returned profile's book.
         """
         if game_id is None:
             return invoke(lambda owner: engine.dashboard(owner))
-        return invoke(lambda owner: {"campaign": chat_game.create(owner, name, action_id, disposable, game_id),
-                                      "game_id": game_id, "standard_play": {"game_id": DND, "rules_version": "5.2.1", "attributes": ["STR","DEX","CON","INT","WIS","CHA"], "sheet_guide": "Read section=creation. Choose a published adventure or original premise FIRST; wait for the player unless chosen or delegated. Then tailor class+species together and the remaining choices together to its setting, tone and starting level. Quickplay is one explained character draft after selection. Reuse list_dnd_options."} if game_id == DND else {**rules_guidance(game_id), "game_id": game_id}}, True)
+        return invoke(lambda owner: {"campaign": chat_game.create(owner, name, action_id, disposable, game_id,
+                                                                  sovereign_ruleset=sovereign_ruleset),
+                                      "game_id": game_id, "standard_play": {"game_id": DND, "rules_version": "5.2.1", "attributes": ["STR","DEX","CON","INT","WIS","CHA"], "sheet_guide": "Read section=creation. Choose a published adventure or original premise FIRST; wait for the player unless chosen or delegated. Then tailor class+species together and the remaining choices together to its setting, tone and starting level. Quickplay is one explained character draft after selection. Reuse list_dnd_options."} if game_id == DND else {**rules_guidance(game_id, sovereign_ruleset), "game_id": game_id}}, True)
 
     @server.tool(annotations=write, meta=metadata(WRITE_SCOPE))
     def save_chat_update(campaign_id: str, action_id: str, expected_version: int,
@@ -196,7 +202,15 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         The successful save already verifies the commit; do not read again just to verify it.
         Character ancestry/ancestry_description retain the chosen race; missing race never means human.
         changes supports partial character (attributes merge), equipment
-        Sovereign saves also merge sovereignty and accept sovereign_awards, sovereign_development,
+        For rules_profile=sovereign-laws-2026-11-05, read save/laws/identity/growth once.
+        Record creation.origin and creation.title with their real effect and earned upgrades.
+        Laws live in abilities, with rarity, simple, flavor_text, mechanics_display and upgrades.
+        Sovereignty holds the Domain and actual allies with their capabilities, orders and conditions.
+        Quest system_reward.development={scope,summary} supports personal/origin/title/domain/general/forces.
+        A completed quest funds one named owner upgrade whose source is 'quest:'+quest_id.
+        Use maneuver dice and one batched save. The following numerical progression fields apply
+        only to archived Sovereign profiles, which read sovereign-progression/sovereign-warfare.
+        Archived Sovereign saves merge sovereignty and accept sovereign_awards, sovereign_development,
         spend_sovereign_evolution=[{ability_id,evolution_id},...], and sovereign_battle={resolution:fast,front_id,phase_id,
         orders:[{id:formation_id,stance:attack|guard|withdraw,target_id?}],phases:1..3}.
         Read sovereign-progression/sovereign-warfare once before using these. Save handles progression,
@@ -242,7 +256,10 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         dialogue=normal|minimal|on-request. Read campaign-focus once when selecting/changing it;
         keep the saved preference on future turns. A preferences-only save preserves pause/time/build.
         Never set mode/phase/paused/version/authorization. Draft preparation is allowed before play;
-        After the player's final Background/attribute/name choices, write character.story_summary,
+        For Sovereign Laws, save the accepted Origin, Title, body, Laws and actual allies with
+        story_summary and opening_preview using changes.begin_adventure=true. Native Laws have
+        no four-item outfit requirement, old stat sheet or separate start confirmation.
+        For Age/archived Sovereign after the final Background/attribute/name choices, write character.story_summary,
         starting equipment and opening_preview in this SAME save with changes.begin_adventure=true
         (or top-level begin_adventure=true). The nested form works with older cached tool schemas. This
         completes creation and opens the first scene directly, with no extra confirmation or button.
@@ -269,7 +286,9 @@ def build_mcp(engine, config, verifier, creation_repository=None):
     def roll_game_random(action_id: str, rolls: list[dict],
                          campaign_id: str | None = None) -> CallToolResult:
         """Reusable Python rolls for an explicitly authorized chat-led game or generation request.
-        Batch1..20 requests with unique label and kind: dice{sides,count=1,modifier=0},
+        Sovereign Laws uses kind=maneuver{edge:even|player|opposition} for ONE risky exchange.
+        Returns the actual d6 rolls, kept die and outcome=threat|cost|clean. Safe actions need no roll.
+        Batch1..20 independent requests with unique label and kind: dice{sides,count=1,modifier=0},
         check{dc,modifier=0,advantage=false,disadvantage=false}, or rarity{luck:1..20 current score}.
         world_event{context:safe|travel|frontier|unstable,transition_id,pool OR pool_action_id}
         conditionally rolls trigger/category/severity/selection in one request (read rules 32A first).

@@ -1,0 +1,18 @@
+# DnDGPT Sovereign Laws index
+
+Read the compact hardener once. Use campaign_id for a saved campaign and game_id=sovereign-system for a new game.
+Start with creation, body-and-domain, laws and identity. Resolve play with maneuvers, forces and story.
+Use growth for quest rewards, rarity-and-gear for acquisitions, and save for the connected records.
+Read story-ui for presentation. Reuse cached sections and successful save results.
+
+creation | Choose a creature and enter play | 2352 characters
+body-and-domain | Bodies, reach and a living domain | 1576 characters
+laws | Powers and meaningful improvements | 1433 characters
+identity | Origin and Title | 1770 characters
+maneuvers | One real roll for a risky exchange | 1868 characters
+forces | Allies, forces and work between scenes | 1212 characters
+story | Advance the story through choices and consequences | 2268 characters
+growth | Quests, rewards and one upgrade list per owner | 1793 characters
+rarity-and-gear | Rarity, Luck and meaningful gear | 1528 characters
+save | Hosted play and continuity | 2649 characters
+story-ui | Readable story and working choices | 1693 characters

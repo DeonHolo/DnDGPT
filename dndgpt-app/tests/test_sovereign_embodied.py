@@ -1,3 +1,4 @@
+from app.sovereign_play import PROFILE as EMBODIED_PROFILE
 import copy
 
 import pytest
@@ -51,7 +52,7 @@ def embodied_state(engine, rarity="RARE", mode="bound"):
 
 
 def test_new_campaign_has_matching_two_pick_defaults(engine):
-    state = ChatGame(engine).create("owner-a", "New embodied", "embodied-defaults", True, SOVEREIGN)
+    state = ChatGame(engine).create("owner-a", "New embodied", "embodied-defaults", True, SOVEREIGN, sovereign_ruleset=EMBODIED_PROFILE)
     assert state["creation"]["sovereign_ruleset"] == PROFILE
     assert state["sovereignty"]["ascension_earned"] == 2
     assert state["personal_progression"]["upgrades_available"] == 2
@@ -106,7 +107,7 @@ def test_legacy_campaign_can_change_future_rate_without_migration(engine):
 
 
 def test_custom_starting_counts_configure_once_without_changing_other_creation_fields(engine):
-    state = ChatGame(engine).create("owner-a", "Custom counts", "custom-counts", True, SOVEREIGN)
+    state = ChatGame(engine).create("owner-a", "Custom counts", "custom-counts", True, SOVEREIGN, sovereign_ruleset=EMBODIED_PROFILE)
     after = apply_changes(state, {"creation": {"sovereign_growth": {"personal_start": 3, "sovereign_start": 3}}})
     assert after["creation"]["sovereign_ruleset"] == PROFILE
     assert after["personal_powers"]["earned"] == after["sovereignty"]["ascension_earned"] == 3
@@ -234,7 +235,7 @@ def test_effective_book_has_no_retired_acquisition_boards_or_automatic_unique():
 
 def prepared_campaign(engine):
     game = ChatGame(engine)
-    created = game.create("owner-a", "Portable bound core", "embodied-portable-create", True, SOVEREIGN)
+    created = game.create("owner-a", "Portable bound core", "embodied-portable-create", True, SOVEREIGN, sovereign_ruleset=EMBODIED_PROFILE)
     prepared = embodied_state(engine)
     patch = {key: prepared[key] for key in ("character", "creation", "sovereignty")}
     patch["upsert"] = {"abilities": prepared["abilities"]}

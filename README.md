@@ -41,7 +41,7 @@ These published 5e adventures are run with the installed 2024 rules; they includ
 
 ### Three games, one connection
 
-**Sovereign System** lets you play a mobile creature, a bound dungeon heart or a distributed being such as a living forest. Four substantial core powers develop through integrated upgrades. Defend and expand a working domain, with distinctive autonomous commanders and forces. Creation uses normal rarity and Luck; ask explicitly if you want a scoped UNIQUE override.
+**Sovereign System** lets you play a mobile creature, a bound dungeon heart or a distributed being such as a living forest. Four broad magical Laws give you different ways to act. Upgrades unlock new possibilities, and your Origin and Title each grant an ability from the start. Your domain and allies take their form from the creature you choose. Creation uses normal rarity and Luck; ask explicitly if you want a scoped UNIQUE override.
 
 
 Choose **D&D 2024**, **Age of Convergence** or **Sovereign System** in the dashboard. Each game shows its own campaigns and serves its own rules through the same DnDGPT connection. A campaign keeps the game it was created for. Existing homebrew saves keep their mechanics, including older saves without a game label.
@@ -50,7 +50,7 @@ Age of Convergence remains the original **5e Hack and homebrew fantasy RPG**, wi
 
 The backend bundles searchable official SRD text and a source-filtered Open5e reference snapshot. Relevant entries are retrieved through tools and reused; the entire book is not sent with every turn. The Python integration adapts the reference approach of [heffrey78/dnd-mcp](https://github.com/heffrey78/dnd-mcp) without requiring another player-installed connection. Public SRD options are a subset of the paid books. [Implementation and verification](docs/DND_2024_IMPLEMENTATION.md).
 
-New Sovereign campaigns grant two personal refinements and two permanent Domain, General or Army developments at creation and each character level. Important battles use close-up tactical scenes with actual powers, defenses and finite objectives; routine logistics stay with the GM. Body-specific equipment, territory and current defenses appear in Sovereignty. You can set a custom growth rate during setup or request a future-rate change through chat without a separate dashboard approval. Existing saves keep their recorded progression and earned history. [Rules, compatibility and implementation](docs/SOVEREIGN_EMBODIED_2026_11_04.md).
+New Sovereign campaigns use **Sovereign Laws**. A risky maneuver resolves your intent, allied follow-through and the opposition with one real d6 roll. Fictional capabilities, reach and injuries shape the outcome. Creation and major chapter breakthroughs offer two personal and two permanent Sovereign developments by default; you can request different counts in chat. Quests and important deeds can develop your Origin or Title. Acquired territory and earned Domain capabilities share one owner record. Routine logistics follow standing orders. Existing saves keep their recorded rules. [Design, rules and compatibility](docs/SOVEREIGN_LAWS_DESIGN.md).
 
 ### Why I made this
 

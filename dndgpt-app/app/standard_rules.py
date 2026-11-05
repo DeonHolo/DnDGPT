@@ -57,7 +57,15 @@ def class_kit_check(state):
     return {"missing": missing, "utility_required": minimum, "utility_recorded": counts["utility"]}
 
 
-def rules_guidance(game="age-of-convergence"):
+def rules_guidance(game="age-of-convergence", profile=None):
+    from .game_profiles import SOVEREIGN, SOVEREIGN_LAWS
+    if game == SOVEREIGN and profile in (None, SOVEREIGN_LAWS):
+        return {"rules_profile": SOVEREIGN_LAWS, "resources": [], "attributes": ["LCK"],
+                "creation": "Read creation, body-and-domain, laws and identity. Build from the player's premise with Origin and Title available at the start.",
+                "resolution": "Read maneuvers. One actual d6 exchange with a clear edge. Save fictional effects and meaningful conditions.",
+                "progression": "Read growth. Develop named capabilities on their actual owner, including quest-earned Origin and Title growth.",
+                "completion": "Save the accepted build, Your story and opening with changes.begin_adventure=true.",
+                "records": "Read save. Reuse current state, real roll receipts and one batched saved outcome."}
     guidance = {"resources": ["HP", "MP"], "starting_hp": "45 + 3 * STR",
             "starting_mp": "75 + 5 * INT",
             "attributes": ["STR", "DEX", "INT", "CHA", "LCK"],

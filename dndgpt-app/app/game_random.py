@@ -8,6 +8,7 @@ from .storage import canonical
 from . import records
 from .outfitting import BUDGETS, slot_pool, starting_outfit
 from .world_events import CHANCES, valid_id, validate_pool, draw_event
+from .game_profiles import uses_sovereign_laws
 
 
 class GameRandom:
@@ -21,6 +22,7 @@ class GameRandom:
         labels = set()
         outfitting_count = 0
         event_count = 0
+        maneuver_count = 0
         for row in rolls:
             if type(row) is not dict:
                 raise ValueError('Each roll must be an object')
@@ -29,6 +31,7 @@ class GameRandom:
                 raise ValueError('Roll labels must be unique nonblank text of at most120 characters')
             labels.add(label)
             allowed = {'dice': {'sides', 'count', 'modifier'},
+                       'maneuver': {'edge'},
                        'check': {'dc', 'modifier', 'advantage', 'disadvantage'},
                        'rarity': {'luck'}, 'outfitting': {'class_rarity', 'slot_preferences'},
                        'world_event': {'context', 'transition_id', 'pool', 'pool_action_id'}}
@@ -38,6 +41,10 @@ class GameRandom:
                 integer(row.get('sides'), 2, 10000, 'sides')
                 integer(row.get('count', 1), 1, 20, 'count')
                 integer(row.get('modifier', 0), -10000, 10000, 'modifier')
+            elif kind == 'maneuver':
+                maneuver_count += 1
+                if maneuver_count > 1 or row.get('edge') not in ('even', 'player', 'opposition'):
+                    raise ValueError('One maneuver uses edge=even, player or opposition')
             elif kind == 'check':
                 integer(row.get('dc'), 1, 40, 'dc')
                 integer(row.get('modifier', 0), -20, 40, 'modifier')
@@ -93,6 +100,9 @@ class GameRandom:
             if len(canonical(rolls).encode()) > 250000:
                 raise ValueError('Roll batch exceeds 250000 bytes; reuse a saved regional event pool')
             event = next((row for row in rolls if row['kind'] == 'world_event'), None)
+            maneuver = any(row['kind'] == 'maneuver' for row in rolls)
+            if maneuver and campaign_id is None:
+                raise ValueError('A maneuver needs its Sovereign Laws campaign')
             if event and (not campaign_id or action_id != 'event-' + campaign_id + '-' + event['transition_id']):
                 raise ValueError('Use action_id=event-<campaign_id>-<transition_id> for a world event')
             if any(row['kind'] == 'outfitting' for row in rolls):
@@ -105,6 +115,11 @@ class GameRandom:
         with self.store.transaction() as db:
             if campaign_id is not None:
                 bound_state = self.engine._get(db, owner, campaign_id)
+                laws = uses_sovereign_laws(bound_state)
+                if maneuver and not laws:
+                    fail(422, 'wrong_game_roll', 'Use maneuvers with a Sovereign Laws campaign')
+                if laws and any(row['kind'] in {'check', 'outfitting'} for row in rolls):
+                    fail(422, 'wrong_game_roll', 'Sovereign Laws uses maneuvers and independent rarity rolls')
                 if bound_state.get('game_id') == 'dnd-2024' and any(row['kind'] in {'rarity', 'outfitting', 'world_event'} for row in rolls):
                     fail(422, 'wrong_game_roll', 'D&D uses its selected adventure and official rules; use dice/check for its rolls')
             prior = records.get(db, 'game_rolls_v1', {'owner': owner, 'action_id': action_id})
@@ -115,6 +130,8 @@ class GameRandom:
                 if prior['request'] != request:
                     fail(409, 'idempotency_conflict', 'action_id already has different roll arguments')
                 return self.public(previous)
+            if maneuver and (bound_state['phase'] != 'adventure' or bound_state['paused']):
+                fail(423, 'adventure_not_authorized', 'A maneuver needs an active adventure')
             event_pool = None
             if event:
                 state = self.engine._get(db, owner, campaign_id)
@@ -152,6 +169,12 @@ class GameRandom:
                     values = [self.dice.roll(row['sides']) for _ in range(row.get('count', 1))]
                     result = {'rolls': values, 'modifier': row.get('modifier', 0),
                               'total': sum(values) + row.get('modifier', 0)}
+                elif kind == 'maneuver':
+                    edge = row['edge']
+                    values = [self.dice.roll(6) for _ in range(1 if edge == 'even' else 2)]
+                    kept = min(values) if edge == 'opposition' else max(values)
+                    outcome = 'threat' if kept <= 2 else 'cost' if kept <= 4 else 'clean'
+                    result = {'rolls': values, 'kept': kept, 'outcome': outcome, 'edge': edge}
                 elif kind == 'check':
                     result = self.dice.check(row['dc'], row.get('modifier', 0),
                                              row.get('advantage', False), row.get('disadvantage', False))

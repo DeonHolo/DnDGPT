@@ -63,7 +63,7 @@ function refreshDashboardSearch(){
     }
   }
   const domGroups=[
-    ["#equipment .item-card","Equipment & inventory","equipment"],
+    ["#equipment .item-card, #equipment .sovereign-card","Equipment & inventory","equipment"],
     ["#quests .quest-card","Quest Journal","quests"],
     ["#world-page-living .life-card","People & places","world"],
     ["#sovereignty .sovereign-card","Sovereignty","sovereignty"],
@@ -71,7 +71,10 @@ function refreshDashboardSearch(){
   ];
   const actors=sovereignCombatView(state);
   for(const [group,enemy]of [[actors.summons,false],[actors.enemies,true]])for(const actor of group)
-    add(actor.name,"Allies & combat",[actorSummary(actor),searchPublicText(actor)].join(" "),()=>openSearchActor(actor,enemy));
+    add(actor.name,"Allies & combat",[actorSummary(actor),searchPublicText(actor)].join(" "),()=>{
+      if(usesSovereignLaws(state)){selectCompanionPage("summons");return [...$("summons").querySelectorAll("[data-laws-owner]")].find(node=>node.dataset.lawsOwner===actor.id)}
+      return openSearchActor(actor,enemy);
+    });
   for(const [selector,section,page]of domGroups)for(const node of document.querySelectorAll(selector)){
     const title=node.querySelector(".item-name,h3,summary")?.textContent;if(!title)continue;
     add(title,section,searchableText(node),()=>{selectCompanionPage(page);return node});

@@ -62,7 +62,7 @@ def validate_archive(archive):
     text(archive["exported_at"], "exported_at", 80)
     if "rules_profile" in source:
         text(source["rules_profile"], "rules_profile", 128)
-    from .game_profiles import validate_game, game_id
+    from .game_profiles import validate_game, game_id, uses_sovereign_laws
     try:
         validate_game(game_id(source), source.get("game_rules_version", "1.0"))
     except ValueError as error:
@@ -97,17 +97,22 @@ def validate_archive(archive):
     character = source["character"]
     required_character = {"name", "class_name", "rarity", "attributes", "level", "xp", "xp_next", "scene_counter",
                           "attribute_points", "skill_points", "talent_points", "hp", "hp_max", "mp", "mp_max", "def"}
+    if uses_sovereign_laws(source):
+        required_character = {"name", "class_name", "rarity", "attributes"}
     if type(character) is not dict or not required_character <= character.keys():
         fail(422, "invalid_archive", "The saved character is incomplete")
     attributes = character["attributes"]
-    if (type(attributes) is not dict or not {"STR", "INT", "CHA", "LCK"} <= attributes.keys()
-            or len(attributes.keys() & {"DEX", "AGI"}) != 1):
+    if not uses_sovereign_laws(source) and (type(attributes) is not dict or
+            not {"STR", "INT", "CHA", "LCK"} <= attributes.keys() or len(attributes.keys() & {"DEX", "AGI"}) != 1):
         fail(422, "invalid_archive", "The saved attributes are incomplete")
     changes = {key: source[key] for key in TEXT_FIELDS | OBJECT_FIELDS if key in source}
     changes.update(character=character, equipment=source["equipment"],
                    fictional_time_seconds=source["fictional_time_seconds"],
                    level_up_freeze=source["level_up_freeze"], replace={key: source[key] for key in COLLECTIONS})
     projected = apply_changes(source, changes, correction=True)
+    if uses_sovereign_laws(source) and source["phase"] == "adventure":
+        from .sovereign_laws import complete
+        complete(projected)
     if source["phase"] != "adventure" and source["fictional_time_seconds"] != 0:
         fail(422, "invalid_archive", "An unstarted adventure cannot have elapsed gameplay time")
     return projected

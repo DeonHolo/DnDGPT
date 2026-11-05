@@ -7,6 +7,7 @@ const gameSelections={};
 function sovereignCombatView(next){
   const allies=new Map((next.summons||[]).map(c=>[c.id,c]));
   if(next.game_id==="sovereign-system")for(const c of next.sovereignty?.commanders||[])if(c.side!=="enemy")allies.set(c.id,{...c,permanent:true});
+  if(usesSovereignLaws(next))for(const c of next.sovereignty.formations)if(c.side!=="enemy")allies.set(c.id,c);
   return {...next,summons:[...allies.values()].filter(c=>activeActor(c)),enemies:(next.enemies||[]).filter(c=>activeActor(c,true))};
 }
 let lastGameContext="";
@@ -29,7 +30,10 @@ function activateGame(id){
   updateLayoutRail();
   renderSceneOptions(id);selectScene(preferences.game_scenes?.[id]||preferences.scene||scene,false);
   setDndNavigation(id==="dnd-2024");
-  if(id==="sovereign-system"){$("title-skills").textContent="Core Powers";$("nav-skills").querySelector(".nav-title").textContent="Core Powers"}
+  if(id==="sovereign-system"){
+    const laws=usesSovereignLaws(state||{}),title=laws?"Laws & Developments":"Core Powers";
+    $("title-skills").textContent=title;$("nav-skills").querySelector(".nav-title").textContent=title;$("xpMeter").hidden=laws;
+  }
   document.querySelector(".identity h1").textContent=id==="sovereign-system"?"Sovereign System":"DnDGPT";
   sovereignNav.hidden=id!=="sovereign-system";
   $("nav-gallery").querySelector(".nav-index").textContent=id==="sovereign-system"?"09":"08";
@@ -156,7 +160,7 @@ function renderSovereignBody(parent,next){
   const card=sovereigntyCard(parent,body.form,modes[body.mode]||"Your body",body.description);card.dataset.sovereignScene="body";
   if(body.mode==="bound")paragraph(card,"Core location · "+body.core_location,"sovereign-meta");
   const detail=recordDetail(card,"How you act","sovereign-body-functions");
-  renderFacts(detail,[["Movement",body.movement],["Manipulation",body.manipulation],["Communication",body.communication],
+  renderFacts(detail,[["Reach",body.reach],["Movement",body.movement],["Manipulation",body.manipulation],["Communication",body.communication],
     ["Perception",body.perception],["Vulnerability",body.vulnerability],["Primary attribute",body.primary_attribute]]);
 }
 function renderSovereignScenes(parent,next){
