@@ -44,3 +44,9 @@ The save validator accepts creature capabilities, four Laws, Origin, Title, actu
 The dashboard displays native capability records and each owner's earned history. Laws keep Overview, Full rules and Upgrades; Your story stays collapsible. Gear records its actual holder or place. All four layouts use the same records. Search uses the mounted campaign without another tool call.
 
 This release adds no model judge or simulation call per turn. Ordinary risky play uses one roll call and one batched saved outcome, with already loaded rules and current state reused. This describes the intended call path, not measured end-to-end ChatGPT latency or proof of long-campaign story quality.
+
+## Verification
+
+The focused backend checks passed 13 cases: mobile/bound/distributed creation, all outcome bands and both edge directions, retry reuse, incomplete-start protection, Origin/Title quest rewards, duplicate-award rejection, archive restore, authenticated rule routing, and batching a maneuver with an independent contextual roll in one receipt/save. The older Sovereign, personal power and direct-play suites passed all 125 cases. Those tests use disposable campaigns.
+
+The in-app browser passed seven checks using a local simulated host and real authenticated MCP transport: Origin/Title and collapsed story, four Law inspectors, actual Domain/force capabilities, gear search without a tool call, ally search, all four layouts at 390/1100px, and unchanged saved versions while browsing. Evidence is in the local `dndgpt-app/test-results/sovereign-laws-browser.json`. These checks do not establish native ChatGPT rendering or actual Android app behavior. A full played campaign remains the next story-quality test.

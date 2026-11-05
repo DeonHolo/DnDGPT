@@ -8,10 +8,10 @@ Read story-ui for presentation. Reuse cached sections and successful save result
 creation | Choose a creature and enter play | 2352 characters
 body-and-domain | Bodies, reach and a living domain | 1576 characters
 laws | Powers and meaningful improvements | 1433 characters
-identity | Origin and Title | 1770 characters
+identity | Origin and Title | 1777 characters
 maneuvers | One real roll for a risky exchange | 1868 characters
 forces | Allies, forces and work between scenes | 1212 characters
-story | Advance the story through choices and consequences | 2268 characters
+story | Advance the story through choices and consequences | 2529 characters
 growth | Quests, rewards and one upgrade list per owner | 1793 characters
 rarity-and-gear | Rarity, Luck and meaningful gear | 1528 characters
 save | Hosted play and continuity | 2649 characters
