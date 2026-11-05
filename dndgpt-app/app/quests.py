@@ -25,7 +25,7 @@ def reward(value, contract=False, laws=False):
     require(type(value) is dict, "Quest rewards must be objects")
     allowed = {"summary", "source", "currency", "items"} | (set() if contract else {"xp", "evolution_credits"})
     if laws and not contract:
-        allowed = (allowed - {"xp", "evolution_credits"}) | {"development"}
+        allowed = (allowed - {"xp", "evolution_credits"}) | {"development", "level_up", "class_ascension"}
     require(not value.keys() - allowed, "Unknown reward field; settlement is server-controlled")
     require(value.get("source", "System") == "System" or contract, "System reward source must be System")
     require(integer(value.get("xp", 0), 100000), "Quest XP must be 0..100000")
@@ -37,6 +37,21 @@ def reward(value, contract=False, laws=False):
                 type(development["scope"]) is str and development["scope"] in SCOPES and
                 nonblank(development["summary"]) and integer(development.get("picks", 1), 20) and development.get("picks", 1) >= 1,
                 "A development reward needs its scope, named benefit and promised number of picks")
+    if "level_up" in value:
+        if value["level_up"] is True:
+            value["level_up"] = {"core_picks": 2, "sovereign_picks": 2, "major_picks": 2}
+        terms = value["level_up"]
+        require(type(terms) is dict and terms.keys() == {"core_picks", "sovereign_picks", "major_picks"} and
+                all(integer(count, 20) and count >= 1 for count in terms.values()),
+                "A level reward needs its promised core, Sovereign and fourth-level selections")
+    if "class_ascension" in value:
+        if value["class_ascension"] is True:
+            value["class_ascension"] = {"picks": 2}
+        terms = value["class_ascension"]
+        require(type(terms) is dict and terms.keys() == {"picks"} and integer(terms["picks"], 20) and terms["picks"] >= 1,
+                "An ascension reward needs its promised refinement selections")
+    require(not ("development" in value and ("level_up" in value or "class_ascension" in value)),
+            "Keep a standalone development distinct from the level or ascension reward")
     currency = value.get("currency", {})
     require(type(currency) is dict and len(currency) <= 8 and
             all(nonblank(key, 40) and integer(amount) for key, amount in currency.items()),
@@ -78,13 +93,15 @@ def normalize(quest, laws=False):
         if "reward" in obj:
             require(obj.get("optional", False), "Use System reward for required objectives")
             reward(obj["reward"], laws=laws)
-            require("development" not in obj["reward"], "Put a promised development in the quest's System reward")
+            require(not {"development", "level_up", "class_ascension"}.intersection(obj["reward"]),
+                    "Put a promised development in the quest's System reward")
         ids.append(obj["id"])
     require(len(ids) == len(set(ids)) and any(not obj.get("optional") for obj in objectives),
             "Use distinct objective IDs and at least one required objective")
     reward(quest.get("system_reward"), laws=laws)
     package = quest["system_reward"]
     require(package.get("xp") or package.get("evolution_credits") or package.get("items") or package.get("development") or
+            package.get("level_up") or package.get("class_ascension") or
             any(package.get("currency", {}).values()), "Declare a concrete System reward")
     status = str(quest.get("status", "active")).lower()
     require(status in TERMINAL | {"active", "paused"}, "Unknown quest status")
@@ -117,6 +134,11 @@ def grant(state, package):
         inventory[item["id"]] = copy.deepcopy(item)
     state["inventory"] = list(inventory.values())
     state["reward_credits"]["earned"] += package.get("evolution_credits", 0)
+    from .game_profiles import uses_sovereign_laws
+    if uses_sovereign_laws(state):
+        from .sovereign_laws import settle_growth
+        return settle_growth(state, package)
+    return {}
 
 
 def apply_quests(before, state, changes, correction=False):
@@ -165,9 +187,14 @@ def apply_quests(before, state, changes, correction=False):
         for key, package in payouts:
             if key not in settled:
                 require(before["phase"] == "adventure" or historical, "Quest rewards are earned during adventure play")
+                earned = {}
                 if not historical:
-                    grant(state, package)
-                settled[key] = {"version": before["version"] + 1, "historical": historical}
+                    if laws and ("level_up" in package or "class_ascension" in package):
+                        supplied = changes.get("character", {})
+                        require(not ({"level", "rarity"}.intersection(supplied) or "LCK" in supplied.get("attributes", {})),
+                                "The server applies this reward's character growth once")
+                    earned = grant(state, package)
+                settled[key] = {"version": before["version"] + 1, "historical": historical, **earned}
         quest["reward_status"] = "settled" if "system" in settled else "pending"
     spend = changes.get("spend_evolution_credit")
     if spend is not None:

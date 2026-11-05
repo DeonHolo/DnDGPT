@@ -9,7 +9,7 @@ LEGACY_CONTROLS = {"sovereign_awards", "sovereign_development", "spend_sovereign
                    "sovereign_battle", "spend_personal_upgrades", "spend_evolution_credit",
                    "personal_power_exception"}
 CHARACTER_FIELDS = {"name", "class_name", "rarity", "attributes", "story_summary", "appearance",
-                    "biography", "ancestry", "ancestry_description"}
+                    "biography", "ancestry", "ancestry_description", "level"}
 
 
 def initial():
@@ -26,6 +26,11 @@ def identities(state, scope):
     if scope + "s" in creation:
         return creation[scope + "s"]
     return [creation[scope]] if creation.get(scope) else []
+
+
+def world_ready(state):
+    world = state.get("world", {})
+    return words(world.get("summary"), 12000) and (words(world.get("earth_connection"), 6000) or words(world.get("setting_override")))
 
 
 def validate_selections(before, state):
@@ -59,6 +64,10 @@ def kit_check(state):
     creation, character = state["creation"], state["character"]
     count = selection_policy(state)["picks"] if creation.get("selection_policy") else 1
     established = state["phase"] == "adventure"
+    opening_picks = selection_policy(state)["picks"]
+    core = sum(len(row.get("upgrades", [])) for row in state["abilities"])
+    sovereign = sum(len(owner.get("upgrades", [])) for scope, owner in owners(state)
+                    if scope in {"domain", "general", "forces"})
     missing = []
     for label, ready in (
         ("chosen body", bool(creation.get("sovereign_body"))),
@@ -67,10 +76,34 @@ def kit_check(state):
         (str(count) + " Titles or a choice to defer them", (bool(identities(state, "title")) if established else len(identities(state, "title")) == count) or creation.get("title_declined") is True),
         ("actual Domain", words(state["sovereignty"]["domain"].get("description"))),
         ("actual rarity", character.get("rarity") in RARITIES),
+        ("world introduction and Earth connection", established or creation.get("setup_version", 1) < 2 or world_ready(state)),
+        (str(opening_picks) + " starting core-power upgrades", established or core >= opening_picks),
+        (str(opening_picks) + " starting Sovereign upgrades", established or sovereign >= opening_picks),
     ):
         if not ready:
             missing.append(label)
     return {"required": True, "ready": not missing, "missing": missing}
+
+
+def settle_growth(state, package):
+    """Called only once per quest payout, inside the saved-turn transaction."""
+    earned = {}
+    character = state["character"]
+    if "level_up" in package:
+        character["level"] = character.get("level", 1) + 1
+        character["attributes"]["LCK"] = min(20, character["attributes"]["LCK"] + 1)
+        terms = package["level_up"]
+        earned.update(level=character["level"], core_picks=terms["core_picks"],
+                      sovereign_picks=terms["sovereign_picks"],
+                      major_picks=terms["major_picks"] if character["level"] % 4 == 0 else 0)
+    if "class_ascension" in package:
+        current = RARITIES.index(character["rarity"])
+        promoted = RARITIES[min(len(RARITIES) - 1, current + 1)]
+        character["rarity"] = promoted
+        for law in state["abilities"]:
+            law["rarity"] = promoted
+        earned.update(class_rarity=promoted, ascension_picks=package["class_ascension"]["picks"])
+    return earned
 
 
 def owners(state):
@@ -93,13 +126,14 @@ def validate(before, state, changes, correction=False):
     require(set(character) <= CHARACTER_FIELDS and character.get("rarity") in RARITIES and
             set(character.get("attributes", {})) == {"LCK"} and 1 <= character["attributes"]["LCK"] <= 20,
             "Sovereign Laws records Luck and the creature's actual capabilities")
+    require(type(character.get("level", 1)) is int and character.get("level", 1) >= 1, "Use a positive character level")
     require(not any(state["equipment"].values()), "Record who holds or houses gear in inventory")
 
     body = creation.get("sovereign_body")
     if body is not None:
         require(type(body) is dict and body.get("mode") in ("mobile", "bound", "distributed") and
-                all(words(body.get(key)) for key in ("form", "description", "reach", "perception", "vulnerability")),
-                "Describe the creature's form, reach, senses and vulnerability")
+                all(words(body.get(key)) for key in ("form", "description", "reach", "perception")),
+                "Describe the creature's form, reach and senses")
         if body["mode"] == "bound":
             require(words(body.get("core_location")), "A bound creature needs its fixed locus")
 
@@ -132,16 +166,25 @@ def validate(before, state, changes, correction=False):
         require(words(owner.get("name")), "Name the owner of the capability")
         if scope in {"general", "forces"}:
             records(owner.get("abilities", []), "Ally abilities")
-        for upgrade in records(owner.get("upgrades", []), "Earned developments").values():
+        for upgrade in records(owner.get("upgrades", []), "Earned developments", 1000).values():
             require(all(words(upgrade.get(key)) for key in ("name", "effect", "source")) and
                     upgrade.get("rarity") in RARITIES, "Record the named upgrade, effect, source and rarity")
             if upgrade["source"].startswith("quest:"):
                 quest_id = upgrade["source"].removeprefix("quest:")
                 quest = quests.get(quest_id, {})
                 reward = quest.get("system_reward", {}).get("development", {}) if quest.get("quest_schema") == 1 else {}
-                quest_awards[quest_id] = quest_awards.get(quest_id, 0) + 1
-                require(quest.get("status") == "completed" and reward.get("scope") == scope and
-                        quest_awards[quest_id] <= reward.get("picks", 1),
+                package = quest.get("system_reward", {})
+                earned = state.get("quest_settlements", {}).get(quest_id, {}).get("system", {})
+                growth = "level_up" in package or "class_ascension" in package
+                kind = upgrade.get("award_kind", "core") if scope == "personal" else "sovereign"
+                if growth:
+                    maximum = earned.get(kind + "_picks", 0) if scope in {"personal", "domain", "general", "forces"} else 0
+                    budget = (quest_id, kind)
+                else:
+                    maximum = reward.get("picks", 1) if reward.get("scope") == scope else 0
+                    budget = (quest_id, "development")
+                quest_awards[budget] = quest_awards.get(budget, 0) + 1
+                require(quest.get("status") == "completed" and quest_awards[budget] <= maximum,
                         "Apply the completed quest's promised development picks once, to their actual owners")
 
     if before["phase"] == "adventure" and not correction:

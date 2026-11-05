@@ -17,7 +17,7 @@ GAMES = ({"id": DND, "name": "D&D 2024", "rules_version": "5.2.1"},
 GAME_INTRODUCTIONS = {
     DND: "D&D's revised 2024 rules: classic classes, species, spells and character sheets. Choose a published adventure or an original D&D story, solo or with a party.",
     AGE: "A power-fantasy RPG where Earth meets other worlds. Discover generated classes and powers, rarity-ranked rewards and flexible personal builds.",
-    SOVEREIGN: "Play an extraordinary being, from a traveling keeper to a tide-bound creature. Use your Laws in risky maneuvers, develop a living domain, and lead allies with their own abilities.",
+    SOVEREIGN: "An Age of Convergence power fantasy: play an extraordinary being with four core powers, a living domain and distinctive allies. Begin with its world's story, then choose a Class and grow through numbered levels.",
 }
 RULES = Path(__file__).resolve().parent.parent / "rules"
 

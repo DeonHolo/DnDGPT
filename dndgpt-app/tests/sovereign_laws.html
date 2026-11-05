@@ -61,6 +61,24 @@ document.getElementById('run').onclick=async()=>{
    const after=await w.openai.callTool('get_campaign',{campaign_id:fixture.campaign.id});assert(after.structuredContent.campaign.version===fixture.campaign.version,'Browsing changed the save');
    await w.callTool('get_campaign',{campaign_id:fixture.campaign.id});assert(d.getElementById('xpMeter').hidden&&d.getElementById('nav-skills').textContent.includes('Core Powers'),'Refresh restored old profile labels');
   });
+  await test('Numbered level rewards, next goal and major choices render without a Luck interface',async()=>{
+   let current=fixture.campaign;
+   for(const level of [2,3,4]){
+    const id='browser-level-'+level;
+    const quest={id,quest_schema:1,name:'The crossing '+level,finish_condition:'The guests reach the far bank.',objectives:[{id:'cross',text:'Bring the guests across',status:'pending'}],system_reward:{level_up:true}};
+    let result=await w.callTool('save_chat_update',{campaign_id:current.id,action_id:id+'-offer',expected_version:current.version,summary:'Announce a milestone',changes:{upsert:{quest_log:[quest]}}});
+    current=result.structuredContent.campaign;quest.objectives[0].status='done';
+    result=await w.callTool('save_chat_update',{campaign_id:current.id,action_id:id+'-complete',expected_version:current.version,summary:'The guests reach safety',changes:{upsert:{quest_log:[quest]}}});current=result.structuredContent.campaign;
+   }
+   const goal={id:'browser-next-level',quest_schema:1,name:'Reopen the old river route',finish_condition:'The trapped river route is open again.',objectives:[{id:'open',text:'Reopen the river route',status:'pending'}],system_reward:{level_up:true}};
+   await w.callTool('save_chat_update',{campaign_id:current.id,action_id:'browser-next-goal',expected_version:current.version,summary:'Announce the next level goal',changes:{upsert:{quest_log:[goal]}}});
+   d.getElementById('nav-character').click();const panel=d.getElementById('character');
+   assert(panel.innerText.includes('Level 4')&&panel.innerText.includes('Next level'),'Level or next goal missing');
+   const earned=[...panel.querySelectorAll('details')].find(node=>node.querySelector('summary')?.textContent==='Earned choices to make');assert(earned,'Earned choices missing');earned.querySelector('summary').click();assert(earned.innerText.includes('Major refinements · choose 2'),'Fourth-level bonus missing');
+   assert(!/\bLuck\b|\bLCK\b/.test(panel.innerText),'Hidden rarity score was exposed');
+   d.getElementById('nav-quests').click();assert(d.getElementById('quests').innerText.includes('2 Sovereign upgrades'),'Level reward missing');assert(!/\bLuck\b|\bLCK\b/.test(d.getElementById('quests').innerText),'Hidden score leaked through reward copy');
+   d.getElementById('nav-character').click();
+  });
  }catch(e){results.push({name:'Setup',passed:false,error:e.message})}
  const passed=results.every(r=>r.passed);document.getElementById('result').textContent=passed?'All '+results.length+' checks passed':'Failed: '+JSON.stringify(results.filter(r=>!r.passed));
  await fetch('/test-laws-record',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({passed,results})});document.getElementById('run').disabled=false;

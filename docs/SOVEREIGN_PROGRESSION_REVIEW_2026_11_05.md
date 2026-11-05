@@ -1,5 +1,7 @@
 # Sovereign progression review
 
+Historical review of 1.3.1–1.3.2. The subsequent approved correction restores numbered levels, fourth-level rewards, complete starting bundles and the world introduction. Current design and release status: [creation and levels](SOVEREIGN_CREATION_AND_LEVELS_2026_11_05.md).
+
 This records the current behavior, the requested selection correction, and the decisions still open. It is not a claim that numbered levels have been restored.
 
 ## What changed in the Laws overhaul

@@ -1,18 +1,19 @@
 # DnDGPT Sovereign Laws index
 
 Read the compact hardener once. Use campaign_id for a saved campaign and game_id=sovereign-system for a new game.
-Start with creation, body-and-domain, laws and identity. Resolve play with maneuvers, forces and story.
+Start with world and creation: Age of Convergence introduction before Classes, both opening upgrade bundles, then identities and gear. Resolve play with maneuvers, forces and story.
 Use growth for quest rewards, rarity-and-gear for acquisitions, and save for the connected records.
 Read story-ui for presentation. Reuse cached sections and successful save results.
 
-creation | Choose a creature and enter play | 4124 characters
-body-and-domain | Bodies, reach and a living domain | 1576 characters
-laws | Powers and meaningful improvements | 2554 characters
-identity | Origin and Title | 1729 characters
-maneuvers | One real roll for a risky exchange | 1868 characters
+creation | Choose a creature and enter play | 6017 characters
+world | Age of Convergence lore and the story introduction | 2398 characters
+body-and-domain | Bodies, reach and a living domain | 1721 characters
+laws | Powers and meaningful improvements | 2977 characters
+identity | Origin and Title | 1793 characters
+maneuvers | One real roll for a risky exchange | 2708 characters
 forces | Allies, forces and work between scenes | 1662 characters
-story | Advance the story through choices and consequences | 2529 characters
-growth | Quests, rewards and one upgrade list per owner | 2442 characters
-rarity-and-gear | Rarity, Luck and meaningful gear | 1528 characters
-save | Hosted play and continuity | 3400 characters
-story-ui | Readable story and working choices | 1693 characters
+story | Advance the story through choices and consequences | 2765 characters
+growth | Quests, rewards and one upgrade list per owner | 3983 characters
+rarity-and-gear | Rarity, Luck and meaningful gear | 1680 characters
+save | Hosted play and continuity | 4446 characters
+story-ui | Readable story and working choices | 2009 characters

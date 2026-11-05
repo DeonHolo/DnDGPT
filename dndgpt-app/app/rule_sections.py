@@ -72,7 +72,7 @@ def index_text(text):
     if text.startswith("# DnDGPT Sovereign Laws"):
         lines = ["# DnDGPT Sovereign Laws index", "",
                  "Read the compact hardener once. Use campaign_id for a saved campaign and game_id=sovereign-system for a new game.",
-                 "Start with creation, body-and-domain, laws and identity. Resolve play with maneuvers, forces and story.",
+                 "Start with world and creation: Age of Convergence introduction before Classes, both opening upgrade bundles, then identities and gear. Resolve play with maneuvers, forces and story.",
                  "Use growth for quest rewards, rarity-and-gear for acquisitions, and save for the connected records.",
                  "Read story-ui for presentation. Reuse cached sections and successful save results.", ""]
         return "\n".join(lines + [f"{key} | {item['title']} | {item['end']-item['start']} characters" for key, item in entries.items()]) + "\n"

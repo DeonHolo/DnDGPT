@@ -1,6 +1,6 @@
 /* Structured quest cards and owned image media; no automatic gameplay writes. */
 function questStatus(row){return String(row.status||"active").toLowerCase().replace(/^complete$/,"completed")}
-function renderReward(parent,title,reward,status){
+function renderReward(parent,title,reward,status,questId){
   const box=element("section",undefined,"quest-reward");box.append(element("h4",title));
   if(reward?.summary)box.append(element("p",reward.summary));
   const list=element("ul");
@@ -8,6 +8,9 @@ function renderReward(parent,title,reward,status){
   for(const [unit,amount]of Object.entries(reward?.currency||{}))if(amount)list.append(element("li",amount+" "+unit));
   for(const item of reward?.items||[])list.append(element("li",(item.name||"Equipment")+(item.rarity?" · "+item.rarity:"")));
   if(reward?.development){const count=reward.development.picks||1;list.append(element("li",count+" upgrade choice"+(count===1?"":"s")+" · "+reward.development.summary))}
+  const earned=state?.quest_settlements?.[questId]?.system;
+  if(reward?.level_up){const level=earned?.level||((state?.character?.level||1)+1);list.append(element("li",(earned?.level?"Level "+level:"Gain a level")+" · "+reward.level_up.core_picks+" Core upgrades and "+reward.level_up.sovereign_picks+" Sovereign upgrades"+(level%4===0?" and "+reward.level_up.major_picks+" major refinements":"")))}
+  if(reward?.class_ascension)list.append(element("li",(earned?.class_rarity?"Class development · "+earned.class_rarity:state?.character?.rarity==="UNIQUE"?"UNIQUE Class development":"Class ascension · next rarity tier")+" and "+reward.class_ascension.picks+" class-grade refinements"));
   if(reward?.evolution_credits)list.append(element("li",reward.evolution_credits+" bankable Skill Evolution credit"+(reward.evolution_credits===1?"":"s")));
   if(list.children.length)box.append(list);else if(!reward?.summary)box.append(element("p","Reward terms have not been recorded.","muted"));
   if(status)box.append(element("small",status));parent.append(box);
@@ -41,7 +44,7 @@ function renderQuestCard(parent,quest){
   const optional=quest.objectives.filter(row=>row.optional);
   if(optional.length)renderObjectives(recordDetail(card,"Optional bonus objectives","quest-optional-"+quest.id),optional);
   if(quest.finish_condition)card.append(element("p","Finish: "+quest.finish_condition,"muted"));
-  renderReward(card,"System reward",quest.system_reward,quest.reward_status==="settled"?"Granted on completion":"Granted when required objectives are complete");
+  renderReward(card,"System reward",quest.system_reward,quest.reward_status==="settled"?"Granted on completion":"Granted when required objectives are complete",quest.id);
   if(quest.contract_payment){
     const pay=quest.contract_payment;renderReward(card,"Contract payment · "+pay.creditor,pay.reward,pay.status==="collected"?"Collected":pay.status==="unavailable"?"Unavailable":"Owed · "+pay.condition);
   }

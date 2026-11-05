@@ -1,5 +1,9 @@
 # Continuity and recovery release
 
+## Sovereign creation and numbered levels — 2026-11-05
+
+Approved follow-up restores the Age of Convergence world introduction before Class selection, verifies both starting upgrade bundles, removes compulsory weaknesses, protects established advantages during maneuver outcomes, and restores numbered milestone levels with two Core/two Sovereign upgrades plus two extra major refinements each fourth level. Internal rarity growth is hidden, starts at 9 and rises automatically; no allocation or dashboard statistic. The GM chooses scene scale without a fixed ratio. Full implementation and verification status: `docs/SOVEREIGN_CREATION_AND_LEVELS_2026_11_05.md`.
+
 ## Sovereign selection and progression clarity — 2026-11-05
 
 Following player feedback, correct new Laws boards to twelve classes/one pick and six other offers/two picks. Preserve four core powers, distinguish core-power upgrades from permanent Domain/General/forces upgrades, require possibility-based distinctive offers, and support two Origin traits/Title records with their own growth history. A collapsible dashboard guide explains the current structure. Numbered levels, fourth-level bonuses, Luck growth and a definite class-ascension route were not restored without a settled progression design. Before/after audit and remaining decisions: `docs/SOVEREIGN_PROGRESSION_REVIEW_2026_11_05.md`.

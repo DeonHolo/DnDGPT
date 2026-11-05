@@ -399,9 +399,11 @@ class ChatGame:
                 from .sovereign_laws import initial, SELECTIONS
                 state["rules_profile"] = SOVEREIGN_LAWS
                 state["character"] = {key: character[key] for key in ("name", "class_name", "rarity")}
-                state["character"]["attributes"] = {"LCK": 5}
+                state["character"]["attributes"] = {"LCK": 9}
+                state["character"]["level"] = 1
                 state["sovereignty"] = initial()
                 state["creation"]["selection_policy"] = dict(SELECTIONS)
+                state["creation"]["setup_version"] = 2
             elif game_id == SOVEREIGN:
                 from .sovereign_play import GROWTH
                 state["creation"]["sovereign_ruleset"] = embodied_profile

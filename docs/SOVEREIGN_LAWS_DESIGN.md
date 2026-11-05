@@ -1,5 +1,7 @@
 # Sovereign Laws design notes
 
+The original design/release below is historical. The approved follow-up restores numbered levels and fourth-level bonuses, the Age of Convergence introduction, and complete starting rewards. See [current creation and progression](SOVEREIGN_CREATION_AND_LEVELS_2026_11_05.md).
+
 5 November 2026. Approved design and implementation for the Sovereign Laws playtest.
 
 Follow-up correction: the player requested twelve class offers (choose one) and six other selection offers (choose two). Current terminology uses Core Powers for the four Laws and Core-power upgrades for their growth. The before/after progression audit, identity distinctions and unapproved level/ascension decisions are in [the progression review](SOVEREIGN_PROGRESSION_REVIEW_2026_11_05.md). The original implementation and release evidence below remain historical.

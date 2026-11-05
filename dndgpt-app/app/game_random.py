@@ -31,7 +31,7 @@ class GameRandom:
                 raise ValueError('Roll labels must be unique nonblank text of at most120 characters')
             labels.add(label)
             allowed = {'dice': {'sides', 'count', 'modifier'},
-                       'maneuver': {'edge'},
+                       'maneuver': {'edge', 'effect', 'stakes', 'established'},
                        'check': {'dc', 'modifier', 'advantage', 'disadvantage'},
                        'rarity': {'luck'}, 'outfitting': {'class_rarity', 'slot_preferences'},
                        'world_event': {'context', 'transition_id', 'pool', 'pool_action_id'}}
@@ -45,6 +45,9 @@ class GameRandom:
                 maneuver_count += 1
                 if maneuver_count > 1 or row.get('edge') not in ('even', 'player', 'opposition'):
                     raise ValueError('One maneuver uses edge=even, player or opposition')
+                if any(type(row[key]) is not str or not 1 <= len(row[key].strip()) <= 600
+                       for key in ('effect', 'stakes', 'established') if key in row):
+                    raise ValueError('Declare concise maneuver effect, stakes and established facts')
             elif kind == 'check':
                 integer(row.get('dc'), 1, 40, 'dc')
                 integer(row.get('modifier', 0), -20, 40, 'modifier')
@@ -52,7 +55,8 @@ class GameRandom:
                     if type(row.get(key, False)) is not bool:
                         raise ValueError(key + ' must be boolean')
             elif kind == 'rarity':
-                integer(row.get('luck'), 1, 20, 'luck score')
+                if 'luck' in row:
+                    integer(row['luck'], 1, 20, 'luck score')
             elif kind == 'world_event':
                 event_count += 1
                 if (event_count > 1 or row.get('context') not in CHANCES or
@@ -112,6 +116,7 @@ class GameRandom:
                 {'campaign_id': campaign_id, 'rolls': rolls})
         except (ValueError, TypeError) as error:
             fail(422, 'invalid_roll_request', str(error))
+        laws = False
         with self.store.transaction() as db:
             if campaign_id is not None:
                 bound_state = self.engine._get(db, owner, campaign_id)
@@ -130,6 +135,13 @@ class GameRandom:
                 if prior['request'] != request:
                     fail(409, 'idempotency_conflict', 'action_id already has different roll arguments')
                 return self.public(previous)
+            rarity = any(row['kind'] == 'rarity' for row in rolls)
+            if rarity and not laws and any(row['kind'] == 'rarity' and 'luck' not in row for row in rolls):
+                fail(422, 'invalid_roll_request', 'This game needs its recorded rarity score')
+            if laws and rarity and bound_state['phase'] == 'character_draft' and bound_state['creation'].get('setup_version', 1) >= 2:
+                from .sovereign_laws import world_ready
+                if not world_ready(bound_state):
+                    fail(422, 'world_introduction_required', 'Save the world introduction and Earth connection before generating Class offers')
             if maneuver and (bound_state['phase'] != 'adventure' or bound_state['paused']):
                 fail(423, 'adventure_not_authorized', 'A maneuver needs an active adventure')
             event_pool = None
@@ -175,11 +187,12 @@ class GameRandom:
                     kept = min(values) if edge == 'opposition' else max(values)
                     outcome = 'threat' if kept <= 2 else 'cost' if kept <= 4 else 'clean'
                     result = {'rolls': values, 'kept': kept, 'outcome': outcome, 'edge': edge}
+                    result.update({key: row[key] for key in ('effect', 'stakes', 'established') if key in row})
                 elif kind == 'check':
                     result = self.dice.check(row['dc'], row.get('modifier', 0),
                                              row.get('advantage', False), row.get('disadvantage', False))
                 elif kind == 'rarity':
-                    result = self.dice.rarity(row['luck'])
+                    result = self.dice.rarity(bound_state['character']['attributes']['LCK'] if laws else row['luck'])
                 elif kind == 'outfitting':
                     result = starting_outfit(row['class_rarity'], self.dice, row['slot_preferences'])
                 else:

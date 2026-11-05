@@ -212,6 +212,10 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         Character ancestry/ancestry_description retain the chosen race; missing race never means human.
         changes supports partial character (attributes merge), equipment
         For rules_profile=sovereign-laws-2026-11-05, read save/laws/identity/growth once.
+        Read world/creation before new Class offers. Show the Age of Convergence introduction first,
+        then Class, both opening upgrade bundles, Title/Origin, gear/story and opening.
+        Both opening bundles must be applied; base Domain/allies do not consume those picks.
+        Luck is server-managed background rarity, omitted from player setup, screens and prose.
         Offer 12 classes (choose 1); other creation/development boards have 6 options (choose 2).
         Record creation.origins and creation.titles as the selected identity records with real effects
         and earned upgrades. Singular origin/title records remain readable for older saves.
@@ -221,6 +225,10 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         Sovereignty holds the Domain and actual allies with their capabilities, orders and conditions.
         Quest system_reward.development={scope,summary,picks:2} supports personal/origin/title/domain/general/forces.
         A completed quest grants its promised owner picks once, with source='quest:'+quest_id on each upgrade.
+        system_reward.level_up=true grants one level and 2 core/2 Sovereign choices, plus 2 major
+        choices every fourth level. class_ascension=true grants the next Class tier and 2 refinements.
+        Keep promised terms fixed. The server applies level/grade; do not also edit those character fields.
+        Children use award_kind=core/major/ascension for personal rewards, on actual owners.
         Use maneuver dice and one batched save. The following numerical progression fields apply
         only to archived Sovereign profiles, which read sovereign-progression/sovereign-warfare.
         Archived Sovereign saves merge sovereignty and accept sovereign_awards, sovereign_development,

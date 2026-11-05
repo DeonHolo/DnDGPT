@@ -161,7 +161,7 @@ function renderSovereignBody(parent,next){
   if(body.mode==="bound")paragraph(card,"Core location · "+body.core_location,"sovereign-meta");
   const detail=recordDetail(card,"How you act","sovereign-body-functions");
   renderFacts(detail,[["Reach",body.reach],["Movement",body.movement],["Manipulation",body.manipulation],["Communication",body.communication],
-    ["Perception",body.perception],["Vulnerability",body.vulnerability],["Primary attribute",body.primary_attribute]]);
+    ["Perception",body.perception],...(!usesSovereignLaws(next)?[["Vulnerability",body.vulnerability],["Primary attribute",body.primary_attribute]]:[])]);
 }
 function renderSovereignScenes(parent,next){
   const domain=next.sovereignty.domain,known=rows=>(rows||[]).filter(row=>row.known_to_player!==false);

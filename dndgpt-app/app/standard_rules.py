@@ -60,10 +60,11 @@ def class_kit_check(state):
 def rules_guidance(game="age-of-convergence", profile=None):
     from .game_profiles import SOVEREIGN, SOVEREIGN_LAWS
     if game == SOVEREIGN and profile in (None, SOVEREIGN_LAWS):
-        return {"rules_profile": SOVEREIGN_LAWS, "resources": [], "attributes": ["LCK"],
-                "creation": "Read creation, body-and-domain, laws and identity. Offer 12 classes, choose 1. Other creation/development boards have 6 options, choose 2. Keep four core Laws; a creature's body can be its Domain or colony.",
-                "resolution": "Read maneuvers. One actual d6 exchange with a clear edge. Save fictional effects and meaningful conditions.",
-                "progression": "Read growth. Core-power upgrades develop the four Laws. Sovereign upgrades develop Domain/General/forces. Both unlock new creature-specific plans. Origin/Title grow through earned identity rewards.",
+        return {"rules_profile": SOVEREIGN_LAWS, "resources": [], "attributes": [],
+                "creation": "Read world/creation first. Age of Convergence story introduction, then 12 classes choose 1; opening Core AND Sovereign boards each have 6 options choose 2; then Title/Origin boards each 6/2; fitting gear, name, Your story and opening. Keep four Laws. Both starting bundles must be applied. No forced vulnerability or extra approval.",
+                "resolution": "Read maneuvers. Declare effect, stakes and already-established facts; one real d6 exchange resolves only that uncertainty. Superior forces do not become weak because of a poor roll.",
+                "progression": "Read growth/save. Level 1 start; milestones grant one level, 2 core and 2 Sovereign upgrades. Every fourth level adds 2 major refinements. Announce the next level and Class-ascension goal. Origin/Title rewards are additional. All improve real capabilities.",
+                "internal_rarity": "The server uses stored LCK, initially 9 then +1 per earned level capped at 20. Keep Luck off setup, dashboard and player narration; no allocation menu. Native rarity requests can omit luck.",
                 "completion": "Save the accepted build, Your story and opening with changes.begin_adventure=true.",
                 "records": "Read save. Reuse current state, real roll receipts and one batched saved outcome."}
     guidance = {"resources": ["HP", "MP"], "starting_hp": "45 + 3 * STR",
