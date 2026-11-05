@@ -112,14 +112,19 @@ def test_activity_completion_keeps_rewards_once_and_finishes(engine, game):
     assert state["funds"]["silver"] == 5 and state["quest_log"][0]["status"] == "completed"
 
 
-@pytest.mark.parametrize("game", [AGE, SOVEREIGN])
-def test_focus_rules_are_delivered_for_each_selected_game(game):
-    page = rules_page("rulebook", 0, "campaign-focus", game_id=game)
+@pytest.mark.parametrize("game,profile", [(AGE, None), (SOVEREIGN, "sovereign-embodied-2026-11-04"),
+                                         (SOVEREIGN, "sovereign-laws-2026-11-05")])
+def test_focus_rules_are_delivered_for_each_selected_game(game, profile):
+    native = profile == "sovereign-laws-2026-11-05"
+    page = rules_page("rulebook", 0, "creation" if native else "campaign-focus", game_id=game, profile=profile)
     assert page["next_offset"] is None
     assert "on-request" in page["content"]
-    if game == SOVEREIGN:
+    if native:
+        assert "Hunts, exploration, conquest" in page["content"]
+        assert "dialogue=normal|minimal|on-request" in page["content"]
+    elif game == SOVEREIGN:
         assert "without a numeric personal-roaming/strategy quota" in page["content"]
         assert "Negotiation is optional" in page["content"]
     else:
         assert "70/30" in page["content"] and "no compulsory negotiation" in page["content"]
-    assert rules_page("hardener", 0, game_id=game)["next_offset"] is None
+    assert rules_page("hardener", 0, game_id=game, profile=profile)["next_offset"] is None

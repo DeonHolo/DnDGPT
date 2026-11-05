@@ -66,12 +66,18 @@ def test_legacy_combined_foundation_is_not_mislabeled_as_original(engine):
     assert "base_mechanics_display" not in result["abilities"][0]
 
 
-@pytest.mark.parametrize("game", ["age-of-convergence", "sovereign-system"])
-def test_cleanup_rules_are_routed_and_hardener_stays_one_page(game):
-    section = rules_page("rulebook", 0, "roster-cleanup", game)
-    assert "changes.remove.enemies" in section["content"]
-    assert "Ending combat alone spends no duration" in section["content"]
-    assert "protected" in section["content"].lower()
-    checklist = rules_page("hardener", 0, None, game)
-    assert "roster-cleanup" in checklist["content"]
+@pytest.mark.parametrize("game,profile", [("age-of-convergence", None), ("sovereign-system", "sovereign-embodied-2026-11-04"),
+                                         ("sovereign-system", "sovereign-laws-2026-11-05")])
+def test_cleanup_rules_are_routed_and_hardener_stays_one_page(game, profile):
+    native = profile == "sovereign-laws-2026-11-05"
+    section = rules_page("rulebook", 0, "forces" if native else "roster-cleanup", game, profile)
+    if native:
+        assert "defeated or departed enemies" in section["content"]
+        assert "actual presence or effect ends" in section["content"]
+    else:
+        assert "changes.remove.enemies" in section["content"]
+        assert "Ending combat alone spends no duration" in section["content"]
+        assert "protected" in section["content"].lower()
+    checklist = rules_page("hardener", 0, None, game, profile)
+    assert ("expired presence" if native else "roster-cleanup") in checklist["content"]
     assert checklist["next_offset"] is None
