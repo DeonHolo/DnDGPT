@@ -137,6 +137,19 @@ def test_authenticated_rules_and_start_follow_new_profile_and_other_modes_remain
                                          "sovereign_ruleset": PROFILE})["structuredContent"]["campaign"]
     old_book = tool(web, "read_rules", {"campaign_id": old["id"], "document": "index"})["structuredContent"]
     assert "sovereign-creation" in old_book["content"] and old_book["source_sha256"] != book["source_sha256"]
+    # An uncertain pre-release creation can be retried after the default profile changes.
+    # Preserve its original request shape and return guidance for the recovered save.
+    import json
+    from app import records
+    from app.storage import canonical
+    with web.app.state.engine.store.transaction() as db:
+        receipt = records.get(db, "creations_v1", {"action_id": "laws-old-profile"})
+        request = json.loads(receipt["request"])
+        request.pop("sovereign_ruleset")
+        records.update(db, "creations_v1", {"owner": receipt["owner"], "action_id": "laws-old-profile"},
+                       {"request": canonical(request)})
+    replay = tool(web, "create_chat_game", {"name": "Archived profile", "action_id": "laws-old-profile", "game_id": SOVEREIGN})["structuredContent"]
+    assert replay["campaign"]["id"] == old["id"] and replay["standard_play"]["resources"] == ["HP", "MP"]
     assert rule_source("age-of-convergence")["source_sha256"] == "94ec7b0882418a00fc6140c09fa725984be02aaa3d70f9cf7664fcb55399a529"
 
 

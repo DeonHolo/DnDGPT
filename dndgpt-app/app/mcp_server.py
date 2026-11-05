@@ -184,9 +184,11 @@ def build_mcp(engine, config, verifier, creation_repository=None):
         """
         if game_id is None:
             return invoke(lambda owner: engine.dashboard(owner))
-        return invoke(lambda owner: {"campaign": chat_game.create(owner, name, action_id, disposable, game_id,
-                                                                  sovereign_ruleset=sovereign_ruleset),
-                                      "game_id": game_id, "standard_play": {"game_id": DND, "rules_version": "5.2.1", "attributes": ["STR","DEX","CON","INT","WIS","CHA"], "sheet_guide": "Read section=creation. Choose a published adventure or original premise FIRST; wait for the player unless chosen or delegated. Then tailor class+species together and the remaining choices together to its setting, tone and starting level. Quickplay is one explained character draft after selection. Reuse list_dnd_options."} if game_id == DND else {**rules_guidance(game_id, sovereign_ruleset), "game_id": game_id}}, True)
+        def create_selected(owner):
+            campaign = chat_game.create(owner, name, action_id, disposable, game_id, sovereign_ruleset=sovereign_ruleset)
+            guidance = {"game_id": DND, "rules_version": "5.2.1", "attributes": ["STR","DEX","CON","INT","WIS","CHA"], "sheet_guide": "Read section=creation. Choose a published adventure or original premise FIRST; wait for the player unless chosen or delegated. Then tailor class+species together and the remaining choices together to its setting, tone and starting level. Quickplay is one explained character draft after selection. Reuse list_dnd_options."} if game_id == DND else {**rules_guidance(game_id, campaign.get("rules_profile")), "game_id": game_id}
+            return {"campaign": campaign, "game_id": game_id, "standard_play": guidance}
+        return invoke(create_selected, True)
 
     @server.tool(annotations=write, meta=metadata(WRITE_SCOPE))
     def save_chat_update(campaign_id: str, action_id: str, expected_version: int,
