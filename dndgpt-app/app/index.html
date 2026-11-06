@@ -267,7 +267,11 @@ for(const button of document.querySelectorAll("#sectionNav [data-target]")){
 const $=id=>document.getElementById(id);
 const requests=new Map();
 let nextId=1, standard=false, hostCapabilities={}, hostContext={}, state=null, campaigns=[], pending=null;
-let preferences=window.openai?.widgetState?.view_preferences||{panels:[],details:[],hud_hidden:false};
+function normalizeViewPreferences(value){
+  const source=value&&typeof value==="object"&&!Array.isArray(value)?value:{};
+  return {...source,panels:Array.isArray(source.panels)?source.panels.filter(id=>typeof id==="string"):[],details:Array.isArray(source.details)?source.details.filter(id=>typeof id==="string"):[],hud_hidden:source.hud_hidden===true};
+}
+let preferences=normalizeViewPreferences(window.openai?.widgetState?.view_preferences);
 let preferencesLoaded=Boolean(window.openai?.widgetState?.view_preferences), restoring=false, savingTimer, pollingTimer, polling=false, busy=false;
 let lastSelected=window.openai?.widgetState?.campaign_id||null;
 let dismissedProposal=null, lastVerifiedAt=null, syncIssue=false, gearTab="equipment", skillTab="combat", worldTab="world", combatTab="summons";
@@ -1101,7 +1105,7 @@ function receive(result,verified=false){
   receiveGallery(data);
   if(data.historical)return;
   if(data.view_preferences&&!preferencesLoaded){
-    preferences={...preferences,...data.view_preferences};preferencesLoaded=true;restorePreferences();
+    preferences=normalizeViewPreferences({...preferences,...data.view_preferences});preferencesLoaded=true;restorePreferences();
   }
   if(Array.isArray(data.campaigns)){
     campaigns=data.campaigns.filter(c=>!deletedCampaigns.has(c.id)&&(c.game_id||"age-of-convergence")===currentGame);$("session").replaceChildren(element("option","Select a saved game"));
@@ -1284,29 +1288,44 @@ new ResizeObserver(()=>{if(standard)notify("ui/notifications/size-changed",{heig
 /* sovereign script */
 /* campaign life script */
 /* dashboard search script */
+let initialConnection;
 function startSavedConnection(){
-  if(pollingTimer||(!standard&&!window.openai?.callTool))return;
+  if(pollingTimer||(!standard&&!window.openai?.callTool))return initialConnection;
   $("connection").textContent="Connected to saved state.";
   pollingTimer=setInterval(()=>{if(document.visibilityState==="visible"&&(!lastVerifiedAt||Date.now()-lastVerifiedAt.getTime()>=45000))refresh().catch(error=>notice(error.message))},45000);
-  refresh().catch(error=>notice(error.message));
+  initialConnection=refresh().catch(error=>notice(error.message));
+  return initialConnection;
 }
-(async()=>{
-  renderChoices();restorePreferences();
-  if(window.openai?.callTool){
-    $("connection").textContent="ChatGPT compatibility bridge connected.";
-  }else if(window.parent!==window){
+async function initializeDashboardHost(){
+  if(window.parent!==window){
+    // Compatibility globals can coexist with a host that requires MCP Apps readiness.
+    // Give standard negotiation priority, while legacy-only hosts can connect promptly.
+    const fallback=window.openai?.callTool?setTimeout(()=>startSavedConnection(),300):null;
     try{
       const init=await rpc("ui/initialize",{protocolVersion:"2026-01-26",appInfo:{name:"DnDGPT",version:uiVersion},appCapabilities:{availableDisplayModes:["inline","pip","fullscreen"]}});
       if(init.protocolVersion!=="2026-01-26")throw new Error("Unsupported MCP Apps protocol version");
-      standard=true;hostCapabilities=init.hostCapabilities||{};applyHostContext(init.hostContext);
+      const compatibilityStarted=Boolean(pollingTimer);
+      standard=true;hostCapabilities=init.hostCapabilities||{};
       notify("ui/notifications/initialized");
+      clearTimeout(fallback);
+      applyHostContext(init.hostContext);
       $("connection").textContent="Connected to saved state.";
+      await startSavedConnection();
+      // A slow handshake may finish after a rejected compatibility read. Recover once.
+      if(compatibilityStarted&&syncIssue)await refresh();
     }catch(error){
-      $("connection").textContent=window.openai?.callTool?"ChatGPT compatibility bridge available.":"Host connection unavailable. Prompt-copy preview only.";
+      clearTimeout(fallback);
+      if(window.openai?.callTool)startSavedConnection();
+      else $("connection").textContent="Host connection unavailable. Prompt-copy preview only.";
     }
-  }else $("connection").textContent="Local preview · not connected to a ChatGPT conversation.";
+  }else if(window.openai?.callTool)startSavedConnection();
+  else $("connection").textContent="Local preview · not connected to a ChatGPT conversation.";
+}
+// Start the required handshake before preference restoration or saved-data rendering.
+initializeDashboardHost();
+(()=>{
+  renderChoices();restorePreferences();
   if(window.openai?.toolOutput)receive({structuredContent:window.openai.toolOutput,_meta:toolMetadata(window.openai.toolResponseMetadata)});
-  startSavedConnection();
   if(!standard&&!window.openai?.callTool){$("syncStatus").dataset.state="preview";$("syncStatus").textContent="Preview · no saved state connection."}
   applyHostContext(hostContext);
 })();

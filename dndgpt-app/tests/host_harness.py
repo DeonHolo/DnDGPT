@@ -419,8 +419,20 @@ async def test_journal_record(request: Request):
     return {"saved": True}
 
 
+@app.get("/test-host-connection")
+def test_host_connection():
+    return FileResponse(HERE / "host_connection.html")
+
+
+@app.post("/test-host-connection-record")
+async def record_host_connection(request: Request):
+    report = await request.json()
+    (HERE.parent / "test-results/host-connection-browser.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
+    return {"saved": True}
+
+
 @app.get("/test-legacy-widget")
-def test_legacy_widget(neutral: bool = False):
+def test_legacy_widget(neutral: bool = False, partial: bool = False, strict: bool = False):
     """Phone-style bridge only: no standard ui/initialize response is available."""
     from app.presentation import dashboard_html
     shim = """<script>
@@ -439,6 +451,10 @@ def test_legacy_widget(neutral: bool = False):
     if neutral:
         shim = shim.replace("toolOutput:{game_id:'age-of-convergence'}", "toolOutput:{game_id:null,mode_selection_required:true}")
         # Deliberately stale widgetState remains to catch implicit last-mode selection.
+    if partial:
+        shim = shim.replace("widgetState:{game_id:'age-of-convergence'}", "widgetState:{view_preferences:{layout:'ember'}}")
+    if strict:
+        shim = shim.replace("window.legacyCalls.push(name);", "window.legacyCalls.push(name);if(!window.parent.connectionHostReady)throw Error('Host is not initialized yet');")
     return HTMLResponse(dashboard_html().replace("<head>", "<head>" + shim, 1))
 
 

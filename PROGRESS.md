@@ -1,5 +1,9 @@
 # Continuity and recovery release
 
+## Dashboard initialization repair — 2026-11-06
+
+Repair the live five-second dashboard initialization timeout: negotiate MCP Apps even when ChatGPT also exposes compatibility globals, send readiness before state processing, preserve prompt legacy/late-bridge startup and normalize partial persisted preferences. Test real save notification/refresh updates without remounting. Root cause and verification: `docs/DASHBOARD_HOST_STARTUP_2026_11_06.md`.
+
 ## Sovereign creation and numbered levels — 2026-11-05
 
 Approved follow-up restores the Age of Convergence world introduction before Class selection, verifies both starting upgrade bundles, removes compulsory weaknesses, protects established advantages during maneuver outcomes, and restores numbered milestone levels with two Core/two Sovereign upgrades plus two extra major refinements each fourth level. Internal rarity growth is hidden, starts at 9 and rises automatically; no allocation or dashboard statistic. The GM chooses scene scale without a fixed ratio. Sovereignty again has Domain, General and Army / Minions tabs; Appearance, actual named abilities and owned upgrades replace empty capability headings and dominant Where/Orders rows. Full implementation and verification status: `docs/SOVEREIGN_CREATION_AND_LEVELS_2026_11_05.md`.
