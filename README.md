@@ -88,7 +88,7 @@ Open the advanced OAuth settings. Under **Registration method**, choose **User-D
 | Token endpoint auth method | **None** |
 | Scopes | `campaign:read` and `campaign:write` |
 | Base scopes | `offline_access` |
-| OpenID Connect / OIDC | **Off** |
+| OpenID Connect / "OIDC Enabled" | **Uncheck/Off** |
 
 The OAuth Client ID is public connection information, not a password.
 
